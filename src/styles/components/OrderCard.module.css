@@ -1,0 +1,88 @@
+.container {
+  background-color: var(--white);
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  color: var(--black);
+  font-weight: 600;
+  flex-wrap: wrap;
+}
+.img {
+  width: 120px;
+  height: 150px;
+  border-radius: 8px;
+}
+.number {
+  display: flex;
+  gap: 4px;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid var(--dreamy-cloud);
+  padding: 8px 16px 8px 16px;
+  border-radius: 10px;
+}
+.total {
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 16px 8px 16px;
+}
+.row {
+  display: flex;
+  gap: 10px;
+  text-align: center;
+}
+.column {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-self: stretch;
+  line-height: 1.5;
+}
+.color {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+}
+.category {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--grey-text);
+}
+.title {
+  font-size: 16px;
+  font-weight: 600;
+}
+.subtitle {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Media query for screens smaller than 600px (e.g., smartphones) */
+@media (max-width: 600px) {
+  .form_container {
+    width: 250px;
+  }
+  .card_container {
+    width: 250px;
+  }
+  .semi_item {
+    width: 100%;
+  }
+}
+
+/* Media query for screens between 601px and 900px (e.g., tablets) */
+@media (min-width: 601px) and (max-width: 900px) {
+  .semi_item {
+    width: 100%;
+  }
+}
+
+/* Media query for screens between 901px and 1200px (e.g., larger tablets and small desktops) */
+@media (min-width: 901px) and (max-width: 1200px) {
+}
+
+/* Media query for screens larger than 1200px (e.g., large desktops) */
+@media (min-width: 1201px) {
+}

@@ -1,0 +1,49 @@
+.containerA {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+.borderA {
+  border: 1px solid var(--white);
+  border-radius: 5px;
+  padding: 5px;
+}
+.containerB {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  color: var(--brown);
+  font-size: 20px;
+}
+
+/* Media query for screens smaller than 600px (e.g., smartphones) */
+@media (max-width: 600px) {
+  .containerA {
+    gap: 3px;
+  }
+  .borderA {
+    padding: 2px;
+    font-size: 15px;
+  }
+}
+
+/* Media query for screens between 601px and 900px (e.g., tablets) */
+@media (min-width: 601px) and (max-width: 900px) {
+  .containerA {
+    gap: 5px;
+  }
+  .borderA {
+    padding: 5px;
+    font-size: 15px;
+  }
+}
+
+/* Media query for screens between 901px and 1200px (e.g., larger tablets and small desktops) */
+@media (min-width: 901px) and (max-width: 1200px) {
+}
+
+/* Media query for screens larger than 1200px (e.g., large desktops) */
+@media (min-width: 1201px) {
+}

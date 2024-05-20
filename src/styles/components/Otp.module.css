@@ -1,0 +1,55 @@
+.container {
+  background-color: var(--white);
+  width: 400px;
+  padding: 20px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 25px;
+}
+.resend {
+  text-align: center;
+  cursor: pointer;
+  color: var(--brown);
+}
+.main_text {
+  color: var(--black);
+  font-size: 20px;
+  font-weight: 600;
+}
+.sub_text {
+  max-width: 300px;
+  text-align: center;
+  color: var(--placeholder-text);
+  font-size: 14px;
+  font-weight: 400;
+}
+.button {
+  width: 100%;
+  cursor: pointer;
+  color: var(--white);
+  background-color: var(--brown);
+  padding: 13px;
+  border-radius: 10px;
+  border: none;
+}
+/* Media query for screens smaller than 600px (e.g., smartphones) */
+@media (max-width: 600px) {
+  .container {
+    width: 250px;
+  }
+}
+
+/* Media query for screens between 601px and 900px (e.g., tablets) */
+@media (min-width: 601px) and (max-width: 900px) {
+}
+
+/* Media query for screens between 901px and 1200px (e.g., larger tablets and small desktops) */
+@media (min-width: 901px) and (max-width: 1200px) {
+}
+
+/* Media query for screens larger than 1200px (e.g., large desktops) */
+@media (min-width: 1201px) {
+}

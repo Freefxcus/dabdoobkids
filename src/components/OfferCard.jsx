@@ -1,0 +1,15 @@
+import React from "react";
+import styles from "../styles/components/OfferCard.module.css";
+
+export default function OfferCard({ item }) {
+  return (
+    <div className={styles.container}>
+      <div className={styles["image-container"]}>
+        {/* <img src={item.img} width="150px" /> */}
+        <img src={item.img} width="150px" />
+      </div>
+      <div className={styles.title}>{item.title}</div>
+      <div className={styles.description}>{item.body}</div>
+    </div>
+  );
+}
