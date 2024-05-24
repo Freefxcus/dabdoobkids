@@ -80,22 +80,30 @@ export default function Profile() {
         // params: { page: 1 },
       })
       .then((response) => {
-        dispatch(userInfoActions.update(response.data.data));
+        dispatch(userInfoActions.update(response.data?.data));
         setIsLoading(false);
       })
       .catch((err) => {
-        if (err.response.data.message === "Unauthorized") {
+        setIsLoading(false);
+
+        if (err === "Unauthorized") {
           authorize(setForceReload);
-        } else {
-          notifyError(err.response.data.message);
         }
+
+        //   }
+        // });
       });
 
     //* address
-    getAddress().then((res) => {
-      console.log(res.items[0]);
-      setAddress(res);
-    });
+    getAddress()
+      .then((res) => {
+        // console.log(res.items[0]);
+
+        // setAddress(res);
+      })
+      .catch((err) => {
+        console.log(err , "<<<<<<err>>>>>>");
+      });
   }, [forceReload]);
 
   useEffect(() => {
@@ -107,15 +115,13 @@ export default function Profile() {
         },
       })
       .then((response) => {
-        console.log(response.data.data);
+        console.log(response.data?.data);
 
-        setOrders(response.data.data.data);
+        setOrders(response.data?.data?.data);
         // setTotalPages(response.data.data.metadata.totalPages);
         setIsLoading(false);
       })
-      .catch((error) => {
-        console.error("API Error:", error);
-      });
+      .catch((error) => {});
   }, []);
 
   return (

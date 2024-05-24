@@ -45,7 +45,7 @@ export default function Home() {
   const [reload, setReload] = useState(false);
   const [activeSlide, setActiveSlide] = useState(0);
   const data = useSelector((state) => state.data.value);
-  console.log(data);
+  console.log(data,"<<<<<<<<<<<<<<<<<Data");
 
   const products = data.products;
   const categories = data.categories;
@@ -84,6 +84,7 @@ export default function Home() {
     //* products
     getProducts()
       .then((res) => {
+        console.log(res , "<<<<<<<<ressss");
         dispatch(
           dataActions.update({
             products: {
@@ -160,33 +161,33 @@ export default function Home() {
 
     setState({ ...state, [anchor]: open });
   };
-  useEffect(() => {
-    // Make an API call using the Axios instance
-    axiosInstance
-      .get("/products")
-      .then((response) => {
-        console.log("API Response:", response.data);
-      })
-      .catch((error) => {
-        console.error("API Error:", error);
-      });
-    axiosInstance
-      .get("/categories")
-      .then((response) => {
-        console.log("API Response:", response.data.data.categories);
-      })
-      .catch((error) => {
-        console.error("API Error:", error);
-      });
-    axiosInstance
-      .get("/brands")
-      .then((response) => {
-        console.log("API Response:", response.data);
-      })
-      .catch((error) => {
-        console.error("API Error:", error);
-      });
-  }, []);
+  // useEffect(() => {
+  //   // Make an API call using the Axios instance
+  //   axiosInstance
+  //     .get("/products")
+  //     .then((response) => {
+  //       console.log("API Response:", response.data);
+  //     })
+  //     .catch((error) => {
+  //       console.error("API Error:", error);
+  //     });
+  //   axiosInstance
+  //     .get("/categories")
+  //     .then((response) => {
+  //       console.log("API Response:", response.data.data.categories);
+  //     })
+  //     .catch((error) => {
+  //       console.error("API Error:", error);
+  //     });
+  //   axiosInstance
+  //     .get("/brands")
+  //     .then((response) => {
+  //       console.log("API Response:", response.data);
+  //     })
+  //     .catch((error) => {
+  //       console.error("API Error:", error);
+  //     });
+  // }, []);
   return (
     <>
       {products?.array?.length < 0 && (

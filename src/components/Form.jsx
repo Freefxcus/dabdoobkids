@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { notifySuccess, notifyError } from "../utils/general.js";
 import closed from "../images/closed.png";
 import open from "../images/open.png";
+import { googleAuth } from "../utils/apiCalls.js";
 export default function Form({ type, toggleDrawer }) {
   const [show, setShow] = useState(false);
   const navigate = useNavigate();
@@ -45,12 +46,12 @@ export default function Form({ type, toggleDrawer }) {
             "refresh_token",
             response.data.data.refreshToken
           );
-          toggleDrawer();
+          // toggleDrawer();
           navigate("/");
         }
       })
       .catch((error) => {
-        console.log(error);
+        console.log(error,"<<<<errrrrrrrrrrrrr");  
         if (type === "login") {
           console.log(error);
           notifyError("Wrong username or password!");
@@ -61,6 +62,13 @@ export default function Form({ type, toggleDrawer }) {
         );
       });
   };
+
+
+
+const handleGoogleAuth = async () => {
+  window.open("https://api.dabdoobkidz.com/auth/google", "_self");
+}
+
   const loginInitialValues = {
     email: "",
     password: "",
@@ -181,6 +189,7 @@ export default function Form({ type, toggleDrawer }) {
               width="20px"
               height="20px"
               style={{ cursor: "pointer" }}
+              alt="show/hide password"
             />
           </div>
 
@@ -203,8 +212,8 @@ export default function Form({ type, toggleDrawer }) {
           </div>
 
           <button className={styles.brown_button}>Login</button>
-          <button className={styles.grey_button}>
-            <img src={google} width="25px" /> <div>Google</div>
+          <button className={styles.grey_button} onClick={handleGoogleAuth}>
+            <img src={google} width="25px" alt = "google"/> <div>Google</div>
           </button>
           <div className={styles.footer}>
             <div className={styles.footer_main}>Don't have account yet?</div>
@@ -222,6 +231,10 @@ export default function Form({ type, toggleDrawer }) {
           </div>
         </>
       )}
+
+
+
+      {/* ========================================================================= */}
       {type === "register" && (
         <>
           <div className={styles.title}>Create an Account</div>

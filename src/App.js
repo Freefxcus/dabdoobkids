@@ -25,6 +25,7 @@ import Plans from "./components/Plans";
 import Sidebar from "./components/Sidebar";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import OAuth from "./components/OAuth";
 
 function App() {
   const [open, setOpen] = useState(false);
@@ -50,10 +51,12 @@ function App() {
                   <Route path="/details/:id" element={<Details />} />
                   <Route path="/register" element={<Register />} />
                   <Route path="/login" element={<Login />} />
+                  <Route path="/auth/google/callback" element={<OAuth />} />
                   <Route path="/otp" element={<Otp />} />
                   <Route path="/search" element={<Search />} />
                   <Route path="/about" element={<About />} />
                   <Route path="/news" element={<News />} />
+
                   {/* <Route
                     path="/search/:categoryId?/:brandId?"
                     element={<Search />}

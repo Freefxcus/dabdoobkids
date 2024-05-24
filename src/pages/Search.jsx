@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import styles from "../styles/pages/Search.module.css";
 import ClothesCard from "../components/ClothesCard";
 import Checkbox from "@mui/material/Checkbox";
@@ -25,9 +25,6 @@ export default function Search() {
   const [catId, setCatId] = useState(urlCatId ? urlCatId : "");
   const [brandId, setBrandId] = useState(urlBrandId ? urlBrandId : "");
   const [query, setQuery] = useState(urlQuery ? urlQuery : "");
-  const debouncedHandleInputChange = debounce((value) => {
-    setQuery(value);
-  }, 1000); //
   const [searchData, setSearchData] = useState([]);
   console.log(searchData.products);
   const [totalPages, setTotalPages] = useState(1);
@@ -40,11 +37,25 @@ export default function Search() {
   const categories = data.categories;
   const brands = data.brands;
 
-  useEffect(() => {
-    getProducts(page, false, catId, brandId, query).then((res) => {
-      setSearchData(res);
-    });
-  }, [page, catId, brandId, query]);
+  // useEffect(() => {
+  //   getProducts(page, false, catId, brandId, query).then((res) => {
+  //     setSearchData(res);
+  //   });
+  // }, [page, catId, brandId, query]);
+
+  const debouncedHandleInputChange = useCallback(
+    debounce((value) => {
+      getProducts(page, false, catId, brandId, query).then((res) => {
+        setSearchData(res);
+      });
+    }, 1000),
+    [page, catId, brandId, query]
+  ); //
+
+  const handleSearch = (value) => {
+    setQuery(value);
+    debouncedHandleInputChange(value);
+  };
   return (
     <div
       // className={`${styles.container} margin-container section-top-margin section-bottom-margin`}
@@ -74,7 +85,7 @@ export default function Search() {
             className={styles.search_input}
             placeholder="Search product"
             onChange={(e) => {
-              debouncedHandleInputChange(e.target.value);
+              handleSearch(e.target.value);
             }}
           />
           <img src={lense} />
@@ -149,17 +160,7 @@ export default function Search() {
           </div>
         </div>
         <div className={styles.cards_section}>
-          <Pagination
-            color="primary"
-            variant="outlined"
-            count={totalPages}
-            page={page}
-            onChange={(e, v) => {
-              setPage(v);
-              searchData([]);
-            }}
-            sx={{ mt: "10px", mb: "10px", width: "100%" }}
-          />
+
           <>
             {isLoading && (
               <>
@@ -175,8 +176,21 @@ export default function Search() {
               !isLoading &&
               searchData.products.map((item) => <ClothesCard item={item} />)}
           </>
+          <Pagination
+            color="primary"
+            variant="outlined"
+            count={totalPages}
+            page={page}
+            onChange={(e, v) => {
+              setPage(v);
+              searchData([]);
+            }}
+            sx={{ mt: "10px", mb: "10px", width: "100%"  , mx: "auto"}}
+          />
         </div>
+
       </div>
+ 
       {/* drawer */}
       <div>
         <Drawer

@@ -251,3 +251,24 @@ export const deleteAddress = async (id) => {
 
   return returnedValue; // caught by .then()
 };
+
+
+export const googleAuth = async () => {
+  let returnedValue;
+
+  await instance
+    .get("/auth/google")
+    .then((response) => {
+      console.log(response , "<<<<googleAuth");
+      // localStorage.setItem("access_token", response.data.data.accessToken);
+      // localStorage.setItem("refresh_token", response.data.data.refreshToken);
+      // returnedValue = response.data.data;
+    })
+    .catch((error) => {
+      notifyError(error);
+    });
+
+  return returnedValue; // caught by .then()
+}
+
+
