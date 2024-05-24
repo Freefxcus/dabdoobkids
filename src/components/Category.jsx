@@ -8,17 +8,20 @@ export default function Category({ item }) {
 
   return (
     <div
-      className={styles.container}
+      style={{margin : "48px auto" , }}
       onClick={() => {
         // navigate(`search/${item.id}`);
-        navigate(`search/?categoryId=${item.id}`);
+        navigate(`/search/?categoryId=${item.id}`);
       }}
     >
-      <div className={styles["text-section"]}>
-        <div className={styles.title}>{item.name}</div>
-        <div className={styles.subtitle}>2310 Product</div>
+      <div style={{ display: "flex", alignItems: "center",gap :"16px",justifyContent : "center" , width : "400px" }}>
+        <div style={{display : "flex" , flexDirection : "column" , width :"50%"}}>
+          <div className={styles.title}>{item.name}</div>
+          <div className={styles.subtitle}>2310 Product</div>
+        </div>
+
+        <img style={{width : "140px" , height : "140px"}} src={item?.images?.[0]} alt="Category Image" className={styles.image}  />
       </div>
-      <img src={item?.images?.[0]} className={styles.image} />
     </div>
   );
 }

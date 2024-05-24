@@ -1,17 +1,28 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "../styles/pages/Categories.module.css";
 import Category from "../components/Category";
+import { getCategories } from "../utils/apiCalls";
+import { Box } from "@mui/material";
 export default function Categories() {
   const [largeImage, setLargeImage] = useState();
+  const [categoriesData, setCategoriesData] = useState({});
+  useEffect(() => {
+    getCategories().then((res) => {
+      setCategoriesData(res);
+    });
+      
+  }, []);
+
 
   return (
-    <div className="section-top-padding section-bottom-padding">
+    <div style={{padding : "12px" }}>
       <div className={styles.title}>Categories</div>
-      <div className={styles.cards_container}>
-        {["", "", "", "", "", "", "", "", ""].map((item) => (
-          <Category item={item} />
+      <Box sx={{display : "grid" , gridTemplateColumns : {lg : "repeat(3, 1fr)" , md : "repeat(2,1fr)" , xs :"repeat(1, 1fr)"} , justifyItems : "center", gap : "22px"}}>
+   
+        {categoriesData?.categories?.map((category) => (
+          <Category item={category} />
         ))}
-      </div>
+      </Box>
     </div>
   );
 }

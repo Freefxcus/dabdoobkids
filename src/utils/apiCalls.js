@@ -271,4 +271,18 @@ export const googleAuth = async () => {
   return returnedValue; // caught by .then()
 }
 
+export const getCategories = async() => {
+  let returnedValue;
 
+  await instance
+    .get("/categories")
+    .then((response) => {
+      console.log(response);
+      returnedValue = response.data.data;
+    })
+
+    .catch((error) => {
+      notifyError(error);
+    });
+  return returnedValue; // caught by .then()
+}
