@@ -31,10 +31,8 @@ export const getProducts = async (page, all, category, brand, query) => {
       returnedValue = response.data.data;
     })
     .catch((error) => {
-      notifyError(error.message);
-      //throw new Error(error);
+      notifyError(error);
     });
-
   return returnedValue; // caught by .then()
 };
 export const getProductById = async (id) => {
@@ -49,8 +47,7 @@ export const getProductById = async (id) => {
       returnedValue = response.data.data;
     })
     .catch((error) => {
-      notifyError(error.message);
-      //throw new Error(error);
+      notifyError(error);
     });
 
   return returnedValue; // caught by .then()
@@ -67,11 +64,7 @@ export const getWishlistItems = async () => {
         : [];
     })
     .catch((error) => {
-      notifyError(error.message);
-      // throw new Error(error);
-      // throw new Error(
-      //   error.response?.data?.errors?.[0].message || error.response.data.message
-      // );
+      notifyError(error);
     });
 
   return returnedValue; // caught by .then()
@@ -90,8 +83,7 @@ export const addToWishlist = async (id) => {
       // returnedValue = response.data.data;
     })
     .catch((error) => {
-      notifyError(error.message);
-      //throw new Error(error);
+      notifyError(error);
     });
 
   return returnedValue; // caught by .then()
@@ -109,8 +101,7 @@ export const removeFromWishlist = async (id) => {
       // returnedValue = response.data.data;
     })
     .catch((error) => {
-      notifyError(error.message);
-      //throw new Error(error);
+      notifyError(error);
     });
 
   return returnedValue; // caught by .then()
@@ -126,8 +117,7 @@ export const getCart = async () => {
       returnedValue = response.data.data;
     })
     .catch((error) => {
-      notifyError(error.message);
-      //throw new Error(error);
+      notifyError(error);
     });
 
   return returnedValue; // caught by .then()
@@ -147,8 +137,7 @@ export const addToCart = async (id, count) => {
       returnedValue = response.data.data;
     })
     .catch((error) => {
-      notifyError(error.message);
-      //throw new Error(error);
+      notifyError(error);
     });
 
   return returnedValue; // caught by .then()
@@ -164,8 +153,7 @@ export const emptyCart = async (id) => {
       returnedValue = response.data.data;
     })
     .catch((error) => {
-      notifyError(error.message);
-      //throw new Error(error);
+      notifyError(error);
     });
 
   return returnedValue; // caught by .then()
@@ -182,8 +170,7 @@ export const removeFromCart = async (id) => {
       returnedValue = response.data.data;
     })
     .catch((error) => {
-      notifyError(error.message);
-      //throw new Error(error);
+      notifyError(error);
     });
 
   return returnedValue; // caught by .then()
@@ -206,12 +193,7 @@ export const orderCheckout = async (promocode, useWallet, paymentMethod) => {
       returnedValue = response;
     })
     .catch((error) => {
-      notifyError(error.message);
-      // throw new Error(
-      //   error.response.data.errors?.[0].message ||
-      //     error.response.data.message ||
-      //     "Error!"
-      // );
+      notifyError(error);
     });
 
   return returnedValue; // caught by .then()
@@ -230,11 +212,7 @@ export const authorize = async (setForceReload) => {
         setForceReload((prev) => !prev);
       })
       .catch((error) => {
-        localStorage.removeItem("access_token");
-        localStorage.removeItem("refresh_token");
-        notifyError("Session Expired!");
-        navigate("/login");
-        //throw new Error(error);
+        notifyError(error);
       });
   } else {
     notifyError("Please Log In!");
@@ -252,8 +230,7 @@ export const getAddress = async () => {
       returnedValue = response.data.data;
     })
     .catch((error) => {
-      notifyError(error.message);
-      //throw new Error(error);
+      notifyError(error);
     });
 
   return returnedValue; // caught by .then()
@@ -269,8 +246,7 @@ export const deleteAddress = async (id) => {
       returnedValue = response.data.data;
     })
     .catch((error) => {
-      notifyError(error.message);
-      //throw new Error(error);
+      notifyError(error);
     });
 
   return returnedValue; // caught by .then()

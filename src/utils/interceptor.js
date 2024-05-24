@@ -26,18 +26,10 @@ instance.interceptors.request.use(
 // Response interceptor
 instance.interceptors.response.use(
   (response) => {
-    console.log(response.data);
     return response;
   },
   (error) => {
-    console.log("sssssssssssssssss", error.response.data.message);
-    // Do something with response error
-    // console.error(
-    //   "xxxxxxxxxxxxxxxxxResponse Error Interceptor:",
-    //   error.response.data.message
-    // );
     return Promise.reject(error.response.data.message);
-    // return error.response.data.message;
   }
 );
 
