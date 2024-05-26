@@ -25,6 +25,9 @@ import {
   addToCart,
   removeFromCart,
 } from "../utils/apiCalls.js";
+import { toast } from "react-toastify";
+import SingleProductModal from "../components/singleProduct/SingleProductModal.jsx";
+import { set } from "lodash";
 
 export default function Details() {
   const { id } = useParams();
@@ -36,11 +39,15 @@ export default function Details() {
   const [largeImage, setLargeImage] = useState("");
   const [size, setSize] = useState("");
   const [counter, setCounter] = useState(0);
+  const [variant , setVaraint] = useState(0);
+  const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
 
+
   const handleChange = (event) => {
-    setSize(event.target.value);
+    setVaraint(event.target.value);
   };
+
 
   const handleImageChange = (e) => {
     const clickedImage = e.target.src;
@@ -80,6 +87,7 @@ export default function Details() {
             <div className={styles["small-images-container"]}>
               {productDetails.images.slice(0, 4).map((img, index) => (
                 <img
+                alt="small-imge"
                   key={index}
                   src={img}
                   className={styles["small-image"]}
@@ -95,7 +103,7 @@ export default function Details() {
               {productDetails.category.name}
             </div>
             <div style={{ fontSize: "36px", color: "var(--errie-black)" }}>
-              {productDetails.name}
+              {productDetails?.name}
             </div>
             <div
               style={{
@@ -104,7 +112,7 @@ export default function Details() {
                 color: "var(--errie-black)",
               }}
             >
-              $ {productDetails.price}
+              $ {productDetails?.variants[variant]?.price}
             </div>
             <div
               style={{
@@ -124,26 +132,25 @@ export default function Details() {
                 },
               }}
             >
-              <FormControl sx={{ m: 1, minWidth: 150 }} size="small">
+              <FormControl sx={{width : "100%"}} size="small">
                 <InputLabel id="demo-simple-select-label">
                   Select Size
                 </InputLabel>
                 <Select
+                sx={{width : "100%"}}
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
-                  value={size}
+        
+                  defaultValue={0}
                   label="Select Size"
                   onChange={handleChange}
                 >
-                  <MenuItem value={10}>First size</MenuItem>
-                  <MenuItem value={10}>New born</MenuItem>
-                  <MenuItem value={10}>0-1 M</MenuItem>
-                  <MenuItem value={10}>1-3 M</MenuItem>
-                  <MenuItem value={10}>3-6 M</MenuItem>
-                  <MenuItem value={10}>6-9 M</MenuItem>
-                  <MenuItem value={10}>9-12 M</MenuItem>
-                  <MenuItem value={10}>1.5-2 Y</MenuItem>
-                  <MenuItem value={10}>2-3 Y</MenuItem>
+                  {productDetails.variants.map((variant, index) => (
+                    <MenuItem key={index} value={index}>
+                      {variant?.size}
+                    </MenuItem>
+                  
+                  ))}
                 </Select>
               </FormControl>
             </Box>
@@ -204,8 +211,13 @@ export default function Details() {
                 }}
                 onClick={(e) => {
                   e.stopPropagation();
+                  if (counter > productDetails?.variants[variant]?.stock ) {
+                    toast.error("Out of stock");
+                    return
+                  }
+                  setOpen(true);
                   dispatch(cartActions.add({ id: +id, count: counter }));
-                  addToCart(+id, counter);
+                  addToCart(+id, counter , productDetails?.variants[variant]?.id);
                   // if (wished) {
                   //   dispatch(cartActions.remove(+id));
                   //   removeFromCart(+id);
@@ -215,10 +227,12 @@ export default function Details() {
                   // }
                 }}
               >
-                <img src={cart} width="16px" />
+                <img src={cart} width="16px" alt="cart" />
                 <div>Add to cart</div>
               </div>
+              <SingleProductModal open={open} handleClose={setOpen} productDetails={productDetails} />
               <img
+                alt="heart-icon"
                 src={wished ? fHeart : eHeart}
                 className={styles["heart-icon"]}
                 onClick={(e) => {

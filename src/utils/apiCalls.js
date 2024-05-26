@@ -113,30 +113,31 @@ export const getCart = async () => {
   await instance
     .get("/cart")
     .then((response) => {
-      console.log(response);
       returnedValue = response.data.data;
     })
     .catch((error) => {
+      console.log(error,"cartresponseeee");
       notifyError(error);
     });
 
   return returnedValue; // caught by .then()
 };
 
-export const addToCart = async (id, count) => {
+export const addToCart = async (id, count , variant) => {
   let returnedValue;
 
   await instance
     .post("/cart", {
       product: id,
       count: count,
+      variant: variant,
     })
     .then((response) => {
-      console.log(response);
       notifySuccess("Added to cart!");
       returnedValue = response.data.data;
     })
     .catch((error) => {
+      console.log(error , "add Cartttttt");
       notifyError(error);
     });
 
@@ -158,16 +159,17 @@ export const emptyCart = async (id) => {
 
   return returnedValue; // caught by .then()
 };
-export const removeFromCart = async (id) => {
+export const removeFromCart = async (ProductId,variantId) => {
   let returnedValue;
   await instance
     .put("/cart", {
-      product: id,
+      product: ProductId,
+      variant : variantId
     })
     .then((response) => {
       console.log(response);
       notifySuccess("Removed from cart!");
-      returnedValue = response.data.data;
+      returnedValue = response;
     })
     .catch((error) => {
       notifyError(error);
