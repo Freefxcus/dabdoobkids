@@ -288,3 +288,18 @@ export const getCategories = async() => {
     });
   return returnedValue; // caught by .then()
 }
+
+export const getWishList = async() => {
+  let returnedValue;
+
+  await instance
+    .get("/wishlists")
+    .then((response) => {
+      console.log(response);
+      returnedValue = response.data.data;
+    })
+    .catch((error) => {
+      notifyError(error);
+    });
+  return returnedValue; // caught by .then()
+}

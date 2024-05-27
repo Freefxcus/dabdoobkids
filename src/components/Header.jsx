@@ -245,6 +245,9 @@ export default function Header({ setOpen }) {
                     className={styles.clickable}
                     style={{ marginLeft: "10px", marginRight: "10px" }}
                     width="25px"
+                    onClick={()=>{
+                      navigate("/wishlist")
+                    }}
                   />
                   <div className={`${styles.clickable} ${styles.badge}`}>
                     {wishlist.length}

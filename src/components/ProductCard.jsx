@@ -9,8 +9,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { wishlistActions } from "../Redux/store";
 import { useNavigate } from "react-router-dom";
 import { truncateText } from "../utils/general.js";
-export default function ClothesCard({ item }) {
-  console.log(item);
+export default function Productcard({ item , setChanged }) {
+  console.log(item,"item12312312");
   const wishlist = useSelector((state) => state.wishlist.value);
   const wished = wishlist.includes(item?.id);
   const dispatch = useDispatch();
@@ -23,6 +23,7 @@ export default function ClothesCard({ item }) {
         navigate(`/details/${item?.id}`);
       }}
     >
+        
       <div className={styles["card-top"]}>
         {/* <img src={lady} width="100%" height="380px" /> */}
         <img
@@ -31,18 +32,20 @@ export default function ClothesCard({ item }) {
           }
           alt="product"
           style={{height: "356px" , width: "100%" , objectFit: "cover"}}
-  
+
         />
         <div
           className={styles["heart-container"]}
-          onClick={(e) => {
+          onClick={ async(e) => {
             e.stopPropagation();
             if (wished) {
               dispatch(wishlistActions.remove(item?.id));
-              removeFromWishlist(item?.id);
+             await removeFromWishlist(item?.id);
+              setChanged(prev=>!prev);
             } else {
               dispatch(wishlistActions.add(item?.id));
-              addToWishlist(item?.id);
+             await addToWishlist(item?.id);
+               
             }
           }}
         >

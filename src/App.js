@@ -26,6 +26,8 @@ import Sidebar from "./components/Sidebar";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import OAuth from "./components/OAuth";
+import WishList from "./pages/WishList";
+import Checkout from "./pages/Checkout";
 
 function App() {
   const [open, setOpen] = useState(false);
@@ -56,6 +58,7 @@ function App() {
                   <Route path="/search" element={<Search />} />
                   <Route path="/about" element={<About />} />
                   <Route path="/news" element={<News />} />
+                  <Route path = "/checkout" element = {<Checkout />} />
 
                   {/* <Route
                     path="/search/:categoryId?/:brandId?"
@@ -66,6 +69,7 @@ function App() {
                   <Route path="/profile" element={<Profile />} />
                   <Route path="/plans" element={<Plans />} />
                   <Route path="/categories" element={<Categories />} />
+                  <Route path="/wishlist" element={<WishList />} />
                 </>
               )}
             </Routes>
