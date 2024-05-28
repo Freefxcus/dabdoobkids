@@ -1,12 +1,40 @@
 export default function ConfirmPayment() {
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "12px" , flex : 1 , width : "70%"}}>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: "18px",
+        flex: 1,
+        width: "70%",
+      }}
+    >
       <h2>Price Summary</h2>
-      <div>
+      <div style={{ display: "flex", flexDirection: "column", gap: "18px" }}>
         <h3>Promo Code</h3>
-        <div style={{ display: "flex",}}>
-          <input style={{border : "2px solid var(--dreamy-cloud) " , padding : "12px 12px"}} type="text" placeholder="Enter Promo Code" />
-          <button style={{ backgroundColor: "var(--dreamy-cloud)" , border : "none", padding : "12px 12px" }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            gap: "12px",
+          }}
+        >
+          <input
+            style={{
+              border: "2px solid var(--dreamy-cloud) ",
+              padding: "12px 12px ",
+              flex: 2,
+            }}
+            type="text"
+            placeholder="Enter Promo Code"
+          />
+          <button
+            style={{
+              backgroundColor: "var(--dreamy-cloud)",
+              border: "none",
+              padding: "12px 24px",
+            }}
+          >
             Add
           </button>
         </div>
@@ -115,7 +143,20 @@ export default function ConfirmPayment() {
             $3.000.00
           </h2>
         </div>
-        <button>Continue to payment</button>
+        <button
+          style={{
+            backgroundColor: "var(--brown)",
+            color: "white",
+            border: "none",
+            padding: "12px 32px",
+            fontWeight: "400",
+            fontSize: "18px",
+            borderRadius: "10px",
+            cursor: "pointer",
+          }}
+        >
+          Contuinue to Payment
+        </button>
       </div>
     </div>
   );

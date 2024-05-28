@@ -3,6 +3,7 @@ import { baseUrl } from "./baseUrl";
 import { store } from "../Redux/store";
 import instance from "../utils/interceptor.js";
 import { notifySuccess, notifyError, navigate } from "./general.js";
+import { t } from "i18next";
 // client_id: redux("userInfo").id,
 // ----------------------------------------------------------------
 const redux = (slice) => {
@@ -181,7 +182,7 @@ export const removeFromCart = async (ProductId,variantId) => {
 export const orderCheckout = async (promocode, useWallet, paymentMethod) => {
   let returnedValue;
   const body = {
-    promocode,
+    promocode ,
     useWallet,
     paymentMethod, // example default value for item
   };
@@ -190,6 +191,28 @@ export const orderCheckout = async (promocode, useWallet, paymentMethod) => {
   console.log(body);
   await instance
     .post("/orders/checkout", body)
+    .then((response) => {
+      console.log(response);
+      returnedValue = response;
+    })
+    .catch((error) => {
+      notifyError(error);
+    });
+
+  return returnedValue; // caught by .then()
+};
+export const orderSummary = async () => {
+  let returnedValue;
+  const body = {
+
+    useWallet : true,
+    paymentMethod : "cash", // example default value for item
+  };
+  console.log(body);
+  Object.keys(body).forEach((key) => body[key] === "" && delete body[key]);
+  console.log(body);
+  await instance
+    .post("/orders/summary", body)
     .then((response) => {
       console.log(response);
       returnedValue = response;
@@ -221,6 +244,22 @@ export const authorize = async (setForceReload) => {
     navigate("/login");
   }
 };
+
+export const AddAddress = async (body) => {
+  let returnedValue;
+  await instance
+    .post("/addresses" , body)
+    .then((response) => {
+      console.log(response);
+      returnedValue = response.data.data;
+    })
+    .catch((error) => {
+      notifyError(error);
+    });
+
+  return returnedValue; // caught by .then()
+
+}
 
 export const getAddress = async () => {
   let returnedValue;

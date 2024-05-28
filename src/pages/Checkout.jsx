@@ -1,26 +1,33 @@
 import { useEffect, useState } from "react";
-import { getCart } from "../utils/apiCalls";
+import { getCart, orderCheckout } from "../utils/apiCalls"; 
 import styles from "../styles/components/OrderCard.module.css";
 import ConfirmPayment from "../components/checkout/ConfirmPayment";
+import BillingDetails from "../components/checkout/BillingDetails";
 export default function Checkout() {
   const [cart, setCart] = useState([]);
 
   useEffect(() => {
+
+    const makeOrder = async () => {
+        const order = await orderCheckout();
+        console.log(order, "order123123");
+    }
     const fetchCart = async () => {
       const cart = await getCart();
       setCart(cart);
     };
     fetchCart();
+    makeOrder();
   }, []);
 
   console.log(cart, "checkout123123123");
 
   return (
-    <div style={{ margin : "12px auto" , display : "flex" ,maxWidth : "70%" , gap : "52px" , justifyContent : "center"   }}>
-      <div style={{ display: "flex", flexDirection: "column", gap: "24px", flex :1  , justifyContent : "center" , alignItems :"center"}}>
+    <div style={{ margin : "12px auto" , display : "flex" ,maxWidth : "70%" , gap : "52px" , justifyContent : "center"  , flexWrap : "wrap" }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: "24px", flex :2  }}>
         <h1 style={{ fontSize: "24px", fontWeight: "500" }}>Summary Order</h1>
         {cart?.items?.map((item) => (
-          <div style={{ display: "flex", gap: "32px" }}>
+          <div style={{ display: "flex", gap: "32px" ,justifyContent : "center" , marginBottom : "18px"}}>
             <img
               style={{ height: "150px", width: "116px", objectFit: "cover" }}
               src={item?.product?.images[0]}
@@ -100,6 +107,8 @@ export default function Checkout() {
             </div>
           </div>
         ))}
+
+        <BillingDetails/>
       </div>
 
         <ConfirmPayment/>

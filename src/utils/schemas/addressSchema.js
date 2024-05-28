@@ -1,25 +1,33 @@
 import * as yup from "yup";
 
 export const addressSchema = yup.object().shape({
-  address_label: yup
+  phone_number: yup
     .string()
-    .min(3, "Must be at least 3 characters long")
+    .min(11, "Phone must be at least 11 characters long")
     .required("Required"),
-  country: yup
+  first_name: yup
     .string()
-    .min(3, "Must be at least 3 characters long")
+    .min(2, "Phone must be at least 2 characters long")
     .required("Required"),
+  last_name: yup
+    .string()
+    .min(2, "Phone must be at least 2 characters long")
+    .required("Required"),
+
   address: yup
     .string()
     .min(3, "Must be at least 3 characters long")
     .required("Required"),
-  province: yup
-    .string()
-    .min(3, "Must be at least 3 characters long")
+
+  primary: yup.boolean().required("Required"),
+  type: yup.string().required("Required"),
+  governorate: yup
+    .number()
+    .min(2, "Must be at least 3 characters long")
     .required("Required"),
   city: yup
-    .string()
-    .min(3, "Must be at least 3 characters long")
+    .number()
+    .min(2, "Must be at least 3 characters long")
     .required("Required"),
   district: yup
     .string()
@@ -32,10 +40,13 @@ export const addressSchema = yup.object().shape({
 });
 
 export const addressSchemaInitialValues = {
-  address_label: "",
-  country: "",
+  phone_number: "",
+  first_name: "",
+  last_name: "",
+  type: "",
+  primary: "",
   address: "",
-  province: "",
+  governorate: "",
   city: "",
   district: "",
   postal_code: "",
