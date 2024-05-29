@@ -13,8 +13,9 @@ import {
 } from "../../utils/schemas/addressSchema.js";
 import { useFormik } from "formik";
 import CloseIcon from "@mui/icons-material/Close";
-import { AddAddress } from "../../utils/apiCalls.js";
+import { AddAddress, updateAddress } from "../../utils/apiCalls.js";
 import { toast } from "react-toastify";
+import { add } from "lodash";
 
 const style = {
   position: "absolute",
@@ -32,19 +33,46 @@ const style = {
   border: "none",
   borderRadius: "10px",
 };
-const onSubmit = async (values) => {
-  const parametres = {
-    phone: values.phone_number,
-    name: values.first_name + " " + values.last_name,
- 
-    ...values,
+
+export default function AddressModal({
+  open,
+  setOpen,
+  type,
+  addressInfo,
+  addressId,
+}) {
+  console.log(addressInfo, "addressInfo123123");
+
+  const onSubmit = async (values) => {
+    const parametres = {
+      phone: values?.phone_number,
+      name: values.first_name + " " + values.last_name,
+      postalCode : values.postal_code,
+
+
+      ...values,
+    };
+    if (type === "edit") {
+      const resUpdate = await updateAddress(addressInfo.id, parametres);
+      console.log(resUpdate, "resUpdate123");
+      if (resUpdate.status) toast.success("Address updated successfully");
+    } else if (type === "add") {
+      const resAddress = await AddAddress(parametres);
+      if (resAddress.status) toast.success("Address added successfully");
+    }
   };
-  const resAddress = await AddAddress(parametres);
-  if (resAddress.status)
-    toast.success("Address added successfully");
-  console.log(resAddress, "address valuessss");
-};
-export default function AddressModal({ open, setOpen }) {
+  const initialAddressValues = {
+    phone_number: addressInfo?.phone || "",
+    address: addressInfo?.address || "",
+    first_name: addressInfo?.name.split(" ")[0] || "",
+    primary : addressInfo?.primary || false,
+    type: addressInfo?.type || "Home",
+    last_name: addressInfo?.name.split(" ")[1] || "",
+    governorate: addressInfo?.governorate.id || "",
+    district: addressInfo?.district || "",
+    city: addressInfo?.city || "",
+    postal_code: addressInfo?.postal_code || "",
+  };
   const {
     values,
     errors,
@@ -56,7 +84,7 @@ export default function AddressModal({ open, setOpen }) {
     setFieldValue,
     setValues,
   } = useFormik({
-    initialValues: addressSchemaInitialValues,
+    initialValues: initialAddressValues,
     validationSchema: addressSchema,
     onSubmit,
   });
@@ -96,7 +124,7 @@ export default function AddressModal({ open, setOpen }) {
             </div>
 
             <input
-              value={values.address_label}
+              value={values?.phone_number}
               onChange={handleChange}
               id="phone_number"
               onBlur={handleBlur}
@@ -168,7 +196,7 @@ export default function AddressModal({ open, setOpen }) {
                 <span className="error">{errors.type}</span>
               )}
             </div>
-            <FormControl  fullWidth>
+            <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label">Type</InputLabel>
               <Select
                 labelId="demo-simple-select-label"
@@ -184,12 +212,12 @@ export default function AddressModal({ open, setOpen }) {
                 }
                 onChange={handleChange}
               >
-                <MenuItem  value="Home">Home</MenuItem>
+                <MenuItem value="Home">Home</MenuItem>
                 <MenuItem value="Office">Office</MenuItem>
               </Select>
             </FormControl>
           </div>
-          
+
           {/* primary */}
           <div className={styles.item}>
             <div className={`${styles.label} ${styles.item}`}>
@@ -216,7 +244,7 @@ export default function AddressModal({ open, setOpen }) {
                 }
                 onChange={handleChange}
               >
-                <MenuItem value={true} >True</MenuItem>
+                <MenuItem value={true}>True</MenuItem>
                 <MenuItem value={false}>False</MenuItem>
               </Select>
             </FormControl>
@@ -342,7 +370,7 @@ export default function AddressModal({ open, setOpen }) {
             ></input>
           </div>
           <button className={`${styles.brown_button} ${styles.item}`}>
-            Save
+            {isSubmitting ? "loading" : type === "edit" ? "Edit" : "Add"}
           </button>
         </Box>
       </form>

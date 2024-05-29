@@ -117,14 +117,14 @@ export const getCart = async () => {
       returnedValue = response.data.data;
     })
     .catch((error) => {
-      console.log(error,"cartresponseeee");
+      console.log(error, "cartresponseeee");
       notifyError(error);
     });
 
   return returnedValue; // caught by .then()
 };
 
-export const addToCart = async (id, count , variant) => {
+export const addToCart = async (id, count, variant) => {
   let returnedValue;
 
   await instance
@@ -138,7 +138,7 @@ export const addToCart = async (id, count , variant) => {
       returnedValue = response.data.data;
     })
     .catch((error) => {
-      console.log(error , "add Cartttttt");
+      console.log(error, "add Cartttttt");
       notifyError(error);
     });
 
@@ -160,12 +160,12 @@ export const emptyCart = async (id) => {
 
   return returnedValue; // caught by .then()
 };
-export const removeFromCart = async (ProductId,variantId) => {
+export const removeFromCart = async (ProductId, variantId) => {
   let returnedValue;
   await instance
     .put("/cart", {
       product: ProductId,
-      variant : variantId
+      variant: variantId,
     })
     .then((response) => {
       console.log(response);
@@ -179,12 +179,12 @@ export const removeFromCart = async (ProductId,variantId) => {
   return returnedValue; // caught by .then()
 };
 
-export const orderCheckout = async (promocode, useWallet, paymentMethod) => {
+export const orderCheckout = async () => {
   let returnedValue;
   const body = {
-    promocode ,
-    useWallet,
-    paymentMethod, // example default value for item
+    // promocode  ,
+    useWallet: true,
+    paymentMethod: "Credit Card", // example default value for item
   };
   console.log(body);
   Object.keys(body).forEach((key) => body[key] === "" && delete body[key]);
@@ -204,9 +204,8 @@ export const orderCheckout = async (promocode, useWallet, paymentMethod) => {
 export const orderSummary = async () => {
   let returnedValue;
   const body = {
-
-    useWallet : true,
-    paymentMethod : "cash", // example default value for item
+    useWallet: true,
+    paymentMethod: "cash", // example default value for item
   };
   console.log(body);
   Object.keys(body).forEach((key) => body[key] === "" && delete body[key]);
@@ -248,7 +247,7 @@ export const authorize = async (setForceReload) => {
 export const AddAddress = async (body) => {
   let returnedValue;
   await instance
-    .post("/addresses" , body)
+    .post("/addresses", body)
     .then((response) => {
       console.log(response);
       returnedValue = response.data.data;
@@ -258,8 +257,7 @@ export const AddAddress = async (body) => {
     });
 
   return returnedValue; // caught by .then()
-
-}
+};
 
 export const getAddress = async () => {
   let returnedValue;
@@ -268,6 +266,22 @@ export const getAddress = async () => {
     .get("/addresses")
     .then((response) => {
       console.log(response);
+      returnedValue = response.data.data;
+    })
+    .catch((error) => {
+      notifyError(error);
+    });
+
+  return returnedValue; // caught by .then()
+};
+
+export const updateAddress = async (id, body) => {
+  let returnedValue;
+
+  await instance
+    .put(`/addresses/${id}`, body)
+    .then((response) => {
+      notifySuccess("Address Updated!");
       returnedValue = response.data.data;
     })
     .catch((error) => {
@@ -293,14 +307,13 @@ export const deleteAddress = async (id) => {
   return returnedValue; // caught by .then()
 };
 
-
 export const googleAuth = async () => {
   let returnedValue;
 
   await instance
     .get("/auth/google")
     .then((response) => {
-      console.log(response , "<<<<googleAuth");
+      console.log(response, "<<<<googleAuth");
       // localStorage.setItem("access_token", response.data.data.accessToken);
       // localStorage.setItem("refresh_token", response.data.data.refreshToken);
       // returnedValue = response.data.data;
@@ -310,9 +323,9 @@ export const googleAuth = async () => {
     });
 
   return returnedValue; // caught by .then()
-}
+};
 
-export const getCategories = async() => {
+export const getCategories = async () => {
   let returnedValue;
 
   await instance
@@ -326,9 +339,9 @@ export const getCategories = async() => {
       notifyError(error);
     });
   return returnedValue; // caught by .then()
-}
+};
 
-export const getWishList = async() => {
+export const getWishList = async () => {
   let returnedValue;
 
   await instance
@@ -341,4 +354,19 @@ export const getWishList = async() => {
       notifyError(error);
     });
   return returnedValue; // caught by .then()
-}
+};
+
+export const updateProfile = async (id , data) => {
+  let returnedValue;
+
+  await instance
+    .get(`users/${id}`)
+    .then((response) => {
+      console.log(response);
+      returnedValue = response.data.data;
+    })
+    .catch((error) => {
+      notifyError(error);
+    });
+  return returnedValue;
+};

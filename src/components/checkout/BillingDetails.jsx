@@ -1,6 +1,6 @@
 import AddIcon from "@mui/icons-material/Add";
 import AddressModal from "./AddressModal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   FormControl,
   FormControlLabel,
@@ -8,14 +8,26 @@ import {
   Radio,
   RadioGroup,
 } from "@mui/material";
+import { getAddress } from "../../utils/apiCalls";
 export default function BillingDetails() {
   const [open, setOpen] = useState(false);
-
+  const [address, setAddress] = useState({}); //[{}F
   const [selectedValue, setSelectedValue] = useState("a");
 
   const handleChange = (event) => {
     setSelectedValue(event.target.value);
   };
+
+  useEffect(() => {
+    const fetchAddress = async () => {
+      const address = await getAddress();
+      setAddress(address);
+    };
+    fetchAddress();
+  }, []);
+  console.log("address>>>>>" , address);
+
+
 
   const controlProps = (item) => ({
     checked: selectedValue === item,
@@ -69,11 +81,17 @@ export default function BillingDetails() {
         </div>
       </div>
 
-
       {/* Payment Method */}
-      <div style={{marginTop  : "12px"}}>
+      <div style={{ marginTop: "12px" }}>
         <h1>Expedition</h1>
-        <div style={{ display: "flex", flexDirection: "column" , gap : "12px" , marginTop : "16px" }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "12px",
+            marginTop: "16px",
+          }}
+        >
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
               <img
@@ -83,7 +101,14 @@ export default function BillingDetails() {
               />
               Credit Card
             </div>
-            <Radio {...controlProps("Wallet")} />
+            <Radio
+              {...controlProps("Wallet")}
+              sx={{
+                "&.Mui-checked": {
+                  color: "var(--brown)",
+                },
+              }}
+            />
           </div>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
@@ -94,7 +119,15 @@ export default function BillingDetails() {
               />
               Wallet
             </div>
-            <Radio {...controlProps("Credit Card")} />
+
+            <Radio
+              sx={{
+                "&.Mui-checked": {
+                  color: "var(--brown)",
+                },
+              }}
+              {...controlProps("Credit Card")}
+            />
           </div>
         </div>
       </div>

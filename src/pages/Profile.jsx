@@ -24,6 +24,9 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Button from "@mui/material/Button";
 import OrderCard from "../components/OrderCard.jsx";
 import Box from "@mui/material/Box";
+import AddressModal from "../components/checkout/AddressModal.jsx";
+import UpdateProfileUpdate from "../components/profile/UpdateProfile.jsx";
+import UpdateProfileModal from "../components/profile/UpdateProfile.jsx";
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -34,7 +37,7 @@ export default function Profile() {
   const [helpOption, setHelpOption] = useState("1");
   const [currentId, setCurrentId] = useState("");
   const [alertType, setAlertType] = useState("");
-  const [address, setAddress] = useState("");
+  const [address, setAddress] = useState({});
   const [forceReload, setForceReload] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
   const [popupType, setPopupType] = useState("");
@@ -42,6 +45,10 @@ export default function Profile() {
   const [sidebarItem, setSidebarItem] = useState("1");
   const userInfo = useSelector((state) => state.userInfo.value);
   const [alertOpen, setAlertOpen] = useState(false);
+  const [openAddAddress, setOpenAddAddress] = useState(false);
+  const [openEditAddress, setOpenEditAddress] = useState(false);
+  const [openEditProfile, setOpenEditProfile] = useState(false);
+
   const handleClickOpen = () => {
     setAlertOpen(true);
   };
@@ -98,11 +105,10 @@ export default function Profile() {
     getAddress()
       .then((res) => {
         // console.log(res.items[0]);
-
-        // setAddress(res);
+        setAddress(res);
       })
       .catch((err) => {
-        console.log(err , "<<<<<<err>>>>>>");
+        console.log(err, "<<<<<<err>>>>>>");
       });
   }, [forceReload]);
 
@@ -123,7 +129,7 @@ export default function Profile() {
       })
       .catch((error) => {});
   }, []);
-
+  
   return (
     <>
       <Dialog
@@ -209,18 +215,18 @@ export default function Profile() {
                   }
                   key={index}
                   onClick={() => {
-                    if (item.id == "8") {
+                    if (item?.id == "8") {
                       localStorage.removeItem("access_token");
                       localStorage.removeItem("refresh_token");
                       navigate("/login");
                     }
-                    setSidebarItem(item.id);
+                    setSidebarItem(item?.id);
                   }}
                   style={{
-                    color: item.id === "8" ? "var(--error)" : "initial",
+                    color: item?.id === "8" ? "var(--error)" : "initial",
                   }}
                 >
-                  {item.title}
+                  {item?.title}
                 </div>
               ))}
             </div>
@@ -234,11 +240,12 @@ export default function Profile() {
                     <button
                       className={styles.brown_btn}
                       onClick={() => {
-                        setPopupType("profile");
+                          setOpenEditProfile(true);
                       }}
                     >
                       Edit
                     </button>
+                    <UpdateProfileModal open={openEditProfile} setOpen={setOpenEditProfile} ProfileData={userInfo} />
                   </div>
                   <div className={styles.v_line}></div>
                   <div className={styles.row_wrap}>
@@ -267,11 +274,16 @@ export default function Profile() {
                     <button
                       className={styles.brown_btn}
                       onClick={() => {
-                        setPopupType("create_address");
+                        setOpenAddAddress(true);
                       }}
                     >
                       Add address
                     </button>
+                    <AddressModal
+                      open={openAddAddress}
+                      setOpen={setOpenAddAddress}
+                      type="add"
+                    />
                   </div>
                   {/* ***** */}
 
@@ -281,7 +293,14 @@ export default function Profile() {
                       <div className={styles.title}>{address.name}</div>
                       <div className={styles.body}>{address.address}</div>
                       <div className={styles.row_reverse}>
-                        <div className={styles.edit_link}>Edit</div>
+                        <div
+                          onClick={() => {
+                            setOpenEditAddress(true);
+                          }}
+                          className={styles.edit_link}
+                        >
+                          Edit
+                        </div>
                         <div
                           className={styles.delete_link}
                           onClick={() => {
@@ -292,9 +311,16 @@ export default function Profile() {
                         >
                           Delete
                         </div>
+                        <AddressModal
+                          open={openEditAddress}
+                          setOpen={setOpenEditAddress}
+                          type="edit"
+                          addressInfo={address}
+                        />
                       </div>
                     </>
                   ))}
+
                   {/* ***** */}
                   {/* <div className={styles.v_line}></div>
                   <div className={styles.title}>Office</div>

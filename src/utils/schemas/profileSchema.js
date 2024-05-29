@@ -11,10 +11,10 @@ export const profileSchema = yup.object().shape({
     .min(3, "Last name must be at least 3 characters long")
     .required("Required"),
   email: yup.string().email("Please enter a valid email").required("Required"),
-  phone: yup
-    .string()
-    .matches(phoneRules, { message: "Please create a stronger password" })
-    .required("Required"),
+  // phone: yup
+  //   .string()
+  //   .matches(phoneRules, { message: "Please create a stronger password" })
+  //   .required("Required"),
 });
 
 export const profileSchemaInitialValues = {
