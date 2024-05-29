@@ -28,6 +28,7 @@ import "react-toastify/dist/ReactToastify.css";
 import OAuth from "./components/OAuth";
 import WishList from "./pages/WishList";
 import Checkout from "./pages/Checkout";
+import ProtectedRoute from "./components/auth/ProtectedRoute";
 
 function App() {
   const [open, setOpen] = useState(false);
@@ -58,18 +59,34 @@ function App() {
                   <Route path="/search" element={<Search />} />
                   <Route path="/about" element={<About />} />
                   <Route path="/news" element={<News />} />
-                  <Route path = "/checkout" element = {<Checkout />} />
-
-                  {/* <Route
-                    path="/search/:categoryId?/:brandId?"
-                    element={<Search />}
-                  /> */}
-                  <Route path="/summary" element={<Summary />} />
-                  <Route path="/cart" element={<Cart />} />
-                  <Route path="/profile" element={<Profile />} />
-                  <Route path="/plans" element={<Plans />} />
-                  <Route path="/categories" element={<Categories />} />
-                  <Route path="/wishlist" element={<WishList />} />
+                  <Route
+                    path="/checkout"
+                    element={<ProtectedRoute element={Checkout} />}
+                  />
+                  <Route
+                    path="/summary"
+                    element={<ProtectedRoute element={Summary} />}
+                  />
+                  <Route
+                    path="/cart"
+                    element={<ProtectedRoute element={Cart} />}
+                  />
+                  <Route
+                    path="/profile"
+                    element={<ProtectedRoute element={Profile} />}
+                  />
+                  <Route
+                    path="/plans"
+                    element={<ProtectedRoute element={Plans} />}
+                  />
+                  <Route
+                    path="/categories"
+                    element={<ProtectedRoute element={Categories} />}
+                  />
+                  <Route
+                    path="/wishlist"
+                    element={<ProtectedRoute element={WishList} />}
+                  />
                 </>
               )}
             </Routes>

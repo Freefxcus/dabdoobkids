@@ -33,6 +33,8 @@ const userInfoSlice = createSlice({
     update(state, action) {
       state.value = { ...state.value, ...action.payload };
     },
+    remove(state) {
+      state.value = {};}
   },
 });
 //& products

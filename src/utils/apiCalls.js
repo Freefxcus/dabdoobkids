@@ -360,7 +360,7 @@ export const updateProfile = async (id , data) => {
   let returnedValue;
 
   await instance
-    .get(`users/${id}`)
+    .put(`/users/${id}`,data)
     .then((response) => {
       console.log(response);
       returnedValue = response.data.data;
@@ -370,3 +370,20 @@ export const updateProfile = async (id , data) => {
     });
   return returnedValue;
 };
+
+
+export const getWallet = async () => {
+  let returnedValue;
+
+  await instance
+    .get("/wallets")
+    .then((response) => {
+      returnedValue = response.data.data;
+    })
+    .catch((error) => {
+      console.log(error , "responseeeefromwallet");
+      notifyError(error);
+    });
+
+  return returnedValue; // caught by .then()
+}

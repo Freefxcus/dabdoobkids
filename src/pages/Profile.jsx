@@ -14,7 +14,7 @@ import instance from "../utils/interceptor.js";
 import Popup from "../components/Popup";
 import { userInfoActions } from "../Redux/store";
 import { notifyError, notifySuccess } from "../utils/general";
-import { authorize, getAddress, deleteAddress } from "../utils/apiCalls.js";
+import { authorize, getAddress, deleteAddress, getWallet } from "../utils/apiCalls.js";
 import Loader from "../components/Loader.jsx";
 import Accordion from "@mui/material/Accordion";
 import AccordionActions from "@mui/material/AccordionActions";
@@ -48,7 +48,7 @@ export default function Profile() {
   const [openAddAddress, setOpenAddAddress] = useState(false);
   const [openEditAddress, setOpenEditAddress] = useState(false);
   const [openEditProfile, setOpenEditProfile] = useState(false);
-
+  const [wallet , setWallet] = useState({});//[{}
   const handleClickOpen = () => {
     setAlertOpen(true);
   };
@@ -77,9 +77,13 @@ export default function Profile() {
       setOpen(true);
     }
   }, [popupType]);
+
+  // Scroll to top 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [currentOrder]);
+
+//get profile
   useEffect(() => {
     //* profile
     instance
@@ -112,6 +116,8 @@ export default function Profile() {
       });
   }, [forceReload]);
 
+
+  //get orders
   useEffect(() => {
     instance
       .get("orders", {
@@ -130,6 +136,17 @@ export default function Profile() {
       .catch((error) => {});
   }, []);
   
+
+  // get wallet
+  useEffect(() => {
+    getWallet().then((res) => {
+      console.log(res, "wallet1231231232222");
+      setWallet(res);
+    })
+
+  },[])
+
+  console.log(wallet, "wallet123123132");
   return (
     <>
       <Dialog
@@ -215,7 +232,7 @@ export default function Profile() {
                   }
                   key={index}
                   onClick={() => {
-                    if (item?.id == "8") {
+                    if (item?.id === "9") {
                       localStorage.removeItem("access_token");
                       localStorage.removeItem("refresh_token");
                       navigate("/login");

@@ -11,8 +11,8 @@ import { toast } from "react-toastify";
 import CircularProgress from "@mui/material/CircularProgress";
 export default function UpdateProfileModal({ ProfileData, open, setOpen }) {
   const onSubmit = async (values) => {
-    console.log(values, "values");
-    const resUpdateProfile = await updateProfile(values);
+    console.log(ProfileData, "profileData13123");
+    const resUpdateProfile = await updateProfile(ProfileData?.id,values);
     console.log(resUpdateProfile, "resUpdateProfile");
     setOpen(false);
     if (resUpdateProfile.status === "success")

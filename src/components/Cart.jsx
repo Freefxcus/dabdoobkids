@@ -8,8 +8,10 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
+import { useNavigate } from "react-router-dom";
 
 export default function Cart() {
+  const navigate = useNavigate();
   const [cart, setCart] = useState([]);
   const [checkout, setCheckout] = useState({});
   console.log("checkout:", checkout);
@@ -279,6 +281,9 @@ export default function Cart() {
             }}
           >
             <button
+            onClick={()=>{
+              navigate("/cart")
+            }}
               style={{
                 cursor: "pointer",
                 width: "150px",
