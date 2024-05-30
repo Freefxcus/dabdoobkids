@@ -9,14 +9,16 @@ import { Box, Modal } from "@mui/material";
 import { updateProfile } from "../../utils/apiCalls.js";
 import { toast } from "react-toastify";
 import CircularProgress from "@mui/material/CircularProgress";
-export default function UpdateProfileModal({ ProfileData, open, setOpen }) {
+export default function UpdateProfileModal({ ProfileData, open, setOpen ,setForceReload  }) {
   const onSubmit = async (values) => {
     console.log(ProfileData, "profileData13123");
-    const resUpdateProfile = await updateProfile(ProfileData?.id,values);
+    const resUpdateProfile = await updateProfile(values);
     console.log(resUpdateProfile, "resUpdateProfile");
-    setOpen(false);
-    if (resUpdateProfile.status === "success")
+    if (resUpdateProfile === "success"){
       toast.success("Profile Updated Successfully");
+        setForceReload((prev) => !prev);
+    }
+    setOpen(false);
   };
   const {
     values,

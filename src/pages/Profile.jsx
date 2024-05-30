@@ -14,7 +14,7 @@ import instance from "../utils/interceptor.js";
 import Popup from "../components/Popup";
 import { userInfoActions } from "../Redux/store";
 import { notifyError, notifySuccess } from "../utils/general";
-import { authorize, getAddress, deleteAddress, getWallet } from "../utils/apiCalls.js";
+import { authorize, getAddress, deleteAddress, getWallet, getWalletHistory } from "../utils/apiCalls.js";
 import Loader from "../components/Loader.jsx";
 import Accordion from "@mui/material/Accordion";
 import AccordionActions from "@mui/material/AccordionActions";
@@ -48,7 +48,8 @@ export default function Profile() {
   const [openAddAddress, setOpenAddAddress] = useState(false);
   const [openEditAddress, setOpenEditAddress] = useState(false);
   const [openEditProfile, setOpenEditProfile] = useState(false);
-  const [wallet , setWallet] = useState({});//[{}
+  const [wallet , setWallet] = useState({});
+  const [walletHistory , setWalletHistory] = useState({});
   const handleClickOpen = () => {
     setAlertOpen(true);
   };
@@ -144,7 +145,13 @@ export default function Profile() {
       setWallet(res);
     })
 
+    getWalletHistory().then((res) => {
+      console.log(res, "walletHistory123");
+      setWalletHistory(res);
+    })
+
   },[])
+  
 
   console.log(wallet, "wallet123123132");
   return (
@@ -262,7 +269,7 @@ export default function Profile() {
                     >
                       Edit
                     </button>
-                    <UpdateProfileModal open={openEditProfile} setOpen={setOpenEditProfile} ProfileData={userInfo} />
+                    <UpdateProfileModal open={openEditProfile} setOpen={setOpenEditProfile} ProfileData={userInfo} setForceReload = {setForceReload} />
                   </div>
                   <div className={styles.v_line}></div>
                   <div className={styles.row_wrap}>
@@ -397,7 +404,7 @@ export default function Profile() {
                             fontWeight: "700",
                           }}
                         >
-                          EGP 3000.00
+                          {wallet ? wallet.balance : 0} EGP
                         </Box>
                       </Box>
                       <button
@@ -409,7 +416,7 @@ export default function Profile() {
                         Withdraw
                       </button>
                     </Box>
-                    <table className={styles.my_table}>
+                    {walletHistory.items.length > 0 ?    <table className={styles.my_table}>
                       <tr>
                         <th>Created</th>
                         <th>Type</th>
@@ -417,7 +424,7 @@ export default function Profile() {
                         <th>Amount</th>
                         <th>Balance</th>
                       </tr>
-                      {["", "", "", ""].map((item, index) => (
+                      {walletHistory.items.map((item, index) => (
                         <tr>
                           <td>10 Feb 2024</td>
                           <td>Order Fee</td>
@@ -432,7 +439,8 @@ export default function Profile() {
                           <td>EGP 500</td>
                         </tr>
                       ))}
-                    </table>
+                    </table> : <h1>No Wallet History</h1>}
+                
                   </Box>
                 )}
                 {currentOrder !== null && (

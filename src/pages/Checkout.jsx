@@ -1,33 +1,83 @@
 import { useEffect, useState } from "react";
-import { getCart, orderCheckout } from "../utils/apiCalls"; 
+import { useSearchParams } from "react-router-dom";
+
+import { getAddress, getCart, orderCheckout, orderSummary } from "../utils/apiCalls";
 import styles from "../styles/components/OrderCard.module.css";
 import ConfirmPayment from "../components/checkout/ConfirmPayment";
 import BillingDetails from "../components/checkout/BillingDetails";
 export default function Checkout() {
-  const [cart, setCart] = useState([]);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [payemntMethod, setPaymentMethod] = useState(searchParams.get("paymentMethod") ||"cash");
+  const [promoCode, setPromoCode] = useState(
+    searchParams.get("promocode") || ""
+  );
 
+  const [cart, setCart] = useState([]);
+  const [order, setOrder] = useState([]);
+  const [address, setAddress] = useState([]);
   useEffect(() => {
 
-    const makeOrder = async () => {
-        const order = await orderCheckout();
-        console.log(order, "order123123");
-    }
     const fetchCart = async () => {
-      const cart = await getCart();
-      setCart(cart);
+      const cartData = await getCart();
+      setCart(cartData);
     };
+    
+    const fetchAddress = async () => {
+      const addressData = await getAddress();
+      setAddress(addressData);
+    }
+    
+  
     fetchCart();
-    makeOrder();
+    fetchAddress();
   }, []);
+  console.log(address,"addrezzzzzzzzzzzz");
 
-  console.log(cart, "checkout123123123");
+
+useEffect(()=>{
+    const data = {
+            promocode :promoCode,
+            useWallet : payemntMethod === "wallet",
+            paymentMethod : payemntMethod,
+            address : address?.items?.[0].id
+    }
+    const fetchOrder = async () => {
+        const orderData = await orderSummary(data);
+        setOrder(orderData);
+    }
+    fetchOrder();
+},[address?.items, payemntMethod, promoCode])
+console.log(order, "orderrrrr123123");
 
   return (
-    <div style={{ margin : "12px auto" , display : "flex" ,maxWidth : "70%" , gap : "52px" , justifyContent : "center"  , flexWrap : "wrap" }}>
-      <div style={{ display: "flex", flexDirection: "column", gap: "24px", flex :2  }}>
+    <div
+      style={{
+        margin: "12px auto",
+        display: "flex",
+        maxWidth: "70%",
+        gap: "52px",
+        justifyContent: "center",
+        flexWrap: "wrap",
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "24px",
+          flex: 2,
+        }}
+      >
         <h1 style={{ fontSize: "24px", fontWeight: "500" }}>Summary Order</h1>
         {cart?.items?.map((item) => (
-          <div style={{ display: "flex", gap: "32px" ,justifyContent : "center" , marginBottom : "18px"}}>
+          <div
+            style={{
+              display: "flex",
+              gap: "32px",
+              justifyContent: "center",
+              marginBottom: "18px",
+            }}
+          >
             <img
               style={{ height: "150px", width: "116px", objectFit: "cover" }}
               src={item?.product?.images[0]}
@@ -83,12 +133,12 @@ export default function Checkout() {
                 style={{
                   display: "flex",
                   border: "1px solid var(--dreamy-cloud)",
-                  fontWeight : "400"
+                  fontWeight: "400",
                 }}
               >
-                <h2 style={{ fontWeight : "400"}}>{item?.count}</h2>
-                <h2 style={{ fontWeight : "400"}}>x</h2>
-                <h2 style={{ fontWeight : "400"}}>{item?.variant?.price}</h2>
+                <h2 style={{ fontWeight: "400" }}>{item?.count}</h2>
+                <h2 style={{ fontWeight: "400" }}>x</h2>
+                <h2 style={{ fontWeight: "400" }}>{item?.variant?.price}</h2>
               </div>
             </div>
 
@@ -96,22 +146,24 @@ export default function Checkout() {
               style={{
                 fontWeight: "500",
                 display: "flex",
-               
+
                 justifyItems: "center",
                 alignItems: "center",
               }}
             >
               <div style={{ backgroundColor: "transparent" }}>
-                <h2 style={{ fontWeight : "400"}}>{item?.count * item?.variant?.price}</h2>
+                <h2 style={{ fontWeight: "400" }}>
+                  {item?.count * item?.variant?.price}
+                </h2>
               </div>
             </div>
           </div>
         ))}
 
-        <BillingDetails/>
+        <BillingDetails address={address}/>
       </div>
 
-        <ConfirmPayment/>
+      <ConfirmPayment orderSummary = {order}/>
     </div>
   );
 }

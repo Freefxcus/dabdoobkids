@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { getCart, orderCheckout, emptyCart } from "../utils/apiCalls";
+import { useState, useEffect, useMemo } from "react";
+import { getCart, orderCheckout, emptyCart, orderSummary } from "../utils/apiCalls";
 import LinearProgress from "@mui/material/LinearProgress";
 import styles from "../styles/components/Cart.modules.css";
 import Checkbox from "@mui/material/Checkbox";
@@ -8,7 +8,8 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { use } from "i18next";
 
 export default function Cart() {
   const navigate = useNavigate();
@@ -19,6 +20,9 @@ export default function Cart() {
   const [useWallet, setUseWallet] = useState(false);
   const [promocode, setPromocode] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("Credit Card");
+
+
+
   useEffect(() => {
     getCart().then((res) => {
       console.log(res);
@@ -26,6 +30,18 @@ export default function Cart() {
       setCart(res?.items);
     });
   }, []);
+
+  const totalPrice = useMemo(() => {
+    return cart?.reduce((acc, item) => acc + (item?.count  * item?.variant?.price), 0);
+  },[cart])
+ const handleCheckout = () => {
+  const searchParams = new URLSearchParams({
+    useWallet,
+    promocode,
+    paymentMethod,
+  });
+  navigate(`/checkout?${searchParams.toString()}`);
+ }
   return (
     <div
       style={{
@@ -132,17 +148,17 @@ export default function Cart() {
                         {item.count}X
                       </div>
                       <div>
-                        {/* <span
+                        <span
                           style={{
                             color: "#1B1B1BB2",
                             fontSize: "16px",
                             fontWeight: "600",
-                            textDecoration: "line-through",
+                            
                           }}
                         >
-                          $ 900
+                        {item?.variant?.price}
                         </span>
-                        &nbsp; &nbsp; */}
+                        &nbsp; &nbsp;
                         <span
                           style={{
                             fontSize: "16px",
@@ -176,7 +192,7 @@ export default function Cart() {
           >
             <div>Subtotal</div>
             <div>
-              {!checkout?.status && !isChecking && <div>.......</div>}
+              {/* {!checkout?.status && !isChecking && <div>.......</div>}
               {checkout?.status && <div>$ 3.010.00</div>}
               {isChecking && (
                 <div
@@ -185,7 +201,8 @@ export default function Cart() {
                 >
                   <LinearProgress color="inherit" />
                 </div>
-              )}
+              )} */}
+              {totalPrice}$
             </div>
           </div>
           <div
@@ -310,21 +327,7 @@ export default function Cart() {
                 color: "var(--white)",
                 border: "1px solid var(--brown)",
               }}
-              onClick={() => {
-                seIsChecking(true);
-                orderCheckout(promocode, useWallet, paymentMethod)
-                  .then((res) => {
-                    console.log(res);
-                    setCheckout(res);
-                    seIsChecking(false);
-                  })
-                  .catch((err) => {
-                    // console.log(err);
-                    // alert(err);
-                    seIsChecking(false);
-                    setPromocode("");
-                  });
-              }}
+              onClick={handleCheckout}
             >
               Checkout
             </button>

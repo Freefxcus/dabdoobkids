@@ -39,7 +39,7 @@ import banner2 from "../images/banner2.png";
 import arrow from "../images/arrow.svg";
 const bannerImages = [banner1, banner2];
 export default function Home() {
-  const mobile = useMediaQuery("(max-width:500px)");
+  const mobile = useMediaQuery("(max-width:300px)");
 
   const [currentCat, setCurrentCat] = useState("");
   const [reload, setReload] = useState(false);
@@ -161,33 +161,7 @@ export default function Home() {
 
     setState({ ...state, [anchor]: open });
   };
-  // useEffect(() => {
-  //   // Make an API call using the Axios instance
-  //   axiosInstance
-  //     .get("/products")
-  //     .then((response) => {
-  //       console.log("API Response:", response.data);
-  //     })
-  //     .catch((error) => {
-  //       console.error("API Error:", error);
-  //     });
-  //   axiosInstance
-  //     .get("/categories")
-  //     .then((response) => {
-  //       console.log("API Response:", response.data.data.categories);
-  //     })
-  //     .catch((error) => {
-  //       console.error("API Error:", error);
-  //     });
-  //   axiosInstance
-  //     .get("/brands")
-  //     .then((response) => {
-  //       console.log("API Response:", response.data);
-  //     })
-  //     .catch((error) => {
-  //       console.error("API Error:", error);
-  //     });
-  // }, []);
+
   return (
     <>
       {products?.array?.length < 0 && (
@@ -196,7 +170,7 @@ export default function Home() {
           <div style={{ height: "500px" }} />
         </>
       )}
-      {products?.array?.length == 0 && (
+      {products?.array?.length === 0 && (
         <>
           <div
             style={{

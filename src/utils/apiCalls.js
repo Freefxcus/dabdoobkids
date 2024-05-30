@@ -201,11 +201,16 @@ export const orderCheckout = async () => {
 
   return returnedValue; // caught by .then()
 };
-export const orderSummary = async () => {
+export const orderSummary = async (data) => {
   let returnedValue;
+  console.log(data);
   const body = {
-    useWallet: true,
-    paymentMethod: "cash", // example default value for item
+    useWallet: data?.useWallet,
+    paymentMethod: data?.paymentMethod,
+    address : data?.address,
+    promocode : data?.promocode, 
+    
+    // example default value for item
   };
   console.log(body);
   Object.keys(body).forEach((key) => body[key] === "" && delete body[key]);
@@ -217,7 +222,7 @@ export const orderSummary = async () => {
       returnedValue = response;
     })
     .catch((error) => {
-      notifyError(error);
+  
     });
 
   return returnedValue; // caught by .then()
@@ -356,14 +361,14 @@ export const getWishList = async () => {
   return returnedValue; // caught by .then()
 };
 
-export const updateProfile = async (id , data) => {
+export const updateProfile = async ( data) => {
   let returnedValue;
 
   await instance
-    .put(`/users/${id}`,data)
+    .post(`/auth/profile`,data)
     .then((response) => {
       console.log(response);
-      returnedValue = response.data.data;
+      returnedValue = response.data.status
     })
     .catch((error) => {
       notifyError(error);
@@ -382,6 +387,53 @@ export const getWallet = async () => {
     })
     .catch((error) => {
       console.log(error , "responseeeefromwallet");
+      notifyError(error);
+    });
+
+  return returnedValue; // caught by .then()
+}
+export const getWalletHistory = async () => {
+  let returnedValue;
+
+  await instance
+    .get("/wallets/history")
+    .then((response) => {
+      returnedValue = response.data.data;
+    })
+    .catch((error) => {
+      console.log(error , "responseeeefromwallet");
+      notifyError(error);
+    });
+
+  return returnedValue; // caught by .then()
+}
+
+export const checkPromoCode = async (code) => {
+  let returnedValue;
+
+  await instance
+    .post("/promocode/validate", {
+      code,
+    })
+    .then((response) => {
+      returnedValue = response.data.data;
+    })
+    .catch((error) => {
+      notifyError(error);
+    });
+
+  return returnedValue; // caught by .then()
+}
+
+export const ordersCallback = async () => {
+  let returnedValue;
+
+  await instance
+    .post("/orders/callback")
+    .then((response) => {
+      returnedValue = response.data.data;
+    })
+    .catch((error) => {
       notifyError(error);
     });
 

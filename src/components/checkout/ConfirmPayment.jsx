@@ -1,4 +1,20 @@
-export default function ConfirmPayment() {
+import { useState } from "react";
+import { checkPromoCode, ordersCallback,  } from "../../utils/apiCalls";
+
+
+export default function ConfirmPayment({orderSummary}) {
+    const [promoCode, setPromoCode] = useState("");
+    const validatePromoCode = async () => {
+        checkPromoCode(promoCode)
+
+
+    }
+    
+    const handlePayment = async () => {
+        const resOrdersCallback = await ordersCallback();
+        console.log(resOrdersCallback, "resOrdersCallback");
+    }
+
   return (
     <div
       style={{
@@ -25,10 +41,13 @@ export default function ConfirmPayment() {
               padding: "12px 12px ",
               flex: 2,
             }}
+            value={promoCode}
+            onChange={(e) => setPromoCode(e.target.value)}
             type="text"
             placeholder="Enter Promo Code"
           />
           <button
+            onClick={validatePromoCode}
             style={{
               backgroundColor: "var(--dreamy-cloud)",
               border: "none",
@@ -55,7 +74,7 @@ export default function ConfirmPayment() {
               fontSize: "16px",
             }}
           >
-            $3.040.00
+           {orderSummary?.data?.data?.total}$
           </h2>
         </div>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -75,10 +94,10 @@ export default function ConfirmPayment() {
               fontSize: "16px",
             }}
           >
-            $10
+               {orderSummary?.data?.data?.shipping}$
           </h2>
         </div>
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
+        {/* <div style={{ display: "flex", justifyContent: "space-between" }}>
           <h2
             style={{
               color: "var(rhine-castle)",
@@ -97,7 +116,7 @@ export default function ConfirmPayment() {
           >
             $10
           </h2>
-        </div>
+        </div> */}
         <div
           style={{
             display: "flex",
@@ -121,7 +140,7 @@ export default function ConfirmPayment() {
               fontSize: "16px",
             }}
           >
-            -50$
+                {orderSummary?.data?.data?.discount}$
           </h2>
         </div>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -140,10 +159,11 @@ export default function ConfirmPayment() {
               fontSize: "16px",
             }}
           >
-            $3.000.00
+                 {orderSummary?.data?.data?.subtotal}$
           </h2>
         </div>
         <button
+        onClick={handlePayment}
           style={{
             backgroundColor: "var(--brown)",
             color: "white",

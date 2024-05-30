@@ -15,7 +15,8 @@ import { useFormik } from "formik";
 import CloseIcon from "@mui/icons-material/Close";
 import { AddAddress, updateAddress } from "../../utils/apiCalls.js";
 import { toast } from "react-toastify";
-import { add } from "lodash";
+import { set } from "lodash";
+
 
 const style = {
   position: "absolute",
@@ -88,6 +89,7 @@ export default function AddressModal({
     validationSchema: addressSchema,
     onSubmit,
   });
+
   console.log(values, "values123123");
   return (
     <Modal open={open}>
