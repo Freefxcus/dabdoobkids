@@ -13,7 +13,7 @@ import { Autoplay, Pagination, Navigation } from "swiper/modules";
 
 import CountdownTimer from "../components/CountdownTimer";
 import Form from "../components/Form";
-import { Container } from "@mui/material";
+import { Box, Container } from "@mui/material";
 import ClothesCard from "../components/ClothesCard";
 import OfferCard from "../components/OfferCard";
 import Loader from "../components/Loader";
@@ -378,11 +378,11 @@ export default function Home() {
           {/* shop by category */}
           <div className="padding-container section-bottom-margin">
             <div className={styles.title}>Shop by Categories</div>
-            <div className="cards_container_b">
+            <Box sx={{display : "grid" , gridTemplateColumns : {lg : "repeat(3,1fr)" , md : "repeat(2,1fr)" , xs : "repeat(2,1fr)"}}}>
               {categories?.array?.map((item) => (
                 <Category item={item} />
               ))}
-            </div>
+            </Box>
           </div>
           {/* ticker */}
           <div className={`${styles["image-ticker"]} section-bottom-margin`}>

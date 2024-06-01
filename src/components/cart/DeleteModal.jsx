@@ -1,15 +1,23 @@
 import { Box, Modal } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { removeFromCart } from "../../utils/apiCalls";
+import { useDispatch, useSelector } from "react-redux";
+import { cartActions } from "../../Redux/store";
 
 export default function DeleteModal({ open, setOpen,ProductId , variantId , setCartChanged}) {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+//   console.log(ProductId , "pidididididid");
+const cart = useSelector((state) => state.cart.value);
+console.log(cart , "cart212313212123123123132123");
 
 
-    const handleDeleteFromCart = async () => {
+const handleDeleteFromCart = async () => {
     const res = await removeFromCart(ProductId , variantId);
     console.log(res , "res123123");
     if (res?.status === 200) {
+        dispatch(cartActions.remove( ProductId  ));
+       
       setOpen(false);
         setCartChanged(true)
     }

@@ -1,9 +1,11 @@
 import { Box, Button, Typography } from "@mui/material";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { redirect, useNavigate, useParams, useSearchParams } from "react-router-dom";
 
 import Modal from "@mui/material/Modal";
+import Loader from "./Loader";
+import { googleCallback } from "../utils/apiCalls";
 
 const style = {
   position: "absolute",
@@ -17,36 +19,25 @@ const style = {
   p: 4,
 };
 
+
 export default function OAuth() {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [open, setOpen] = useState(true);
-  console.log(searchParams.get("code"), "<<<parammmms");
+  useEffect(()=>{
+    googleCallback(searchParams.toString()).then((res)=>{
+      console.log(res, "<<<resgoogle");
+      if(res?.data?.status === "success"){
+        localStorage.setItem("access_token", res?.data?.data?.accessToken);
+        localStorage.setItem("refresh_token", res?.data?.data?.refreshToken);   
+        navigate("/")
+      }
+    })
+  },[])
+
+  console.log(searchParams.toString(), "<<<parammmms");
 
   return (
-    <Box
-      sx={{
-        height: "70vh",
-        textAlign: "center",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        gap: "12px",
-      }}
-    >
-      <Typography id="modal-modal-title" variant="h3" component="h2">
-        Success!
-      </Typography>
-
-      <button
-        onClick={()=>{
-            navigate("/")
-        }}
-        style={{ backgroundColor: "var(--brown)", color: "white", padding: "8px" }}
-      >
-        Continue
-      </button>
-    </Box>
+   <Loader/>
   );
 }

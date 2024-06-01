@@ -27,6 +27,7 @@ import dabdoob from "../images/dabdoob.svg";
 import burger from "../images/burger.png";
 import { useDispatch, useSelector } from "react-redux";
 import { wishlistActions } from "../Redux/store";
+import { getCategories, getSubCategories } from "../utils/apiCalls";
 export default function Header({ setOpen }) {
   const debouncedHandleInputChange = useCallback(
     debounce((value) => {
@@ -44,6 +45,8 @@ export default function Header({ setOpen }) {
   const [searchInput, setSearchInput] = useState(false);
   const [searchInputValue, setSearchInputValue] = useState("");
   const [sidebar, setSidebar] = useState("");
+  const [categories, setCategories] = useState([]);
+  const [subCategories , setSubCategories]  = useState([]); 
   const myInputRef = useRef("");
   const navigate = useNavigate();
 
@@ -83,6 +86,17 @@ export default function Header({ setOpen }) {
       setIsUser(true);
     }
   }, [localStorage.getItem("access_token")]);
+
+useEffect(()=>{
+  getCategories().then((res)=>{
+    setCategories(res)
+  })
+  getSubCategories().then((res)=>{
+    setSubCategories(res)
+  })
+  
+},[])
+  console.log(subCategories,"categories123123123");
   return (
     <>
       {/* 1st bar */}
@@ -143,41 +157,23 @@ export default function Header({ setOpen }) {
                 navigate("/");
               }}
             />
+
+            { categories && categories?.categories?.map((category) => (
             <Dropdown
-              title="Baby"
+              title={category?.name}
               items={[{ title: "First", link: "#" }]}
               dropDown={dropDown}
               setDropDown={setDropDown}
               setDropDownType={setDropDownType}
-            />
-            <Dropdown
-              title="Kids"
-              items={[{ title: "First", link: "#" }]}
-              dropDown={dropDown}
-              setDropDown={setDropDown}
-              setDropDownType={setDropDownType}
-            />
-            <Dropdown
-              title="Maternity"
-              items={[{ title: "First", link: "#" }]}
-              dropDown={dropDown}
-              setDropDown={setDropDown}
-              setDropDownType={setDropDownType}
-            />
-            <Dropdown
-              title="Baby gear"
-              items={[{ title: "First", link: "#" }]}
-              dropDown={dropDown}
-              setDropDown={setDropDown}
-              setDropDownType={setDropDownType}
-            />
-            <Dropdown
-              title="Nursing accessories"
-              items={[{ title: "First", link: "#" }]}
-              dropDown={dropDown}
-              setDropDown={setDropDown}
-              setDropDownType={setDropDownType}
-            />
+            />) )
+          
+          }
+            
+   
+                     
+                     
+                     
+        
           </div>
           {/* <div className={styles["sub-container"]}> */}
           <div
@@ -203,6 +199,10 @@ export default function Header({ setOpen }) {
                 position: "relative",
                 left: animation ? 0 : "-220px",
                 transition: "left 1s ease-in-out",
+              }}
+              onClick={() => {
+                navigate("/plans");
+              
               }}
             >
               Try Dabdoob Premium

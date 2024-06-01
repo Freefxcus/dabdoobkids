@@ -17,7 +17,7 @@ export const getProducts = async (page, all, category, brand, query) => {
   const params = {
     page,
     all,
-    item: 10, // example default value for item
+    items: 2, // example default value for item
     category,
     brand,
     query,
@@ -124,6 +124,26 @@ export const getCart = async () => {
   return returnedValue; // caught by .then()
 };
 
+export const updateCart = async ( productId, variantId,body) => {
+  let returnedValue;
+
+  await instance
+    .put("/cart", {
+      product: productId,
+      variant: variantId,
+ 
+    })
+    .then((response) => {
+      console.log(response);
+      returnedValue = response;
+    })
+    .catch((error) => {
+      notifyError(error);
+    });
+
+  return returnedValue; // caught by .then()
+};
+
 export const addToCart = async (id, count, variant) => {
   let returnedValue;
 
@@ -179,12 +199,16 @@ export const removeFromCart = async (ProductId, variantId) => {
   return returnedValue; // caught by .then()
 };
 
-export const orderCheckout = async () => {
+export const orderCheckout = async ( paymentMethod , address ) => {
   let returnedValue;
   const body = {
     // promocode  ,
-    useWallet: true,
-    paymentMethod: "Credit Card", // example default value for item
+
+    useWallet: paymentMethod === "wallet" ? true : false,
+    paymentMethod: paymentMethod,
+    address : address,
+
+    // example default value for item
   };
   console.log(body);
   Object.keys(body).forEach((key) => body[key] === "" && delete body[key]);
@@ -207,9 +231,9 @@ export const orderSummary = async (data) => {
   const body = {
     useWallet: data?.useWallet,
     paymentMethod: data?.paymentMethod,
-    address : data?.address,
-    promocode : data?.promocode, 
-    
+    address: data?.address,
+    promocode: data?.promocode,
+
     // example default value for item
   };
   console.log(body);
@@ -221,9 +245,7 @@ export const orderSummary = async (data) => {
       console.log(response);
       returnedValue = response;
     })
-    .catch((error) => {
-  
-    });
+    .catch((error) => {});
 
   return returnedValue; // caught by .then()
 };
@@ -330,6 +352,27 @@ export const googleAuth = async () => {
   return returnedValue; // caught by .then()
 };
 
+export const googleCallback = async (code) => {
+  let returnedValue;
+  
+  await instance
+    .get(`/auth/google/callback?${code}`, {
+      code,
+    })
+    .then((response) => {
+      console.log(response);
+
+      returnedValue = response;
+
+    })
+    .catch((error) => {
+      notifyError(error);
+    });
+
+  return returnedValue; // caught by .then()
+
+}
+
 export const getCategories = async () => {
   let returnedValue;
 
@@ -346,6 +389,22 @@ export const getCategories = async () => {
   return returnedValue; // caught by .then()
 };
 
+export const getSubCategories = async () => {
+  let returnedValue;
+
+  await instance
+    .get("/subcategories")
+    .then((response) => {
+      console.log(response);
+      returnedValue = response;
+    })
+
+    .catch((error) => {
+      notifyError(error);
+    });
+  return returnedValue; // caught by .then()
+
+}
 export const getWishList = async () => {
   let returnedValue;
 
@@ -361,21 +420,20 @@ export const getWishList = async () => {
   return returnedValue; // caught by .then()
 };
 
-export const updateProfile = async ( data) => {
+export const updateProfile = async (data) => {
   let returnedValue;
 
   await instance
-    .post(`/auth/profile`,data)
+    .post(`/auth/profile`, data)
     .then((response) => {
       console.log(response);
-      returnedValue = response.data.status
+      returnedValue = response.data.status;
     })
     .catch((error) => {
       notifyError(error);
     });
   return returnedValue;
 };
-
 
 export const getWallet = async () => {
   let returnedValue;
@@ -386,12 +444,12 @@ export const getWallet = async () => {
       returnedValue = response.data.data;
     })
     .catch((error) => {
-      console.log(error , "responseeeefromwallet");
+      console.log(error, "responseeeefromwallet");
       notifyError(error);
     });
 
   return returnedValue; // caught by .then()
-}
+};
 export const getWalletHistory = async () => {
   let returnedValue;
 
@@ -401,20 +459,35 @@ export const getWalletHistory = async () => {
       returnedValue = response.data.data;
     })
     .catch((error) => {
-      console.log(error , "responseeeefromwallet");
+      console.log(error, "responseeeefromwallet");
       notifyError(error);
     });
 
   return returnedValue; // caught by .then()
-}
+};
 
 export const checkPromoCode = async (code) => {
   let returnedValue;
 
   await instance
     .post("/promocode/validate", {
-      code,
+      promocode: code,
     })
+    .then((response) => {
+      returnedValue = response
+    })
+    .catch((error) => {
+      notifyError(error);
+    });
+
+  return returnedValue; // caught by .then()
+};
+
+export const ordersCallback = async () => {
+  let returnedValue;
+
+  await instance
+    .post("/orders/callback")
     .then((response) => {
       returnedValue = response.data.data;
     })
@@ -423,13 +496,13 @@ export const checkPromoCode = async (code) => {
     });
 
   return returnedValue; // caught by .then()
-}
+};
 
-export const ordersCallback = async () => {
+export const getPlans = async () => {
   let returnedValue;
 
   await instance
-    .post("/orders/callback")
+    .get("/plans")
     .then((response) => {
       returnedValue = response.data.data;
     })

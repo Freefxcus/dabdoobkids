@@ -46,6 +46,37 @@ export default function Cart() {
     (acc, item) => acc + item.variant.price * item.count,
     0
   );
+  if (!cart) {
+   return  <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        gap: "12px",
+      }}
+    >
+      <img src="/empty-wishlist.svg" alt="empy cart" />
+      <h2>Empty Cart</h2>
+      <p>Looks like you haven't added any products to your Cart yet.</p>
+      <button
+        onClick={() => {
+          navigate("/");
+        }}
+        style={{
+          backgroundColor: "var(--brown)",
+          color: "white",
+          border: "none",
+          padding: "12px 48px",
+          fontWeight: "400",
+          fontSize: "18px",
+          borderRadius: "10px",
+          cursor: "pointer",
+        }}
+      >
+        continue shopping
+      </button>
+    </div>;
+  }
   return (
     <div className={`${styles.container} padding-container`}>
       <Popup open={open} setOpen={setOpen} type="create_address" />
@@ -95,7 +126,7 @@ export default function Cart() {
             backgroundColor: "white",
             border: "1px solid var(--errie-black)",
             padding: "12px 32px",
-            fontWeight: "600",
+            fontWeight: "400",
             fontSize: "18px",
             borderRadius: "10px",
             cursor: "pointer",

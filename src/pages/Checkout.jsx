@@ -33,13 +33,21 @@ export default function Checkout() {
   }, []);
   console.log(address,"addrezzzzzzzzzzzz");
 
+  useEffect(()=>{
+    if(!searchParams.get("paymentMethod")){
+      setSearchParams(prev=>{
+        prev.set("paymentMethod", "Cash on Delivery")
+        return prev
+      })
+    }
+  },[])
 
 useEffect(()=>{
     const data = {
             promocode :promoCode,
             useWallet : payemntMethod === "wallet",
             paymentMethod : payemntMethod,
-            address : address?.items?.[0].id
+            address : address?.items?.[0]?.id
     }
     const fetchOrder = async () => {
         const orderData = await orderSummary(data);
@@ -163,7 +171,7 @@ console.log(order, "orderrrrr123123");
         <BillingDetails address={address}/>
       </div>
 
-      <ConfirmPayment orderSummary = {order}/>
+      <ConfirmPayment address={address} orderSummary = {order}/>
     </div>
   );
 }

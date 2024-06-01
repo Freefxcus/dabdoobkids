@@ -1,19 +1,31 @@
 import { useState } from "react";
-import { checkPromoCode, ordersCallback,  } from "../../utils/apiCalls";
+import {
+  checkPromoCode,
+  orderCheckout,
+  ordersCallback,
+} from "../../utils/apiCalls";
+import { useSearchParams } from "react-router-dom";
+import { set } from "lodash";
 
-
-export default function ConfirmPayment({orderSummary}) {
-    const [promoCode, setPromoCode] = useState("");
-    const validatePromoCode = async () => {
-        checkPromoCode(promoCode)
-
-
-    }
+export default function ConfirmPayment({ orderSummary, address }) {
+  console.log(address, "address123123zzzzzz");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const paymentMethod = searchParams.get("paymentMethod");
+  const addressId = address?.items?.[0]?.id;
+  const [promoCode, setPromoCode] = useState("");
+  const [paymentLink, setPaymentMethod] = useState("");
+  const validatePromoCode = async () => {
+    checkPromoCode(promoCode);
+  };
+  console.log(paymentMethod, addressId, "paymentMethod123123zzzzzz");
+  const handlePayment = async () => {
+    const checkout = await orderCheckout(paymentMethod, addressId);
     
-    const handlePayment = async () => {
-        const resOrdersCallback = await ordersCallback();
-        console.log(resOrdersCallback, "resOrdersCallback");
+    if (checkout?.data?.data?.url) {
+      console.log(checkout, "checkout123123");
+      setPaymentMethod(checkout?.data?.data?.url);
     }
+  };
 
   return (
     <div
@@ -74,7 +86,7 @@ export default function ConfirmPayment({orderSummary}) {
               fontSize: "16px",
             }}
           >
-           {orderSummary?.data?.data?.total}$
+            {orderSummary?.data?.data?.total}$
           </h2>
         </div>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -94,7 +106,7 @@ export default function ConfirmPayment({orderSummary}) {
               fontSize: "16px",
             }}
           >
-               {orderSummary?.data?.data?.shipping}$
+            {orderSummary?.data?.data?.shipping}$
           </h2>
         </div>
         {/* <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -140,7 +152,7 @@ export default function ConfirmPayment({orderSummary}) {
               fontSize: "16px",
             }}
           >
-                {orderSummary?.data?.data?.discount}$
+            {orderSummary?.data?.data?.discount}$
           </h2>
         </div>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -159,11 +171,11 @@ export default function ConfirmPayment({orderSummary}) {
               fontSize: "16px",
             }}
           >
-                 {orderSummary?.data?.data?.subtotal}$
+            {orderSummary?.data?.data?.subtotal}$
           </h2>
         </div>
         <button
-        onClick={handlePayment}
+          onClick={handlePayment}
           style={{
             backgroundColor: "var(--brown)",
             color: "white",
@@ -178,6 +190,8 @@ export default function ConfirmPayment({orderSummary}) {
           Contuinue to Payment
         </button>
       </div>
+
+      {paymentLink && <iframe  src={paymentLink} title="Paymob" style={{position : "fixed" , height : "100vh" , width : "100vw" , zIndex : "9999" , inset : "0"}} />}
     </div>
   );
 }

@@ -10,18 +10,23 @@ import {
 } from "@mui/material";
 import { getAddress } from "../../utils/apiCalls";
 import { useSearchParams } from "react-router-dom";
-export default function BillingDetails({address}) {
-  const [open, setOpen] = useState(false);
- //[{}F
+import { Prev } from "react-bootstrap/esm/PageItem";
+export default function BillingDetails({ address }) {
+  const [openEdit, setOpenEdit] = useState(false);
+  const [openAdd, setOpenAdd] = useState(false);
+  //[{}F
   const [searchParams, setSearchParams] = useSearchParams();
-  const [payemntMethod, setPaymentMethod] = useState(searchParams.get("paymentMethod") ||"cash");
-    const [promoCode , setPromoCode] = useState(searchParams.get("promocode") ||"")
+  const [payemntMethod, setPaymentMethod] = useState(
+    searchParams.get("paymentMethod") 
+  );
+  const [promoCode, setPromoCode] = useState(
+    searchParams.get("promocode") || ""
+  );
 
-    console.log(searchParams.get("paymentMethod") , "paymentMethod12312132");
+  console.log(searchParams.get("paymentMethod"), "paymentMethod12312132");
   const handleChange = (event) => {
     setPaymentMethod(event.target.value);
   };
-
 
   const controlProps = (item) => ({
     checked: payemntMethod === item,
@@ -30,6 +35,8 @@ export default function BillingDetails({address}) {
     name: "color-radio-button-demo",
     inputProps: { "aria-label": item },
   });
+  console.log(controlProps, "controlProps123123");
+
   return (
     <div>
       <h1 style={{ fontSize: "22px", marginBottom: "12px" }}>
@@ -68,7 +75,7 @@ export default function BillingDetails({address}) {
             />
             <div
               onClick={() => {
-                setOpen(true);
+                setOpenAdd(true);
               }}
             >
               <AddIcon sx={{ color: "var(--brown)", cursor: "pointer" }} />
@@ -92,7 +99,7 @@ export default function BillingDetails({address}) {
             </div>
             <img
               onClick={() => {
-                setOpen(true);
+                setOpenEdit(true);
               }}
               style={{
                 padding: "12px",
@@ -126,6 +133,12 @@ export default function BillingDetails({address}) {
               Credit Card
             </div>
             <Radio
+              onClick={() => {
+                setSearchParams((prev) => {
+                  prev.set("paymentMethod", "Credit Card");
+                  return prev;
+                });
+              }}
               {...controlProps("Credit Card")}
               sx={{
                 "&.Mui-checked": {
@@ -145,6 +158,12 @@ export default function BillingDetails({address}) {
             </div>
 
             <Radio
+              onClick={() => {
+                setSearchParams((prev) => {
+                  prev.set("paymentMethod", "Cash on Delivery");
+                  return prev;
+                });
+              }}
               sx={{
                 "&.Mui-checked": {
                   color: "var(--brown)",
@@ -164,6 +183,12 @@ export default function BillingDetails({address}) {
             </div>
 
             <Radio
+              onClick={() => {
+                setSearchParams((prev) => {
+                  prev.set("paymentMethod", "Cash on Delivery");
+                  return prev;
+                });
+              }}
               sx={{
                 "&.Mui-checked": {
                   color: "var(--brown)",
@@ -173,7 +198,14 @@ export default function BillingDetails({address}) {
             />
           </div>
 
-          <div style={{marginTop : "6px" , display : "flex" ,flexDirection : "column"  , gap  :"12px"}}>
+          <div
+            style={{
+              marginTop: "6px",
+              display: "flex",
+              flexDirection: "column",
+              gap: "12px",
+            }}
+          >
             <h3>Add Delivery Instructions</h3>
             <textarea
               style={{
@@ -182,16 +214,17 @@ export default function BillingDetails({address}) {
                 border: "1px solid #E5E7EB",
                 padding: "12px",
               }}
-              />
+            />
           </div>
         </div>
       </div>
       <AddressModal
-        open={open}
-        setOpen={setOpen}
+        open={openEdit}
+        setOpen={setOpenEdit}
         addressInfo={address.items?.[0]}
         type="edit"
       />
+      <AddressModal open={openAdd} setOpen={setOpenAdd} type="add" />
     </div>
   );
 }

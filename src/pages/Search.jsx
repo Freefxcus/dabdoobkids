@@ -13,23 +13,26 @@ import Box from "@mui/material/Box";
 import LinearProgress from "@mui/material/LinearProgress";
 import { userInfoActions, dataActions, wishlistActions } from "../Redux/store";
 import { useDispatch, useSelector } from "react-redux";
-import { debounce } from "lodash";
-import { useLocation } from "react-router-dom";
+import { debounce, set } from "lodash";
+import { useLocation, useSearchParams } from "react-router-dom";
 
 export default function Search() {
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
+  // const location = useLocation();
+  // const searchParams = new URLSearchParams(location.search);
+  // const location = useLocation();
+// const [searchParams, setSearchParams] = useState(new URLSearchParams(location.search));
+  const [searchParams, setSearchParams] = useSearchParams();
   const urlCatId = searchParams.get("categoryId");
   const urlBrandId = searchParams.get("brandId");
   const urlQuery = searchParams.get("query");
   const [catId, setCatId] = useState(urlCatId ? urlCatId : "");
   const [brandId, setBrandId] = useState(urlBrandId ? urlBrandId : "");
-  const [query, setQuery] = useState(urlQuery ? urlQuery : "");
+  const [queryStr, setQuery] = useState(urlQuery ? urlQuery : "");
   const [searchData, setSearchData] = useState([]);
   console.log(searchData.products);
   const [totalPages, setTotalPages] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(searchParams.get('page') );
   const [state, setState] = useState(false);
   const [checked, setChecked] = useState(false);
 
@@ -37,25 +40,41 @@ export default function Search() {
   const categories = data.categories;
   const brands = data.brands;
 
-  // useEffect(() => {
-  //   getProducts(page, false, catId, brandId, query).then((res) => {
-  //     setSearchData(res);
-  //   });
-  // }, [page, catId, brandId, query]);
-
-  const debouncedHandleInputChange = useCallback(
-    debounce((value) => {
-      getProducts(page, false, catId, brandId, query).then((res) => {
+  useEffect(() => {
+    setIsLoading(true)
+    const pageNumber = searchParams.get('page') || 1;
+    getProducts(pageNumber, false, catId, brandId, queryStr).then((res) => {
+      setSearchData(res);
+      setIsLoading(false)
+    });
+  }, []);
+  console.log(searchParams.get('page') , "searchParams123saddsd123123");
+  const debouncedHandleInputChange = debounce((searchparams) => {
+      setIsLoading(true);
+      const searchPage = searchparams.get('page') || 1;
+      const searchCatId = searchparams.get('categoryId') || '';
+      const searchBrandId = searchparams.get('brandId') || '';
+      const searchQuery = searchparams.get('query') || '';
+      getProducts(searchPage, false, searchCatId, searchBrandId, searchQuery).then((res) => {
         setSearchData(res);
+        setIsLoading(false);
       });
-    }, 1000),
-    [page, catId, brandId, query]
-  ); //
+    }, 1000)
+  
 
-  const handleSearch = (value) => {
-    setQuery(value);
-    debouncedHandleInputChange(value);
+  const handleSearch = (e) => {
+
+    setSearchParams((prev) => {
+      if(e.target.value === ''){
+        prev.delete('query');
+        return prev;
+      }
+      prev.set('query', e.target.value);
+      return prev;
+    })
+    debouncedHandleInputChange(searchParams);
   };
+  console.log(searchData, "searchData13132");
   return (
     <div
       // className={`${styles.container} margin-container section-top-margin section-bottom-margin`}
@@ -81,12 +100,10 @@ export default function Search() {
       <div className={styles.center}>
         <div className={styles.search_container}>
           <input
-            value={query}
+            defaultValue={queryStr}
             className={styles.search_input}
             placeholder="Search product"
-            onChange={(e) => {
-              handleSearch(e.target.value);
-            }}
+            onChange={handleSearch}
           />
           <img src={lense} />
         </div>
@@ -99,16 +116,28 @@ export default function Search() {
               <div
                 className={styles.checkbox_container}
                 onClick={() => {
-                  if (catId == category.id) {
+                  if (catId === category.id) {
                     setCatId("");
+                    setSearchParams((prev) => {
+                      prev.delete('categoryId');
+                      return prev;
+                    
+                    } )
+                  debouncedHandleInputChange(searchParams);
                   } else {
+                    setSearchParams((prev) => {
+                      prev.set('categoryId', category.id);
+                      prev.delete('page');
+                      return prev;
+                    })
                     setCatId(category.id);
+                    debouncedHandleInputChange(searchParams);
                   }
                 }}
               >
                 <Checkbox
                   // checked={checked}
-                  checked={catId == category.id}
+                  checked={catId === category.id}
                   sx={{
                     // color: pink[800],
                     padding: 0,
@@ -127,16 +156,29 @@ export default function Search() {
               <div
                 className={styles.checkbox_container}
                 onClick={() => {
-                  if (brandId == brand.id) {
+                  if (brandId === brand.id) {
                     setBrandId("");
+                    setSearchParams((prev) => {
+                      prev.delete('brandId');
+                      return prev;
+                    
+                    } )
+                  debouncedHandleInputChange(searchParams);
                   } else {
                     setBrandId(brand.id);
+                    setSearchParams((prev) => {
+                      prev.set('brandId', brand.id);
+                      prev.delete('page');
+                      return prev;
+                    })
+          
+                    debouncedHandleInputChange(searchParams);
                   }
                 }}
               >
                 <Checkbox
                   // checked={checked}
-                  checked={brandId == brand.id}
+                  checked={brandId === brand.id}
                   sx={{
                     // color: pink[800],
                     padding: 0,
@@ -177,15 +219,20 @@ export default function Search() {
               searchData.products.map((item) => <ClothesCard item={item} />)}
           </>
           <Pagination
+            
+            sx={{ mt: "10px", mb: "10px", width: "100%" }} 
             color="primary"
             variant="outlined"
-            count={totalPages}
-            page={page}
+            count={searchData?.metadata?.totalPages || 1}
+            page={+searchParams.get('page') || 1}
             onChange={(e, v) => {
-              setPage(v);
-              searchData([]);
+              setSearchParams((prev) => {
+                prev.set('page', v);
+                return prev;
+              })
+              // searchData([]);
+              debouncedHandleInputChange(searchParams);
             }}
-            sx={{ mt: "10px", mb: "10px", width: "100%"  , mx: "auto"}}
           />
         </div>
 
