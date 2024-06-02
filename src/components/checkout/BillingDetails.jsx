@@ -23,15 +23,22 @@ export default function BillingDetails({ address }) {
     searchParams.get("promocode") || ""
   );
 
+useEffect(()=>{
+  setSearchParams((prev)=>{
+    prev.set("paymentMethod", "Cash on Delivery")
+    return prev
+  })
+},[])
+
   console.log(searchParams.get("paymentMethod"), "paymentMethod12312132");
   const handleChange = (event) => {
     setPaymentMethod(event.target.value);
   };
-
+  const initialValue = searchParams.get("paymentMethod") || "Cash on Delivery";
   const controlProps = (item) => ({
     checked: payemntMethod === item,
     onChange: handleChange,
-    value: searchParams.get("paymentMethod"),
+    value: item,
     name: "color-radio-button-demo",
     inputProps: { "aria-label": item },
   });
@@ -160,7 +167,7 @@ export default function BillingDetails({ address }) {
             <Radio
               onClick={() => {
                 setSearchParams((prev) => {
-                  prev.set("paymentMethod", "Cash on Delivery");
+                  prev.set("paymentMethod", "wallet");
                   return prev;
                 });
               }}
@@ -169,7 +176,7 @@ export default function BillingDetails({ address }) {
                   color: "var(--brown)",
                 },
               }}
-              {...controlProps("Wallet")}
+              {...controlProps("wallet")}
             />
           </div>
           <div style={{ display: "flex", justifyContent: "space-between" }}>

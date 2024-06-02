@@ -31,6 +31,7 @@ import Checkout from "./pages/Checkout";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import OrderDetails from "./components/orders/OrderDetails";
 import ForgetPassword from "./pages/ForgetPassword";
+import PostPayment from "./pages/post-payment";
 
 function App() {
   const [open, setOpen] = useState(false);
@@ -89,6 +90,10 @@ function App() {
                   <Route
                     path="/wishlist"
                     element={<ProtectedRoute element={WishList} />}
+                  />
+                  <Route
+                    path="/post-payment"
+                    element={<ProtectedRoute element={PostPayment} />}
                   />
 
                   <Route

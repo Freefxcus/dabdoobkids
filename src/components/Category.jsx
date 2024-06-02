@@ -9,7 +9,7 @@ export default function Category({ item }) {
 
   return (
     <div
-      style={{ margin: "8px auto", maxWidth: "100%" }}
+      style={{ maxWidth: "100%" }}
       onClick={() => {
         // navigate(`search/${item.id}`);
         navigate(`/search/?categoryId=${item.id}`);
