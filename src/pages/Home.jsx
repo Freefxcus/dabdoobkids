@@ -45,7 +45,7 @@ export default function Home() {
   const [reload, setReload] = useState(false);
   const [activeSlide, setActiveSlide] = useState(0);
   const data = useSelector((state) => state.data.value);
-  console.log(data,"<<<<<<<<<<<<<<<<<Data");
+  console.log(data, "<<<<<<<<<<<<<<<<<Data");
 
   const products = data.products;
   const categories = data.categories;
@@ -84,7 +84,7 @@ export default function Home() {
     //* products
     getProducts()
       .then((res) => {
-        console.log(res , "<<<<<<<<ressss");
+        console.log(res, "<<<<<<<<ressss");
         dispatch(
           dataActions.update({
             products: {
@@ -106,6 +106,7 @@ export default function Home() {
         },
       })
       .then((response) => {
+        console.log(response, "categoriesasdasdsdasd");
         setCurrentCat(response.data.data.categories[0]);
         dispatch(
           dataActions.update({
@@ -324,12 +325,12 @@ export default function Home() {
                     delay: 2000,
                     disableOnInteraction: false,
                   }}
-                  navigation={true}
+                  navigation={false}
                   modules={[Navigation]}
                   breakpoints={{
                     // when window width is >= 320px
                     320: {
-                      slidesPerView: 1,
+                      slidesPerView: 2,
                       spaceBetween: 10,
                     },
                     // when window width is >= 480px
@@ -377,15 +378,48 @@ export default function Home() {
           </div>
           {/* shop by category */}
           <div className="padding-container section-bottom-margin">
-            <div className={styles.title}>Shop by Categories</div>
-            <Box sx={{display : "grid" , gridTemplateColumns : {lg : "repeat(3,1fr)" , md : "repeat(2,1fr)" , xs : "repeat(2,1fr)"}}}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                width: "100%",
+              }}
+            >
+              <h1 className={styles.title}>Shop by category</h1>
+
+              <span
+                onClick={() => navigate("/categories")}
+                style={{
+                  color: "var(--brown)",
+                  fontSize: "14px",
+                  cursor: "pointer",
+                  textAlign: "center",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                All Categories
+              </span>
+            </div>
+            <Box
+              sx={{
+                display: "grid",
+                gridTemplateColumns: {
+                  lg: "repeat(3,1fr)",
+                  md: "repeat(2,1fr)",
+                  xs: "repeat(2,1fr)",
+                },
+                gap: { lg: "20px", md: "10px", xs: "10px" },
+                maxWidth: "100%",
+                alignContent: "start",
+              }}
+            >
               {categories?.array?.map((item) => (
                 <Category item={item} />
               ))}
             </Box>
           </div>
           {/* ticker */}
-          <div className={`${styles["image-ticker"]} section-bottom-margin`}>
+          {/* <div className={`${styles["image-ticker"]} section-bottom-margin`}>
             {brands?.array &&
               repeatedBands.map(({ images, name, id }) => (
                 <img
@@ -396,7 +430,7 @@ export default function Home() {
                   }}
                 />
               ))}
-          </div>
+          </div> */}
           {/* daily sale */}
           <div className="padding-container section-bottom-margin">
             <div
