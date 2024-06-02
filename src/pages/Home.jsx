@@ -95,7 +95,7 @@ export default function Home() {
         );
       })
       .catch((err) => {
-        notifyError(err.response.data.message);
+        notifyError(err);
       });
 
     //* categories
@@ -117,7 +117,7 @@ export default function Home() {
         );
       })
       .catch((err) => {
-        notifyError(err.response.data.message);
+        notifyError(err);
       });
     //* brands
     instance

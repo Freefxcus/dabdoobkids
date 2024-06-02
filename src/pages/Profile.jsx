@@ -311,7 +311,7 @@ console.log(orders, "orderszdsaddsegwgfqffdq");
                   </div>
                   {/* ***** */}
 
-                  {address.items?.map((address) => (
+                  {address?.items?.map((address) => (
                     <>
                       <div className={styles.v_line}></div>
                       <div className={styles.title}>{address.name}</div>

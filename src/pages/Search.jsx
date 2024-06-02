@@ -29,7 +29,7 @@ export default function Search() {
   const [brandId, setBrandId] = useState(urlBrandId ? urlBrandId : "");
   const [queryStr, setQuery] = useState(urlQuery ? urlQuery : "");
   const [searchData, setSearchData] = useState([]);
-  console.log(searchData.products);
+
   const [totalPages, setTotalPages] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [page, setPage] = useState(searchParams.get('page') );
