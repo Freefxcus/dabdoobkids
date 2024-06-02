@@ -54,6 +54,23 @@ export const getProductById = async (id) => {
   return returnedValue; // caught by .then()
 };
 
+export const getRelatedProducts = async (id) => {
+  let returnedValue;
+
+  await instance
+    .get(`/products/${id}/related`)
+    .then((response) => {
+      console.log(response);
+      returnedValue = response;
+    })
+    .catch((error) => {
+      notifyError(error);
+    });
+
+  return returnedValue; // caught by .then()
+
+}
+
 export const getWishlistItems = async () => {
   let returnedValue;
 
@@ -249,7 +266,22 @@ export const orderSummary = async (data) => {
 
   return returnedValue; // caught by .then()
 };
+export const getSingleOrder = async (id) => {
+  let returnedValue;
 
+  await instance
+    .get(`/orders/${id}`)
+    .then((response) => {
+      console.log(response);
+      returnedValue = response;
+    })
+    .catch((error) => {
+      notifyError(error);
+    });
+
+  return returnedValue; // caught by .then()
+
+}
 export const authorize = async (setForceReload) => {
   window.stop();
   if (localStorage.getItem("refresh_token")) {

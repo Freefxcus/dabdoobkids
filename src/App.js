@@ -29,6 +29,7 @@ import OAuth from "./components/OAuth";
 import WishList from "./pages/WishList";
 import Checkout from "./pages/Checkout";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
+import OrderDetails from "./components/orders/OrderDetails";
 
 function App() {
   const [open, setOpen] = useState(false);
@@ -87,6 +88,8 @@ function App() {
                     path="/wishlist"
                     element={<ProtectedRoute element={WishList} />}
                   />
+
+                  <Route path = "/order/:id" element = {<ProtectedRoute element={OrderDetails}/>}/>
                 </>
               )}
             </Routes>

@@ -15,7 +15,7 @@ import img3 from "../images/details-page/3.png";
 import img4 from "../images/details-page/4.png";
 import img5 from "../images/details-page/5.png";
 import { useParams } from "react-router-dom";
-import { getProductById } from "../utils/apiCalls";
+import { getProductById, getRelatedProducts } from "../utils/apiCalls";
 import Loader from "../components/Loader";
 import { useDispatch, useSelector } from "react-redux";
 import { wishlistActions, cartActions } from "../Redux/store";
@@ -41,6 +41,8 @@ export default function Details() {
   const [counter, setCounter] = useState(0);
   const [variant , setVaraint] = useState(0);
   const [open, setOpen] = useState(false);
+  const [relatedProducts , setRelatedProducts] = useState([]);
+
   const dispatch = useDispatch();
 
 
@@ -68,7 +70,13 @@ export default function Details() {
       setProductDetails(res);
       setLargeImage(res.images[0]);
     });
+
+    // getRelatedProducts(id).then((res) => {
+    //   setRelatedProducts(res);
+    // })
   }, []);
+
+  console.log(productDetails , "productDetails12321123");
   return (
     <>
       {!productDetails?.id && (
