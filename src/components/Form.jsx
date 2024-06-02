@@ -51,7 +51,7 @@ export default function Form({ type, toggleDrawer }) {
         }
       })
       .catch((error) => {
-        console.log(error,"<<<<errrrrrrrrrrrrr");  
+        console.log(error, "<<<<errrrrrrrrrrrrr");
         if (type === "login") {
           console.log(error);
           notifyError("Wrong username or password!");
@@ -63,11 +63,9 @@ export default function Form({ type, toggleDrawer }) {
       });
   };
 
-
-
-const handleGoogleAuth = async () => {
-  window.open("https://api.dabdoobkidz.com/auth/google", "_self");
-}
+  const handleGoogleAuth = async () => {
+    window.open("https://api.dabdoobkidz.com/auth/google", "_self");
+  };
 
   const loginInitialValues = {
     email: "",
@@ -208,12 +206,19 @@ const handleGoogleAuth = async () => {
               }
             />
             <div className={styles.remember_me_label}>Remember for 30 days</div>
-            <div className={styles.remember_me_link}>Forgot password</div>
+            <div
+              onClick={() => {
+                navigate("/forget-password");
+              }}
+              className={styles.remember_me_link}
+            >
+              Forgot password
+            </div>
           </div>
 
           <button className={styles.brown_button}>Login</button>
           <button className={styles.grey_button} onClick={handleGoogleAuth}>
-            <img src={google} width="25px" alt = "google"/> <div>Google</div>
+            <img src={google} width="25px" alt="google" /> <div>Google</div>
           </button>
           <div className={styles.footer}>
             <div className={styles.footer_main}>Don't have account yet?</div>
@@ -231,8 +236,6 @@ const handleGoogleAuth = async () => {
           </div>
         </>
       )}
-
-
 
       {/* ========================================================================= */}
       {type === "register" && (

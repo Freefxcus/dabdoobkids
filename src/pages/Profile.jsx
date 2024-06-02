@@ -14,7 +14,13 @@ import instance from "../utils/interceptor.js";
 import Popup from "../components/Popup";
 import { userInfoActions } from "../Redux/store";
 import { notifyError, notifySuccess } from "../utils/general";
-import { authorize, getAddress, deleteAddress, getWallet, getWalletHistory } from "../utils/apiCalls.js";
+import {
+  authorize,
+  getAddress,
+  deleteAddress,
+  getWallet,
+  getWalletHistory,
+} from "../utils/apiCalls.js";
 import Loader from "../components/Loader.jsx";
 import Accordion from "@mui/material/Accordion";
 import AccordionActions from "@mui/material/AccordionActions";
@@ -48,8 +54,8 @@ export default function Profile() {
   const [openAddAddress, setOpenAddAddress] = useState(false);
   const [openEditAddress, setOpenEditAddress] = useState(false);
   const [openEditProfile, setOpenEditProfile] = useState(false);
-  const [wallet , setWallet] = useState({});
-  const [walletHistory , setWalletHistory] = useState({});
+  const [wallet, setWallet] = useState({});
+  const [walletHistory, setWalletHistory] = useState({});
   const handleClickOpen = () => {
     setAlertOpen(true);
   };
@@ -79,12 +85,12 @@ export default function Profile() {
     }
   }, [popupType]);
 
-  // Scroll to top 
+  // Scroll to top
   // useEffect(() => {
   //   window.scrollTo(0, 0);
   // }, [currentOrder]);
 
-//get profile
+  //get profile
   useEffect(() => {
     //* profile
     instance
@@ -117,7 +123,6 @@ export default function Profile() {
       });
   }, [forceReload]);
 
-
   //get orders
   useEffect(() => {
     instance
@@ -136,22 +141,18 @@ export default function Profile() {
       })
       .catch((error) => {});
   }, []);
-  
-console.log(orders, "orderszdsaddsegwgfqffdq");
+
+  console.log(orders, "orderszdsaddsegwgfqffdq");
   // get wallet
   useEffect(() => {
     getWallet().then((res) => {
-    
       setWallet(res);
-    })
+    });
 
     getWalletHistory().then((res) => {
- 
       setWalletHistory(res);
-    })
-
-  },[])
-  
+    });
+  }, []);
 
   console.log(wallet, "wallet123123132");
   return (
@@ -264,12 +265,17 @@ console.log(orders, "orderszdsaddsegwgfqffdq");
                     <button
                       className={styles.brown_btn}
                       onClick={() => {
-                          setOpenEditProfile(true);
+                        setOpenEditProfile(true);
                       }}
                     >
                       Edit
                     </button>
-                    <UpdateProfileModal open={openEditProfile} setOpen={setOpenEditProfile} ProfileData={userInfo} setForceReload = {setForceReload} />
+                    <UpdateProfileModal
+                      open={openEditProfile}
+                      setOpen={setOpenEditProfile}
+                      ProfileData={userInfo}
+                      setForceReload={setForceReload}
+                    />
                   </div>
                   <div className={styles.v_line}></div>
                   <div className={styles.row_wrap}>
@@ -416,39 +422,39 @@ console.log(orders, "orderszdsaddsegwgfqffdq");
                         Withdraw
                       </button>
                     </Box>
-                    {walletHistory.items.length > 0 ?    <table className={styles.my_table}>
-                      <tr>
-                        <th>Created</th>
-                        <th>Type</th>
-                        <th>Details</th>
-                        <th>Amount</th>
-                        <th>Balance</th>
-                      </tr>
-                      {walletHistory.items.map((item, index) => (
+                    {walletHistory.items.length > 0 ? (
+                      <table className={styles.my_table}>
                         <tr>
-                          <td>10 Feb 2024</td>
-                          <td>Order Fee</td>
-                          <td>Process credits against NEGG20093079663.</td>
-                          <td
-                            style={{
-                              color: index === 2 ? "#F04438" : "#32D583",
-                            }}
-                          >
-                            - EGP 7000
-                          </td>
-                          <td>EGP 500</td>
+                          <th>Created</th>
+                          <th>Type</th>
+                          <th>Details</th>
+                          <th>Amount</th>
+                          <th>Balance</th>
                         </tr>
-                      ))}
-                    </table> : <h1>No Wallet History</h1>}
-                
+                        {walletHistory.items.map((item, index) => (
+                          <tr>
+                            <td>10 Feb 2024</td>
+                            <td>Order Fee</td>
+                            <td>Process credits against NEGG20093079663.</td>
+                            <td
+                              style={{
+                                color: index === 2 ? "#F04438" : "#32D583",
+                              }}
+                            >
+                              - EGP 7000
+                            </td>
+                            <td>EGP 500</td>
+                          </tr>
+                        ))}
+                      </table>
+                    ) : (
+                      <h1>No Wallet History</h1>
+                    )}
                   </Box>
                 )}
-         
               </div>
             )}
-            {sidebarItem === "3" && (
-              <OrderList orders={orders}/>
-            )}
+            {sidebarItem === "3" && <OrderList orders={orders} />}
             {sidebarItem === "4" && (
               <div className={styles.text_container}>
                 <div className={styles.sub_header}>Returns and refunds</div>

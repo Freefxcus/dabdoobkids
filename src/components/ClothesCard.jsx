@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { wishlistActions } from "../Redux/store";
 import { useNavigate } from "react-router-dom";
 import { truncateText } from "../utils/general.js";
+import { CardMedia } from "@mui/material";
 export default function ClothesCard({ item }) {
   console.log(item);
   const wishlist = useSelector((state) => state.wishlist.value);
@@ -25,13 +26,16 @@ export default function ClothesCard({ item }) {
     >
       <div className={styles["card-top"]}>
         {/* <img src={lady} width="100%" height="380px" /> */}
-        <img
+        <CardMedia
+          sx={{
+            height: { lg: "356px", md: "300px", xs: "204px" },
+            width: "100%",
+            objectFit: "cover",
+          }}
+          component={"img"}
           src={
             item.images?.[0] || "https://i.postimg.cc/HnNLbVGh/placeholder.png"
           }
-          alt="product"
-          style={{height: "356px" , width: "100%" , objectFit: "cover"}}
-  
         />
         <div
           className={styles["heart-container"]}

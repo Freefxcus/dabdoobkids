@@ -30,6 +30,7 @@ import WishList from "./pages/WishList";
 import Checkout from "./pages/Checkout";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import OrderDetails from "./components/orders/OrderDetails";
+import ForgetPassword from "./pages/ForgetPassword";
 
 function App() {
   const [open, setOpen] = useState(false);
@@ -55,6 +56,7 @@ function App() {
                   <Route path="/details/:id" element={<Details />} />
                   <Route path="/register" element={<Register />} />
                   <Route path="/login" element={<Login />} />
+                  <Route path="/forget-password" element={<ForgetPassword />} />
                   <Route path="/auth/google/callback" element={<OAuth />} />
                   <Route path="/otp" element={<Otp />} />
                   <Route path="/search" element={<Search />} />
@@ -89,7 +91,10 @@ function App() {
                     element={<ProtectedRoute element={WishList} />}
                   />
 
-                  <Route path = "/order/:id" element = {<ProtectedRoute element={OrderDetails}/>}/>
+                  <Route
+                    path="/order/:id"
+                    element={<ProtectedRoute element={OrderDetails} />}
+                  />
                 </>
               )}
             </Routes>

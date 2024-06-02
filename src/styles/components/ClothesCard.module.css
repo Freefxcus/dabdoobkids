@@ -1,6 +1,6 @@
 .container {
   /* width: 295px; */
-  width: 100%;
+
   max-width: 300px;
   cursor: pointer;
 }
@@ -58,13 +58,11 @@
 /* Media query for screens smaller than 600px (e.g., smartphones) */
 @media (max-width: 600px) {
   .container {
-
     /* width: 100%; */
 
     cursor: pointer;
   }
   .card-top {
-  
     border-radius: 8px;
     position: relative;
   }
