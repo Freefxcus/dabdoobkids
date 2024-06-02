@@ -31,7 +31,7 @@ export default function BillingDetails({ address }) {
   const controlProps = (item) => ({
     checked: payemntMethod === item,
     onChange: handleChange,
-    value: item,
+    value: searchParams.get("paymentMethod"),
     name: "color-radio-button-demo",
     inputProps: { "aria-label": item },
   });
@@ -194,7 +194,7 @@ export default function BillingDetails({ address }) {
                   color: "var(--brown)",
                 },
               }}
-              {...controlProps("cash")}
+              {...controlProps("Cash on Delivery")}
             />
           </div>
 

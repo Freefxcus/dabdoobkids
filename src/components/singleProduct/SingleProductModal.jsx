@@ -101,6 +101,10 @@ export default function SingleProductModal({
                 View Cart
               </button>
               <button
+              onClick={() => {
+                navigate("/checkout");
+                handleClose(false);}
+              }
                 style={{
                   backgroundColor: "var(--brown)",
                   color: "white",

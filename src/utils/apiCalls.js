@@ -188,7 +188,7 @@ export const emptyCart = async (id) => {
     .delete("/cart")
     .then((response) => {
       console.log(response);
-      notifySuccess("Cart is empty now!");
+
       returnedValue = response.data.data;
     })
     .catch((error) => {
@@ -537,6 +537,21 @@ export const getPlans = async () => {
     .get("/plans")
     .then((response) => {
       returnedValue = response.data.data;
+    })
+    .catch((error) => {
+      notifyError(error);
+    });
+
+  return returnedValue; // caught by .then()
+}
+
+export const resetPassword = async (data) => {
+  let returnedValue;
+
+  await instance
+    .post("/auth/reset-password", data)
+    .then((response) => {
+      returnedValue = response;
     })
     .catch((error) => {
       notifyError(error);

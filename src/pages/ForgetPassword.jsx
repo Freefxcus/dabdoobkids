@@ -6,10 +6,13 @@ import {
 import { Box, CardMedia } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import styles from "../styles/components/forget-password.modules.css";
+import { resetPassword } from "../utils/apiCalls";
 export default function ForgetPassword() {
   const navigate = useNavigate();
   const onSubmit = (values) => {
-    console.log(values);
+      resetPassword(values).then((res) => {
+        console.log(res , "resetapiresponse");
+      })
   };
   const {
     values,
@@ -36,7 +39,7 @@ export default function ForgetPassword() {
         mb: "35px",
       }}
     >
-      <CardMedia component={"img"} src="/allert.svg" />
+      <CardMedia sx={{width : {xs : "300px" , md : "100%"} , mx : "auto"}} component={"img"} src="/allert.svg" />
 
       <Box
         sx={{
@@ -56,16 +59,18 @@ export default function ForgetPassword() {
       >
         <h5>Email</h5>
         <input
+        id="email"
+        
           className="input-field"
-          style={{ height: "40px", border: "1px solid #E5E7EB" }}
-          type="text"
+          style={{ height: "40px", border: "1px solid #E5E7EB" , padding : "0px 8px" }}
+          type="email"
           placeholder="Email address"
           value={values.email}
+          onBlur={handleBlur}
+          onChange={handleChange}
         />
         <button
-          onClick={() => {
-            navigate("/");
-          }}
+          type="submit"
           style={{
             marginTop: "12px",
             backgroundColor: "var(--brown)",

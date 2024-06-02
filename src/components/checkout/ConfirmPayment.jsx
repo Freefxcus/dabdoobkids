@@ -1,30 +1,44 @@
 import { useState } from "react";
 import {
   checkPromoCode,
+  emptyCart,
   orderCheckout,
   ordersCallback,
 } from "../../utils/apiCalls";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { set } from "lodash";
+import { CircularProgress, Stack } from "@mui/material";
+import { toast } from "react-toastify";
+
 
 export default function ConfirmPayment({ orderSummary, address }) {
-  console.log(address, "address123123zzzzzz");
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const paymentMethod = searchParams.get("paymentMethod");
   const addressId = address?.items?.[0]?.id;
   const [promoCode, setPromoCode] = useState("");
   const [paymentLink, setPaymentMethod] = useState("");
+  const [loading, setLoading] = useState(false);
   const validatePromoCode = async () => {
     checkPromoCode(promoCode);
   };
   console.log(paymentMethod, addressId, "paymentMethod123123zzzzzz");
   const handlePayment = async () => {
+    setLoading(true);
     const checkout = await orderCheckout(paymentMethod, addressId);
+    console.log(checkout?.data?.status, "checkout123123");
     
     if (checkout?.data?.data?.url) {
-      console.log(checkout, "checkout123123");
+      toast.success("Redirecting to Payment Gateway");
       setPaymentMethod(checkout?.data?.data?.url);
+
+    }else if (checkout?.data?.status === "success") {
+      toast.success("Order Placed Successfully");
+      emptyCart().then(() => {
+        navigate("/");
+      })
     }
+    setLoading(false);
   };
 
   return (
@@ -187,7 +201,7 @@ export default function ConfirmPayment({ orderSummary, address }) {
             cursor: "pointer",
           }}
         >
-          Contuinue to Payment
+          {loading ? <Stack direction="row" justifyContent={"center"} gap={2} alignItems={"center"}> <CircularProgress color="inherit" size="1rem" sx={{width : "12px", }}/> Loading</Stack> : "Continue to Payment"}
         </button>
       </div>
 
