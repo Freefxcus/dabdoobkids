@@ -3,10 +3,11 @@ import React, { useState, useEffect, useRef } from "react";
 import styles from "../styles/components/Footer.module.css";
 import logo from "../images/logo.svg";
 import brownEmail from "../images/brown-email.svg";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Footer() {
   const [emailValue, setEmailInputValue] = useState("");
+  const navigate = useNavigate();
 
   return (
     <>

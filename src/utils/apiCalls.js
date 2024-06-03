@@ -68,8 +68,7 @@ export const getRelatedProducts = async (id) => {
     });
 
   return returnedValue; // caught by .then()
-
-}
+};
 
 export const getWishlistItems = async () => {
   let returnedValue;
@@ -141,14 +140,13 @@ export const getCart = async () => {
   return returnedValue; // caught by .then()
 };
 
-export const updateCart = async ( productId, variantId,body) => {
+export const updateCart = async (productId, variantId, body) => {
   let returnedValue;
 
   await instance
     .put("/cart", {
       product: productId,
       variant: variantId,
- 
     })
     .then((response) => {
       console.log(response);
@@ -216,14 +214,14 @@ export const removeFromCart = async (ProductId, variantId) => {
   return returnedValue; // caught by .then()
 };
 
-export const orderCheckout = async ( paymentMethod , address ) => {
+export const orderCheckout = async (paymentMethod, address) => {
   let returnedValue;
   const body = {
     // promocode  ,
 
     useWallet: paymentMethod === "wallet" ? true : false,
     paymentMethod: paymentMethod,
-    address : address,
+    address: address,
 
     // example default value for item
   };
@@ -280,8 +278,7 @@ export const getSingleOrder = async (id) => {
     });
 
   return returnedValue; // caught by .then()
-
-}
+};
 export const authorize = async (setForceReload) => {
   window.stop();
   if (localStorage.getItem("refresh_token")) {
@@ -306,7 +303,7 @@ export const authorize = async (setForceReload) => {
 export const AddAddress = async (body) => {
   const governorate = +body.governorate;
   const city = +body.city;
-  body = {  ...body, governorate, city}
+  body = { ...body, governorate, city };
   console.log(body, "bodyacxssadasds");
   let returnedValue;
   await instance
@@ -341,7 +338,7 @@ export const getAddress = async () => {
 export const updateAddress = async (id, body) => {
   const governorate = +body.governorate;
   const city = +body.city;
-  body = {  ...body, governorate, city}
+  body = { ...body, governorate, city };
   console.log(body, "bodyacxssadasds");
   let returnedValue;
 
@@ -394,7 +391,7 @@ export const googleAuth = async () => {
 
 export const googleCallback = async (code) => {
   let returnedValue;
-  
+
   await instance
     .get(`/auth/google/callback?${code}`, {
       code,
@@ -403,15 +400,13 @@ export const googleCallback = async (code) => {
       console.log(response);
 
       returnedValue = response;
-
     })
     .catch((error) => {
       notifyError(error);
     });
 
   return returnedValue; // caught by .then()
-
-}
+};
 
 export const getCategories = async () => {
   let returnedValue;
@@ -443,8 +438,7 @@ export const getSubCategories = async () => {
       notifyError(error);
     });
   return returnedValue; // caught by .then()
-
-}
+};
 export const getWishList = async () => {
   let returnedValue;
 
@@ -514,7 +508,7 @@ export const checkPromoCode = async (code) => {
       promocode: code,
     })
     .then((response) => {
-      returnedValue = response
+      returnedValue = response;
     })
     .catch((error) => {
       notifyError(error);
@@ -551,7 +545,7 @@ export const getPlans = async () => {
     });
 
   return returnedValue; // caught by .then()
-}
+};
 
 export const resetPassword = async (data) => {
   let returnedValue;
@@ -566,7 +560,7 @@ export const resetPassword = async (data) => {
     });
 
   return returnedValue; // caught by .then()
-}
+};
 
 export const getOrderInvoice = async (id) => {
   let returnedValue;
@@ -581,7 +575,7 @@ export const getOrderInvoice = async (id) => {
     });
 
   return returnedValue; // caught by .then()
-}
+};
 
 export const getGovernorates = async () => {
   let returnedValue;
@@ -596,7 +590,7 @@ export const getGovernorates = async () => {
     });
 
   return returnedValue; // caught by .then()
-}
+};
 
 export const getCitites = async () => {
   let returnedValue;
@@ -611,4 +605,36 @@ export const getCitites = async () => {
     });
 
   return returnedValue; // caught by .then()
-}
+};
+
+export const getUserPlan = async () => {
+  let returnedValue;
+
+  await instance
+    .get(`/auth/profile/plan`)
+    .then((response) => {
+      returnedValue = response;
+    })
+    .catch((error) => {
+      notifyError(error);
+    });
+
+  return returnedValue; // caught by .then()
+};
+
+export const subscribeToPlan = async (planId) => {
+  let returnedValue;
+  console.log(planId, "planid");
+  await instance
+    .post(`/subscription`, {
+      plan: planId,
+    })
+    .then((response) => {
+      returnedValue = response;
+    })
+    .catch((error) => {
+      notifyError(error);
+    });
+
+  return returnedValue; // caught by .then()
+};

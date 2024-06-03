@@ -46,7 +46,7 @@ export default function Header({ setOpen }) {
   const [searchInputValue, setSearchInputValue] = useState("");
   const [sidebar, setSidebar] = useState("");
   const [categories, setCategories] = useState([]);
-  const [subCategories , setSubCategories]  = useState([]); 
+  const [subCategories, setSubCategories] = useState([]);
   const myInputRef = useRef("");
   const navigate = useNavigate();
 
@@ -87,16 +87,15 @@ export default function Header({ setOpen }) {
     }
   }, [localStorage.getItem("access_token")]);
 
-useEffect(()=>{
-  getCategories().then((res)=>{
-    setCategories(res)
-  })
-  getSubCategories().then((res)=>{
-    setSubCategories(res)
-  })
-  
-},[])
-  console.log(subCategories,"categories123123123");
+  useEffect(() => {
+    getCategories().then((res) => {
+      setCategories(res);
+    });
+    getSubCategories().then((res) => {
+      setSubCategories(res);
+    });
+  }, []);
+  console.log(subCategories, "categories123123123");
   return (
     <>
       {/* 1st bar */}
@@ -105,15 +104,18 @@ useEffect(()=>{
         style={{
           backgroundColor: "var(--brown)",
           color: "var(--white)",
-          paddingTop: "2px",
-          paddingBottom: "2px",
+          paddingTop: "8px",
+          paddingBottom: "8px",
         }}
       >
-        <div className={styles.container}>
-          <div className={styles["sub-container"]}>
-            <div>Nederlants</div>
-            <div>English</div>
-          </div>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "end",
+            height: "100%",
+          }}
+        >
           <div className={styles["sub-container"]}>
             <div
               style={{
@@ -146,8 +148,12 @@ useEffect(()=>{
         style={{ backgroundColor: "var(--off-white)" }}
       >
         <div
+          style={{
+            justifyContent: "space-between",
+            paddingTop: 0,
+            paddingBottom: 0,
+          }}
           className={`${styles.container}`}
-          style={{ paddingTop: 0, paddingBottom: 0 }}
         >
           <div className={styles["sub-container"]}>
             <img
@@ -158,22 +164,16 @@ useEffect(()=>{
               }}
             />
 
-            { categories && categories?.categories?.map((category) => (
-            <Dropdown
-              title={category?.name}
-              items={[{ title: "First", link: "#" }]}
-              dropDown={dropDown}
-              setDropDown={setDropDown}
-              setDropDownType={setDropDownType}
-            />) )
-          
-          }
-            
-   
-                     
-                     
-                     
-        
+            {categories &&
+              categories?.categories?.map((category) => (
+                <Dropdown
+                  title={category?.name}
+                  items={[{ title: "First", link: "#" }]}
+                  dropDown={dropDown}
+                  setDropDown={setDropDown}
+                  setDropDownType={setDropDownType}
+                />
+              ))}
           </div>
           {/* <div className={styles["sub-container"]}> */}
           <div
@@ -202,7 +202,6 @@ useEffect(()=>{
               }}
               onClick={() => {
                 navigate("/plans");
-              
               }}
             >
               Try Dabdoob Premium
@@ -245,8 +244,8 @@ useEffect(()=>{
                     className={styles.clickable}
                     style={{ marginLeft: "10px", marginRight: "10px" }}
                     width="25px"
-                    onClick={()=>{
-                      navigate("/wishlist")
+                    onClick={() => {
+                      navigate("/wishlist");
                     }}
                   />
                   <div className={`${styles.clickable} ${styles.badge}`}>
