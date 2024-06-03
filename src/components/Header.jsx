@@ -101,14 +101,14 @@ export default function Header({ setOpen }) {
       return subCategory.name;
     }
   );
-  const formattedSybCategoriesLinks = subCategotyNames.map((subCategory) => {
-    return { title: subCategory, link: "/search" };
-  });
+  const formattedSybCategoriesLinks = subCategotyNames?.map((subCategory) => {
+    return { title: subCategory, link: "/search" } ;
+  }) || [];
+  console.log(formattedSybCategoriesLinks, "subCategotyNames123123123");
   const subCategoryLinks = [
     { title: "Shop All", link: "/search" },
     ...formattedSybCategoriesLinks,
   ];
-  console.log(subCategoryLinks, "subCategotyNames123123123");
   return (
     <>
       {/* 1st bar */}
