@@ -1,7 +1,12 @@
 import { Box, Button, Typography } from "@mui/material";
 
 import { useEffect, useState } from "react";
-import { redirect, useNavigate, useParams, useSearchParams } from "react-router-dom";
+import {
+  redirect,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 
 import Modal from "@mui/material/Modal";
 import Loader from "./Loader";
@@ -19,25 +24,21 @@ const style = {
   p: 4,
 };
 
-
 export default function OAuth() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [open, setOpen] = useState(true);
-  useEffect(()=>{
-    googleCallback(searchParams.toString()).then((res)=>{
-      console.log(res, "<<<resgoogle");
-      if(res?.data?.status === "success"){
-        localStorage.setItem("access_token", res?.data?.data?.accessToken);
-        localStorage.setItem("refresh_token", res?.data?.data?.refreshToken);   
-        navigate("/")
-      }
-    })
-  },[])
+  console.log();
+  useEffect(() => {
+    const token = searchParams.get("token");
+    const refresh = searchParams.get("refresh");
+    console.log(token, refresh, "token and refresh");
+    localStorage.setItem("access_token", token);
+    localStorage.setItem("refresh_token", refresh);
+    navigate("/");
+  }, []);
 
   console.log(searchParams.toString(), "<<<parammmms");
 
-  return (
-   <Loader/>
-  );
+  return <Loader open={true} />;
 }
