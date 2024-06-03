@@ -63,15 +63,16 @@ export default function OrderCard({
                   }}
                   className={styles.size}
                 >
-                  {variant.size}
+                  {variant?.size}
                 </span>
 
                 <span>Color : </span>
                 <span
                   className={styles.color}
                   style={{
-                    backgroundColor: `${variant.color}`,
+                    backgroundColor: `${variant?.color}`,
                     marginLeft: "6px",
+                    border : "1px solid black",
                   }}
                 ></span>
               </div>

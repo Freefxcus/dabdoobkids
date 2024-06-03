@@ -29,7 +29,7 @@ import { toast } from "react-toastify";
 import SingleProductModal from "../components/singleProduct/SingleProductModal.jsx";
 import { set } from "lodash";
 import SwiperComponent from "../components/Swiper.jsx";
-import { Typography } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 
 export default function Details() {
   const { id } = useParams();
@@ -47,8 +47,9 @@ export default function Details() {
 
   const dispatch = useDispatch();
 
-  const handleChange = (event) => {
-    setVaraint(event.target.value);
+  const handleChange = (value) => {
+    setVaraint(prev => value);
+    console.log(variant, "variantzzzzzzzzzz");
   };
 
   const handleImageChange = (e) => {
@@ -76,7 +77,7 @@ export default function Details() {
     });
   }, []);
 
-  console.log(relatedProducts, "productDetails12321123");
+  console.log(productDetails, "productDetails12321123");
 
   return (
     <>
@@ -149,17 +150,39 @@ export default function Details() {
                   sx={{ width: "100%" }}
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
-                  defaultValue={0}
+                  defaultValue={variant || 0}
+                  value={variant || 0}
                   label="Select Size"
-                  onChange={handleChange}
+                  onChange={(event)=>handleChange(event.target.value)}
                 >
-                  {productDetails.variants.map((variant, index) => (
+                  {productDetails?.variants?.map((variant, index) => (
                     <MenuItem key={index} value={index}>
                       {variant?.size}
                     </MenuItem>
                   ))}
                 </Select>
               </FormControl>
+            </Box>
+            <Box>
+              <h1>Color :</h1>
+              <Stack direction={"row"} gap={"12px"}>
+                {productDetails?.variants?.map((singleVariant, index) => (
+                 
+                  <span
+                    onClick={() => handleChange(index)}
+                    key={index}
+                    className={styles.color}
+                    style={{
+                      backgroundColor: `${singleVariant?.color}`,
+                      marginLeft: "6px",
+                      width: "30px",
+                      height: "30px",
+                      border : variant === index ? "2px solid var(--brown)" : "1px solid black",
+                      cursor: "pointer",
+                    }}
+                  ></span>
+                ))}
+              </Stack>
             </Box>
             <div
               style={{
@@ -278,13 +301,12 @@ export default function Details() {
         <Typography
           variant="h4"
           sx={{
-        
-            marginLeft:{md : "60px" , xs : "30px"},
+            marginLeft: { md: "60px", xs: "30px" },
             marginBottom: "16px",
-            fontWeight : "400"
+            fontWeight: "400",
           }}
         >
-     You may also like
+          You may also like
         </Typography>
         <SwiperComponent items={relatedProducts} />
       </Box>
