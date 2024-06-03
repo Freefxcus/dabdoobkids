@@ -353,8 +353,8 @@ export default function Form({ type, toggleDrawer }) {
           <button className={styles.brown_button} type="submit">
             Register
           </button>
-          <button className={styles.grey_button}>
-            <img src={google} width="25px" /> <div>Google</div>
+          <button className={styles.grey_button} onClick={handleGoogleAuth}>
+            <img src={google} width="25px" alt="google" /> <div>Google</div>
           </button>
           <div className={styles.footer}>
             <div className={styles.footer_main}>Already have an account?</div>

@@ -313,6 +313,7 @@ export default function Profile() {
                       open={openAddAddress}
                       setOpen={setOpenAddAddress}
                       type="add"
+                      setForceReload={setForceReload}
                     />
                   </div>
                   {/* ***** */}

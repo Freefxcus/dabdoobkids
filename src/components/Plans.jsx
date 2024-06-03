@@ -5,6 +5,7 @@ import { ArrowRight2 } from "iconsax-react";
 import check from "../images/check.svg";
 import { getPlans } from "../utils/apiCalls";
 import { useNavigate } from "react-router-dom";
+import { Box } from "@mui/material";
 export default function Plans() {
   const navigate = useNavigate();
   const [plans, setPlans] = React.useState([]);
@@ -18,6 +19,10 @@ export default function Plans() {
   //     console.log(key,"key123231123")
 
   // })
+
+  useEffect(()=>{
+    
+  },[])
   return (
     <div className={`${styles.container} `}>
       {plans?.items?.length === 0 ? (
@@ -92,9 +97,11 @@ export default function Plans() {
                   {info[1] ? (
                     <img src={check} width="20px" />
                   ) : (
-                    <img src="/grey-check.svg" style={{ width: "20px" }} />
+                    <img src="/failure.svg" style={{ width: "20px" }} />
                   )}
-                  <div>{info[0]}</div>
+                  <Box sx={{
+                    textDecoration : info[1]? "none" : "line-through",
+                  }}>{info[0]}</Box>
                 </div>
               ))}
             </div>

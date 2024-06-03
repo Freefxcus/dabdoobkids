@@ -29,6 +29,7 @@ import { toast } from "react-toastify";
 import SingleProductModal from "../components/singleProduct/SingleProductModal.jsx";
 import { set } from "lodash";
 import SwiperComponent from "../components/Swiper.jsx";
+import { Typography } from "@mui/material";
 
 export default function Details() {
   const { id } = useParams();
@@ -40,17 +41,15 @@ export default function Details() {
   const [largeImage, setLargeImage] = useState("");
   const [size, setSize] = useState("");
   const [counter, setCounter] = useState(0);
-  const [variant , setVaraint] = useState(0);
+  const [variant, setVaraint] = useState(0);
   const [open, setOpen] = useState(false);
-  const [relatedProducts , setRelatedProducts] = useState([]);
+  const [relatedProducts, setRelatedProducts] = useState([]);
 
   const dispatch = useDispatch();
-
 
   const handleChange = (event) => {
     setVaraint(event.target.value);
   };
-
 
   const handleImageChange = (e) => {
     const clickedImage = e.target.src;
@@ -74,10 +73,11 @@ export default function Details() {
 
     getRelatedProducts(id).then((res) => {
       setRelatedProducts(res);
-    })
+    });
   }, []);
 
-  console.log(relatedProducts , "productDetails12321123");
+  console.log(relatedProducts, "productDetails12321123");
+
   return (
     <>
       {!productDetails?.id && (
@@ -96,7 +96,7 @@ export default function Details() {
             <div className={styles["small-images-container"]}>
               {productDetails.images.slice(0, 4).map((img, index) => (
                 <img
-                alt="small-imge"
+                  alt="small-imge"
                   key={index}
                   src={img}
                   className={styles["small-image"]}
@@ -141,15 +141,14 @@ export default function Details() {
                 },
               }}
             >
-              <FormControl sx={{width : "100%"}} size="small">
+              <FormControl sx={{ width: "100%" }} size="small">
                 <InputLabel id="demo-simple-select-label">
                   Select Size
                 </InputLabel>
                 <Select
-                sx={{width : "100%"}}
+                  sx={{ width: "100%" }}
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
-        
                   defaultValue={0}
                   label="Select Size"
                   onChange={handleChange}
@@ -158,7 +157,6 @@ export default function Details() {
                     <MenuItem key={index} value={index}>
                       {variant?.size}
                     </MenuItem>
-                  
                   ))}
                 </Select>
               </FormControl>
@@ -220,13 +218,17 @@ export default function Details() {
                 }}
                 onClick={(e) => {
                   e.stopPropagation();
-                  if (counter > productDetails?.variants[variant]?.stock ) {
+                  if (counter > productDetails?.variants[variant]?.stock) {
                     toast.error("Out of stock");
-                    return
+                    return;
                   }
                   setOpen(true);
                   dispatch(cartActions.add({ id: +id, count: counter }));
-                  addToCart(+id, counter , productDetails?.variants[variant]?.id);
+                  addToCart(
+                    +id,
+                    counter,
+                    productDetails?.variants[variant]?.id
+                  );
                   // if (wished) {
                   //   dispatch(cartActions.remove(+id));
                   //   removeFromCart(+id);
@@ -239,7 +241,11 @@ export default function Details() {
                 <img src={cart} width="16px" alt="cart" />
                 <div>Add to cart</div>
               </div>
-              <SingleProductModal open={open} handleClose={setOpen} productDetails={productDetails} />
+              <SingleProductModal
+                open={open}
+                handleClose={setOpen}
+                productDetails={productDetails}
+              />
               <img
                 alt="heart-icon"
                 src={wished ? fHeart : eHeart}
@@ -266,9 +272,22 @@ export default function Details() {
               </div>
             </div>
           </div>
-        
         </div>
       )}
+      <Box>
+        <Typography
+          variant="h4"
+          sx={{
+        
+            marginLeft:{md : "60px" , xs : "30px"},
+            marginBottom: "16px",
+            fontWeight : "400"
+          }}
+        >
+     You may also like
+        </Typography>
+        <SwiperComponent items={relatedProducts} />
+      </Box>
     </>
   );
 }

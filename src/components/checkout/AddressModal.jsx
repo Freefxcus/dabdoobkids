@@ -13,10 +13,15 @@ import {
 } from "../../utils/schemas/addressSchema.js";
 import { useFormik } from "formik";
 import CloseIcon from "@mui/icons-material/Close";
-import { AddAddress, updateAddress } from "../../utils/apiCalls.js";
+import {
+  AddAddress,
+  getCitites,
+  getGovernorates,
+  updateAddress,
+} from "../../utils/apiCalls.js";
 import { toast } from "react-toastify";
 import { set } from "lodash";
-
+import { useEffect, useState } from "react";
 
 const style = {
   position: "absolute",
@@ -41,32 +46,41 @@ export default function AddressModal({
   type,
   addressInfo,
   addressId,
+  setForceReload
 }) {
   console.log(addressInfo, "addressInfo123123");
-
+  const [governorates, setGovernorates] = useState([]);
+  const [cities, setCities] = useState([]);
   const onSubmit = async (values) => {
+    console.log(+values.governorate, "values123123dassdasd");
     const parametres = {
       phone: values?.phone_number,
       name: values.first_name + " " + values.last_name,
-      postalCode : values.postal_code,
-
-
+      postalCode: values.postal_code,
+      governorate: +values.governorate,
+      city: +values.city,
       ...values,
     };
     if (type === "edit") {
       const resUpdate = await updateAddress(addressInfo.id, parametres);
       console.log(resUpdate, "resUpdate123");
-      if (resUpdate.status) toast.success("Address updated successfully");
+      if (resUpdate.status) {toast.success("Address updated successfully")
+      setOpen(false);
+      setForceReload((prev) => !prev);
+      }
     } else if (type === "add") {
       const resAddress = await AddAddress(parametres);
-      if (resAddress.status) toast.success("Address added successfully");
+      if (resAddress.status) {toast.success("Address added successfully")
+      setOpen(false);
+      setForceReload((prev) => !prev);
+      };
     }
   };
   const initialAddressValues = {
     phone_number: addressInfo?.phone || "",
     address: addressInfo?.address || "",
     first_name: addressInfo?.name.split(" ")[0] || "",
-    primary : addressInfo?.primary || false,
+    primary: addressInfo?.primary || false,
     type: addressInfo?.type || "Home",
     last_name: addressInfo?.name.split(" ")[1] || "",
     governorate: addressInfo?.governorate.id || "",
@@ -89,8 +103,16 @@ export default function AddressModal({
     validationSchema: addressSchema,
     onSubmit,
   });
+  useEffect(() => {
+    getGovernorates().then((res) => {
+      setGovernorates(res);
+    });
+    getCitites().then((res) => {
+      setCities(res);
+    })
+  }, []);
 
-  console.log(values, "values123123");
+  console.log(governorates, "values123123");
   return (
     <Modal open={open}>
       <form onSubmit={handleSubmit}>
@@ -135,7 +157,7 @@ export default function AddressModal({
                   ? `${styles.input} ${styles.item} ${styles.bottom_margin} input-error`
                   : `${styles.input} ${styles.item} ${styles.bottom_margin}`
               }
-              placeholder="000"
+              placeholder="phone"
             ></input>
           </div>
           <div style={{ display: "flex", width: "100%" }}>
@@ -159,7 +181,7 @@ export default function AddressModal({
                     ? `${styles.input} ${styles.item} ${styles.bottom_margin} input-error`
                     : `${styles.input} ${styles.item} ${styles.bottom_margin}`
                 }
-                placeholder="000"
+                placeholder="first name"
               ></input>
             </div>
 
@@ -183,7 +205,7 @@ export default function AddressModal({
                     ? `${styles.input} ${styles.item} ${styles.bottom_margin} input-error`
                     : `${styles.input} ${styles.item} ${styles.bottom_margin}`
                 }
-                placeholder="000"
+                placeholder="last name"
               ></input>
             </div>
           </div>
@@ -285,7 +307,7 @@ export default function AddressModal({
                 <span className="error">{errors.governorate}</span>
               )}
             </div>
-            <input
+            <select
               value={values.governorate}
               onChange={handleChange}
               id="governorate"
@@ -297,7 +319,12 @@ export default function AddressModal({
                   : `${styles.input} ${styles.item} ${styles.bottom_margin}`
               }
               placeholder="Province"
-            ></input>
+            >
+              {governorates?.data?.data?.map((gov) => (
+                <option value={gov.id}>{gov.name.en}</option>
+              ))}
+
+            </select>
           </div>
           {/* city */}
           <div className={styles.semi_item}>
@@ -309,7 +336,7 @@ export default function AddressModal({
                 <span className="error">{errors.city}</span>
               )}
             </div>
-            <input
+            <select
               value={values.city}
               onChange={handleChange}
               id="city"
@@ -321,7 +348,11 @@ export default function AddressModal({
                   : `${styles.input} ${styles.item} ${styles.bottom_margin}`
               }
               placeholder="City"
-            ></input>
+            >
+              {cities?.data?.data?.map((city) => (
+                <option value={city.id}>{city.name.en}</option>
+              ))}
+            </select>
           </div>
           {/* district */}
           <div className={styles.semi_item}>

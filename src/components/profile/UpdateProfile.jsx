@@ -9,6 +9,7 @@ import { Box, Modal } from "@mui/material";
 import { updateProfile } from "../../utils/apiCalls.js";
 import { toast } from "react-toastify";
 import CircularProgress from "@mui/material/CircularProgress";
+import CloseIcon from '@mui/icons-material/Close';
 export default function UpdateProfileModal({ ProfileData, open, setOpen ,setForceReload  }) {
   const onSubmit = async (values) => {
     console.log(ProfileData, "profileData13123");
@@ -40,8 +41,9 @@ export default function UpdateProfileModal({ ProfileData, open, setOpen ,setForc
     <Modal open={open}>
       <Box sx={style} className={styles.form_container}>
         <form className={styles.form_container} onSubmit={handleSubmit}>
-          <div className={`${styles.title} ${styles.item}`}>Profile</div>
-
+          <div style={{display : "flex" , justifyContent : "space-between"}} className={`${styles.title} ${styles.item}`}>Profile
+          <CloseIcon onClick={() => setOpen(false)} className={styles.close_icon} />
+          </div>
           {/* first name */}
           <div className={styles.semi_item}>
             <div className={`${styles.label} ${styles.item}`}>

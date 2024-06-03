@@ -304,12 +304,16 @@ export const authorize = async (setForceReload) => {
 };
 
 export const AddAddress = async (body) => {
+  const governorate = +body.governorate;
+  const city = +body.city;
+  body = {  ...body, governorate, city}
+  console.log(body, "bodyacxssadasds");
   let returnedValue;
   await instance
     .post("/addresses", body)
     .then((response) => {
       console.log(response);
-      returnedValue = response.data.data;
+      returnedValue = response;
     })
     .catch((error) => {
       notifyError(error);
@@ -335,6 +339,10 @@ export const getAddress = async () => {
 };
 
 export const updateAddress = async (id, body) => {
+  const governorate = +body.governorate;
+  const city = +body.city;
+  body = {  ...body, governorate, city}
+  console.log(body, "bodyacxssadasds");
   let returnedValue;
 
   await instance
@@ -565,6 +573,36 @@ export const getOrderInvoice = async (id) => {
 
   await instance
     .get(`/orders/${id}/invoice`)
+    .then((response) => {
+      returnedValue = response;
+    })
+    .catch((error) => {
+      notifyError(error);
+    });
+
+  return returnedValue; // caught by .then()
+}
+
+export const getGovernorates = async () => {
+  let returnedValue;
+
+  await instance
+    .get("/governorate")
+    .then((response) => {
+      returnedValue = response;
+    })
+    .catch((error) => {
+      notifyError(error);
+    });
+
+  return returnedValue; // caught by .then()
+}
+
+export const getCitites = async () => {
+  let returnedValue;
+
+  await instance
+    .get(`/city`)
     .then((response) => {
       returnedValue = response;
     })
