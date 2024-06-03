@@ -559,3 +559,18 @@ export const resetPassword = async (data) => {
 
   return returnedValue; // caught by .then()
 }
+
+export const getOrderInvoice = async (id) => {
+  let returnedValue;
+
+  await instance
+    .get(`/orders/${id}/invoice`)
+    .then((response) => {
+      returnedValue = response;
+    })
+    .catch((error) => {
+      notifyError(error);
+    });
+
+  return returnedValue; // caught by .then()
+}

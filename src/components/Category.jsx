@@ -34,7 +34,7 @@ export default function Category({ item }) {
         <CardMedia
           component={"img"}
           sx={{
-            width: { lg: "140px", md: "110px", xs: "80px" },
+            width: { lg: "140px", md: "110px", xs: "60px" },
             height: { lg: "120px", md: "90px", xs: "60px" },
             objectFit: "contain",
           }}

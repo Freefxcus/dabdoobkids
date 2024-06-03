@@ -58,7 +58,7 @@ function App() {
                   <Route path="/register" element={<Register />} />
                   <Route path="/login" element={<Login />} />
                   <Route path="/forget-password" element={<ForgetPassword />} />
-                  <Route path="/auth/google/callback" element={<OAuth />} />
+                  <Route path="/auth/google" element={<OAuth />} />
                   <Route path="/otp" element={<Otp />} />
                   <Route path="/search" element={<Search />} />
                   <Route path="/about" element={<About />} />

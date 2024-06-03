@@ -9,7 +9,7 @@ export default function PostPayment() {
     <Stack gap={"12px"} justifyContent={"center"} alignItems={"center"} sx={{minHeight : "57vh"}}>
       {paymentMethod ? (
         <>
-          (
+      
             
             <CardMedia component={"img"} sx={{width : "90px"}} src="/success.svg" alt="failure" />
 
@@ -35,7 +35,7 @@ export default function PostPayment() {
           >
             Return to Home
           </button>
-          )
+     
         </>
       ) : (
         <>

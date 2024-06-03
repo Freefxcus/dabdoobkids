@@ -19,7 +19,7 @@ export default function OrderOverview({
 
 
   const [productCount, setProductCount] = React.useState(item.count);
-  const total = productCount * variant.price;
+  const total = productCount * variant?.price;
 
   return (
     // <div className={styles.container}>
@@ -50,14 +50,14 @@ export default function OrderOverview({
                   }}
                   className={styles.size}
                 >
-                  {variant.size}
+                  {variant?.size}
                 </span>
 
                 <span>Color : </span>
                 <span
                   className={styles.color}
                   style={{
-                    backgroundColor: `${variant.color}`,
+                    backgroundColor: `${variant?.color}`,
                     marginLeft: "6px",
                   }}
                 ></span>

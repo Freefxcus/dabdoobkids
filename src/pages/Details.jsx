@@ -28,6 +28,7 @@ import {
 import { toast } from "react-toastify";
 import SingleProductModal from "../components/singleProduct/SingleProductModal.jsx";
 import { set } from "lodash";
+import SwiperComponent from "../components/Swiper.jsx";
 
 export default function Details() {
   const { id } = useParams();
@@ -54,7 +55,7 @@ export default function Details() {
   const handleImageChange = (e) => {
     const clickedImage = e.target.src;
     setLargeImage(clickedImage);
-    const clonedSmallImages = [...productDetails?.images.slice(0, 4)];
+    const clonedSmallImages = [...productDetails?.images?.slice(0, 4)];
     const indexOfImageToReplace = clonedSmallImages.indexOf(clickedImage);
     if (indexOfImageToReplace !== -1) {
       clonedSmallImages[indexOfImageToReplace] = largeImage;
@@ -68,15 +69,15 @@ export default function Details() {
   useEffect(() => {
     getProductById(id).then((res) => {
       setProductDetails(res);
-      setLargeImage(res.images[0]);
+      setLargeImage(res?.images[0]);
     });
 
-    // getRelatedProducts(id).then((res) => {
-    //   setRelatedProducts(res);
-    // })
+    getRelatedProducts(id).then((res) => {
+      setRelatedProducts(res);
+    })
   }, []);
 
-  console.log(productDetails , "productDetails12321123");
+  console.log(relatedProducts , "productDetails12321123");
   return (
     <>
       {!productDetails?.id && (
@@ -265,6 +266,7 @@ export default function Details() {
               </div>
             </div>
           </div>
+        
         </div>
       )}
     </>
