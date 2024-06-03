@@ -5,15 +5,24 @@ export default function PostPayment() {
   const [searchParams, setSearchParams] = useSearchParams();
   const paymentMethod = searchParams.get("success");
   const navigate = useNavigate();
+  console.log(paymentMethod, "paymentMethod213123");
   return (
-    <Stack gap={"12px"} justifyContent={"center"} alignItems={"center"} sx={{minHeight : "57vh"}}>
-      {paymentMethod ? (
+    <Stack
+      gap={"12px"}
+      justifyContent={"center"}
+      alignItems={"center"}
+      sx={{ minHeight: "57vh" }}
+    >
+      {paymentMethod === "true" ? (
         <>
-      
-            
-            <CardMedia component={"img"} sx={{width : "90px"}} src="/success.svg" alt="failure" />
+          <CardMedia
+            component={"img"}
+            sx={{ width: "90px" }}
+            src="/success.svg"
+            alt="failure"
+          />
 
-            <h1>Payment Successful</h1>
+          <h1>Payment Successful</h1>
           <p>
             Your payment has been successfully processed. Your order will be
             delivered soon.
@@ -35,13 +44,16 @@ export default function PostPayment() {
           >
             Return to Home
           </button>
-     
         </>
       ) : (
         <>
-   
-            <CardMedia component={"img"} sx={{width : "90px"}} src="/failure.svg" alt="failure" />
-            <h1 style={{fontSize : "32px"}}>Payment Failed</h1>
+          <CardMedia
+            component={"img"}
+            sx={{ width: "90px" }}
+            src="/failure.svg"
+            alt="failure"
+          />
+          <h1 style={{ fontSize: "32px" }}>Payment Failed</h1>
           <p>
             Your payment has been failed. Please try again or contact support.
           </p>
@@ -62,7 +74,6 @@ export default function PostPayment() {
           >
             Return to Home
           </button>
-        
         </>
       )}
     </Stack>
