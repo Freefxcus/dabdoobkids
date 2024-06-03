@@ -15,6 +15,7 @@ import { useSelector } from "react-redux";
 import { getCart } from "../utils/apiCalls";
 import { use } from "i18next";
 import { useNavigate } from "react-router-dom";
+import CartProgress from "../components/CartProgress";
 export default function Cart() {
   const navigate = useNavigate();
   const [promocode, setPromocode] = useState("");
@@ -46,42 +47,70 @@ export default function Cart() {
     (acc, item) => acc + item.variant.price * item.count,
     0
   );
+  const generateDiscountMesage = (totalPrice) => {
+    if (totalPrice < 3500) {
+      return "Add more items to your cart to get discount";
+    }
+    const requiredPriceForDiscount = (totalPrice / 3500) * 100;
+    if (requiredPriceForDiscount > 50 && requiredPriceForDiscount < 100) {
+      return "you are almost there! Add more items to get discount";
+    }
+    if (requiredPriceForDiscount >= 100) {
+      return "Congratulations! You are eligible for discount";
+    }
+  };
+  const requiredPriceForDiscount = (totalPrice / 3500) * 100;
+  const messageforDiscount = generateDiscountMesage(totalPrice);
   if (!cart) {
-   return  <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        gap: "12px",
-      }}
-    >
-      <img src="/empty-wishlist.svg" alt="empy cart" />
-      <h2>Empty Cart</h2>
-      <p>Looks like you haven't added any products to your Cart yet.</p>
-      <button
-        onClick={() => {
-          navigate("/");
-        }}
+    return (
+      <div
         style={{
-          backgroundColor: "var(--brown)",
-          color: "white",
-          border: "none",
-          padding: "12px 48px",
-          fontWeight: "400",
-          fontSize: "18px",
-          borderRadius: "10px",
-          cursor: "pointer",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: "12px",
         }}
       >
-        continue shopping
-      </button>
-    </div>;
+        <img src="/empty-wishlist.svg" alt="empy cart" />
+        <h2>Empty Cart</h2>
+        <p>Looks like you haven't added any products to your Cart yet.</p>
+        <button
+          onClick={() => {
+            navigate("/");
+          }}
+          style={{
+            backgroundColor: "var(--brown)",
+            color: "white",
+            border: "none",
+            padding: "12px 48px",
+            fontWeight: "400",
+            fontSize: "18px",
+            borderRadius: "10px",
+            cursor: "pointer",
+          }}
+        >
+          continue shopping
+        </button>
+      </div>
+    );
   }
   return (
-    <div className={`${styles.container} padding-container`}>
+    <div
+      style={{ minHeight: "54vh" }}
+      className={`${styles.container} padding-container`}
+    >
       <Popup open={open} setOpen={setOpen} type="create_address" />
       <div className={styles.column}>
-        <div className={styles.title_main}>Summary Order</div>
+        <div className={styles.title_main}>My Shopping Cart </div>
+        <div style={{ margin: "0px auto" }}>
+          <CartProgress
+            value={totalPrice}
+            percentage={requiredPriceForDiscount}
+          />
+          <h4 style={{ textAlign: "center", marginTop: "12px" }}>
+            {messageforDiscount}
+          </h4>
+        </div>
         {cart?.items?.map((item) => (
           <OrderCard
             item={item}
@@ -97,6 +126,9 @@ export default function Cart() {
           justifyContent: "space-between",
           alignItems: "center",
           width: "100%",
+          flexWrap: "wrap",
+          backgroundColor: "#FAFAFA",
+          padding: "12px",
         }}
       >
         <p style={{ flex: "2" }}>
@@ -107,10 +139,11 @@ export default function Cart() {
             display: "flex",
             justifyContent: "space-between ",
             flex: "1",
+            gap: "12px",
           }}
         >
           <h2>Subtotal</h2>
-          <h2>{totalPrice}</h2>
+          <h2>{totalPrice}$</h2>
         </div>
       </div>
       <div
@@ -119,6 +152,7 @@ export default function Cart() {
           justifyContent: "flex-end",
           width: "100%",
           gap: "12px",
+          flexWrap: "wrap",
         }}
       >
         <button

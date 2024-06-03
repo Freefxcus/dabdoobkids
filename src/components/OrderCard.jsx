@@ -13,7 +13,7 @@ export default function OrderCard({
   totalPrice,
 }) {
   console.log(item, "item123123");
-  
+
   const { product, variant } = item;
 
   const [openDelete, setOpenDelete] = React.useState(false);
@@ -32,9 +32,18 @@ export default function OrderCard({
     <div style={{ display: "flex", flexDirection: "column" }}>
       <div
         className={styles.container}
-        style={{ justifyContent: "space-between" }}
+        style={{
+          justifyContent: "space-between",
+          paddingBottom: "20px",
+          borderBottom: " 0.5px solid #E8E8E8",
+        }}
       >
-        <div style={{ display: "flex", gap: "10px" }}>
+        <div
+          style={{
+            display: "flex",
+            gap: "10px",
+          }}
+        >
           <img src={product?.images[0]} alt="product" className={styles.img} />
           <div className={styles.column}>
             <div className={styles.column}>
@@ -71,24 +80,14 @@ export default function OrderCard({
         </div>
         <div style={{ display: "flex", gap: "10px" }}>
           <img
-            src="./edit.svg"
-            onClick={() => {
-              setOpenEdit(true);
-            }}
-            alt="edit"
-            style={{ cursor: "pointer" }}
-          />
-          <img
             onClick={() => {
               setOpenDelete(true);
-              
             }}
             src="./remove.svg"
             alt="remove"
             style={{ cursor: "pointer" }}
           />
 
-          <EditModal open={openEdit} setOpen={setOpenEdit} product={item} setCartChanged={setCartChanged} />
           <DeleteModal
             open={openDelete}
             setOpen={setOpenDelete}
@@ -98,17 +97,31 @@ export default function OrderCard({
           />
         </div>
         {/* <div className={styles.number} style={{ marginLeft: "auto" }}> */}
-        <div className={styles.number}>
-          <div>{productCount}</div>
-          <div>x</div>
-          <div>{variant.price}</div>
+        <div className={styles.column}>
+          <span>price</span>
+          <div style={{ alignSelf: "center" }} className={styles.number}>
+            <div>{productCount}</div>
+            <div>x</div>
+            <div>{variant.price}$</div>
+          </div>
+          <div></div>
         </div>
-        <CartCounter
-          increment={increment}
-          decrement={decrement}
-          count={productCount}
-        />
-        <div className={styles.total}>{total}</div>
+
+        <div className={styles.column}>
+          <span>Quantity</span>
+          <CartCounter
+            increment={increment}
+            decrement={decrement}
+            count={productCount}
+          />
+          <div></div>
+        </div>
+
+        <div className={styles.column}>
+          <span>SubTotal</span>
+          <div className={styles.total}>{total}$</div>
+          <div></div>
+        </div>
       </div>
     </div>
   );

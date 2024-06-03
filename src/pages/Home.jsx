@@ -37,6 +37,7 @@ import { current } from "@reduxjs/toolkit";
 import banner1 from "../images/banner1.png";
 import banner2 from "../images/banner2.png";
 import arrow from "../images/arrow.svg";
+import CartProgress from "../components/CartProgress.jsx";
 const bannerImages = [banner1, banner2];
 export default function Home() {
   const mobile = useMediaQuery("(max-width:300px)");
