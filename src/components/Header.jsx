@@ -96,6 +96,19 @@ export default function Header({ setOpen }) {
     });
   }, []);
   console.log(subCategories, "categories123123123");
+  const subCategotyNames = subCategories?.data?.data?.categories?.map(
+    (subCategory) => {
+      return subCategory.name;
+    }
+  );
+  const formattedSybCategoriesLinks = subCategotyNames.map((subCategory) => {
+    return { title: subCategory, link: "/search" };
+  });
+  const subCategoryLinks = [
+    { title: "Shop All", link: "/search" },
+    ...formattedSybCategoriesLinks,
+  ];
+  console.log(subCategoryLinks, "subCategotyNames123123123");
   return (
     <>
       {/* 1st bar */}
@@ -344,13 +357,7 @@ export default function Header({ setOpen }) {
       >
         <div className={`padding-container ${styles["dropdown-content"]}`}>
           <div className={styles["dropdown-section"]} style={{ flex: "1" }}>
-            {[
-              { title: "Shop All", link: "#" },
-              { title: "Newborn essentials", link: "#" },
-              { title: "Baby boy", link: "#" },
-              { title: "Baby girl", link: "#" },
-              { title: "Offers", link: "#" },
-            ].map(({ title, link }) => (
+            {subCategoryLinks.map(({ title, link }) => (
               <Link to={link} className={styles.link}>
                 {title}
               </Link>
