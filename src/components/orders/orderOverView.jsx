@@ -35,7 +35,7 @@ export default function OrderOverview({
           <div className={styles.column}>
             <div className={styles.column}>
               <div className={styles.category}>Spring Collection</div>
-              <div className={styles.title}>{product.name.en}</div>
+              <div className={styles.title}>{product?.name?.en}</div>
             </div>
             <div className={`${styles.row} ${styles.subtitle}`}>
               <div></div>

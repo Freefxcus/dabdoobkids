@@ -10,6 +10,8 @@ import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { use } from "i18next";
+import { useDispatch } from "react-redux";
+import { cartActions } from "../Redux/store";
 
 export default function Cart() {
   const navigate = useNavigate();
@@ -20,7 +22,7 @@ export default function Cart() {
   const [useWallet, setUseWallet] = useState(false);
   const [promocode, setPromocode] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("Credit Card");
-
+  const dispatch = useDispatch()
 
 
   useEffect(() => {
@@ -67,6 +69,8 @@ export default function Cart() {
               setCart(undefined);
               seIsChecking(false);
             });
+            dispatch(cartActions.clearCart())
+
           }}
         >
           Clear all

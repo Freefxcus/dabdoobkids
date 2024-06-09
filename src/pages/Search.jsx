@@ -15,12 +15,13 @@ import { userInfoActions, dataActions, wishlistActions } from "../Redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { debounce, set } from "lodash";
 import { useLocation, useSearchParams } from "react-router-dom";
+import Empty from "./empty";
 
 export default function Search() {
   // const location = useLocation();
   // const searchParams = new URLSearchParams(location.search);
   // const location = useLocation();
-// const [searchParams, setSearchParams] = useState(new URLSearchParams(location.search));
+  // const [searchParams, setSearchParams] = useState(new URLSearchParams(location.search));
   const [searchParams, setSearchParams] = useSearchParams();
   const urlCatId = searchParams.get("categoryId");
   const urlBrandId = searchParams.get("brandId");
@@ -32,7 +33,7 @@ export default function Search() {
 
   const [totalPages, setTotalPages] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
-  const [page, setPage] = useState(searchParams.get('page') );
+  const [page, setPage] = useState(searchParams.get("page"));
   const [state, setState] = useState(false);
   const [checked, setChecked] = useState(false);
 
@@ -41,37 +42,41 @@ export default function Search() {
   const brands = data.brands;
 
   useEffect(() => {
-    setIsLoading(true)
-    const pageNumber = searchParams.get('page') || 1;
+    setIsLoading(true);
+    const pageNumber = searchParams.get("page") || 1;
     getProducts(pageNumber, false, catId, brandId, queryStr).then((res) => {
       setSearchData(res);
-      setIsLoading(false)
+      setIsLoading(false);
     });
   }, []);
-  console.log(searchParams.get('page') , "searchParams123saddsd123123");
+  console.log(searchParams.get("page"), "searchParams123saddsd123123");
   const debouncedHandleInputChange = debounce((searchparams) => {
-      setIsLoading(true);
-      const searchPage = searchparams.get('page') || 1;
-      const searchCatId = searchparams.get('categoryId') || '';
-      const searchBrandId = searchparams.get('brandId') || '';
-      const searchQuery = searchparams.get('query') || '';
-      getProducts(searchPage, false, searchCatId, searchBrandId, searchQuery).then((res) => {
-        setSearchData(res);
-        setIsLoading(false);
-      });
-    }, 1000)
-  
+    setIsLoading(true);
+    const searchPage = searchparams.get("page") || 1;
+    const searchCatId = searchparams.get("categoryId") || "";
+    const searchBrandId = searchparams.get("brandId") || "";
+    const searchQuery = searchparams.get("query") || "";
+    getProducts(
+      searchPage,
+      false,
+      searchCatId,
+      searchBrandId,
+      searchQuery
+    ).then((res) => {
+      setSearchData(res);
+      setIsLoading(false);
+    });
+  }, 1000);
 
   const handleSearch = (e) => {
-
     setSearchParams((prev) => {
-      if(e.target.value === ''){
-        prev.delete('query');
+      if (e.target.value === "") {
+        prev.delete("query");
         return prev;
       }
-      prev.set('query', e.target.value);
+      prev.set("query", e.target.value);
       return prev;
-    })
+    });
     debouncedHandleInputChange(searchParams);
   };
   console.log(searchData, "searchData13132");
@@ -97,17 +102,7 @@ export default function Search() {
         <div className={styles.options_title}>Title</div>
         <div className={styles.notification}>3</div>
       </div>
-      <div className={styles.center}>
-        <div className={styles.search_container}>
-          <input
-            defaultValue={queryStr}
-            className={styles.search_input}
-            placeholder="Search product"
-            onChange={handleSearch}
-          />
-          <img src={lense} />
-        </div>
-      </div>
+
       <div className={styles.body_container}>
         <div className={styles.categories_section}>
           <div className={styles.category}>
@@ -119,17 +114,16 @@ export default function Search() {
                   if (catId === category.id) {
                     setCatId("");
                     setSearchParams((prev) => {
-                      prev.delete('categoryId');
+                      prev.delete("categoryId");
                       return prev;
-                    
-                    } )
-                  debouncedHandleInputChange(searchParams);
+                    });
+                    debouncedHandleInputChange(searchParams);
                   } else {
                     setSearchParams((prev) => {
-                      prev.set('categoryId', category.id);
-                      prev.delete('page');
+                      prev.set("categoryId", category.id);
+                      prev.delete("page");
                       return prev;
-                    })
+                    });
                     setCatId(category.id);
                     debouncedHandleInputChange(searchParams);
                   }
@@ -159,19 +153,18 @@ export default function Search() {
                   if (brandId === brand.id) {
                     setBrandId("");
                     setSearchParams((prev) => {
-                      prev.delete('brandId');
+                      prev.delete("brandId");
                       return prev;
-                    
-                    } )
-                  debouncedHandleInputChange(searchParams);
+                    });
+                    debouncedHandleInputChange(searchParams);
                   } else {
                     setBrandId(brand.id);
                     setSearchParams((prev) => {
-                      prev.set('brandId', brand.id);
-                      prev.delete('page');
+                      prev.set("brandId", brand.id);
+                      prev.delete("page");
                       return prev;
-                    })
-          
+                    });
+
                     debouncedHandleInputChange(searchParams);
                   }
                 }}
@@ -201,43 +194,73 @@ export default function Search() {
             Clear All
           </div>
         </div>
-        <div className={styles.cards_section}>
 
-          <>
-            {isLoading && (
-              <>
-                {/* <Loader open={true} /> */}
-                <Box sx={{ width: "100%" }}>
-                  <LinearProgress />
-                </Box>
-                <div style={{ height: "500px" }} />
-              </>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            mx: "auto",
+          }}
+        >
+                <div className={styles.center}>
+                <div className={styles.search_container}>
+                  <input
+                    defaultValue={queryStr}
+                    className={styles.search_input}
+                    placeholder="Search product"
+                    onChange={handleSearch}
+                  />
+                  <img src={lense} />
+                </div>
+              </div>
+          <div className={styles.cards_section}>
+            {!searchData?.products?.length && !isLoading && (
+              <Box sx={{ mx: "auto" }}>
+                <Empty
+                  title="No Result Found"
+                  message="The item you are looking for is not in our store."
+                />
+              </Box>
             )}
 
-            {searchData?.products?.length > 0 &&
-              !isLoading &&
-              searchData.products.map((item) => <ClothesCard item={item} />)}
-          </>
-          <Pagination
-            
-            sx={{ mt: "10px", mb: "10px", width: "100%" }} 
-            color="primary"
-            variant="outlined"
-            count={searchData?.metadata?.totalPages || 1}
-            page={+searchParams.get('page') || 1}
-            onChange={(e, v) => {
-              setSearchParams((prev) => {
-                prev.set('page', v);
-                return prev;
-              })
-              // searchData([]);
-              debouncedHandleInputChange(searchParams);
-            }}
-          />
-        </div>
-
+            <>
+              {isLoading && (
+                <>
+                  {/* <Loader open={true} /> */}
+                  <Box sx={{ width: "100%" , display : "flex" , alignItems : "center" }}>
+                    <LinearProgress />
+                  </Box>
+                  <div style={{ height: "500px" }} />
+                </>
+              )}
+        
+              {searchData?.products?.length > 0 &&
+                !isLoading &&
+                searchData.products.map((item) => <ClothesCard item={item} />)}
+            </>
+          </div>
+          <Box sx={{ width: "100%", mx: "auto", marginTop: "24px" }}>
+            <Pagination
+              sx={{ display: "flex", justifyContent: "center" }}
+              color="primary"
+              variant="outlined"
+              count={searchData?.metadata?.totalPages || 1}
+              page={+searchParams.get("page") || 1}
+              onChange={(e, v) => {
+                setSearchParams((prev) => {
+                  prev.set("page", v);
+                  return prev;
+                });
+                // searchData([]);
+                debouncedHandleInputChange(searchParams);
+              }}
+            />
+          </Box>
+        </Box>
       </div>
- 
+
       {/* drawer */}
       <div>
         <Drawer

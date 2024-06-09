@@ -9,11 +9,6 @@ import delivery from "../images/delivery.png";
 import cart from "../images/cart.png";
 import eHeart from "../images/empty-heart.svg";
 import fHeart from "../images/filled-heart.svg";
-import img1 from "../images/details-page/1.png";
-import img2 from "../images/details-page/2.png";
-import img3 from "../images/details-page/3.png";
-import img4 from "../images/details-page/4.png";
-import img5 from "../images/details-page/5.png";
 import { useParams } from "react-router-dom";
 import { getProductById, getRelatedProducts } from "../utils/apiCalls";
 import Loader from "../components/Loader";
@@ -27,9 +22,11 @@ import {
 } from "../utils/apiCalls.js";
 import { toast } from "react-toastify";
 import SingleProductModal from "../components/singleProduct/SingleProductModal.jsx";
-import { set } from "lodash";
+
 import SwiperComponent from "../components/Swiper.jsx";
 import { Stack, Typography } from "@mui/material";
+import { set } from "lodash";
+import Empty from "./empty.jsx";
 
 export default function Details() {
   const { id } = useParams();
@@ -40,11 +37,12 @@ export default function Details() {
   console.log(productDetails);
   const [largeImage, setLargeImage] = useState("");
   const [size, setSize] = useState("");
-  const [counter, setCounter] = useState(0);
+  const [counter, setCounter] = useState(1);
   const [variant, setVaraint] = useState(0);
   const [open, setOpen] = useState(false);
   const [relatedProducts, setRelatedProducts] = useState([]);
-
+  const [reload , setReload] = useState(false);
+  const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
 
   const handleChange = (value) => {
@@ -67,6 +65,7 @@ export default function Details() {
     }
   };
   useEffect(() => {
+   
     getProductById(id).then((res) => {
       setProductDetails(res);
       setLargeImage(res?.images[0]);
@@ -74,20 +73,24 @@ export default function Details() {
 
     getRelatedProducts(id).then((res) => {
       setRelatedProducts(res);
+      setLoading(false);
+    }).catch((err) => {
+      setLoading(false);
     });
-  }, []);
+    
+  }, [reload]);
 
-  console.log(productDetails, "productDetails12321123");
+  console.log(loading, "productDetails12321123");
 
   return (
     <>
-      {!productDetails?.id && (
+      {loading && (
         <>
           <Loader open={true} />
           <div style={{ height: "500px" }} />
         </>
       )}
-
+  {!productDetails && <Empty title="Product not Found" message="Seems there is a problem finding this product"/> }
       {productDetails?.id && (
         <div
           className={`${styles.container} margin-container section-top-margin section-bottom-margin`}
@@ -164,7 +167,7 @@ export default function Details() {
               </FormControl>
             </Box>
             <Box>
-              <h1>Color :</h1>
+              <h1 style={{marginBottom : "12px"}}>Color :</h1>
               <Stack direction={"row"} gap={"12px"}>
                 {productDetails?.variants?.map((singleVariant, index) => (
                  
@@ -215,7 +218,7 @@ export default function Details() {
               >
                 <div
                   onClick={() => {
-                    if (counter > 0) {
+                    if (counter > 1) {
                       setCounter((prev) => prev - 1);
                     }
                   }}
@@ -287,7 +290,7 @@ export default function Details() {
                 height="30px"
               />
             </div>
-            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "10px" , margin :"12px 0px" }}>
               <img src={delivery} className={styles["delivery-icon"]} />
               <div>
                 <div>Delivery details</div>
@@ -297,18 +300,22 @@ export default function Details() {
           </div>
         </div>
       )}
-      <Box>
+      <Box 
+      sx={{
+        mx : {xs : "20px" , md : "40px" , lg :"60px"},
+      }}>
         <Typography
           variant="h4"
           sx={{
-            marginLeft: { md: "60px", xs: "30px" },
+            marginLeft: {xs : "5px" , md : "10px" , lg :"20px"},
             marginBottom: "16px",
             fontWeight: "400",
+            fontSize : {xs : "24px" , md : "32px" , lg :"40px"},
           }}
         >
           You may also like
         </Typography>
-        <SwiperComponent items={relatedProducts} />
+        <SwiperComponent setReload = {setReload} items={relatedProducts} />
       </Box>
     </>
   );
