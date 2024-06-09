@@ -7,6 +7,7 @@ import { getPlans, getUserPlan, subscribeToPlan } from "../utils/apiCalls";
 import { useNavigate } from "react-router-dom";
 import { Box } from "@mui/material";
 import { toast } from "react-toastify";
+
 export default function Plans() {
   const navigate = useNavigate();
   const [plans, setPlans] = React.useState([]);
@@ -80,7 +81,7 @@ export default function Plans() {
               You are currently not Subscribed to any plan{" "}
             </h1>
           )}
-          <div style={{ display: "flex", gap: "32px" }}>
+          <Box sx={{ display: "flex", gap: "32px" , flexWrap : "wrap" , justifyContent : "center" }}>
             {plans?.items?.map((plan) => (
               <div
                 className={`${styles["premium-container"]} margin-container`}
@@ -138,7 +139,7 @@ export default function Plans() {
                 </div>
               </div>
             ))}
-          </div>
+          </Box>
         </>
       )}
       {paymentLink && (

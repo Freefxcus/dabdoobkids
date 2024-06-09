@@ -81,6 +81,9 @@
 }
 
 @media (max-width: 600px) {
+  .container {
+    gap: 20px;
+  }
   .large-image {
     width: 100%;
     /* height: 400px; */

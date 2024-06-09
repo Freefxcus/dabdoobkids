@@ -93,6 +93,9 @@ const cartSlice = createSlice({
       const cart = state.value.filter((item) => item.id !== action.payload);
       state.value = cart;
     },
+    clearCart(state) {
+      state.value = [];
+    },
   },
 });
 

@@ -4,10 +4,11 @@ import "swiper/css/navigation";
 import { Autoplay, Pagination, Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import ClothesCard from "./ClothesCard";
+import { useNavigate } from "react-router-dom";
 
-export default function SwiperComponent({items}) {
+export default function SwiperComponent({items , setReload}) {
     console.log(items, "itemsrelatedddd123123");
-    
+    const navigate = useNavigate();
   return (
     <Swiper
     className="mySwiper"
@@ -48,6 +49,10 @@ export default function SwiperComponent({items}) {
             display: "flex",
             justifyContent: "center",
             // alignItems: "center",
+          }}
+          onClick={() => {
+            navigate(`/details/${item.id}`);
+            setReload(prev => !prev);
           }}
         >
           <ClothesCard item={item} />
