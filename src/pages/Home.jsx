@@ -38,6 +38,7 @@ import banner1 from "../images/banner1.png";
 import banner2 from "../images/banner2.png";
 import arrow from "../images/arrow.svg";
 import CartProgress from "../components/CartProgress.jsx";
+import BannerSwiper from "../components/Home/BannerSwiper.jsx";
 const bannerImages = [banner1, banner2];
 export default function Home() {
   const mobile = useMediaQuery("(max-width:300px)");
@@ -136,18 +137,9 @@ export default function Home() {
           })
         );
       })
-      .catch(() => {
-        notifyError("xxxxxxxxxx");
-      });
+      .catch(() => {});
   }, [reload]);
   const dispatch = useDispatch();
-
-  const [open, setOpen] = React.useState(true);
-  const [formData, setFormData] = useState({
-    // name: "",
-    // email: "",
-    file: null,
-  });
 
   // *********
   const [state, setState] = React.useState({
@@ -190,76 +182,7 @@ export default function Home() {
       {products?.array?.length > 0 && (
         <>
           {/* swiper */}
-          <div
-            className={`${styles["banner-container"]} section-bottom-margin`}
-            style={{ position: "relative" }}
-          >
-            <Swiper
-              className="mySwiper"
-              grabCursor={true}
-              pagination={{
-                clickable: true,
-              }}
-              autoplay={{
-                delay: 2000,
-                disableOnInteraction: false,
-              }}
-              modules={[Autoplay, Pagination]}
-              onSlideChange={(e) => setActiveSlide(e.activeIndex)}
-            >
-              {bannerImages.map((img, index) => (
-                <SwiperSlide>
-                  <img src={img} className="slider-image" />
-                </SwiperSlide>
-              ))}
-            </Swiper>
-
-            <Star type="a" />
-            {activeSlide === 0 && (
-              <>
-                <div className={styles["swiper-text-2"]}>
-                  <div className={styles["swiper-text-title-2"]}>
-                    DABDOOB KIDS
-                  </div>
-                  <div className={styles["swiper-text-body-2"]}>
-                    Make yourself look different without old-fashioned clothes
-                    and impress others.
-                  </div>
-                  <button className={styles.shop_collection}>
-                    <span> Shop Collection</span>
-                    <img src={arrow} />
-                  </button>
-                </div>
-              </>
-            )}
-            {activeSlide === 1 && (
-              <>
-                <div className={styles["countdown-container"]}>
-                  <div
-                    className={styles["countdown-title"]}
-                    style={{ whiteSpace: "nowrap" }}
-                  >
-                    Daily sale
-                  </div>
-                  <CountdownTimer
-                    hours={5}
-                    minutes={30}
-                    seconds={20}
-                    type="a"
-                  />
-                </div>
-                <div className={styles["swiper-text"]}>
-                  <div className={styles["swiper-text-title"]}>
-                    DABDOOB KIDS
-                  </div>
-                  <div className={styles["swiper-text-body"]}>
-                    Make yourself look different without old-fashioned clothes
-                    and impress others.
-                  </div>
-                </div>
-              </>
-            )}
-          </div>
+          <BannerSwiper />
           {/* new arrival */}
           <div className="padding-container section-bottom-margin">
             <div

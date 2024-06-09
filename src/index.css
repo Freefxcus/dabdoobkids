@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap");
+
 :root {
   --transparent: rgba(0, 0, 0, 0);
   --white: #ffffff;
@@ -169,7 +171,6 @@
 .swiper-slide {
   /* text-align: center; */
   font-size: 18px;
-  background: #fff;
 
   /* Center slide text vertically */
   display: flex;
