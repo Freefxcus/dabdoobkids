@@ -2,12 +2,14 @@ import React, { useState } from "react";
 import styles from "../../styles/pages/Profile.module.css";
 import OrderCard from "../OrderCard";
 import OrderOverview from "./orderOverView";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { Box, Pagination } from "@mui/material";
 
-export default function OrderList({ orders }) {
+export default function OrderList({ setSearchParams,paginationInfo,orders }) {
   console.log(orders, "ziadorderedsdsadsa");
   const navigate = useNavigate();
   const [currentOrder, setCurrentOrder] = useState(null);
+
 
   return (
     <div
@@ -97,8 +99,20 @@ export default function OrderList({ orders }) {
             </button>
           </div>
         ))}
+        <Box sx={{mx:"auto"}}>
+          <Pagination 
+            count={paginationInfo?.totalPages} 
+
+            onChange={(event, value) => {
+              setSearchParams(prev=>{
+                return { ...prev, page: value }
+              })
+            }}
+          
+          />
+        </Box>
       </div>
-      {currentOrder !== null && (
+      {/* {currentOrder !== null && (
         <>
           {orders
             .filter((order) => order.id === currentOrder)
@@ -237,7 +251,7 @@ export default function OrderList({ orders }) {
               </div>
             ))}
         </>
-      )}
+      )} */}
     </div>
   );
 }

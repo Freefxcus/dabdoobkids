@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import styles from "../styles/pages/Profile.module.css";
 import promo from "../images/promo.png";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -56,6 +56,9 @@ export default function Profile() {
   const [openEditProfile, setOpenEditProfile] = useState(false);
   const [wallet, setWallet] = useState({});
   const [walletHistory, setWalletHistory] = useState({});
+  const [paginationInfo, setPaginationInfo] = useState({});
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const handleClickOpen = () => {
     setAlertOpen(true);
   };
@@ -129,18 +132,18 @@ export default function Profile() {
       .get("orders", {
         params: {
           items: 5,
-          // page: page,
+          page: searchParams.get("page") || 1,
         },
       })
       .then((response) => {
-        console.log(response.data?.data);
-
+        console.log(response?.data?.data?.metadata);
+        setPaginationInfo(response?.data?.data?.metadata);
         setOrders(response.data?.data?.data);
         // setTotalPages(response.data.data.metadata.totalPages);
         setIsLoading(false);
       })
       .catch((error) => {});
-  }, []);
+  }, [searchParams]);
 
   console.log(orders, "orderszdsaddsegwgfqffdq");
   // get wallet
@@ -455,7 +458,7 @@ export default function Profile() {
                 )}
               </div>
             )}
-            {sidebarItem === "3" && <OrderList orders={orders} />}
+            {sidebarItem === "3" && <OrderList setSearchParams={setSearchParams} paginationInfo={paginationInfo} orders={orders} />}
             {sidebarItem === "4" && (
               <div className={styles.text_container}>
                 <div className={styles.sub_header}>Returns and refunds</div>

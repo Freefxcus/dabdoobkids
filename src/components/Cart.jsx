@@ -12,6 +12,8 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { use } from "i18next";
 import { useDispatch } from "react-redux";
 import { cartActions } from "../Redux/store";
+import { Box } from "@mui/material";
+import CartProgress from "./CartProgress";
 
 export default function Cart() {
   const navigate = useNavigate();
@@ -36,6 +38,7 @@ export default function Cart() {
   const totalPrice = useMemo(() => {
     return cart?.reduce((acc, item) => acc + (item?.count  * item?.variant?.price), 0);
   },[cart])
+  const percentage = totalPrice / 3500 * 100;
  const handleCheckout = () => {
   const searchParams = new URLSearchParams({
     useWallet,
@@ -76,6 +79,10 @@ export default function Cart() {
           Clear all
         </div>
       </div>
+      
+      <Box sx={{mb : "24px"}}>
+        <CartProgress percentage={percentage} value={totalPrice}/>
+      </Box>
       {cart === undefined && (
         <div
           style={{
@@ -266,6 +273,7 @@ export default function Cart() {
                 Payment Method
               </InputLabel>
               <Select
+              disabled={useWallet}
                 size="small"
                 labelId="demo-select-small-label"
                 id="demo-select-small"
