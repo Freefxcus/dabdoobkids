@@ -58,6 +58,7 @@ export default function BannerSwiper() {
                     fontFamily: "Playfair Display, serif",
                     fontStyle: "italic",
                     fontWeight: 500,
+                    fontSize : {xs : "2rem", sm : "3rem", md : "4rem", lg : "5rem"},
                     textAlign: "center",
                     marginBottom: "1rem",
                   }}
@@ -68,7 +69,7 @@ export default function BannerSwiper() {
                   sx={{
                     color: "white",
                     textAlign: "center",
-                    fontSize: "1.5rem",
+                    fontSize : {xs : "1rem", sm : "1rem", md : "1rem", lg : "2rem"},
                     fontWeight: 300,
                     maxWidth: "80%",
                     mx: "auto",

@@ -22,16 +22,18 @@ export const getProducts = async (page, all, category, brand, query) => {
     brand,
     query,
   };
-  Object.keys(params).forEach((key) => params[key] == "" && delete params[key]);
+  Object.keys(params).forEach((key) => !params[key] ? delete params[key] : params[key]);
   console.log(params);
   await instance
     .get("/products", {
       params,
     })
     .then((response) => {
-      returnedValue = response.data.data;
+      console.log(response?.data?.data);
+      returnedValue = response?.data?.data;
     })
     .catch((error) => {
+      console.log(error, "responseeeefromproducts");
       notifyError(error);
     });
   return returnedValue; // caught by .then()
