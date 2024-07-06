@@ -1,13 +1,20 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
-import { getAddress, getCart, orderCheckout, orderSummary } from "../utils/apiCalls";
+import {
+  getAddress,
+  getCart,
+  orderCheckout,
+  orderSummary,
+} from "../utils/apiCalls";
 import styles from "../styles/components/OrderCard.module.css";
 import ConfirmPayment from "../components/checkout/ConfirmPayment";
 import BillingDetails from "../components/checkout/BillingDetails";
 export default function Checkout() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [payemntMethod, setPaymentMethod] = useState(searchParams.get("paymentMethod") ||"cash");
+  const [payemntMethod, setPaymentMethod] = useState(
+    searchParams.get("paymentMethod") || "cash"
+  );
   const [promoCode, setPromoCode] = useState(
     searchParams.get("promocode") || ""
   );
@@ -16,53 +23,51 @@ export default function Checkout() {
   const [order, setOrder] = useState([]);
   const [address, setAddress] = useState([]);
   useEffect(() => {
-
     const fetchCart = async () => {
       const cartData = await getCart();
       setCart(cartData);
     };
-    
+
     const fetchAddress = async () => {
       const addressData = await getAddress();
       setAddress(addressData);
-    }
-    
-  
+    };
+
     fetchCart();
     fetchAddress();
   }, []);
-  console.log(address,"addrezzzzzzzzzzzz");
+  console.log(address, "addrezzzzzzzzzzzz");
 
-  useEffect(()=>{
-    if(!searchParams.get("paymentMethod")){
-      setSearchParams(prev=>{
-        prev.set("paymentMethod", "Cash on Delivery")
-        return prev
-      })
+  useEffect(() => {
+    if (!searchParams.get("paymentMethod")) {
+      setSearchParams((prev) => {
+        prev.set("paymentMethod", "Cash on Delivery");
+        return prev;
+      });
     }
-  },[])
+  }, []);
 
-useEffect(()=>{
+  useEffect(() => {
     const data = {
-            promocode :promoCode,
-            useWallet : payemntMethod === "wallet",
-            paymentMethod : payemntMethod,
-            address : address?.items?.[0]?.id
-    }
+      promocode: promoCode,
+      useWallet: payemntMethod === "wallet",
+      paymentMethod: payemntMethod,
+      address: address?.items?.[0]?.id,
+    };
     const fetchOrder = async () => {
-        const orderData = await orderSummary(data);
-        setOrder(orderData);
-    }
+      const orderData = await orderSummary(data);
+      setOrder(orderData);
+    };
     fetchOrder();
-},[address?.items, payemntMethod, promoCode])
-console.log(order, "orderrrrr123123");
+  }, [address?.items, payemntMethod, promoCode]);
+  console.log(order, "orderrrrr123123");
 
   return (
     <div
       style={{
         margin: "12px auto",
         display: "flex",
-        maxWidth: "70%",
+        maxWidth: "80%",
         gap: "52px",
         justifyContent: "center",
         flexWrap: "wrap",
@@ -73,7 +78,7 @@ console.log(order, "orderrrrr123123");
           display: "flex",
           flexDirection: "column",
           gap: "24px",
-          flex: 2,
+          flex: 1,
         }}
       >
         <h1 style={{ fontSize: "24px", fontWeight: "500" }}>Summary Order</h1>
@@ -83,6 +88,7 @@ console.log(order, "orderrrrr123123");
               display: "flex",
               gap: "32px",
               justifyContent: "center",
+              flexWrap: "wrap",
               marginBottom: "18px",
             }}
           >
@@ -121,6 +127,7 @@ console.log(order, "orderrrrr123123");
                 <span
                   className={styles.color}
                   style={{
+                
                     backgroundColor: `${item?.variant?.color}`,
                     marginLeft: "6px",
                   }}
@@ -128,6 +135,15 @@ console.log(order, "orderrrrr123123");
               </div>
             </div>
 
+            <div
+              style={{
+                fontWeight: "500",
+                display: "flex",
+                gap: "32px",
+                justifyContent: "space-around",
+                alignItems: "center",
+              }}
+            >
             <div
               style={{
                 fontWeight: "500",
@@ -140,6 +156,7 @@ console.log(order, "orderrrrr123123");
               <div
                 style={{
                   display: "flex",
+
                   border: "1px solid var(--dreamy-cloud)",
                   fontWeight: "400",
                 }}
@@ -165,13 +182,13 @@ console.log(order, "orderrrrr123123");
                 </h2>
               </div>
             </div>
-          </div>
+          </div> </div>
         ))}
 
-        <BillingDetails address={address}/>
+        <BillingDetails address={address} />
       </div>
 
-      <ConfirmPayment address={address} orderSummary = {order}/>
+      <ConfirmPayment address={address} orderSummary={order} />
     </div>
   );
 }

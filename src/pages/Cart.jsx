@@ -103,10 +103,10 @@ export default function Cart() {
       <div className={styles.column}>
         <div className={styles.title_main}>My Shopping Cart </div>
         <div style={{ margin: "0px auto" }}>
-          <CartProgress
-            value={totalPrice}
-            percentage={requiredPriceForDiscount}
-          />
+            <CartProgress
+              value={totalPrice}
+              percentage={requiredPriceForDiscount}
+            />
           <h4 style={{ textAlign: "center", marginTop: "12px" }}>
             {messageforDiscount}
           </h4>
@@ -138,6 +138,7 @@ export default function Cart() {
           style={{
             display: "flex",
             justifyContent: "space-between ",
+            flexWrap: "wrap",
             flex: "1",
             gap: "12px",
           }}

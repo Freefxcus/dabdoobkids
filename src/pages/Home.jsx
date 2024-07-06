@@ -163,7 +163,7 @@ export default function Home() {
           {/* new arrival */}
 
           <NewArrival products={products} categories={categories} />
-        h</>
+        </>
       )}
       {/* shop by category */}
       <div className="padding-container section-bottom-margin">

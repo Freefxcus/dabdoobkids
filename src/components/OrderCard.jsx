@@ -32,7 +32,7 @@ export default function OrderCard({
     <div style={{ display: "flex", flexDirection: "column" }}>
       <div
         className={styles.container}
-        style={{
+        style={{ 
           justifyContent: "space-between",
           paddingBottom: "20px",
           borderBottom: " 0.5px solid #E8E8E8",
@@ -41,6 +41,7 @@ export default function OrderCard({
         <div
           style={{
             display: "flex",
+            flexWrap: "wrap",
             gap: "10px",
           }}
         >

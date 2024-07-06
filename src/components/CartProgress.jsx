@@ -9,7 +9,7 @@ export default function CartProgress({ value, percentage = "100%" }) {
         sx={{
           backgroundColor: "#D1D1D1",
           borderRadius: "50px",
-          width: "400px",
+          width:{xs:"80%" ,md: "400px"},
           height: "20px",
         }}
       >
