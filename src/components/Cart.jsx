@@ -1,5 +1,10 @@
 import { useState, useEffect, useMemo } from "react";
-import { getCart, orderCheckout, emptyCart, orderSummary } from "../utils/apiCalls";
+import {
+  getCart,
+  orderCheckout,
+  emptyCart,
+  orderSummary,
+} from "../utils/apiCalls";
 import LinearProgress from "@mui/material/LinearProgress";
 import styles from "../styles/components/Cart.modules.css";
 import Checkbox from "@mui/material/Checkbox";
@@ -24,8 +29,7 @@ export default function Cart() {
   const [useWallet, setUseWallet] = useState(false);
   const [promocode, setPromocode] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("Credit Card");
-  const dispatch = useDispatch()
-
+  const dispatch = useDispatch();
 
   useEffect(() => {
     getCart().then((res) => {
@@ -36,22 +40,30 @@ export default function Cart() {
   }, []);
 
   const totalPrice = useMemo(() => {
-    return cart?.reduce((acc, item) => acc + (item?.count  * item?.variant?.price), 0);
-  },[cart])
-  const percentage = totalPrice / 3500 * 100;
- const handleCheckout = () => {
-  const searchParams = new URLSearchParams({
-    useWallet,
-    promocode,
-    paymentMethod,
-  });
-  navigate(`/checkout?${searchParams.toString()}`);
- }
+    return cart?.reduce(
+      (acc, item) => acc + item?.count * item?.variant?.price,
+      0
+    );
+  }, [cart]);
+  const percentage = (totalPrice / 3500) * 100;
+  const handleCheckout = () => {
+    const searchParams = new URLSearchParams({
+      useWallet,
+      promocode,
+      paymentMethod,
+    });
+    navigate(`/checkout?${searchParams.toString()}`);
+  };
   return (
     <div
+    className={styles.container}
+    
       style={{
-        margin: "30px",
-        width: "400px",
+
+
+        padding: "30px",
+        width: "100%",
+        maxWidth: "250px",
       }}
     >
       <div
@@ -72,21 +84,20 @@ export default function Cart() {
               setCart(undefined);
               seIsChecking(false);
             });
-            dispatch(cartActions.clearCart())
-
+            dispatch(cartActions.clearCart());
           }}
         >
           Clear all
         </div>
       </div>
-      
-      <Box sx={{mb : "24px"}}>
-        <CartProgress percentage={percentage} value={totalPrice}/>
+
+      <Box sx={{ mb: "24px" }}>
+        <CartProgress percentage={percentage} value={totalPrice} />
       </Box>
       {cart === undefined && (
         <div
           style={{
-            width: "100%",
+            width: "80%",
             color: "var(--brown)",
             fontSize: "20px",
             marginTop: "30px",
@@ -96,7 +107,7 @@ export default function Cart() {
         </div>
       )}
       {cart?.length === 0 && (
-        <div style={{ width: "100%", color: "var(--brown)" }} spacing={2}>
+        <div style={{ width: "80%", color: "var(--brown)" }} spacing={2}>
           <LinearProgress color="inherit" />
         </div>
       )}
@@ -117,7 +128,8 @@ export default function Cart() {
                   <img src={item.product.images[0]} height="150px" />
                   <div
                     style={{
-                      width: "400px",
+                      width: "80%",
+                      maxWidth: "400px",
                       display: "flex",
                       flexDirection: "column",
                       justifyContent: "space-between",
@@ -164,10 +176,9 @@ export default function Cart() {
                             color: "#1B1B1BB2",
                             fontSize: "16px",
                             fontWeight: "600",
-                            
                           }}
                         >
-                        {item?.variant?.price}
+                          {item?.variant?.price}
                         </span>
                         &nbsp; &nbsp;
                         <span
@@ -186,7 +197,7 @@ export default function Cart() {
                   style={{
                     marginTop: "10px",
                     borderTop: "1px solid #E8E8E8",
-                    width: "100%",
+                    width: "80%",
                   }}
                 ></div>
               </>
@@ -273,7 +284,7 @@ export default function Cart() {
                 Payment Method
               </InputLabel>
               <Select
-              disabled={useWallet}
+                disabled={useWallet}
                 size="small"
                 labelId="demo-select-small-label"
                 id="demo-select-small"
@@ -310,9 +321,9 @@ export default function Cart() {
             }}
           >
             <button
-            onClick={()=>{
-              navigate("/cart")
-            }}
+              onClick={() => {
+                navigate("/cart");
+              }}
               style={{
                 cursor: "pointer",
                 width: "150px",

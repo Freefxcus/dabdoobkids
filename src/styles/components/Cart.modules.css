@@ -1,5 +1,11 @@
 .container {
-  /* background-color: var(--dr-white); */
+  background-color:#555;
+  width: 100%;
+  height: 100%;
+
+  padding: 30px;
+ 
+ margin: 30px;
 }
 
 .notification {

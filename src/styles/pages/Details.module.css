@@ -79,6 +79,11 @@
 .cart-button:hover {
   opacity: 0.8;
 }
+.cart-button:disabled {
+
+  background-color: #9f9f9f99;
+  cursor:default;
+}
 
 @media (max-width: 600px) {
   .container {

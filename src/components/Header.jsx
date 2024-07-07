@@ -203,7 +203,9 @@ export default function Header({ setOpen }) {
                 left: animation ? 0 : "160px",
                 transition: "left 1s ease-in-out",
               }}
-              onClick={() => {}}
+              onClick={() => {
+                navigate("/plans");
+              }}
             />
             <div
               className={`${styles.tag} hidden-on-small-screen`}

@@ -236,18 +236,20 @@ export default function Details() {
                   +
                 </div>
               </div>
-              <div
+              <button
                 className={styles["cart-button"]}
                 style={{
                   opacity: counter < 1 ? ".3" : "1",
                   pointerEvents: counter < 1 ? "none" : "initial",
                 }}
+                disabled={productDetails?.variants?.length<1||   counter < 1 || counter > productDetails?.variants[variant]?.stock}
                 onClick={(e) => {
                   e.stopPropagation();
                   if (counter > productDetails?.variants[variant]?.stock) {
                     toast.error("Out of stock");
                     return;
                   }
+                
                   setOpen(true);
                   dispatch(cartActions.add({ id: +id, count: counter }));
                   addToCart(
@@ -265,8 +267,8 @@ export default function Details() {
                 }}
               >
                 <img src={cart} width="16px" alt="cart" />
-                <div>Add to cart</div>
-              </div>
+                <span>Add to cart</span>
+              </button>
               <SingleProductModal
                 open={open}
                 handleClose={setOpen}
