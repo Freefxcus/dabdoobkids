@@ -370,7 +370,7 @@ export default function Header({ setOpen }) {
             className={styles["dropdown-section"]}
             style={{ justifyContent: "center", alignItems: "center" }}
           >
-            <div className={styles.card}>
+            {/* <div className={styles.card}>
               <div className={styles["card-image"]}>
                 <img src={gift} />
                 <img src={baby1} />
@@ -378,7 +378,7 @@ export default function Header({ setOpen }) {
               <div className={styles["card-text"]}>
                 Baby & Kids, Moms, accessories & more
               </div>
-            </div>
+            </div> */}
           </div>
           <div className={styles.line}></div>
           <div className={styles["dropdown-section"]}>
