@@ -20,6 +20,7 @@ import {
   deleteAddress,
   getWallet,
   getWalletHistory,
+  getPromoCode,
 } from "../utils/apiCalls.js";
 import Loader from "../components/Loader.jsx";
 import Accordion from "@mui/material/Accordion";
@@ -39,7 +40,8 @@ export default function Profile() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const [orders, setOrders] = useState(null);
+  const [orders, setOrders] = useState(null); 
+   const [PromoCodes, setPromoCodes] = useState(null);
   const [helpOption, setHelpOption] = useState("1");
   const [currentId, setCurrentId] = useState("");
   const [alertType, setAlertType] = useState("");
@@ -154,6 +156,10 @@ export default function Profile() {
 
     getWalletHistory().then((res) => {
       setWalletHistory(res);
+    });
+    getPromoCode().then((res) => {
+      console.log("res1313213213213213213132",res);
+      setPromoCodes(res);
     });
   }, []);
 
@@ -405,7 +411,7 @@ export default function Profile() {
                             fontWeight: "600",
                           }}
                         >
-                          wallet
+                          wallet  
                         </Box>
                         <Box
                           sx={{

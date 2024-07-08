@@ -6,7 +6,7 @@ import {
   orderSummary,
 } from "../utils/apiCalls";
 import LinearProgress from "@mui/material/LinearProgress";
-import styles from "../styles/components/Cart.modules.css";
+import styles from "../styles/components/Cart.module.css";
 import Checkbox from "@mui/material/Checkbox";
 import Select from "@mui/material/Select";
 import InputLabel from "@mui/material/InputLabel";
@@ -56,15 +56,9 @@ export default function Cart() {
   };
   return (
     <div
-    className={styles.container}
+    className={styles['container-cart']}
     
-      style={{
-
-
-        padding: "30px",
-        width: "100%",
-        maxWidth: "250px",
-      }}
+   
     >
       <div
         style={{
@@ -317,6 +311,7 @@ export default function Cart() {
             style={{
               display: "flex",
               justifyContent: "space-between",
+              gap:"15px",
               marginTop: "20px",
             }}
           >

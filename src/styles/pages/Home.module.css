@@ -20,9 +20,9 @@
 }
 .image-ticker img {
   display: inline-block;
-  animation: ticker 80s linear infinite;
+  animation: ticker 15s linear infinite;
   height: 150px;
-  -webkit-animation: ticker 80s linear infinite;
+  -webkit-animation: ticker 15s linear infinite;
 }
 @keyframes ticker {
   0% {
@@ -173,6 +173,10 @@
 .offers-title {
   font-size: 46px;
   margin-bottom: 10px;
+}
+.offers-title-sub{
+  font-style: italic;
+  font-weight: 600;
 }
 /* Media query for screens smaller than 600px (e.g., smartphones) */
 @media (max-width: 600px) {

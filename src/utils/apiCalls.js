@@ -501,7 +501,21 @@ export const getWalletHistory = async () => {
 
   return returnedValue; // caught by .then()
 };
+export const getPromoCode = async () => {
+  let returnedValue;
 
+  await instance
+    .get("/promocode")
+    .then((response) => {
+      returnedValue = response.data.data;
+    })
+    .catch((error) => {
+      console.log(error, "responseeeefromwallet");
+      notifyError(error);
+    });
+
+  return returnedValue; // caught by .then()
+};
 export const checkPromoCode = async (code) => {
   let returnedValue;
 

@@ -1,12 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "../../styles/pages/Home.module.css";
 import ClothesCard from "../ClothesCard";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 
 export default function NewArrival({ categories, products }) {
-  const [currentCat, setCurrentCat] = useState("");
+  const [currentCat, setCurrentCat] = useState(categories[0]?.id);
+useEffect(() => {
 
+  setCurrentCat(categories[0]?.id)
+}, [])
   return (
     <div className="padding-container section-bottom-margin">
       <div
@@ -39,7 +42,10 @@ export default function NewArrival({ categories, products }) {
         </div>
       </div>
       <div className={styles["categories-container"]}>
-        {categories?.map((item, index) => (
+        {categories?.map((item, index) => 
+          products
+            .filter((product, i) => product?.category?.id === item?.id)?.length>0?
+          (
           <div
             className={
               item.id === currentCat?.id
@@ -50,7 +56,7 @@ export default function NewArrival({ categories, products }) {
           >
             {item.name}
           </div>
-        ))}
+        ):null)}
       </div>
 
       <div className={`section-bottom-margin`}>
@@ -95,7 +101,7 @@ export default function NewArrival({ categories, products }) {
           }}
         >
           {products
-            .filter((item, i) => item.category.id === currentCat.id)
+            .filter((item, i) => item.category.id === (currentCat?.id||1))
 
             .map((item) => (
               <SwiperSlide

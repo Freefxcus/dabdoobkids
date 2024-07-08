@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { truncateText } from "../utils/general.js";
 import { CardMedia } from "@mui/material";
 export default function ClothesCard({ item }) {
-  console.log(item);
+  console.log("item",item);
   const wishlist = useSelector((state) => state.wishlist.value);
   const wished = wishlist.includes(item?.id);
   const dispatch = useDispatch();
@@ -69,7 +69,7 @@ export default function ClothesCard({ item }) {
           {item.brand.name?.en || item.brand.name}
         </div>
         <div>{truncateText(item.description?.en || item.description, 50)}</div>
-        <div style={{ fontWeight: "bold" }}>${item?.price}</div>
+        <div style={{ fontWeight: "bold" }}>${item?.variants?.[0]?.price}</div>
       </div>
     </div>
   );
