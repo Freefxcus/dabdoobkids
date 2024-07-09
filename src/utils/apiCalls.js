@@ -548,6 +548,36 @@ export const ordersCallback = async () => {
   return returnedValue; // caught by .then()
 };
 
+export const orderRefund =  async (id,data) => {
+  let returnedValue;
+
+  await instance
+    .post(`/orders/${id}/refund`,data)
+    .then((response) => {
+      returnedValue = response;
+    })
+    .catch((error) => {
+      notifyError(error);
+    });
+
+  return returnedValue;
+};
+
+
+export const orderReturn =  async (id) => {
+  let returnedValue;
+
+  await instance
+    .post(`/orders/${id}/return`)
+    .then((response) => {
+      returnedValue = response.data.data;
+    })
+    .catch((error) => {
+      notifyError(error);
+    });
+
+  return returnedValue;
+};
 export const getPlans = async () => {
   let returnedValue;
 
@@ -587,7 +617,7 @@ export const getOrderInvoice = async (id) => {
       returnedValue = response;
     })
     .catch((error) => {
-      notifyError(error);
+      // notifyError(error);
     });
 
   return returnedValue; // caught by .then()

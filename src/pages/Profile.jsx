@@ -157,10 +157,10 @@ export default function Profile() {
     getWalletHistory().then((res) => {
       setWalletHistory(res);
     });
-    getPromoCode().then((res) => {
-      console.log("res1313213213213213213132",res);
-      setPromoCodes(res);
-    });
+    // getPromoCode().then((res) => {
+    //   console.log("res1313213213213213213132",res);
+    //   setPromoCodes(res);
+    // });
   }, []);
 
   console.log(wallet, "wallet123123132");

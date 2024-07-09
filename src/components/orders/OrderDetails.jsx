@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import styles from "../../styles/pages/Profile.module.css";
 import { useEffect, useState } from "react";
-import { getOrderInvoice, getSingleOrder } from "../../utils/apiCalls";
+import { getOrderInvoice, getSingleOrder, orderRefund, orderReturn } from "../../utils/apiCalls";
 import OrderCard from "../OrderCard";
 import OrderOverview from "./orderOverView";
 import { use } from "i18next";
@@ -12,6 +12,7 @@ export default function OrderDetails() {
   const { id } = useParams();
   useEffect(() => {
     getSingleOrder(id).then((res) => {
+      console.log(res,"order123123123order123123123");
       setOrder(res?.data?.data)
     });
 
@@ -130,6 +131,10 @@ export default function OrderDetails() {
           <div>$ {order?.totalPrice}</div>
         </div>
         <button
+onClick={()=>order?.orderStatus=="Paid"?orderRefund(order?.id,{
+      "user": order?.user,
+      "items":order?.items?.map(item=>item.id)
+    }):orderReturn(order?.id)}
           style={{
             width: "100%",
             height: "48px",
@@ -144,7 +149,7 @@ export default function OrderDetails() {
             cursor: "pointer",
           }}
         >
-          Refund
+{         order?.orderStatus=="Paid"? "Refund":"Return"}
         </button>
       </div>
     </>
