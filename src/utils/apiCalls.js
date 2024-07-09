@@ -564,6 +564,20 @@ export const orderRefund =  async (id,data) => {
 };
 
 
+export const orderCancel =  async (id,data) => {
+  let returnedValue;
+
+  await instance
+    .post(`/orders/${id}/ship/cancel`)
+    .then((response) => {
+      returnedValue = response;
+    })
+    .catch((error) => {
+      notifyError(error);
+    });
+
+  return returnedValue;
+};
 export const orderReturn =  async (id) => {
   let returnedValue;
 
