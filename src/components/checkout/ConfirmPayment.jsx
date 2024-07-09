@@ -200,7 +200,9 @@ export default function ConfirmPayment({ orderSummary, address }) {
             borderRadius: "10px",
             cursor: "pointer",
           }}
+          disabled={loading||!address?.items?.[0]?.id}
         >
+        
           {loading ? <Stack direction="row" justifyContent={"center"} gap={2} alignItems={"center"}> <CircularProgress color="inherit" size="1rem" sx={{width : "12px", }}/> Loading</Stack> : "Continue to Payment"}
         </button>
       </div>

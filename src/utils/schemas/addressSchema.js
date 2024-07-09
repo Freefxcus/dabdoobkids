@@ -23,7 +23,6 @@ export const addressSchema = yup.object().shape({
   type: yup.string().required("Required"),
   governorate: yup
     .number()
-    .min(2, "Must be at least 3 characters long")
     .required("Required"),
   city: yup
     .number()

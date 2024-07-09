@@ -8,13 +8,14 @@ import {
   Radio,
   RadioGroup,
 } from "@mui/material";
-import { getAddress } from "../../utils/apiCalls";
+import { getAddress, getWallet } from "../../utils/apiCalls";
 import { useSearchParams } from "react-router-dom";
 import { Prev } from "react-bootstrap/esm/PageItem";
 export default function BillingDetails({ address }) {
   const [openEdit, setOpenEdit] = useState(false);
   const [openAdd, setOpenAdd] = useState(false);
-  //[{}F
+  const [wallet, setWallet] = useState();
+
   const [searchParams, setSearchParams] = useSearchParams();
   const [payemntMethod, setPaymentMethod] = useState(
     searchParams.get("paymentMethod") 
@@ -29,6 +30,11 @@ useEffect(()=>{
     return prev
   })
 },[])
+useEffect(() => {
+  getWallet().then((res) => {
+  setWallet(res);
+  });
+}, []);
 
   console.log(searchParams.get("paymentMethod"), "paymentMethod12312132");
   const handleChange = (event) => {
@@ -176,6 +182,7 @@ useEffect(()=>{
                   color: "var(--brown)",
                 },
               }}
+              disabled={ wallet?.balance ==0}
               {...controlProps("wallet")}
             />
           </div>
