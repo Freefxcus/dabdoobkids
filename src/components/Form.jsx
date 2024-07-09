@@ -51,14 +51,15 @@ export default function Form({ type, toggleDrawer }) {
         }
       })
       .catch((error) => {
-        console.log(error, "<<<<errrrrrrrrrrrrr");
+        console.log(error,error.response, "<<<<errrrrrrrrrrrrr");
         if (type === "login") {
           console.log(error);
           notifyError("Wrong username or password!");
+          return;
         }
         notifyError(
           error.response?.data?.errors[0]?.message ||
-            error.response?.data?.message
+            error.response?.data?.message||error
         );
       });
   };
