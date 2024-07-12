@@ -83,7 +83,7 @@ export const getWishlistItems = async () => {
         : [];
     })
     .catch((error) => {
-      notifyError(error);
+      // notifyError(error);
     });
 
   return returnedValue; // caught by .then()

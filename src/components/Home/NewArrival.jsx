@@ -5,10 +5,11 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 
 export default function NewArrival({ categories, products }) {
-  const [currentCat, setCurrentCat] = useState(categories[0]?.id);
+  console.log(products,"NewArrivalNewArrivalNewArrival");
+  const [currentCat, setCurrentCat] = useState(categories?.[0]?.id);
 useEffect(() => {
 
-  setCurrentCat(categories[0]?.id)
+  setCurrentCat(categories?.[0]?.id)
 }, [])
   return (
     <div className="padding-container section-bottom-margin">
@@ -43,12 +44,12 @@ useEffect(() => {
       </div>
       <div className={styles["categories-container"]}>
         {categories?.map((item, index) => 
-          products
-            .filter((product, i) => product?.category?.id === item?.id)?.length>0?
+          products[0]?.category?.id?products
+            .filter((product, i) => product?.category?.id == item?.id)?.length>0?
           (
           <div
             className={
-              item.id === currentCat?.id
+              item?.id === currentCat?.id
                 ? styles["category-active"]
                 : styles.category
             }
@@ -56,7 +57,18 @@ useEffect(() => {
           >
             {item.name}
           </div>
-        ):null)}
+        ):null:(
+          <div
+            className={
+              item?.id === currentCat?.id
+                ? styles["category-active"]
+                : styles.category
+            }
+            onClick={() => setCurrentCat(item)}
+          >
+            {item.name}
+          </div>
+        ))}
       </div>
 
       <div className={`section-bottom-margin`}>
@@ -100,8 +112,8 @@ useEffect(() => {
             },
           }}
         >
+            {/* .filter((item, i) => item?.category?.id === (currentCat?.id||1)) */}
           {products
-            .filter((item, i) => item.category.id === (currentCat?.id||1))
 
             .map((item) => (
               <SwiperSlide

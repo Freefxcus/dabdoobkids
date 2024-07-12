@@ -39,7 +39,7 @@ export default function Header({ setOpen }) {
   );
   const wishlist = useSelector((state) => state.wishlist.value);
   const cart = useSelector((state) => state.cart.value);
-  const [dropDownType, setDropDownType] = useState("");
+  const [dropDownType, setDropDownType] = useState();
   const [dropDown, setDropDown] = useState(false);
   const [isUser, setIsUser] = useState(false);
   const [searchInput, setSearchInput] = useState(false);
@@ -89,24 +89,22 @@ export default function Header({ setOpen }) {
 
   useEffect(() => {
     getCategories().then((res) => {
+
       setCategories(res);
     });
     getSubCategories().then((res) => {
       setSubCategories(res);
     });
   }, []);
-  console.log(subCategories, "categories123123123");
-  const subCategotyNames = subCategories?.data?.data?.categories?.map(
+
+  const formattedSybCategoriesLinks = subCategories?.data?.data?.categories?.map(
     (subCategory) => {
-      return subCategory.name;
+      return { title: subCategory?.name, link: "/search" ,parentId:subCategory?.category?.id} ;
     }
-  );
-  const formattedSybCategoriesLinks = subCategotyNames?.map((subCategory) => {
-    return { title: subCategory, link: "/search" } ;
-  }) || [];
-  console.log(formattedSybCategoriesLinks, "subCategotyNames123123123");
+  )|| [];
+
   const subCategoryLinks = [
-    { title: "Shop All", link: "/search" },
+    { title: "Shop All", link: "/search",parentId:dropDownType },
     ...formattedSybCategoriesLinks,
   ];
   return (
@@ -182,6 +180,7 @@ export default function Header({ setOpen }) {
                 <Dropdown
                   title={category?.name}
                   items={[{ title: "First", link: "#" }]}
+                  id={category?.id}
                   dropDown={dropDown}
                   setDropDown={setDropDown}
                   setDropDownType={setDropDownType}
@@ -337,7 +336,7 @@ export default function Header({ setOpen }) {
             )}
             <img
               src={burger}
-              className={`${styles.clickable} hidden-on-large-screen`}
+              className={`${styles.clickable} hidden-on-large-screen show-on-small-screen`}
               style={{ marginLeft: "10px", width: "30px" }}
               onClick={() => {
                 setOpen((prev) => !prev);
@@ -359,7 +358,7 @@ export default function Header({ setOpen }) {
       >
         <div className={`padding-container ${styles["dropdown-content"]}`}>
           <div className={styles["dropdown-section"]} style={{ flex: "1" }}>
-            {subCategoryLinks.map(({ title, link }) => (
+            {subCategoryLinks.filter(sub=>sub.parentId==dropDownType).map(({ title, link }) => (
               <Link to={link} className={styles.link}>
                 {title}
               </Link>

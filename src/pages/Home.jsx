@@ -254,7 +254,7 @@ export default function Home() {
 
         <div className="cards_container_a">
             {products
-              .filter((item, i) => item.extraInfo?.sale)
+              .filter((item, i) => item?.extraInfo?.sale)
               .slice(0, mobile ? 2 : 4)
               .map((item) => (
                 <ClothesCard item={item} />

@@ -20,19 +20,18 @@ export default function Sidebar() {
     });
   }, []);
 
-  const subCategotyNames = subCategories?.data?.data?.categories?.map(
+  const formattedSybCategoriesLinks = subCategories?.data?.data?.categories?.map(
     (subCategory) => {
-      return subCategory.name;
+      return { title: subCategory?.name, link: "/search" ,parentId:subCategory?.category?.id} ;
     }
-  );
-  const formattedSybCategoriesLinks = subCategotyNames?.map((subCategory) => {
-    return { title: subCategory, link: "/search" } ;
-  }) || [];
+  )|| [];
 
   const subCategoryLinks = [
-    { title: "Shop All", link: "/search" },
+    { title: "Shop All", link: "/search",parentId:"all" },
     ...formattedSybCategoriesLinks,
   ];
+
+
   return (
     <div className={`${styles.sidebar} padding-container`}>
     {categories ?
@@ -47,8 +46,8 @@ export default function Sidebar() {
         </AccordionSummary>
         <AccordionDetails className={styles.content}>
         <div className={styles["dropdown-section"]} style={{ flex: "1" }}>
-            {subCategoryLinks.map(({ title, link }) => (
-             <div key={category.name + link }> <Link to={link} className={styles.link}>
+            {subCategoryLinks.filter(sub=>sub.parentId==category.id||sub.parentId=="all").map(({ title, link }) => (
+             <div key={category.name + title }> <Link to={link} className={styles.link}>
                 {title}
               </Link></div>
             ))}

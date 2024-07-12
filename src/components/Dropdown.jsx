@@ -6,15 +6,17 @@ export default function Dropdown({
   title,
   items,
   dropDown,
+  id,
   setDropDown,
   setDropDownType,
 }) {
+
   return (
     <div
       className={`${styles.dropdown} hidden-on-small-screen`}
       onMouseEnter={() => {
         setDropDown(true);
-        setDropDownType(title);
+        setDropDownType(id);
       }}
       onMouseLeave={() => {
         setDropDown(false);

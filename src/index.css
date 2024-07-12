@@ -98,6 +98,9 @@
   .hidden-on-large-screen {
     display: none;
   }
+  .show-on-small-screen{
+    display: block!important;
+  }
   .section-bottom-margin {
     margin-bottom: 30px;
   }
