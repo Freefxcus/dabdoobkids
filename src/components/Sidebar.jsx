@@ -7,7 +7,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import styles from "../styles/components/Sidebar.module.css";
 import { getCategories, getSubCategories } from "../utils/apiCalls";
 import { Link } from "react-router-dom";
-export default function Sidebar() {
+export default function Sidebar({setOpen}) {
 
   const [categories, setCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
@@ -47,7 +47,7 @@ export default function Sidebar() {
         <AccordionDetails className={styles.content}>
         <div className={styles["dropdown-section"]} style={{ flex: "1" }}>
             {subCategoryLinks.filter(sub=>sub.parentId==category.id||sub.parentId=="all").map(({ title, link }) => (
-             <div key={category.name + title }> <Link to={link} className={styles.link}>
+             <div key={category.name + title } onClick={()=>setOpen(false)}> <Link to={link} className={styles.link}>
                 {title}
               </Link></div>
             ))}

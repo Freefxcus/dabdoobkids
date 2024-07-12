@@ -426,6 +426,22 @@ export const getCategories = async () => {
   return returnedValue; // caught by .then()
 };
 
+export const getBrands = async () => {
+  let returnedValue;
+
+  await instance
+    .get("/brands")
+    .then((response) => {
+      console.log(response);
+      returnedValue = response.data.data;
+    })
+
+    .catch((error) => {
+      notifyError(error);
+    });
+  return returnedValue; // caught by .then()
+};
+
 export const getSubCategories = async () => {
   let returnedValue;
 

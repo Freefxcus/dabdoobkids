@@ -119,9 +119,12 @@
 @media (max-width: 600px) {
   .categories_section {
     display: none;
+  }.options {
+    display: flex ;
   }
-  .options {
-    display: flex;
+  .categories_section_mobile {
+    min-width: 200px;
+   max-width:250px;
   }
   .countdown-container {
     padding: 5px;
@@ -136,6 +139,8 @@
 @media (min-width: 601px) and (max-width: 900px) {
   .categories_section {
     display: none;
+  }.options {
+    display: flex ;
   }
   .countdown-container {
     padding: 8px;
