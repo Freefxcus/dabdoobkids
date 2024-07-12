@@ -11,31 +11,49 @@ import {
 import { getAddress, getWallet } from "../../utils/apiCalls";
 import { useSearchParams } from "react-router-dom";
 import { Prev } from "react-bootstrap/esm/PageItem";
-export default function BillingDetails({ address }) {
+export default function BillingDetails({
+  address,
+  addressActive,
+  setAddressActive,
+}) {
   const [openEdit, setOpenEdit] = useState(false);
   const [openAdd, setOpenAdd] = useState(false);
   const [wallet, setWallet] = useState();
-
+  const [addressInfo, setAddressInfo] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
   const [payemntMethod, setPaymentMethod] = useState(
-    searchParams.get("paymentMethod") 
+    searchParams.get("paymentMethod")
   );
   const [promoCode, setPromoCode] = useState(
     searchParams.get("promocode") || ""
   );
 
-useEffect(()=>{
-  setSearchParams((prev)=>{
-    prev.set("paymentMethod", "Cash on Delivery")
-    return prev
-  })
-},[])
-useEffect(() => {
-  getWallet().then((res) => {
-  setWallet(res);
-  });
-}, []);
+  useEffect(() => {
+    setSearchParams((prev) => {
+      prev.set("paymentMethod", "Cash on Delivery");
+      return prev;
+    });
+  }, []);
+  useEffect(() => {
+    getWallet().then((res) => {
+      setWallet(res);
+    });
+    setAddressActive(
+      address?.items?.length
+        ? address?.items?.filter((item) => item?.primary).id ||
+            address?.items?.[0]?.id
+        : null
+    );
+  }, []);
 
+  useEffect(() => {
+    setAddressActive(
+      address?.items?.length
+        ? address?.items?.filter((item) => item?.primary).id ||
+            address?.items?.[0]?.id
+        : null
+    );
+  }, [address]);
   console.log(searchParams.get("paymentMethod"), "paymentMethod12312132");
   const handleChange = (event) => {
     setPaymentMethod(event.target.value);
@@ -55,7 +73,7 @@ useEffect(() => {
       <h1 style={{ fontSize: "22px", marginBottom: "12px" }}>
         Shipping Details
       </h1>
-      <div>
+      <div style={{ display: "grid", gap: "15px" }}>
         <h3
           style={{
             marginBottom: "12px",
@@ -95,36 +113,45 @@ useEffect(() => {
             </div>
           </div>
         ) : (
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              border: "1px solid #E5E7EB",
-              alignItems: "center",
-            }}
-          >
-            <div style={{ padding: "12px" }}>
-              <h1>
-                {address?.items?.[0].address},{" "}
-                {address?.items?.[0]?.city?.name?.en},{" "}
-                {address?.items?.[0]?.governorate?.name?.en}{" "}
-              </h1>
-            </div>
-            <img
-              onClick={() => {
-                setOpenEdit(true);
-              }}
+          address?.items?.map((addressItem) => (
+            <div
+              key={addressItem.id}
               style={{
-                padding: "12px",
+                display: "flex",
+                justifyContent: "space-between",
+                border: "1px solid #E5E7EB",
+                alignItems: "center",
+                backgroundColor:
+                  addressActive == addressItem.id ? "#E5E7EB44" : "#fff",
                 cursor: "pointer",
               }}
-              src="/editpen.svg"
-              alt="editIcon"
-            />
-          </div>
+              onClick={() => {
+                setAddressActive(addressItem.id);
+              }}
+            >
+              <div style={{ padding: "12px" }}>
+                <h1>
+                  {addressItem.address}, {addressItem?.city?.name?.en},{" "}
+                  {addressItem?.governorate?.name?.en}{" "}
+                </h1>
+              </div>
+
+              <img
+                onClick={() => {
+                  setAddressInfo(addressItem);
+                  setOpenEdit(true);
+                }}
+                style={{
+                  padding: "12px",
+                  cursor: "pointer",
+                }}
+                src="/editpen.svg"
+                alt="editIcon"
+              />
+            </div>
+          ))
         )}
       </div>
-
       {/* Payment Method */}
       <div style={{ marginTop: "12px" }}>
         <h1>Expedition</h1>
@@ -182,7 +209,7 @@ useEffect(() => {
                   color: "var(--brown)",
                 },
               }}
-              disabled={ wallet?.balance ==0}
+              disabled={wallet?.balance == 0}
               {...controlProps("wallet")}
             />
           </div>
@@ -232,13 +259,19 @@ useEffect(() => {
           </div>
         </div>
       </div>
-      <AddressModal
-        open={openEdit}
-        setOpen={setOpenEdit}
-        addressInfo={address.items?.[0]}
-        type="edit"
-      />
-      <AddressModal open={openAdd} setOpen={setOpenAdd} type="add" />
+
+      {address?.items?.length ? (
+        addressInfo && openEdit ? (
+          <AddressModal
+            open={openEdit}
+            setOpen={setOpenEdit}
+            addressInfo={addressInfo}
+            type="edit"
+          />
+        ) : null
+      ) : (
+        <AddressModal open={openEdit} setOpen={setOpenEdit} type="add" />
+      )}
     </div>
   );
 }

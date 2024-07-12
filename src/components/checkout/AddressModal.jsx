@@ -62,7 +62,7 @@ export default function AddressModal({
       ...values,
     };
     if (type === "edit") {
-      const resUpdate = await updateAddress(addressInfo.id, parametres);
+      const resUpdate = await updateAddress(addressInfo?.id, parametres);
       console.log(resUpdate, "resUpdate123");
       if (resUpdate.status) {toast.success("Address updated successfully")
       setOpen(false);

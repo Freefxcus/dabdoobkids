@@ -11,11 +11,11 @@ import { CircularProgress, Stack } from "@mui/material";
 import { toast } from "react-toastify";
 
 
-export default function ConfirmPayment({ orderSummary, address }) {
+export default function ConfirmPayment({ orderSummary, address,addressActive }) {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const paymentMethod = searchParams.get("paymentMethod");
-  const addressId = address?.items?.[0]?.id;
+  const addressId = addressActive||address?.items?.[0]?.id;
   const [promoCode, setPromoCode] = useState("");
   const [paymentLink, setPaymentMethod] = useState("");
   const [loading, setLoading] = useState(false);
@@ -200,7 +200,7 @@ export default function ConfirmPayment({ orderSummary, address }) {
             borderRadius: "10px",
             cursor: "pointer",
           }}
-          disabled={loading||!address?.items?.[0]?.id}
+          disabled={loading||!address?.items?.[0]?.id||!addressActive}
         >
         
           {loading ? <Stack direction="row" justifyContent={"center"} gap={2} alignItems={"center"}> <CircularProgress color="inherit" size="1rem" sx={{width : "12px", }}/> Loading</Stack> : "Continue to Payment"}

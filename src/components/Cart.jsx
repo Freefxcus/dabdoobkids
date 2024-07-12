@@ -20,7 +20,7 @@ import { cartActions } from "../Redux/store";
 import { Box } from "@mui/material";
 import CartProgress from "./CartProgress";
 
-export default function Cart() {
+export default function Cart({ toggleDrawer }) {
   const navigate = useNavigate();
   const [cart, setCart] = useState([]);
   const [checkout, setCheckout] = useState({});
@@ -55,11 +55,7 @@ export default function Cart() {
     navigate(`/checkout?${searchParams.toString()}`);
   };
   return (
-    <div
-    className={styles['container-cart']}
-    
-   
-    >
+    <div className={styles["container-cart"]}>
       <div
         style={{
           marginBottom: "20px",
@@ -79,6 +75,7 @@ export default function Cart() {
               seIsChecking(false);
             });
             dispatch(cartActions.clearCart());
+            toggleDrawer();
           }}
         >
           Clear all
@@ -311,13 +308,14 @@ export default function Cart() {
             style={{
               display: "flex",
               justifyContent: "space-between",
-              gap:"15px",
+              gap: "15px",
               marginTop: "20px",
             }}
           >
             <button
               onClick={() => {
                 navigate("/cart");
+                toggleDrawer();
               }}
               style={{
                 cursor: "pointer",
@@ -345,7 +343,10 @@ export default function Cart() {
                 color: "var(--white)",
                 border: "1px solid var(--brown)",
               }}
-              onClick={handleCheckout}
+              onClick={() => {
+                handleCheckout();
+                toggleDrawer();
+              }}
             >
               Checkout
             </button>

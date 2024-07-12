@@ -18,6 +18,7 @@ export default function Checkout() {
   const [promoCode, setPromoCode] = useState(
     searchParams.get("promocode") || ""
   );
+  const [addressActive, setAddressActive] = useState(null);
 
   const [cart, setCart] = useState([]);
   const [order, setOrder] = useState([]);
@@ -31,6 +32,12 @@ export default function Checkout() {
     const fetchAddress = async () => {
       const addressData = await getAddress();
       setAddress(addressData);
+      setAddressActive(
+        addressData?.items?.length
+          ? addressData?.items?.filter((item) => item?.primary).id ||
+              addressData?.items?.[0]?.id
+          : null
+      );
     };
 
     fetchCart();
@@ -127,14 +134,12 @@ export default function Checkout() {
                 <span
                   className={styles.color}
                   style={{
-                
                     backgroundColor: `${item?.variant?.color}`,
                     marginLeft: "6px",
                   }}
                 ></span>
               </div>
             </div>
-
             <div
               style={{
                 fontWeight: "500",
@@ -144,51 +149,56 @@ export default function Checkout() {
                 alignItems: "center",
               }}
             >
-            <div
-              style={{
-                fontWeight: "500",
-                display: "flex",
-
-                justifyItems: "center",
-                alignItems: "center",
-              }}
-            >
               <div
                 style={{
+                  fontWeight: "500",
                   display: "flex",
 
-                  border: "1px solid var(--dreamy-cloud)",
-                  fontWeight: "400",
+                  justifyItems: "center",
+                  alignItems: "center",
                 }}
               >
-                <h2 style={{ fontWeight: "400" }}>{item?.count}</h2>
-                <h2 style={{ fontWeight: "400" }}>x</h2>
-                <h2 style={{ fontWeight: "400" }}>{item?.variant?.price}</h2>
-              </div>
-            </div>
+                <div
+                  style={{
+                    display: "flex",
 
-            <div
-              style={{
-                fontWeight: "500",
-                display: "flex",
-
-                justifyItems: "center",
-                alignItems: "center",
-              }}
-            >
-              <div style={{ backgroundColor: "transparent" }}>
-                <h2 style={{ fontWeight: "400" }}>
-                  {item?.count * item?.variant?.price}
-                </h2>
+                    border: "1px solid var(--dreamy-cloud)",
+                    fontWeight: "400",
+                  }}
+                >
+                  <h2 style={{ fontWeight: "400" }}>{item?.count}</h2>
+                  <h2 style={{ fontWeight: "400" }}>x</h2>
+                  <h2 style={{ fontWeight: "400" }}>{item?.variant?.price}</h2>
+                </div>
               </div>
-            </div>
-          </div> </div>
+
+              <div
+                style={{
+                  fontWeight: "500",
+                  display: "flex",
+
+                  justifyItems: "center",
+                  alignItems: "center",
+                }}
+              >
+                <div style={{ backgroundColor: "transparent" }}>
+                  <h2 style={{ fontWeight: "400" }}>
+                    {item?.count * item?.variant?.price}
+                  </h2>
+                </div>
+              </div>
+            </div>{" "}
+          </div>
         ))}
 
-        <BillingDetails address={address} />
+        <BillingDetails
+          address={address}
+          addressActive={addressActive}
+          setAddressActive={setAddressActive}
+        />
       </div>
 
-      <ConfirmPayment address={address} orderSummary={order} />
+      <ConfirmPayment address={address} addressActive={addressActive} orderSummary={order} />
     </div>
   );
 }

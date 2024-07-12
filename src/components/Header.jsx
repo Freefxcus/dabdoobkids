@@ -27,7 +27,7 @@ import dabdoob from "../images/dabdoob.svg";
 import burger from "../images/burger.png";
 import { useDispatch, useSelector } from "react-redux";
 import { wishlistActions } from "../Redux/store";
-import { getCategories, getSubCategories } from "../utils/apiCalls";
+import { getCart, getCategories, getSubCategories } from "../utils/apiCalls";
 export default function Header({ setOpen }) {
   const debouncedHandleInputChange = useCallback(
     debounce((value) => {
@@ -39,6 +39,7 @@ export default function Header({ setOpen }) {
   );
   const wishlist = useSelector((state) => state.wishlist.value);
   const cart = useSelector((state) => state.cart.value);
+  const [carts, setCarts] = useState([]);
   const [dropDownType, setDropDownType] = useState();
   const [dropDown, setDropDown] = useState(false);
   const [isUser, setIsUser] = useState(false);
@@ -52,6 +53,14 @@ export default function Header({ setOpen }) {
 
   const [animation, setAnimation] = useState(false);
   // For the first useEffect
+
+  useEffect(() => {
+    getCart().then((res) => {
+    
+      setCarts(res?.items);
+    });
+  }, []);
+
   useEffect(() => {
     const animationTimeoutId = setTimeout(() => {
       setAnimation(true);
@@ -99,12 +108,12 @@ export default function Header({ setOpen }) {
 
   const formattedSybCategoriesLinks = subCategories?.data?.data?.categories?.map(
     (subCategory) => {
-      return { title: subCategory?.name, link: "/search" ,parentId:subCategory?.category?.id} ;
+      return { title: subCategory?.name, link: `/search&categoryId=${subCategory?.id}` ,parentId:subCategory?.category?.id} ;
     }
   )|| [];
 
   const subCategoryLinks = [
-    { title: "Shop All", link: "/search",parentId:dropDownType },
+    { title: "Shop All", link: `/search&categoryId=${dropDownType}`,parentId:dropDownType },
     ...formattedSybCategoriesLinks,
   ];
   return (
@@ -298,7 +307,7 @@ export default function Header({ setOpen }) {
                     }}
                   />
                   <div className={`${styles.clickable} ${styles.badge}`}>
-                    {cart.length}
+                    {cart?.length||carts?.length||0}
                   </div>
                 </>
               ) : (
