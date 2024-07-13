@@ -230,6 +230,7 @@ export default function Profile() {
           </div>
           <div className={styles.container}>
             <div className={styles.sidebar}>
+             {/* { id: "8", title: "My Promo" }, */}
               {[
                 { id: "1", title: "Profile" },
                 { id: "2", title: "Wallet" },
@@ -238,7 +239,7 @@ export default function Profile() {
                 { id: "5", title: "Term and Condition" },
                 { id: "6", title: "Privacy Policy" },
                 { id: "7", title: "Help Page" },
-                { id: "8", title: "My Promo" },
+               
                 { id: "9", title: "Log out" },
               ].map((item, index) => (
                 <div
