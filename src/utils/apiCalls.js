@@ -136,7 +136,7 @@ export const getCart = async () => {
     })
     .catch((error) => {
       console.log(error, "cartresponseeee");
-      notifyError(error);
+      // notifyError(error);
     });
 
   return returnedValue; // caught by .then()
