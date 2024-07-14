@@ -7,6 +7,7 @@ import { Box, CardMedia } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import styles from "../styles/components/forget-password.modules.css";
 import { resetPassword } from "../utils/apiCalls";
+import { Helmet } from "react-helmet";
 export default function ForgetPassword() {
   const navigate = useNavigate();
   const onSubmit = (values) => {
@@ -39,6 +40,10 @@ export default function ForgetPassword() {
         mb: "35px",
       }}
     >
+      <Helmet>
+        <title>{"Dabdoob Kidz | Forget Password page"}</title>
+        <meta name="description" content={"No worries! We can help you get back into your account. Enter the email address associated with your account and we'll send you instructions to reset your password"} />
+      </Helmet>
       <CardMedia sx={{width : {xs : "300px" , md : "100%"} , mx : "auto"}} component={"img"} src="/allert.svg" />
 
       <Box

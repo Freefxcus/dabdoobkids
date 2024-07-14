@@ -40,6 +40,7 @@ import arrow from "../images/arrow.svg";
 import CartProgress from "../components/CartProgress.jsx";
 import BannerSwiper from "../components/Home/BannerSwiper.jsx";
 import NewArrival from "../components/Home/NewArrival.jsx";
+import { Helmet } from "react-helmet";
 
 export default function Home() {
   const mobile = useMediaQuery("(max-width:300px)");
@@ -135,6 +136,10 @@ export default function Home() {
 
   return (
     <>
+        {/* <Helmet>
+        <title>{"metaData.title"}</title>
+        <meta name="description" content={"metaData.description"} />
+      </Helmet> */}
       <BannerSwiper />
       {products?.length < 0 && (
         <>

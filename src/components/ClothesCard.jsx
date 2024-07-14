@@ -34,7 +34,7 @@ export default function ClothesCard({ item }) {
           }}
           component={"img"}
           src={
-            item.images?.[0] || "https://i.postimg.cc/HnNLbVGh/placeholder.png"
+            item?.images?.[0] || "https://i.postimg.cc/HnNLbVGh/placeholder.png"
           }
         />
         <div
@@ -66,9 +66,9 @@ export default function ClothesCard({ item }) {
       </div>
       <div className={styles["card-bottom"]}>
         <div style={{ fontWeight: "600" }}>
-          {item.brand?.name?.en || item.brand?.name}
+          {item?.brand?.name?.en || item.brand?.name}
         </div>
-        <div>{truncateText(item.description?.en || item.description, 50)}</div>
+        <div>{truncateText(item?.description?.en || item?.description, 50)}</div>
         <div style={{ fontWeight: "bold" }}>${item?.variants?.[0]?.price}</div>
       </div>
     </div>

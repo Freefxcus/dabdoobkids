@@ -55,7 +55,7 @@ useEffect(() => {
             }
             onClick={() => setCurrentCat(item)}
           >
-            {item.name}
+            {item?.name}
           </div>
         ):null:(
           <div
@@ -115,7 +115,7 @@ useEffect(() => {
             {/* .filter((item, i) => item?.category?.id === (currentCat?.id||1)) */}
           {products
 
-            .map((item) => (
+            ?.map((item) => (
               <SwiperSlide
                 style={{
                   display: "flex",
