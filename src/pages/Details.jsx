@@ -38,16 +38,16 @@ export default function Details() {
   const [largeImage, setLargeImage] = useState("");
   const [size, setSize] = useState("");
   const [counter, setCounter] = useState(1);
-  const [variant, setVaraint] = useState(0);
+  const [variant, setVariant] = useState({});
   const [open, setOpen] = useState(false);
   const [relatedProducts, setRelatedProducts] = useState([]);
-  const [reload , setReload] = useState(false);
+  const [reload, setReload] = useState(false);
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
 
-  const handleChange = (value) => {
-    setVaraint(prev => value);
-    console.log(variant, "variantzzzzzzzzzz");
+  const handleChange = ({ key, value }) => {
+    setVariant((prev) => ({ ...prev, [key]: value }));
+    console.log(key, value,"variantvariantvariantvariant",variant);
   };
 
   const handleImageChange = (e) => {
@@ -65,22 +65,37 @@ export default function Details() {
     }
   };
   useEffect(() => {
-   
     getProductById(id).then((res) => {
       setProductDetails(res);
       setLargeImage(res?.images[0]);
     });
 
-    getRelatedProducts(id).then((res) => {
-      setRelatedProducts(res);
-      setLoading(false);
-    }).catch((err) => {
-      setLoading(false);
-    });
-    
+    getRelatedProducts(id)
+      .then((res) => {
+        setRelatedProducts(res);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setLoading(false);
+      });
   }, [reload]);
 
-  console.log(loading, "productDetails12321123");
+
+  const newVariants = transformVariants(productDetails?.variants);
+
+  
+  const selectedVariantObject =productDetails?.variants?.find(variantItem => 
+    variantItem.options.every(option => 
+      variant[option.option.name] === option.value.value
+    )
+  );
+
+  // const selectedVariantObject = productDetails?.variants?.length?   variant?.length===newVariants.length? productDetails?.variants?.find(variantItem => 
+  //   variantItem.options.every(option => 
+  //     variant[option.option.name] === option.value.value
+  //   )
+  // ):null:null;
+
 
   return (
     <>
@@ -90,7 +105,12 @@ export default function Details() {
           <div style={{ height: "500px" }} />
         </>
       )}
-  {!productDetails && <Empty title="Product not Found" message="Seems there is a problem finding this product"/> }
+      {!productDetails && (
+        <Empty
+          title="Product not Found"
+          message="Seems there is a problem finding this product"
+        />
+      )}
       {productDetails?.id && (
         <div
           className={`${styles.container} margin-container section-top-margin section-bottom-margin`}
@@ -125,7 +145,7 @@ export default function Details() {
                 color: "var(--errie-black)",
               }}
             >
-              $ {productDetails?.variants[variant]?.price}
+              $ {selectedVariantObject?selectedVariantObject?.price:productDetails?.price}
             </div>
             <div
               style={{
@@ -145,48 +165,79 @@ export default function Details() {
                 },
               }}
             >
-              <FormControl sx={{ width: "100%" }} size="small">
-                <InputLabel id="demo-simple-select-label">
-                  Select Size
-                </InputLabel>
-                <Select
-                  sx={{ width: "100%" }}
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  defaultValue={variant || 0}
-                  value={variant || 0}
-                  label="Select Size"
-                  onChange={(event)=>handleChange(event.target.value)}
-                >
-                  {productDetails?.variants?.map((variant, index) => (
-                    <MenuItem key={index} value={index}>
-                      {variant?.size}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
+              {newVariants?.[0] && newVariants?.[0]?.values?.length ? (
+                <FormControl sx={{ width: "100%" }} size="small">
+                  <InputLabel id="demo-simple-select-label">
+                    Select {newVariants?.[0]?.name}
+                  </InputLabel>
+                  <Select
+                    sx={{ width: "100%" }}
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    defaultValue={variant?.[newVariants?.[0]?.name] || 0}
+                    value={variant?.[newVariants?.[0]?.name] || 0}
+                    label="Select Size"
+                    onChange={(event) =>
+                      handleChange({
+                        key: newVariants?.[0]?.name,
+                        value: event.target.value,
+                      })
+                    }
+                  >
+                    {newVariants?.[0]?.values?.map((variant, index) => (
+                      <MenuItem key={index} value={variant}>
+                        {variant}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              ) : null}
             </Box>
-            <Box>
-              <h1 style={{marginBottom : "12px"}}>Color :</h1>
-              <Stack direction={"row"} gap={"12px"}>
-                {productDetails?.variants?.map((singleVariant, index) => (
-                 
-                  <span
-                    onClick={() => handleChange(index)}
-                    key={index}
-                    className={styles.color}
-                    style={{
-                      backgroundColor: `${singleVariant?.color}`,
-                      marginLeft: "6px",
-                      width: "30px",
-                      height: "30px",
-                      border : variant === index ? "2px solid var(--brown)" : "1px solid black",
-                      cursor: "pointer",
-                    }}
-                  ></span>
-                ))}
-              </Stack>
-            </Box>
+            {newVariants?.length > 1
+              ? newVariants
+                  ?.filter((item, index) => item.values?.length && index !== 0)
+                  ?.map((variantItem, index) => (
+                    <Box key={variantItem?.name}>
+                      <h1 style={{ marginBottom: "12px" }}>
+                        {variantItem?.name} :
+                      </h1>
+                      <Stack direction={"row"} gap={"12px"}>
+                        {variantItem?.values?.map((ValueVariant, index) => (
+                          <span
+                            onClick={() =>
+                              handleChange({
+                                key: variantItem?.name,
+                                value: ValueVariant,
+                              })
+                            }
+                            key={index + ValueVariant}
+                            className={styles.color}
+                            style={{
+                              marginLeft: "6px",
+                              padding: "4px 12px",
+                              borderRadius: "8px",
+                              backgroundColor:
+                                variant?.[variantItem?.name] === ValueVariant
+                                  ? "var(--brown)"
+                                  : "transparent",
+                              color:
+                                variant?.[variantItem?.name] === ValueVariant
+                                  ? "white"
+                                  : "var(--rhine-castle)",
+                              border:
+                                variant?.[variantItem?.name] === ValueVariant
+                                  ? "2px solid var(--brown)"
+                                  : "1px solid black",
+                              cursor: "pointer",
+                            }}
+                          >
+                            {ValueVariant}
+                          </span>
+                        ))}
+                      </Stack>
+                    </Box>
+                  ))
+              : null}
             <div
               style={{
                 fontSize: "16px",
@@ -242,20 +293,24 @@ export default function Details() {
                   opacity: counter < 1 ? ".3" : "1",
                   pointerEvents: counter < 1 ? "none" : "initial",
                 }}
-                disabled={productDetails?.variants?.length<1||   counter < 1 || counter > productDetails?.variants[variant]?.stock}
+                disabled={
+                  !selectedVariantObject|| productDetails?.variants?.length < 1 ||
+                  counter < 1 ||
+                  counter >selectedVariantObject?.stock
+                }
                 onClick={(e) => {
                   e.stopPropagation();
-                  if (counter > productDetails?.variants[variant]?.stock) {
+                  if (counter > selectedVariantObject?.stock) {
                     toast.error("Out of stock");
                     return;
                   }
-                
+
                   setOpen(true);
                   dispatch(cartActions.add({ id: +id, count: counter }));
                   addToCart(
                     +id,
                     counter,
-                    productDetails?.variants[variant]?.id
+                    selectedVariantObject?.id
                   );
                   // if (wished) {
                   //   dispatch(cartActions.remove(+id));
@@ -292,7 +347,14 @@ export default function Details() {
                 height="30px"
               />
             </div>
-            <div style={{ display: "flex", alignItems: "center", gap: "10px" , margin :"12px 0px" }}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "10px",
+                margin: "12px 0px",
+              }}
+            >
               <img src={delivery} className={styles["delivery-icon"]} />
               <div>
                 <div>Delivery details</div>
@@ -302,23 +364,48 @@ export default function Details() {
           </div>
         </div>
       )}
-      <Box 
-      sx={{
-        mx : {xs : "20px" , md : "40px" , lg :"60px"},
-      }}>
+      <Box
+        sx={{
+          mx: { xs: "20px", md: "40px", lg: "60px" },
+        }}
+      >
         <Typography
           variant="h4"
           sx={{
-            marginLeft: {xs : "5px" , md : "10px" , lg :"20px"},
+            marginLeft: { xs: "5px", md: "10px", lg: "20px" },
             marginBottom: "16px",
             fontWeight: "400",
-            fontSize : {xs : "24px" , md : "32px" , lg :"40px"},
+            fontSize: { xs: "24px", md: "32px", lg: "40px" },
           }}
         >
           You may also like
         </Typography>
-        <SwiperComponent setReload = {setReload} items={relatedProducts} />
+        <SwiperComponent setReload={setReload} items={relatedProducts} />
       </Box>
     </>
   );
+}
+
+function transformVariants(variants) {
+  const optionsMap = {};
+
+  variants?.forEach((variant) => {
+    variant?.options?.forEach((option) => {
+      const { name } = option.option;
+      const { value } = option.value;
+
+      if (!optionsMap[name]) {
+        optionsMap[name] = new Set();
+      }
+
+      optionsMap[name].add(value);
+    });
+  });
+
+  const newVariants = Object.entries(optionsMap).map(([name, values]) => ({
+    name,
+    values: Array.from(values),
+  }));
+
+  return newVariants;
 }
