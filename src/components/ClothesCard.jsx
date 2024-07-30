@@ -66,10 +66,10 @@ export default function ClothesCard({ item }) {
       </div>
       <div className={styles["card-bottom"]}>
         <div style={{ fontWeight: "600" }}>
-          {item?.brand?.name?.en || item.brand?.name}
+          {item?.brand?.name}
         </div>
-        <div>{truncateText(item?.description?.en || item?.description, 50)}</div>
-        <div style={{ fontWeight: "bold" }}>${item?.variants?.[0]?.price}</div>
+        {/* <div>{truncateText( item?.description, 50)}</div> */}
+        <div style={{ fontWeight: "bold" }}>${item?.price}</div>
       </div>
     </div>
   );

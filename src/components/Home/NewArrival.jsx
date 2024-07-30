@@ -5,7 +5,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 
 export default function NewArrival({ categories, products }) {
-  console.log(products,"NewArrivalNewArrivalNewArrival");
+  console.log(products,"NewArrivalNewArrivalNewArrival",categories);
   const [currentCat, setCurrentCat] = useState(categories?.[0]?.id);
 useEffect(() => {
 
@@ -66,7 +66,7 @@ useEffect(() => {
             }
             onClick={() => setCurrentCat(item)}
           >
-            {item.name}
+            {item?.name}
           </div>
         ))}
       </div>
@@ -114,7 +114,7 @@ useEffect(() => {
         >
             {/* .filter((item, i) => item?.category?.id === (currentCat?.id||1)) */}
           {products
-
+.filter((item, i) => item?.category?.id === (currentCat?.id||1)) 
             ?.map((item) => (
               <SwiperSlide
                 style={{

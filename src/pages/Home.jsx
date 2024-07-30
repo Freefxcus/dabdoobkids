@@ -134,6 +134,9 @@ export default function Home() {
     setState({ ...state, [anchor]: open });
   };
 
+
+console.log("categories",categories,"products",products);
+
   return (
     <>
         {/* <Helmet>
