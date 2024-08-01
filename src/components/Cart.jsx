@@ -34,14 +34,14 @@ export default function Cart({ toggleDrawer }) {
   useEffect(() => {
     getCart().then((res) => {
       console.log(res);
-      console.log(res?.items);
-      setCart(res?.items);
+      console.log(res);
+      setCart(res);
     });
   }, []);
 
   const totalPrice = useMemo(() => {
     return cart?.reduce(
-      (acc, item) => acc + item?.count * item?.variant?.price,
+      (acc, item) => acc + item?.count * +item?.product?.price,
       0
     );
   }, [cart]);
@@ -136,7 +136,7 @@ export default function Cart({ toggleDrawer }) {
                           color: "#1B1B1BB2",
                         }}
                       >
-                        {item.product.name.en}
+                        {item.product.name}
                       </div>
                       <div
                         style={{
@@ -144,7 +144,7 @@ export default function Cart({ toggleDrawer }) {
                           fontWeight: "600",
                         }}
                       >
-                        {item.product.description.en}
+                        {item.product.description}
                       </div>
                     </div>
                     <div
@@ -169,7 +169,7 @@ export default function Cart({ toggleDrawer }) {
                             fontWeight: "600",
                           }}
                         >
-                          {item?.variant?.price}
+                          {+item?.product?.price}
                         </span>
                         &nbsp; &nbsp;
                         <span

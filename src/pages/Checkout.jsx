@@ -89,7 +89,7 @@ export default function Checkout() {
         }}
       >
         <h1 style={{ fontSize: "24px", fontWeight: "500" }}>Summary Order</h1>
-        {cart?.items?.map((item) => (
+        {cart?.map((item) => (
           <div
             style={{
               display: "flex",
@@ -116,29 +116,39 @@ export default function Checkout() {
                   Spring Collection
                 </h2>
                 <h2 style={{ fontSize: "18px", fontWeight: "600" }}>
-                  {item?.product?.name?.en}
+                  {item?.product?.name}
                 </h2>
               </div>
 
-              <div style={{ display: "flex", gap: "12px" }}>
-                <h2
-                  style={{
-                    fontSize: "18px",
-                    fontWeight: "400",
-                    textTransform: "capitalize",
-                  }}
-                >
-                  Size : {item?.variant?.size}
-                </h2>
-                <h2 style={{ fontSize: "18px", fontWeight: "400" }}>Color :</h2>
-                <span
-                  className={styles.color}
-                  style={{
-                    backgroundColor: `${item?.variant?.color}`,
-                    marginLeft: "6px",
-                  }}
-                ></span>
-              </div>
+              {item?.variant?.options.length
+                ? item?.options?.map((variantItem, index) => (
+                    <div
+                      key={index + variantItem?.id}
+                      style={{ display: "flex", gap: "12px" }}
+                    >
+                      <h2
+                        style={{
+                          fontSize: "18px",
+                          fontWeight: "400",
+                          textTransform: "capitalize",
+                        }}
+                      >
+                        {" "}
+                        {variantItem?.option?.name} :{" "}
+                      </h2>
+                      <span
+                        style={{
+                          marginLeft: "6px",
+                          marginRight: "6px",
+                          textTransform: "capitalize",
+                        }}
+                        className={styles.size}
+                      >
+                        {variantItem?.value?.value}
+                      </span>
+                    </div>
+                  ))
+                : null}
             </div>
             <div
               style={{
@@ -168,7 +178,7 @@ export default function Checkout() {
                 >
                   <h2 style={{ fontWeight: "400" }}>{item?.count}</h2>
                   <h2 style={{ fontWeight: "400" }}>x</h2>
-                  <h2 style={{ fontWeight: "400" }}>{item?.variant?.price}</h2>
+                  <h2 style={{ fontWeight: "400" }}>{+item?.product?.price}</h2>
                 </div>
               </div>
 
@@ -183,7 +193,7 @@ export default function Checkout() {
               >
                 <div style={{ backgroundColor: "transparent" }}>
                   <h2 style={{ fontWeight: "400" }}>
-                    {item?.count * item?.variant?.price}
+                    {item?.count * +item?.product?.price}
                   </h2>
                 </div>
               </div>
@@ -198,7 +208,11 @@ export default function Checkout() {
         />
       </div>
 
-      <ConfirmPayment address={address} addressActive={addressActive} orderSummary={order} />
+      <ConfirmPayment
+        address={address}
+        addressActive={addressActive}
+        orderSummary={order}
+      />
     </div>
   );
 }

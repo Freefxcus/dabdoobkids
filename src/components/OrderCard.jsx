@@ -20,7 +20,7 @@ export default function OrderCard({
   const [openEdit, setOpenEdit] = React.useState(false);
 
   const [productCount, setProductCount] = React.useState(item.count);
-  const total = productCount * variant.price;
+  const total = productCount * +product.price;
   const increment = () => {
     setProductCount((prev) => prev + 1);
   };
@@ -49,13 +49,13 @@ export default function OrderCard({
           <div className={styles.column}>
             <div className={styles.column}>
               <div className={styles.category}>Spring Collection</div>
-              <div className={styles.title}>{product.name.en}</div>
+              <div className={styles.title}>{product.name}</div>
             </div>
             <div className={`${styles.row} ${styles.subtitle}`}>
               <div></div>
 
-              <div className={styles.row} style={{ gap: "0" }}>
-                <span>Size : </span>
+            {variant?.options.length? variant?.options?.map((variantItem,index)=><div key={index+variantItem?.id} className={styles.row} style={{ gap: "0" }}>
+                <span>{variantItem?.option?.name} : </span>
                 <span
                   style={{
                     marginLeft: "6px",
@@ -64,19 +64,11 @@ export default function OrderCard({
                   }}
                   className={styles.size}
                 >
-                  {variant?.size}
+                  {variantItem?.value?.value}
                 </span>
 
-                <span>Color : </span>
-                <span
-                  className={styles.color}
-                  style={{
-                    backgroundColor: `${variant?.color}`,
-                    marginLeft: "6px",
-                    border : "1px solid black",
-                  }}
-                ></span>
-              </div>
+               
+              </div>) :null}
             </div>
           </div>
         </div>
@@ -104,7 +96,7 @@ export default function OrderCard({
           <div style={{ alignSelf: "center" }} className={styles.number}>
             <div>{productCount}</div>
             <div>x</div>
-            <div>{variant.price}$</div>
+            <div>{+product.price}$</div>
           </div>
           <div></div>
         </div>

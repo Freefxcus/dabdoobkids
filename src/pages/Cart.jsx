@@ -43,8 +43,8 @@ export default function Cart() {
   }, [cartChanged]);
 
   console.log(cart, "cart123123123");
-  const totalPrice = cart?.items?.reduce(
-    (acc, item) => acc + item.variant.price * item.count,
+  const totalPrice = cart?.reduce(
+    (acc, item) => acc + ((+item.product.price )* item.count),
     0
   );
   const generateDiscountMesage = (totalPrice) => {
@@ -94,6 +94,7 @@ export default function Cart() {
       </div>
     );
   }
+   
   return (
     <div
       style={{ minHeight: "54vh" }}
@@ -111,7 +112,7 @@ export default function Cart() {
             {messageforDiscount}
           </h4>
         </div>
-        {cart?.items?.map((item) => (
+        {cart?.map((item) => (
           <OrderCard
             item={item}
             editable={true}

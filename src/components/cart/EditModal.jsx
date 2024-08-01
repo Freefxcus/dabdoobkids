@@ -59,7 +59,7 @@ export default function EditModal({ open, setOpen, product, setCartChanged }) {
                 justifyContent: "space-between",
               }}
             >
-              <h3>{product?.product?.name?.en}</h3>
+              <h3>{product?.product?.name}</h3>
               <div
                 style={{
                   display: "flex",

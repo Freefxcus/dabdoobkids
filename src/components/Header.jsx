@@ -57,7 +57,7 @@ export default function Header({ setOpen }) {
   useEffect(() => {
     getCart().then((res) => {
     
-      setCarts(res?.items);
+      setCarts(res);
     });
   }, []);
 
