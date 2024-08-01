@@ -165,11 +165,11 @@ export const addToCart = async (id, count, variant) => {
   let returnedValue;
 
   await instance
-    .post("/cart", {
+    .post("/cart", {"items": [{
       product: id,
       count: count,
       variant: variant,
-    })
+    }]})
     .then((response) => {
       notifySuccess("Added to cart!");
       returnedValue = response.data.data;
