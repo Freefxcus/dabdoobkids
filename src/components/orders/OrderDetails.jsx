@@ -21,7 +21,7 @@ export default function OrderDetails() {
     })
 
   }, []);
-  console.log(orderInvoice, "order123123123");
+  console.log(orderInvoice, "order123123123",order);
   const purchaseDate = new Date(order?.purchaseDate).toLocaleString();
 
   return (
@@ -131,7 +131,7 @@ export default function OrderDetails() {
           <div>$ {order?.totalPrice}</div>
         </div>
         <button
-onClick={()=>order?.orderStatus=="Paid"?orderRefund(order?.id,{
+onClick={()=>order?.orderStatus==="Pending"?orderRefund(order?.id,{
       "user": order?.user,
       "items":order?.items?.map(item=>item.id)
     }):orderReturn(order?.id)}
@@ -149,7 +149,7 @@ onClick={()=>order?.orderStatus=="Paid"?orderRefund(order?.id,{
             cursor: "pointer",
           }}
         >
-{         order?.orderStatus=="Paid"? "Refund":"Return"}
+{         order?.orderStatus==="Pending"? "Refund":"Return"}
         </button>
       </div>
     </>

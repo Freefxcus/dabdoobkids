@@ -55,12 +55,13 @@ export default function Header({ setOpen }) {
   // For the first useEffect
 
   useEffect(() => {
-    getCart().then((res) => {
-    
-      setCarts(res);
-    });
+    const fetchCart = async () => {
+      const cart = await getCart();
+      setCarts(cart);
+    };
+    fetchCart();
   }, []);
-
+  
   useEffect(() => {
     const animationTimeoutId = setTimeout(() => {
       setAnimation(true);

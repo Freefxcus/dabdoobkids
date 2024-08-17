@@ -85,8 +85,8 @@ export default function OrderCard({
           <DeleteModal
             open={openDelete}
             setOpen={setOpenDelete}
-            ProductId={product.id}
-            variantId={variant.id}
+            ProductId={product?.id}
+            variantId={variant?.id}
             setCartChanged={setCartChanged}
           />
         </div>

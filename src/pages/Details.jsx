@@ -171,6 +171,7 @@ export default function Details() {
                     Select {newVariants?.[0]?.name}
                   </InputLabel>
                   <Select
+                  className={styles.select}
                     sx={{ width: "100%" }}
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
@@ -219,7 +220,7 @@ export default function Details() {
                               backgroundColor:
                                 variant?.[variantItem?.name] === ValueVariant
                                   ? "var(--brown)"
-                                  : "transparent",
+                                  : "white",
                               color:
                                 variant?.[variantItem?.name] === ValueVariant
                                   ? "white"
@@ -294,9 +295,9 @@ export default function Details() {
                   pointerEvents: counter < 1 ? "none" : "initial",
                 }}
                 disabled={
-                  !selectedVariantObject|| productDetails?.variants?.length < 1 ||
+                  productDetails?.variants?.length ? ( !selectedVariantObject|| productDetails?.variants?.length < 1 ||
                   counter < 1 ||
-                  counter >selectedVariantObject?.stock
+                  counter >selectedVariantObject?.stock):false
                 }
                 onClick={(e) => {
                   e.stopPropagation();
