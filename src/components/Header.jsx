@@ -60,7 +60,7 @@ export default function Header({ setOpen }) {
       setCarts(cart);
     };
     fetchCart();
-  }, []);
+  }, [cart]);
   
   useEffect(() => {
     const animationTimeoutId = setTimeout(() => {
@@ -308,7 +308,7 @@ export default function Header({ setOpen }) {
                     }}
                   />
                   <div className={`${styles.clickable} ${styles.badge}`}>
-                    {cart?.length||carts?.length||0}
+                    {carts?.length||0}
                   </div>
                 </>
               ) : (

@@ -6,7 +6,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { Box, Pagination } from "@mui/material";
 
 export default function OrderList({ setSearchParams,paginationInfo,orders }) {
-  console.log(orders, "ziadorderedsdsadsa");
+  console.log(orders, "ziadorderedsdsadsaordersordersorders");
   const navigate = useNavigate();
   const [currentOrder, setCurrentOrder] = useState(null);
 

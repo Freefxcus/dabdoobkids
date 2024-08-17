@@ -1,6 +1,9 @@
 import { Box, Modal } from "@mui/material";
 import Counter from "./counter";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { getCart } from "../../utils/apiCalls";
+import { useSelector } from "react-redux";
 
 export default function SingleProductModal({
   open,
@@ -8,6 +11,23 @@ export default function SingleProductModal({
   productDetails,
 }) {
   const navigate = useNavigate();
+  const [counter, setCounter] = useState(1);
+
+  console.log("productDetails",productDetails);
+  const cart = useSelector((state) => state.cart.value);
+  const [cartForProduct, setCartForProduct] = useState([]);
+  useEffect(() => {
+
+    const fetchCart = async () => {
+      const cart = await getCart();
+      console.log("cartcartcart",cart);
+      
+      setCartForProduct(cart.find(item=>item?.product?.id === productDetails.id));
+    };
+    fetchCart();
+  }, [cart]);
+  console.log("cartForProduct",cartForProduct);
+  
   return (
     <Modal open={open} >
       <Box>
@@ -55,8 +75,8 @@ export default function SingleProductModal({
                     width: "100%",
                   }}
                 >
-                  <Counter initialValue={1} />
-                  <h3>400$</h3>
+                  <Counter initialValue={cartForProduct.count} />
+                  <h3>{productDetails.price}$</h3>
                 </div>
               </div>
             </div>
@@ -68,7 +88,7 @@ export default function SingleProductModal({
               }}
             >
               <h2>Subtotal</h2>
-              <h2>3000$</h2>
+              <h2>{productDetails.price}$</h2>
             </div>
 
             <p style={{ marginTop: "16px" }}>

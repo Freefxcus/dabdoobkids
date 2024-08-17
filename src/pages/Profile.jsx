@@ -131,16 +131,15 @@ export default function Profile() {
   //get orders
   useEffect(() => {
     instance
-      .get("orders", {
+      .get("profile/orders", {
         params: {
           items: 5,
           page: searchParams.get("page") || 1,
         },
       })
       .then((response) => {
-        console.log(response?.data?.data?.metadata);
         setPaginationInfo(response?.data?.data?.metadata);
-        setOrders(response.data?.data?.data);
+        setOrders(response.data?.data?.orders);
         // setTotalPages(response.data.data.metadata.totalPages);
         setIsLoading(false);
       })
