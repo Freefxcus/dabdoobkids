@@ -51,7 +51,7 @@ export default function Sidebar({setOpen}) {
         <AccordionDetails className={styles.content}>
         <div className={styles["dropdown-section"]} style={{ flex: "1" }}>
 
-        <div  onClick={()=>setOpen(false)}> <Link to={`/search&categoryId=${category?.id}`} className={styles.link}>
+        <div  onClick={()=>setOpen(false)}> <Link to={`/search?categoryId=${category?.id}`} className={styles.link}>
         Shop All
               </Link></div>
             {subCategoryLinks.filter(sub=>sub.parentId==category.id||sub.parentId=="all").map(({ title, link }) => (

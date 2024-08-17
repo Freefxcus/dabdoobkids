@@ -56,9 +56,13 @@ export default function Search() {
     setIsLoading(true);
     const pageNumber = searchParams.get("page") || 1;
     getProducts(pageNumber, false, catId, brandId, queryStr).then((res) => {
+      console.log("res",res);
+      
       setSearchData(res);
       setIsLoading(false);
+      return ;
     });
+    
   }, []);
   useEffect(() => {
     setIsLoading(true);

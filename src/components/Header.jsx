@@ -114,7 +114,7 @@ export default function Header({ setOpen }) {
   )|| [];
 
   const subCategoryLinks = [
-    { title: "Shop All", link: `/search&categoryId=${dropDownType}`,parentId:dropDownType },
+    { title: "Shop All", link: `/search?categoryId=${dropDownType}`,parentId:dropDownType },
     ...formattedSybCategoriesLinks,
   ];
   return (
