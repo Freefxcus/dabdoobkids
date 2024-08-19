@@ -5,10 +5,13 @@ import DeleteModal from "./cart/DeleteModal";
 import Counter from "./singleProduct/counter";
 import CartCounter from "./cart/CartCounter";
 import EditModal from "./cart/EditModal";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart } from "../utils/apiCalls";
+import { cartActions } from "../Redux/store";
 export default function OrderCard({
   editable,
   item,
+  allCarts,
   setCartChanged,
   totalPrice,
 }) {
@@ -18,21 +21,67 @@ export default function OrderCard({
 
   const [openDelete, setOpenDelete] = React.useState(false);
   const [openEdit, setOpenEdit] = React.useState(false);
-
+  const dispatch = useDispatch();
   const [productCount, setProductCount] = React.useState(item.count);
   const total = productCount * +product.price;
+  const cart = useSelector((state) => state.cart.value);
+
   const increment = () => {
     setProductCount((prev) => prev + 1);
+    let NewCarts = cart
+      ?.filter((itemCart) =>
+        +itemCart?.product != +item.product.id 
+      )
+    ;
+    dispatch(
+      cartActions.add({
+        product: item?.product?.id,
+        count: productCount + 1,
+        variant: item?.variant?.id,
+      })
+    );
+  
+
+    addToCart([
+      ...NewCarts,
+      {
+        product: item?.product?.id,
+        count: productCount + 1,
+        variant: item?.variant?.id,
+      },
+    ]);
   };
   const decrement = () => {
     setProductCount((prev) => prev - 1);
+    let NewCarts = cart
+    ?.filter((itemCart) =>
+      +itemCart?.product != +item.product.id 
+    )
+  ;
+  dispatch(
+    cartActions.add({
+      product: item?.product?.id,
+      count: productCount - 1,
+      variant: item?.variant?.id,
+    })
+  );
+
+
+  addToCart([
+    ...NewCarts,
+    {
+      product: item?.product?.id,
+      count: productCount - 1,
+      variant: item?.variant?.id,
+    },
+  ]);
   };
   return (
     // <div className={styles.container}>
     <div style={{ display: "flex", flexDirection: "column" }}>
       <div
         className={styles.container}
-        style={{ 
+        style={{
           justifyContent: "space-between",
           paddingBottom: "20px",
           borderBottom: " 0.5px solid #E8E8E8",
@@ -54,21 +103,27 @@ export default function OrderCard({
             <div className={`${styles.row} ${styles.subtitle}`}>
               <div></div>
 
-            {variant?.options.length? variant?.options?.map((variantItem,index)=><div key={index+variantItem?.id} className={styles.row} style={{ gap: "0" }}>
-                <span>{variantItem?.option?.name} : </span>
-                <span
-                  style={{
-                    marginLeft: "6px",
-                    marginRight: "6px",
-                    textTransform: "capitalize",
-                  }}
-                  className={styles.size}
-                >
-                  {variantItem?.value?.value}
-                </span>
-
-               
-              </div>) :null}
+              {variant?.options.length
+                ? variant?.options?.map((variantItem, index) => (
+                    <div
+                      key={index + variantItem?.id}
+                      className={styles.row}
+                      style={{ gap: "0" }}
+                    >
+                      <span>{variantItem?.option?.name} : </span>
+                      <span
+                        style={{
+                          marginLeft: "6px",
+                          marginRight: "6px",
+                          textTransform: "capitalize",
+                        }}
+                        className={styles.size}
+                      >
+                        {variantItem?.value?.value}
+                      </span>
+                    </div>
+                  ))
+                : null}
             </div>
           </div>
         </div>

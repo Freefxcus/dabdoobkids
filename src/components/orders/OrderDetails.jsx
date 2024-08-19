@@ -131,10 +131,15 @@ export default function OrderDetails() {
           <div>$ {order?.totalPrice}</div>
         </div>
         <button
-onClick={()=>order?.orderStatus==="Pending"?orderRefund(order?.id,{
-      "user": order?.user,
-      "items":order?.items?.map(item=>item.id)
-    }):orderReturn(order?.id)}
+onClick={()=>order.cancellable&&!order.refundable?orderRefund({
+      "order": order.id,
+      "items":order?.items?.map(item=>item.id),
+      requestType:"cancel"
+    }):!order.cancellable&&order.refundable?orderRefund({
+      "order": order.id,
+      "items":order?.items?.map(item=>item.id),
+      requestType:"refund"
+    }):null}
           style={{
             width: "100%",
             height: "48px",

@@ -31,6 +31,9 @@ import Empty from "./empty.jsx";
 export default function Details() {
   const { id } = useParams();
   const wishlist = useSelector((state) => state.wishlist.value);
+  const cart = useSelector((state) => state.cart.value);
+  console.log("cart================>", cart);
+
   const wished = wishlist.includes(+id);
   console.log(wished);
   const [productDetails, setProductDetails] = useState({});
@@ -47,7 +50,7 @@ export default function Details() {
 
   const handleChange = ({ key, value }) => {
     setVariant((prev) => ({ ...prev, [key]: value }));
-    console.log(key, value,"variantvariantvariantvariant",variant);
+    console.log(key, value, "variantvariantvariantvariant", variant);
   };
 
   const handleImageChange = (e) => {
@@ -80,22 +83,19 @@ export default function Details() {
       });
   }, [reload]);
 
-
   const newVariants = transformVariants(productDetails?.variants);
 
-  
-  const selectedVariantObject =productDetails?.variants?.find(variantItem => 
-    variantItem.options.every(option => 
-      variant[option.option.name] === option.value.value
+  const selectedVariantObject = productDetails?.variants?.find((variantItem) =>
+    variantItem.options.every(
+      (option) => variant[option.option.name] === option.value.value
     )
   );
 
-  // const selectedVariantObject = productDetails?.variants?.length?   variant?.length===newVariants.length? productDetails?.variants?.find(variantItem => 
-  //   variantItem.options.every(option => 
+  // const selectedVariantObject = productDetails?.variants?.length?   variant?.length===newVariants.length? productDetails?.variants?.find(variantItem =>
+  //   variantItem.options.every(option =>
   //     variant[option.option.name] === option.value.value
   //   )
   // ):null:null;
-
 
   return (
     <>
@@ -145,7 +145,10 @@ export default function Details() {
                 color: "var(--errie-black)",
               }}
             >
-              $ {selectedVariantObject?selectedVariantObject?.price:productDetails?.price}
+              ${" "}
+              {selectedVariantObject
+                ? selectedVariantObject?.price
+                : productDetails?.price}
             </div>
             <div
               style={{
@@ -171,7 +174,7 @@ export default function Details() {
                     Select {newVariants?.[0]?.name}
                   </InputLabel>
                   <Select
-                  className={styles.select}
+                    className={styles.select}
                     sx={{ width: "100%" }}
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
@@ -295,9 +298,12 @@ export default function Details() {
                   pointerEvents: counter < 1 ? "none" : "initial",
                 }}
                 disabled={
-                  productDetails?.variants?.length ? ( !selectedVariantObject|| productDetails?.variants?.length < 1 ||
-                  counter < 1 ||
-                  counter >selectedVariantObject?.stock):false
+                  productDetails?.variants?.length
+                    ? !selectedVariantObject ||
+                      productDetails?.variants?.length < 1 ||
+                      counter < 1 ||
+                      counter > selectedVariantObject?.stock
+                    : false
                 }
                 onClick={(e) => {
                   e.stopPropagation();
@@ -305,14 +311,28 @@ export default function Details() {
                     toast.error("Out of stock");
                     return;
                   }
+                  let NewCarts = cart?.filter((itemCart) =>
+                    itemCart.product != +id && itemCart.variant
+                      ? itemCart.variant != selectedVariantObject?.id
+                      : true
+                  );
 
                   setOpen(true);
-                  dispatch(cartActions.add({ id: +id, count: counter }));
-                  addToCart(
-                    +id,
-                    counter,
-                    selectedVariantObject?.id
+                  dispatch(
+                    cartActions.add({
+                      product: +id,
+                      count: counter,
+                      variant: selectedVariantObject?.id,
+                    })
                   );
+                  addToCart([
+                    ...NewCarts,
+                    {
+                      product: +id,
+                      count: counter,
+                      variant: selectedVariantObject?.id,
+                    },
+                  ]);
                   // if (wished) {
                   //   dispatch(cartActions.remove(+id));
                   //   removeFromCart(+id);

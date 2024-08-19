@@ -11,22 +11,31 @@ export default function SingleProductModal({
   productDetails,
 }) {
   const navigate = useNavigate();
-  const [counter, setCounter] = useState(1);
+
+  const [count, setCount] = useState();
 
   console.log("productDetails",productDetails);
   const cart = useSelector((state) => state.cart.value);
-  const [cartForProduct, setCartForProduct] = useState([]);
   useEffect(() => {
 
     const fetchCart = async () => {
       const cart = await getCart();
-      console.log("cartcartcart",cart);
-      
-      setCartForProduct(cart.find(item=>item?.product?.id === productDetails.id));
+      let item=cart.find(item=>item?.product?.id === productDetails.id)
+    
+      setCount(item?.count)
+    };
+    fetchCart();
+  }, []);
+  useEffect(() => {
+
+    const fetchCart = async () => {
+      const cart = await getCart();
+      let item=cart.find(item=>item?.product?.id === productDetails.id)
+    
+      setCount(item?.count)
     };
     fetchCart();
   }, [cart]);
-  console.log("cartForProduct",cartForProduct);
   
   return (
     <Modal open={open} >
@@ -75,7 +84,7 @@ export default function SingleProductModal({
                     width: "100%",
                   }}
                 >
-                  <Counter initialValue={cartForProduct.count} />
+                  <Counter setCount={setCount} count={count} item={productDetails} />
                   <h3>{productDetails.price}$</h3>
                 </div>
               </div>
@@ -88,7 +97,7 @@ export default function SingleProductModal({
               }}
             >
               <h2>Subtotal</h2>
-              <h2>{productDetails.price}$</h2>
+              <h2>{ Math.trunc( +count * +productDetails.price)}$</h2>
             </div>
 
             <p style={{ marginTop: "16px" }}>

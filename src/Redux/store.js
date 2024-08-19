@@ -75,7 +75,7 @@ const cartSlice = createSlice({
     },
     add(state, action) {
       const index = state.value.findIndex(
-        (cartItem) => cartItem.id === action.payload.id
+        (cartItem) => cartItem.product === action.payload.product
       );
 
       if (index !== -1) {

@@ -161,15 +161,11 @@ export const updateCart = async (productId, variantId, body) => {
   return returnedValue; // caught by .then()
 };
 
-export const addToCart = async (id, count, variant) => {
+export const addToCart = async (data) => {
   let returnedValue;
 
   await instance
-    .post("/cart", {"items": [{
-      product: id,
-      count: count,
-      variant: variant,
-    }]})
+    .post("/cart", {"items": data})
     .then((response) => {
       notifySuccess("Added to cart!");
       returnedValue = response.data.data;
@@ -270,7 +266,7 @@ export const getSingleOrder = async (id) => {
   let returnedValue;
 
   await instance
-    .get(`/orders/${id}`)
+    .get(`/profile/orders/${id}`)
     .then((response) => {
       console.log(response);
       returnedValue = response;
@@ -564,11 +560,11 @@ export const ordersCallback = async () => {
   return returnedValue; // caught by .then()
 };
 
-export const orderRefund =  async (id,data) => {
+export const orderRefund =  async (data) => {
   let returnedValue;
 
   await instance
-    .post(`/orders/${id}/refund`,data)
+    .post(`/order-request`,data)
     .then((response) => {
       returnedValue = response;
     })

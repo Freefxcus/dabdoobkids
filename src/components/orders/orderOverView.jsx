@@ -61,7 +61,7 @@ export default function OrderOverview({
 
         {/* <div className={styles.number} style={{ marginLeft: "auto" }}> */}
 
-        <div className={styles.total}>{total}$</div>
+        <div className={styles.total}>{item?.totalPrice}$</div>
       </div>
     </div>
   );

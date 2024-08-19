@@ -65,7 +65,7 @@ export default function Productcard({ item , setChanged }) {
       </div>
       <div className={styles["card-bottom"]}>
         <div style={{ fontWeight: "600" }}>
-          {item.brand.name?.en || item.brand.name}
+          {item?.brand?.name }
         </div>
         <div>{truncateText(item.description?.en || item.description, 50)}</div>
         <div style={{ fontWeight: "bold" }}>${item?.price}</div>

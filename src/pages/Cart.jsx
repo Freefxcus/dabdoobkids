@@ -116,6 +116,7 @@ export default function Cart() {
           <OrderCard
             item={item}
             editable={true}
+            allCarts={cart}
             setCartChanged={setCartChanged}
             totalPrice={totalPrice}
           />
