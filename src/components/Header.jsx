@@ -26,7 +26,7 @@ import user from "../images/user.svg";
 import dabdoob from "../images/dabdoob.svg";
 import burger from "../images/burger.png";
 import { useDispatch, useSelector } from "react-redux";
-import { wishlistActions } from "../Redux/store";
+import { cartActions, wishlistActions } from "../Redux/store";
 import { getCart, getCategories, getSubCategories } from "../utils/apiCalls";
 export default function Header({ setOpen }) {
   const debouncedHandleInputChange = useCallback(
@@ -50,10 +50,28 @@ export default function Header({ setOpen }) {
   const [subCategories, setSubCategories] = useState([]);
   const myInputRef = useRef("");
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   const [animation, setAnimation] = useState(false);
   // For the first useEffect
+  useEffect(() => {
+    const fetchCart = async () => {
+      const cart = await getCart();
+      setCarts(cart);
+      if (cart.length) {
+        cart.map((item) =>
+          dispatch(
+            cartActions.add({
+              product: item?.product?.id,
+              count: item.count,
+              variant: item?.variant?.id,
+            })
+          )
+        );
+      }
+    };
 
+    fetchCart();
+  }, []);
   useEffect(() => {
     const fetchCart = async () => {
       const cart = await getCart();
@@ -61,7 +79,7 @@ export default function Header({ setOpen }) {
     };
     fetchCart();
   }, [cart]);
-  
+
   useEffect(() => {
     const animationTimeoutId = setTimeout(() => {
       setAnimation(true);
@@ -99,7 +117,6 @@ export default function Header({ setOpen }) {
 
   useEffect(() => {
     getCategories().then((res) => {
-
       setCategories(res);
     });
     getSubCategories().then((res) => {
@@ -107,14 +124,21 @@ export default function Header({ setOpen }) {
     });
   }, []);
 
-  const formattedSybCategoriesLinks = subCategories?.data?.data?.categories?.map(
-    (subCategory) => {
-      return { title: subCategory?.name, link: `/search&categoryId=${subCategory?.id}` ,parentId:subCategory?.category?.id} ;
-    }
-  )|| [];
+  const formattedSybCategoriesLinks =
+    subCategories?.data?.data?.categories?.map((subCategory) => {
+      return {
+        title: subCategory?.name,
+        link: `/search&categoryId=${subCategory?.id}`,
+        parentId: subCategory?.category?.id,
+      };
+    }) || [];
 
   const subCategoryLinks = [
-    { title: "Shop All", link: `/search?categoryId=${dropDownType}`,parentId:dropDownType },
+    {
+      title: "Shop All",
+      link: `/search?categoryId=${dropDownType}`,
+      parentId: dropDownType,
+    },
     ...formattedSybCategoriesLinks,
   ];
   return (
@@ -308,7 +332,7 @@ export default function Header({ setOpen }) {
                     }}
                   />
                   <div className={`${styles.clickable} ${styles.badge}`}>
-                    {carts?.length||0}
+                    {carts?.length || 0}
                   </div>
                 </>
               ) : (
@@ -368,11 +392,13 @@ export default function Header({ setOpen }) {
       >
         <div className={`padding-container ${styles["dropdown-content"]}`}>
           <div className={styles["dropdown-section"]} style={{ flex: "1" }}>
-            {subCategoryLinks.filter(sub=>sub.parentId==dropDownType).map(({ title, link }) => (
-              <Link to={link} className={styles.link}>
-                {title}
-              </Link>
-            ))}
+            {subCategoryLinks
+              .filter((sub) => sub.parentId == dropDownType)
+              .map(({ title, link }) => (
+                <Link to={link} className={styles.link}>
+                  {title}
+                </Link>
+              ))}
           </div>
           {/* <div className={styles.line}></div>
           <div

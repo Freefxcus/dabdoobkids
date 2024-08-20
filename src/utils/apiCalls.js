@@ -688,7 +688,7 @@ export const getUserPlan = async () => {
       returnedValue = response;
     })
     .catch((error) => {
-      notifyError(error);
+      // notifyError(error);
     });
 
   return returnedValue; // caught by .then()
@@ -698,8 +698,8 @@ export const subscribeToPlan = async (planId) => {
   let returnedValue;
   console.log(planId, "planid");
   await instance
-    .post(`/subscription`, {
-      plan: planId,
+    .post(`/subscriptions`, {
+      plan: +planId,
     })
     .then((response) => {
       returnedValue = response;

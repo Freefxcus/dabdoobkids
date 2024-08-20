@@ -6,11 +6,11 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import delivery from "../images/delivery.png";
-import cart from "../images/cart.png";
+import cartImg from "../images/cart.png";
 import eHeart from "../images/empty-heart.svg";
 import fHeart from "../images/filled-heart.svg";
 import { useParams } from "react-router-dom";
-import { getProductById, getRelatedProducts } from "../utils/apiCalls";
+import { getCart, getProductById, getRelatedProducts } from "../utils/apiCalls";
 import Loader from "../components/Loader";
 import { useDispatch, useSelector } from "react-redux";
 import { wishlistActions, cartActions } from "../Redux/store";
@@ -47,7 +47,14 @@ export default function Details() {
   const [reload, setReload] = useState(false);
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
-
+  const [carts, setCarts] = useState([]);
+ useEffect(() => {
+    const fetchCart = async () => {
+      const cart = await getCart();
+      setCarts(cart);
+    };
+    fetchCart();
+  }, [cart]);
   const handleChange = ({ key, value }) => {
     setVariant((prev) => ({ ...prev, [key]: value }));
     console.log(key, value, "variantvariantvariantvariant", variant);
@@ -311,7 +318,10 @@ export default function Details() {
                     toast.error("Out of stock");
                     return;
                   }
-                  let NewCarts = cart?.filter((itemCart) =>
+                  let cartsFormBack= carts.map((item) =>({ product: item?.product?.id,
+      count: item.count,
+      variant: +item?.variant?.id,}))
+                  let NewCarts = cartsFormBack?.filter((itemCart) =>
                     itemCart.product != +id && itemCart.variant
                       ? itemCart.variant != selectedVariantObject?.id
                       : true
@@ -322,7 +332,7 @@ export default function Details() {
                     cartActions.add({
                       product: +id,
                       count: counter,
-                      variant: selectedVariantObject?.id,
+                      variant: +selectedVariantObject?.id,
                     })
                   );
                   addToCart([
@@ -342,7 +352,7 @@ export default function Details() {
                   // }
                 }}
               >
-                <img src={cart} width="16px" alt="cart" />
+                <img src={cartImg} width="16px" alt="cart" />
                 <span>Add to cart</span>
               </button>
               <SingleProductModal

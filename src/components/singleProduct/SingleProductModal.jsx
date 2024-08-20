@@ -12,17 +12,17 @@ export default function SingleProductModal({
 }) {
   const navigate = useNavigate();
 
-  const [count, setCount] = useState();
+  const [count, setCount] = useState(1);
 
   console.log("productDetails",productDetails);
   const cart = useSelector((state) => state.cart.value);
   useEffect(() => {
 
     const fetchCart = async () => {
-      const cart = await getCart();
-      let item=cart.find(item=>item?.product?.id === productDetails.id)
+      const carts = await getCart();
+      let item=carts?.find(item=>item?.product?.id == productDetails.id)
     
-      setCount(item?.count)
+      setCount(+item?.count||1)
     };
     fetchCart();
   }, []);
@@ -30,9 +30,9 @@ export default function SingleProductModal({
 
     const fetchCart = async () => {
       const cart = await getCart();
-      let item=cart.find(item=>item?.product?.id === productDetails.id)
+      let item=cart?.find(item=>item?.product?.id === productDetails.id)
     
-      setCount(item?.count)
+      setCount(+item?.count||1)
     };
     fetchCart();
   }, [cart]);
@@ -84,7 +84,7 @@ export default function SingleProductModal({
                     width: "100%",
                   }}
                 >
-                  <Counter setCount={setCount} count={count} item={productDetails} />
+                  <Counter setCount={setCount} count={+count} item={productDetails} />
                   <h3>{productDetails.price}$</h3>
                 </div>
               </div>

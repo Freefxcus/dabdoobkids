@@ -28,7 +28,10 @@ export default function OrderCard({
 
   const increment = () => {
     setProductCount((prev) => prev + 1);
-    let NewCarts = cart
+    let cartsFormBack= allCarts.map((item) =>({ product: item?.product?.id,
+      count: item.count,
+      variant: item?.variant?.id,}))
+    let NewCarts = cartsFormBack
       ?.filter((itemCart) =>
         +itemCart?.product != +item.product.id 
       )

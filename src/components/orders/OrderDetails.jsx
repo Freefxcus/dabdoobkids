@@ -1,27 +1,31 @@
 import { useParams } from "react-router-dom";
 import styles from "../../styles/pages/Profile.module.css";
 import { useEffect, useState } from "react";
-import { getOrderInvoice, getSingleOrder, orderRefund, orderReturn } from "../../utils/apiCalls";
+import {
+  getOrderInvoice,
+  getSingleOrder,
+  orderRefund,
+  orderReturn,
+} from "../../utils/apiCalls";
 import OrderCard from "../OrderCard";
 import OrderOverview from "./orderOverView";
 import { use } from "i18next";
 
 export default function OrderDetails() {
   const [order, setOrder] = useState(null);
-  const [orderInvoice , setOrderInvoice] = useState(null);
+  const [orderInvoice, setOrderInvoice] = useState(null);
   const { id } = useParams();
   useEffect(() => {
     getSingleOrder(id).then((res) => {
-      console.log(res,"order123123123order123123123");
-      setOrder(res?.data?.data)
+      console.log(res, "order123123123order123123123");
+      setOrder(res?.data?.data);
     });
 
     getOrderInvoice(id).then((res) => {
-        setOrderInvoice(res?.data?.data)
-    })
-
+      setOrderInvoice(res?.data?.data);
+    });
   }, []);
-  console.log(orderInvoice, "order123123123",order);
+  console.log(orderInvoice, "order123123123", order);
   const purchaseDate = new Date(order?.purchaseDate).toLocaleString();
 
   return (
@@ -68,7 +72,7 @@ export default function OrderDetails() {
               // color: "#FF5630",
             }}
           >
-           {order?.orderStatus}
+            {order?.orderStatus}
           </div>
         </div>
         <div className={styles.row_wrap}>
@@ -78,7 +82,7 @@ export default function OrderDetails() {
               color: "#000",
             }}
           >
-              {purchaseDate}
+            {purchaseDate}
           </div>
         </div>
         <div className={styles.row_wrap}>
@@ -87,9 +91,7 @@ export default function OrderDetails() {
             style={{
               color: "var(--brown)",
             }}
-          >
-         
-          </div>
+          ></div>
         </div>
         <div className={styles.main_title}>Product Detail</div>
         {order?.items?.map((item) => (
@@ -114,7 +116,7 @@ export default function OrderDetails() {
           <div className={styles.left_title}>Shipping</div>
           <div>{order?.shippingFees}$</div>
         </div>
-        
+
         <div className={styles.row_wrap}>
           <div className={styles.left_title} style={{ color: "var(--brown)" }}>
             Discount
@@ -131,15 +133,21 @@ export default function OrderDetails() {
           <div>$ {order?.totalPrice}</div>
         </div>
         <button
-onClick={()=>order.cancellable&&!order.refundable?orderRefund({
-      "order": order.id,
-      "items":order?.items?.map(item=>item.id),
-      requestType:"cancel"
-    }):!order.cancellable&&order.refundable?orderRefund({
-      "order": order.id,
-      "items":order?.items?.map(item=>item.id),
-      requestType:"refund"
-    }):null}
+          onClick={() =>
+            order.cancellable && !order.refundable
+              ? orderRefund({
+                  order: order.id,
+                  items: order?.items?.map((item) => item.id),
+                  requestType: "cancel",
+                })
+              : !order.cancellable && order.refundable
+              ? orderRefund({
+                  order: order.id,
+                  items: order?.items?.map((item) => item.id),
+                  requestType: "refund",
+                })
+              : null
+          }
           style={{
             width: "100%",
             height: "48px",
@@ -154,7 +162,7 @@ onClick={()=>order.cancellable&&!order.refundable?orderRefund({
             cursor: "pointer",
           }}
         >
-{         order?.orderStatus==="Pending"? "Refund":"Return"}
+          {order?.orderStatus === "Pending" ? "Refund" : "Return"}
         </button>
       </div>
     </>

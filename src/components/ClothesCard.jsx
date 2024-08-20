@@ -25,7 +25,7 @@ export default function ClothesCard({ item }) {
       }}
     >
       <div className={styles["card-top"]}>
-        {/* <img src={lady} width="100%" height="380px" /> */}
+    
         <CardMedia
           sx={{
             height: { lg: "356px", md: "300px", xs: "204px" },
@@ -52,17 +52,18 @@ export default function ClothesCard({ item }) {
         >
           <img src={wished ? fHeart : eHeart} width="25px" alt="heart" />
         </div>
+        <div className={styles["tags-container"]}>
         {item?.extraInfo?.new && (
           <div className={styles["hot-container"]}>
             <div>New</div>
             <img src={hot} width="14px" alt="second heart" />
           </div>
         )}
-        {item?.extraInfo?.sold && (
+        {item?.status!=="in-stock" && (
           <div className={styles["sold-container"]}>
             <div>Sold Out</div>
           </div>
-        )}
+        )}</div>
       </div>
       <div className={styles["card-bottom"]}>
         <div style={{ fontWeight: "600" }}>

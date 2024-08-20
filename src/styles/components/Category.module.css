@@ -51,7 +51,7 @@
     gap: 5px;
   }
   .title {
-    font-size: 22px;
+    font-size: 16px;
     font-weight: 600;
   }
   .subtitle {
@@ -65,10 +65,18 @@
 
 /* Media query for screens between 601px and 900px (e.g., tablets) */
 @media (min-width: 601px) and (max-width: 900px) {
+  .title {
+    font-size: 18px;
+    font-weight: 600;
+  }
 }
 
 /* Media query for screens between 901px and 1200px (e.g., larger tablets and small desktops) */
 @media (min-width: 901px) and (max-width: 1200px) {
+  .title {
+    font-size: 22px;
+    font-weight: 600;
+  }
 }
 
 /* Media query for screens larger than 1200px (e.g., large desktops) */

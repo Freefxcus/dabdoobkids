@@ -16,7 +16,7 @@ export default function Plans() {
 
   useEffect(() => {
     getPlans().then((res) => {
-      setPlans(res);
+      setPlans(res?.plans);
     });
   }, []);
   // console.log(plans?.items[1]?.extraInfo, "plans");
@@ -42,7 +42,7 @@ export default function Plans() {
   };
   return (
     <div className={`${styles.container} `}>
-      {plans?.items?.length === 0 ? (
+      {plans?.length === 0 ? (
         <div style={{ width: "100%" }}>
           <div
             style={{
@@ -82,7 +82,7 @@ export default function Plans() {
             </h1>
           )}
           <Box sx={{ display: "flex", gap: "32px" , flexWrap : "wrap" , justifyContent : "center" }}>
-            {plans?.items?.map((plan) => (
+            {plans?.map((plan) => (
               <div
                 className={`${styles["premium-container"]} margin-container`}
               >
@@ -92,7 +92,7 @@ export default function Plans() {
                 >
                   <div className={styles.row}>
                     <img src={premium} width="50px" />
-                    <div>{plan?.name?.en}</div>
+                    <div>{plan?.name}</div>
                   </div>
                   <div className={styles.row}>
                     <div>{plan?.price}</div>
@@ -107,7 +107,7 @@ export default function Plans() {
                     }}
                     className={`${styles["premium-button"]} ${styles.row}`}
                   >
-                    Subscribe to {plan?.name?.en}
+                    Subscribe to {plan?.name}
                     <ArrowRight2
                       size="15"
                       color="var(--white)"
@@ -120,7 +120,8 @@ export default function Plans() {
                   style={{ width: "calc(100% - 30px)" }}
                 >
                   <div style={{ fontWeight: "bold" }}>What’s included?</div>
-                  {Object.entries(plan?.extraInfo).map((info) => (
+                  {/* {plan?.extraInf&& typeof plan?.extraInf =="object"
+                  ?  Object.entries(plan?.extraInfo).map((info) => (
                     <div className={styles.row}>
                       {info[1] ? (
                         <img src={check} width="20px" />
@@ -135,7 +136,7 @@ export default function Plans() {
                         {info[0]}
                       </Box>
                     </div>
-                  ))}
+                  )):null} */}
                 </div>
               </div>
             ))}
