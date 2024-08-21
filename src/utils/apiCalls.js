@@ -34,7 +34,7 @@ export const getProducts = async (page, all, category, brand, query) => {
     })
     .catch((error) => {
       console.log(error, "responseeeefromproducts");
-      notifyError(error);
+      // notifyError(error);
     });
   return returnedValue; // caught by .then()
 };
@@ -50,7 +50,7 @@ export const getProductById = async (id) => {
       returnedValue = response.data.data;
     })
     .catch((error) => {
-      notifyError(error);
+      // notifyError(error);
     });
 
   return returnedValue; // caught by .then()
@@ -66,7 +66,7 @@ export const getRelatedProducts = async (id) => {
       returnedValue = response;
     })
     .catch((error) => {
-      notifyError(error);
+      // notifyError(error);
     });
 
   return returnedValue; // caught by .then()
@@ -272,7 +272,7 @@ export const getSingleOrder = async (id) => {
       returnedValue = response;
     })
     .catch((error) => {
-      notifyError(error);
+      // notifyError(error);
     });
 
   return returnedValue; // caught by .then()
@@ -327,7 +327,7 @@ export const getAddress = async () => {
       returnedValue = response.data.data;
     })
     .catch((error) => {
-      notifyError(error);
+      // notifyError(error);
     });
 
   return returnedValue; // caught by .then()
@@ -381,7 +381,7 @@ export const googleAuth = async () => {
       // returnedValue = response.data.data;
     })
     .catch((error) => {
-      notifyError(error);
+      // notifyError(error);
     });
 
   return returnedValue; // caught by .then()
@@ -417,7 +417,7 @@ export const getCategories = async () => {
     })
 
     .catch((error) => {
-      notifyError(error);
+      // notifyError(error);
     });
   return returnedValue; // caught by .then()
 };
@@ -433,7 +433,7 @@ export const getBrands = async () => {
     })
 
     .catch((error) => {
-      notifyError(error);
+      // notifyError(error);
     });
   return returnedValue; // caught by .then()
 };
@@ -449,7 +449,7 @@ export const getSubCategories = async () => {
     })
 
     .catch((error) => {
-      notifyError(error);
+      // notifyError(error);
     });
   return returnedValue; // caught by .then()
 };
@@ -463,7 +463,7 @@ export const getWishList = async () => {
       returnedValue = response.data.data;
     })
     .catch((error) => {
-      notifyError(error);
+      // notifyError(error);
     });
   return returnedValue; // caught by .then()
 };
@@ -493,7 +493,7 @@ export const getWallet = async () => {
     })
     .catch((error) => {
       console.log(error, "responseeeefromwallet");
-      notifyError(error);
+      // notifyError(error);
     });
 
   return returnedValue; // caught by .then()
@@ -508,7 +508,7 @@ export const getWalletHistory = async () => {
     })
     .catch((error) => {
       console.log(error, "responseeeefromwallet");
-      notifyError(error);
+      // notifyError(error);
     });
 
   return returnedValue; // caught by .then()
@@ -523,7 +523,7 @@ export const getPromoCode = async () => {
     })
     .catch((error) => {
       console.log(error, "responseeeefromwallet");
-      notifyError(error);
+      // notifyError(error);
     });
 
   return returnedValue; // caught by .then()
@@ -613,7 +613,7 @@ export const getPlans = async () => {
       returnedValue = response.data.data;
     })
     .catch((error) => {
-      notifyError(error);
+      // notifyError(error);
     });
 
   return returnedValue; // caught by .then()
@@ -658,7 +658,7 @@ export const getGovernorates = async () => {
       returnedValue = response;
     })
     .catch((error) => {
-      notifyError(error);
+      // notifyError(error);
     });
 
   return returnedValue; // caught by .then()
@@ -673,7 +673,7 @@ export const getCitites = async () => {
       returnedValue = response;
     })
     .catch((error) => {
-      notifyError(error);
+      // notifyError(error);
     });
 
   return returnedValue; // caught by .then()
@@ -683,7 +683,7 @@ export const getUserPlan = async () => {
   let returnedValue;
 
   await instance
-    .get(`/auth/profile/plan`)
+    .get(`/profile/subscription`)
     .then((response) => {
       returnedValue = response;
     })

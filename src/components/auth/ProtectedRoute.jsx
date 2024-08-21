@@ -21,7 +21,8 @@ const ProtectedRoute = ({ element: Component, ...rest }) => {
   const isAuthenticated =
     localStorage.getItem("access_token") &&isTokenExpired(localStorage.getItem("access_token") )
     localStorage.getItem("refresh_token");
-  if (!isAuthenticated) toast.error("Please login to access this page");
+  if (!isAuthenticated)
+    //  toast.error("Please login to access this page");
   return isAuthenticated ? <Component {...rest} /> : <Navigate to="/login" />;
 };
 
