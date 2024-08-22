@@ -5,10 +5,10 @@ import { addToCart } from "../../utils/apiCalls";
 import { toast } from "react-toastify";
 
 export default function Counter({ item,count,
-  setCount}) {
+  setCount,selectedVariantObject}) {
 
   const dispatch = useDispatch();
-console.log(item,"itemitemitemitemitemitem");
+console.log(selectedVariantObject,"selectedVariantObjectselectedVariantObjectselectedVariantObject");
 
 
   const cart = useSelector((state) => state.cart.value);
@@ -24,7 +24,7 @@ console.log(item,"itemitemitemitemitemitem");
       cartActions.add({
         product: item?.id,
         count: count + 1,
-        variant: item?.variant?.id,
+        variant: selectedVariantObject?.id,
       })
     );
   
@@ -34,7 +34,7 @@ console.log(item,"itemitemitemitemitemitem");
       {
         product: item?.id,
         count: count + 1,
-        variant: item?.variant?.id,
+        variant: selectedVariantObject?.id,
       },
     ]);
   };
@@ -50,7 +50,7 @@ console.log(item,"itemitemitemitemitemitem");
     cartActions.add({
       product: item?.id,
       count: count - 1,
-      variant: item?.variant?.id,
+      variant:selectedVariantObject?.id,
     })
   );
 
@@ -60,7 +60,7 @@ console.log(item,"itemitemitemitemitemitem");
     {
       product: item?.id,
       count: count - 1,
-      variant: item?.variant?.id,
+      variant: selectedVariantObject?.id,
     },
   ]);
   };

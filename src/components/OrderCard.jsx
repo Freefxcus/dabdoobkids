@@ -23,7 +23,7 @@ export default function OrderCard({
   const [openEdit, setOpenEdit] = React.useState(false);
   const dispatch = useDispatch();
   const [productCount, setProductCount] = React.useState(item.count);
-  const total = productCount * +product.price;
+  const total = productCount * +(variant?.price||product?.price);
   const cart = useSelector((state) => state.cart.value);
 
   const increment = () => {
@@ -155,7 +155,7 @@ export default function OrderCard({
           <div style={{ alignSelf: "center" }} className={styles.number}>
             <div>{productCount}</div>
             <div>x</div>
-            <div>{+product.price}$</div>
+            <div>{+variant?.price||+product.price}$</div>
           </div>
           <div></div>
         </div>

@@ -45,7 +45,7 @@ export default function Cart() {
 
   console.log(cart, "cart123123123");
   const totalPrice = cart?.reduce(
-    (acc, item) => acc + ((+item.product.price )* item.count),
+    (acc, item) => acc + ((+item.variant.price||+item.product.price )* item.count),
     0
   );
   const generateDiscountMesage = (totalPrice) => {

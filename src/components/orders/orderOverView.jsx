@@ -19,7 +19,7 @@ export default function OrderOverview({
 
 
   const [productCount, setProductCount] = React.useState(item.count);
-  const total = productCount * +item?.price
+  // const total = productCount * +item?.price
 
   return (
     // <div className={styles.container}>

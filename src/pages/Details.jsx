@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import styles from "../styles/pages/Details.module.css";
 import Box from "@mui/material/Box";
 import InputLabel from "@mui/material/InputLabel";
@@ -33,7 +33,29 @@ export default function Details() {
   const wishlist = useSelector((state) => state.wishlist.value);
   const cart = useSelector((state) => state.cart.value);
   console.log("cart================>", cart);
+  const transformVariants = useCallback((variants) => {
+    const optionsMap = {};
 
+    variants?.forEach((variant) => {
+      variant?.options?.forEach((option) => {
+        const { name } = option.option;
+        const { value } = option.value;
+
+        if (!optionsMap[name]) {
+          optionsMap[name] = new Set();
+        }
+
+        optionsMap[name].add(value);
+      });
+    });
+
+    const newVariants = Object.entries(optionsMap).map(([name, values]) => ({
+      name,
+      values: Array.from(values),
+    }));
+
+    return newVariants;
+  }, []);
   const wished = wishlist.includes(+id);
   console.log(wished);
   const [productDetails, setProductDetails] = useState({});
@@ -48,7 +70,7 @@ export default function Details() {
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
   const [carts, setCarts] = useState([]);
- useEffect(() => {
+  useEffect(() => {
     const fetchCart = async () => {
       const cart = await getCart();
       setCarts(cart);
@@ -90,14 +112,34 @@ export default function Details() {
       });
   }, [reload]);
 
-  const newVariants = transformVariants(productDetails?.variants);
+  const newVariants = useMemo(
+    () => transformVariants(productDetails?.variants) || [],
+    [productDetails?.variants, transformVariants]
+  );
 
   const selectedVariantObject = productDetails?.variants?.find((variantItem) =>
     variantItem.options.every(
       (option) => variant[option.option.name] === option.value.value
     )
   );
-
+  useEffect(() => {
+    if (newVariants?.length) {
+      newVariants.forEach((VariantItem) => {
+        if (VariantItem?.name && VariantItem?.values?.[0]) {
+          handleChange({
+            key: VariantItem.name,
+            value: VariantItem.values[0],
+          });
+        }
+      });
+    }
+  }, [newVariants]);
+  useEffect(() => {
+    console.log(selectedVariantObject, "selectedVariantObject");
+    selectedVariantObject?.gallery?.[0]
+      ? setLargeImage(selectedVariantObject?.gallery?.[0])
+      : setLargeImage(productDetails?.images?.[0]);
+  }, [selectedVariantObject]);
   // const selectedVariantObject = productDetails?.variants?.length?   variant?.length===newVariants.length? productDetails?.variants?.find(variantItem =>
   //   variantItem.options.every(option =>
   //     variant[option.option.name] === option.value.value
@@ -120,7 +162,7 @@ export default function Details() {
       )}
       {productDetails?.id && (
         <div
-          className={`${styles.container} margin-container section-top-margin section-bottom-margin`}
+          className={`${styles["container"]} margin-container section-top-margin section-bottom-margin`}
         >
           <div className={styles["images-section"]}>
             <img src={largeImage} className={styles["large-image"]} />
@@ -166,7 +208,7 @@ export default function Details() {
             >
               Tax included shipping calculated at checkout
             </div>
-            <div className={styles.line}></div>
+            <div className={styles["line"]}></div>
             <Box
               sx={{
                 minWidth: 120,
@@ -181,11 +223,17 @@ export default function Details() {
                     Select {newVariants?.[0]?.name}
                   </InputLabel>
                   <Select
-                    className={styles.select}
-                    sx={{ width: "100%" }}
+                    className={styles["select"]}
+                    sx={{
+                      width: "100%",
+                      ".Mui-focused .MuiSelect-select ": {
+                        borderColor: "#ad6b46",
+                        color: "#ad6b46",
+                      },
+                    }}
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
-                    defaultValue={variant?.[newVariants?.[0]?.name] || 0}
+                    defaultValue={newVariants?.[0]?.values?.[0] || 0}
                     value={variant?.[newVariants?.[0]?.name] || 0}
                     label="Select Size"
                     onChange={(event) =>
@@ -222,7 +270,7 @@ export default function Details() {
                               })
                             }
                             key={index + ValueVariant}
-                            className={styles.color}
+                            className={styles["color"]}
                             style={{
                               marginLeft: "6px",
                               padding: "4px 12px",
@@ -267,9 +315,16 @@ export default function Details() {
             >
               {productDetails.description}
             </div>
-            <div className={styles.row}>
+            <div className={styles["row"]}>
+              {selectedVariantObject
+                ? selectedVariantObject.stock > 10
+                  ? null
+                  : `  Only  ${selectedVariantObject.stock} left in stock `
+                : "out of stock please select another option"}
+            </div>
+            <div className={styles["row"]}>
               <div
-                className={styles.row}
+                className={styles["row"]}
                 style={{
                   minWidth: "70px",
                   padding: "13px 8px 13px 8px",
@@ -318,9 +373,11 @@ export default function Details() {
                     toast.error("Out of stock");
                     return;
                   }
-                  let cartsFormBack= carts.map((item) =>({ product: item?.product?.id,
-      count: item.count,
-      variant: +item?.variant?.id,}))
+                  let cartsFormBack = carts.map((item) => ({
+                    product: item?.product?.id,
+                    count: item.count,
+                    variant: +item?.variant?.id,
+                  }));
                   let NewCarts = cartsFormBack?.filter((itemCart) =>
                     itemCart.product != +id && itemCart.variant
                       ? itemCart.variant != selectedVariantObject?.id
@@ -359,6 +416,7 @@ export default function Details() {
                 open={open}
                 handleClose={setOpen}
                 productDetails={productDetails}
+                selectedVariantObject={selectedVariantObject}
               />
               <img
                 alt="heart-icon"
@@ -415,28 +473,4 @@ export default function Details() {
       </Box>
     </>
   );
-}
-
-function transformVariants(variants) {
-  const optionsMap = {};
-
-  variants?.forEach((variant) => {
-    variant?.options?.forEach((option) => {
-      const { name } = option.option;
-      const { value } = option.value;
-
-      if (!optionsMap[name]) {
-        optionsMap[name] = new Set();
-      }
-
-      optionsMap[name].add(value);
-    });
-  });
-
-  const newVariants = Object.entries(optionsMap).map(([name, values]) => ({
-    name,
-    values: Array.from(values),
-  }));
-
-  return newVariants;
 }

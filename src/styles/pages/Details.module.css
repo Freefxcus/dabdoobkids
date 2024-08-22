@@ -69,6 +69,10 @@
   background-color: #fff;
   box-shadow: 0 5px 20px rgba(255,255,255,0.10);
 }
+.select:focus *,.select .Mui-focused {
+  border-color:var(--brown) !important;
+  color:var(--brown) !important;
+}
 .cart-button {
   background-color: var(--brown);
   color: var(--white);

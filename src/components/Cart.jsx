@@ -41,7 +41,7 @@ export default function Cart({ toggleDrawer }) {
 
   const totalPrice = useMemo(() => {
     return cart?.reduce(
-      (acc, item) => acc + item?.count * +item?.product?.price,
+      (acc, item) => acc + item?.count *(+item?.variant?.price ||+item?.product?.price),
       0
     );
   }, [cart]);
@@ -169,7 +169,7 @@ export default function Cart({ toggleDrawer }) {
                             fontWeight: "600",
                           }}
                         >
-                          {+item?.product?.price}
+                          {+item?.variant?.price ||+item?.product?.price}
                         </span>
                         &nbsp; &nbsp;
                         <span

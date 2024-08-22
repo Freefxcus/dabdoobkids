@@ -178,7 +178,7 @@ export default function Checkout() {
                 >
                   <h2 style={{ fontWeight: "400" }}>{item?.count}</h2>
                   <h2 style={{ fontWeight: "400" }}>x</h2>
-                  <h2 style={{ fontWeight: "400" }}>{+item?.product?.price}</h2>
+                  <h2 style={{ fontWeight: "400" }}>{+item?.variant?.price ||+item?.product?.price}</h2>
                 </div>
               </div>
 
@@ -193,7 +193,7 @@ export default function Checkout() {
               >
                 <div style={{ backgroundColor: "transparent" }}>
                   <h2 style={{ fontWeight: "400" }}>
-                    {item?.count * +item?.product?.price}
+                    {item?.count * (+item?.variant?.price ||+item?.product?.price)}
                   </h2>
                 </div>
               </div>

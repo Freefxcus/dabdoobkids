@@ -8,7 +8,7 @@ import { useSelector } from "react-redux";
 export default function SingleProductModal({
   open,
   handleClose,
-  productDetails,
+  productDetails,selectedVariantObject
 }) {
   const navigate = useNavigate();
 
@@ -84,8 +84,8 @@ export default function SingleProductModal({
                     width: "100%",
                   }}
                 >
-                  <Counter setCount={setCount} count={+count} item={productDetails} />
-                  <h3>{productDetails.price}$</h3>
+                  <Counter setCount={setCount} count={+count} item={productDetails} selectedVariantObject={selectedVariantObject}  />
+                  <h3>{+selectedVariantObject?.price||+productDetails?.price}$</h3>
                 </div>
               </div>
             </div>
@@ -97,7 +97,7 @@ export default function SingleProductModal({
               }}
             >
               <h2>Subtotal</h2>
-              <h2>{ Math.trunc( +count * +productDetails.price)}$</h2>
+              <h2>{ Math.trunc( +count * (+selectedVariantObject?.price||+productDetails?.price))}$</h2>
             </div>
 
             <p style={{ marginTop: "16px" }}>
