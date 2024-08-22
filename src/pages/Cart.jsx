@@ -17,6 +17,7 @@ import { use } from "i18next";
 import { useNavigate } from "react-router-dom";
 import CartProgress from "../components/CartProgress";
 export default function Cart() {
+  
   const navigate = useNavigate();
   const [promocode, setPromocode] = useState("");
 

@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 export default function DeleteModal({
   open,
   setOpen,
-  ProductId,
+  ProductId,id,
   variantId,
   setCartChanged,
 }) {
@@ -26,14 +26,8 @@ export default function DeleteModal({
     fetchCart();
   }, [cart]);
   const handleDeleteFromCart = async () => {
-    let cartsFormBack= carts.map((item) =>({ product: item?.product?.id,
-      count: item.count,
-      variant: item?.variant?.id,}))
-      
-      let NewCarts = cartsFormBack?.filter((itemCart) => +itemCart?.product != +ProductId);
-      console.log("NewCarts=================",carts,cart,NewCarts);
-    
-    // addToCart([...NewCarts]);
+  
+    removeFromCart(id);
 
     dispatch(cartActions.remove(ProductId));
 

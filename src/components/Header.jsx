@@ -57,7 +57,7 @@ export default function Header({ setOpen }) {
     const fetchCart = async () => {
       const cart = await getCart();
       setCarts(cart);
-      if (cart.length) {
+      if (cart?.length) {
         cart.map((item) =>
           dispatch(
             cartActions.add({
