@@ -261,38 +261,61 @@ export default function Details() {
                         {variantItem?.name} :
                       </h1>
                       <Stack direction={"row"} gap={"12px"}>
-                        {variantItem?.values?.map((ValueVariant, index) => (
-                          <span
-                            onClick={() =>
-                              handleChange({
-                                key: variantItem?.name,
-                                value: ValueVariant,
-                              })
-                            }
-                            key={index + ValueVariant}
-                            className={styles["color"]}
-                            style={{
-                              marginLeft: "6px",
-                              padding: "4px 12px",
-                              borderRadius: "8px",
-                              backgroundColor:
-                                variant?.[variantItem?.name] === ValueVariant
-                                  ? "var(--brown)"
-                                  : "white",
-                              color:
-                                variant?.[variantItem?.name] === ValueVariant
-                                  ? "white"
-                                  : "var(--rhine-castle)",
-                              border:
-                                variant?.[variantItem?.name] === ValueVariant
-                                  ? "2px solid var(--brown)"
-                                  : "1px solid black",
-                              cursor: "pointer",
-                            }}
-                          >
-                            {ValueVariant}
-                          </span>
-                        ))}
+                        {variantItem?.values?.map((ValueVariant, index) => {
+                          // Find the variant that matches the current ValueVariant
+                          const matchingVariant =
+                            productDetails?.variants?.find((variant) =>
+                              variant?.options.some(
+                                (option) =>
+                                  variantItem?.name == option?.option?.name &&
+                                  ValueVariant == option?.value?.value
+                              )
+                            );
+                          const isAvailable = matchingVariant.options.some(
+                            (option) =>
+                              newVariants?.[0]?.name == option?.option?.name &&
+                              variant?.[newVariants?.[0]?.name] ==
+                                option?.value?.value
+                          );
+                          // Check if the matching variant is in stock
+
+                          return (
+                            <button
+                              onClick={() =>
+                                handleChange({
+                                  key: variantItem?.name,
+                                  value: ValueVariant,
+                                })
+                              }
+                              key={index + ValueVariant}
+                              className={styles["color"]}
+                              style={{
+                                marginLeft: "6px",
+                                padding: "4px 12px",
+                                borderRadius: "8px",
+                                opacity: isAvailable ? 1 : 0.7,
+                                textDecoration:isAvailable ?"none":"line-through",
+                                backgroundColor:
+                                  variant?.[variantItem?.name] === ValueVariant
+                                    ? "var(--brown)"
+                                    : isAvailable
+                                    ? "white"
+                                    : "#9f9f9f99",
+                                color:
+                                  variant?.[variantItem?.name] === ValueVariant
+                                    ? "white"
+                                    : "var(--rhine-castle)",
+                                border:
+                                  variant?.[variantItem?.name] === ValueVariant
+                                    ? "2px solid var(--brown)"
+                                    : "1px solid black",
+                                cursor: isAvailable ? "pointer" : "not-allowed",
+                              }}
+                            >
+                              {ValueVariant}
+                            </button>
+                          );
+                        })}
                       </Stack>
                     </Box>
                   ))
