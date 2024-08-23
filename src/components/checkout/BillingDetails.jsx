@@ -74,13 +74,30 @@ export default function BillingDetails({
         Shipping Details
       </h1>
       <div style={{ display: "grid", gap: "15px" }}>
-        <h3
-          style={{
-            marginBottom: "12px",
-          }}
-        >
-          Address
-        </h3>
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          {" "}
+          <h3
+            style={{
+              marginBottom: "12px",
+            }}
+          >
+            Address
+          </h3>
+          <button
+            style={{
+              backgroundColor: "var(--brown)",
+              borderRadius: "12px",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+            onClick={() => {
+              setOpenAdd(true);
+            }}
+          >
+            <AddIcon sx={{ color: "#fff", cursor: "pointer" }} />
+          </button>
+        </div>
         {address?.items?.length === 0 ? (
           <div
             style={{
@@ -104,13 +121,20 @@ export default function BillingDetails({
               type="text"
               placeholder="Add Shipping Address"
             />
-            <div
-              onClick={() => {
-                setOpenAdd(true);
-              }}
-            >
-              <AddIcon sx={{ color: "var(--brown)", cursor: "pointer" }} />
-            </div>
+            <button
+              style={{
+              backgroundColor: "var(--brown)",
+              borderRadius: "12px",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+            onClick={() => {
+              setOpenAdd(true);
+            }}
+          >
+            <AddIcon sx={{ color: "#fff", cursor: "pointer" }} />
+            </button>
           </div>
         ) : (
           address?.items?.map((addressItem) => (
@@ -270,7 +294,7 @@ export default function BillingDetails({
           />
         ) : null
       ) : (
-        <AddressModal open={openEdit} setOpen={setOpenEdit} type="add" />
+        <AddressModal open={openAdd} setOpen={setOpenAdd} type="add" />
       )}
     </div>
   );

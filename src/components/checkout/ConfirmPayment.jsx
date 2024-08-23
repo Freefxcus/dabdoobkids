@@ -188,6 +188,9 @@ export default function ConfirmPayment({ orderSummary, address,addressActive }) 
             {orderSummary?.data?.data?.subtotal}$
           </h2>
         </div>
+        <div style={{textAlign:"center",color:"red"}}>
+          {!address?.items?.[0]?.id||!addressActive?"please enter address ":null}
+        </div>
         <button
           onClick={handlePayment}
           style={{

@@ -224,6 +224,7 @@ export default function Summary() {
           <div className={styles.title_main}>Sub Total</div>
           <div className={styles.title_main}>$ {`3.010.00`}</div>
         </div>
+       
         <button
           className={styles.brown_button}
           // disabled={!address.address || !promocode}
