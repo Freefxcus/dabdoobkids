@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import styles from "../../styles/pages/Profile.module.css";
 import { useEffect, useState } from "react";
 import {
@@ -15,6 +15,7 @@ export default function OrderDetails() {
   const [order, setOrder] = useState(null);
   const [orderInvoice, setOrderInvoice] = useState(null);
   const { id } = useParams();
+  const navigate=useNavigate()
   useEffect(() => {
     getSingleOrder(id).then((res) => {
       console.log(res, "order123123123order123123123");
@@ -45,7 +46,7 @@ export default function OrderDetails() {
           <img
             src="/back.png"
             style={{ height: "20px", cursor: "pointer" }}
-            onClick={() => {}}
+            onClick={() => navigate("/profile")}
           />
           <div>Order ID: {order?.id}</div>
           <img
@@ -55,7 +56,7 @@ export default function OrderDetails() {
               cursor: "pointer",
               marginLeft: "auto",
             }}
-            onClick={() => {}}
+            onClick={() => navigate("/profile")}
           />
         </div>
         <div className={styles.row_wrap}>
@@ -134,13 +135,13 @@ export default function OrderDetails() {
         </div>
         <button
           onClick={() =>
-            order.cancellable && !order.refundable
+            order?.cancellable && !order?.refundable
               ? orderRefund({
                   order: order.id,
                   items: order?.items?.map((item) => item.id),
                   requestType: "cancel",
                 })
-              : !order.cancellable && order.refundable
+              : !order?.cancellable && order?.refundable
               ? orderRefund({
                   order: order.id,
                   items: order?.items?.map((item) => item.id),
@@ -162,7 +163,7 @@ export default function OrderDetails() {
             cursor: "pointer",
           }}
         >
-          {order?.orderStatus === "Pending" ? "Refund" : "Return"}
+          {  order?.cancellable && !order?.refundable? "Cancel" : !order?.cancellable && order?.refundable? "Refund":"Return"}
         </button>
       </div>
     </>
