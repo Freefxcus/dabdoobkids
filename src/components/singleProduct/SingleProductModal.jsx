@@ -8,37 +8,36 @@ import { useSelector } from "react-redux";
 export default function SingleProductModal({
   open,
   handleClose,
-  productDetails,selectedVariantObject
+  productDetails,
+  selectedVariantObject,
 }) {
   const navigate = useNavigate();
 
   const [count, setCount] = useState(1);
 
-  console.log("productDetails",productDetails);
+  console.log("productDetails", productDetails);
   const cart = useSelector((state) => state.cart.value);
   useEffect(() => {
-
     const fetchCart = async () => {
       const carts = await getCart();
-      let item=carts?.find(item=>item?.product?.id == productDetails.id)
-    
-      setCount(+item?.count||1)
+      let item = carts?.find((item) => item?.product?.id == productDetails.id);
+
+      setCount(+item?.count || 1);
     };
     fetchCart();
   }, []);
   useEffect(() => {
-
     const fetchCart = async () => {
       const cart = await getCart();
-      let item=cart?.find(item=>item?.product?.id === productDetails.id)
-    
-      setCount(+item?.count||1)
+      let item = cart?.find((item) => item?.product?.id === productDetails.id);
+
+      setCount(+item?.count || 1);
     };
     fetchCart();
   }, [cart]);
-  
+
   return (
-    <Modal open={open} >
+    <Modal open={open}>
       <Box>
         <Box sx={style}>
           <div
@@ -50,11 +49,16 @@ export default function SingleProductModal({
               justifyContent: "center",
             }}
           >
-            <div style={{display : "flex", justifyContent : "space-between"}}>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
               <h2 style={{ marginBottom: "16px", fontWeight: "500" }}>
                 Added to Cart
               </h2>
-              <span style={{cursor : "pointer"}} onClick={() => handleClose(false)}>x</span>
+              <span
+                style={{ cursor: "pointer" }}
+                onClick={() => handleClose(false)}
+              >
+                x
+              </span>
             </div>
             <div style={{ display: "flex", width: "100%", gap: "8px" }}>
               <img
@@ -72,9 +76,25 @@ export default function SingleProductModal({
                 }}
               >
                 <div>
-                  <h2 style={{ fontWeight: "500" }}>
-                    {productDetails?.description}
+                  <h2
+                    style={{
+                   
+                      fontWeight: "500",
+                    }}
+                  >
+                    {productDetails?.name}
                   </h2>
+                </div>
+                <div>
+                  <h5
+                    style={{
+                      fontSize: "14px",
+                      fontWeight: "500",   whiteSpace: "pre-wrap",
+                      color: "var(--placeholder-text)",
+                    }}
+                  >
+                    {productDetails?.description}
+                  </h5>
                 </div>
                 <div
                   style={{
@@ -84,8 +104,15 @@ export default function SingleProductModal({
                     width: "100%",
                   }}
                 >
-                  <Counter setCount={setCount} count={+count} item={productDetails} selectedVariantObject={selectedVariantObject}  />
-                  <h3>{+selectedVariantObject?.price||+productDetails?.price}$</h3>
+                  <Counter
+                    setCount={setCount}
+                    count={+count}
+                    item={productDetails}
+                    selectedVariantObject={selectedVariantObject}
+                  />
+                  <h3>
+                    {+selectedVariantObject?.price || +productDetails?.price}$
+                  </h3>
                 </div>
               </div>
             </div>
@@ -97,7 +124,13 @@ export default function SingleProductModal({
               }}
             >
               <h2>Subtotal</h2>
-              <h2>{ Math.trunc( +count * (+selectedVariantObject?.price||+productDetails?.price))}$</h2>
+              <h2>
+                {Math.trunc(
+                  +count *
+                    (+selectedVariantObject?.price || +productDetails?.price)
+                )}
+                $
+              </h2>
             </div>
 
             <p style={{ marginTop: "16px" }}>
@@ -130,10 +163,10 @@ export default function SingleProductModal({
                 View Cart
               </button>
               <button
-              onClick={() => {
-                navigate("/checkout");
-                handleClose(false);}
-              }
+                onClick={() => {
+                  navigate("/checkout");
+                  handleClose(false);
+                }}
                 style={{
                   backgroundColor: "var(--brown)",
                   color: "white",
@@ -164,9 +197,9 @@ const style = {
   flexDirection: "column",
   justifyContent: "center",
   bgcolor: "background.paper",
-  
+
   boxShadow: 24,
   borderRadius: "10px",
-  
+
   p: 4,
 };

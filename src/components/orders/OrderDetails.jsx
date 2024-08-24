@@ -154,16 +154,16 @@ export default function OrderDetails() {
             height: "48px",
             padding: "13px",
             borderRadius: "10px",
-            border: "2px",
             gap: "12px",
             color: "#F04438",
             border: "2px solid #F04438",
             backgroundColor: "transparent",
             fontWeight: "bold",
-            cursor: "pointer",
+            cursor: order?.canSendRequest?"pointer":"not-allowed",
           }}
+          disabled={!order?.canSendRequest}
         >
-          {  order?.cancellable && !order?.refundable? "Cancel" : !order?.cancellable && order?.refundable? "Refund":"Return"}
+          {  order?.cancellable && !order?.refundable? order?.canSendRequest? "Cancel":"Cancel is under evaluation" : !order?.cancellable && order?.refundable?order?.canSendRequest?  "Refund":"Refund is under evaluation":"Return"}
         </button>
       </div>
     </>
