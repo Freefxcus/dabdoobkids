@@ -13,7 +13,7 @@ export default function Plans() {
   const [plans, setPlans] = React.useState([]);
   const [isSubscribed, setIsSubscribed] = React.useState(false);
   const [paymentLink, setPaymentMethod] = useState("");
-
+  const [planItem, setPlanItem] = React.useState([]);
   useEffect(() => {
     getPlans().then((res) => {
       setPlans(res?.plans);
@@ -27,12 +27,13 @@ export default function Plans() {
 
   useEffect(() => {
     getUserPlan().then((res) => {
-      console.log(res, "userplanssssssssssssssssssssss");
+      if (res?.data?.data?.plan?.id) {
+        setPlanItem(res?.data?.data?.plan);
+      }
     });
   }, []);
-  console.log(plans, "plansdsadasddas");
+
   const handleSubscribe = (id) => {
-    console.log(id, "iddplannnnnnnnnnnnnnnnnnnnnnnn");
     subscribeToPlan(id).then((res) => {
       if (res?.status === 201) {
         toast.success("Redirecting to Payment Gateway");
@@ -81,7 +82,14 @@ export default function Plans() {
               You are currently not Subscribed to any plan{" "}
             </h1>
           )}
-          <Box sx={{ display: "flex", gap: "32px" , flexWrap : "wrap" , justifyContent : "center" }}>
+          <Box
+            sx={{
+              display: "flex",
+              gap: "32px",
+              flexWrap: "wrap",
+              justifyContent: "center",
+            }}
+          >
             {plans?.map((plan) => (
               <div
                 className={`${styles["premium-container"]} margin-container`}
@@ -101,19 +109,27 @@ export default function Plans() {
                   <div className={styles.row}>
                     <div>Get the best benefits with us</div>
                   </div>
-                  <button
-                    onClick={() => {
-                      handleSubscribe(plan?.id);
-                    }}
-                    className={`${styles["premium-button"]} ${styles.row}`}
-                  >
-                    Subscribe to {plan?.name}
-                    <ArrowRight2
-                      size="15"
-                      color="var(--white)"
-                      variant="Outline"
-                    />
-                  </button>
+                  {plan.id == planItem?.id ? (
+                    <div
+                      className={`${styles["premium-button"]} ${styles.row}`}
+                    >
+                      you are Subscribe to {plan?.name}
+                    </div>
+                  ) : (
+                    <button
+                      onClick={() => {
+                        handleSubscribe(plan?.id);
+                      }}
+                      className={`${styles["premium-button"]} ${styles.row}`}
+                    >
+                      Subscribe to {plan?.name}
+                      <ArrowRight2
+                        size="15"
+                        color="var(--white)"
+                        variant="Outline"
+                      />
+                    </button>
+                  )}
                 </div>
                 <div
                   className={`${styles.column} ${styles["premium-body"]}`}

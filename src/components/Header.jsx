@@ -24,8 +24,13 @@ import bag from "../images/bag.svg";
 import brownBag from "../images/brown-bag.svg";
 import user from "../images/user.svg";
 import dabdoob from "../images/dabdoob.svg";
+import premium from "../images/premium.png";
 import burger from "../images/burger.png";
-import {  getCategories, getSubCategories } from "../utils/apiCalls";
+import {
+  getCategories,
+  getSubCategories,
+  getUserPlan,
+} from "../utils/apiCalls";
 import { useGetAllCartsQuery } from "../Redux/cartApi";
 import { useGetAllWishListQuery } from "../Redux/wishlistApi";
 export default function Header({ setOpen }) {
@@ -37,11 +42,11 @@ export default function Header({ setOpen }) {
     }, 2000),
     []
   );
-  
 
   const [dropDownType, setDropDownType] = useState();
   const [dropDown, setDropDown] = useState(false);
   const [isUser, setIsUser] = useState(false);
+  const [isSubscription, setIsSubscription] = useState(false);
   const [searchInput, setSearchInput] = useState(false);
   const [searchInputValue, setSearchInputValue] = useState("");
   const [sidebar, setSidebar] = useState("");
@@ -50,12 +55,18 @@ export default function Header({ setOpen }) {
   const myInputRef = useRef("");
   const navigate = useNavigate();
   const [animation, setAnimation] = useState(false);
-  const {  data: cartData} = useGetAllCartsQuery()
+  const { data: cartData } = useGetAllCartsQuery();
   const cartItems = cartData?.data || [];
-  const {  data: wishListData} = useGetAllWishListQuery()
+  const { data: wishListData } = useGetAllWishListQuery();
   const wishListItems = wishListData?.data?.[0]?.items || [];
 
-
+  useEffect(() => {
+    getUserPlan().then((res) => {
+      if (res?.data?.data?.plan?.id) {
+        setIsSubscription(true);
+      }
+    });
+  }, []);
   useEffect(() => {
     const animationTimeoutId = setTimeout(() => {
       setAnimation(true);
@@ -178,8 +189,10 @@ export default function Header({ setOpen }) {
         >
           <div className={styles["sub-container"]}>
             <img
-              src={logo}
-              className={styles.logo}
+              src={isSubscription?premium :logo}
+              className={styles["logo"]}
+              style={{width: isSubscription?"50px":"100px"}}
+              alt="logo "
               onClick={() => {
                 navigate("/");
               }}
@@ -204,19 +217,20 @@ export default function Header({ setOpen }) {
             style={{ gap: 0 }}
           >
             <img
-              src={dabdoob}
+              src={isSubscription? premium:dabdoob}
               className={`${styles.clickable} hidden-on-small-screen`}
               style={{
+                  width:isSubscription?"50px":"auto",
                 marginLeft: "10px",
                 position: "relative",
                 left: animation ? 0 : "160px",
                 transition: "left 1s ease-in-out",
-              }}
+              }} alt="logo"
               onClick={() => {
                 navigate("/plans");
               }}
             />
-            <div
+          {!isSubscription && <div
               className={`${styles.tag} hidden-on-small-screen`}
               style={{
                 marginLeft: "10px",
@@ -229,10 +243,11 @@ export default function Header({ setOpen }) {
               }}
             >
               Try Dabdoob Premium
-            </div>
+            </div>}
             <img
               src={lense}
               className={styles.clickable}
+              alt="logo"
               style={{ marginLeft: "10px" }}
               onClick={() => {
                 setSearchInput(true);
@@ -273,7 +288,7 @@ export default function Header({ setOpen }) {
                     }}
                   />
                   <div className={`${styles.clickable} ${styles.badge}`}>
-                    {wishListItems?.length||0}
+                    {wishListItems?.length || 0}
                   </div>
                 </>
               ) : (

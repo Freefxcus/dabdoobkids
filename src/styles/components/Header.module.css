@@ -13,9 +13,10 @@
 
 .logo {
   cursor: pointer;
-  width: 100px;
+ 
   padding-top: 5px;
   padding-bottom: 5px;
+
 }
 
 .dropdown {
