@@ -4,44 +4,44 @@ import { addToCart, getCart, removeFromCart } from "../../utils/apiCalls";
 import { useDispatch, useSelector } from "react-redux";
 import { cartActions } from "../../Redux/store";
 import { useEffect, useState } from "react";
+import HandleMessageIsAuth from "../../utils/message";
+import { useDeleteFromCartMutation } from "../../Redux/cartApi";
+import { notifyError, notifySuccess } from "../../utils/general";
 
 export default function DeleteModal({
   open,
   setOpen,
-  ProductId,id,
+  ProductId,
+  id,
   variantId,
-  setCartChanged,
 }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  //   console.log(ProductId , "pidididididid");
-  const cart = useSelector((state) => state.cart.value);
-  const [carts, setCarts] = useState([]);
-  console.log(cart, "cart212313212123123123132123");
-  useEffect(() => {
-    const fetchCart = async () => {
-      const cart = await getCart();
-      setCarts(cart);
-    };
-    fetchCart();
-  }, [cart]);
+  const [
+    deleteFromCart,
+    {
+      isLoading: wishListDeleteLoad,
+      isSuccess: isSuccessDeleteWishList,
+      isError: isErrorDeleteWishList,
+      error: deleteWishListError, // Capture the error object
+    },
+  ] = useDeleteFromCartMutation();
+
   const handleDeleteFromCart = async () => {
-  
-    removeFromCart(id);
-
-    dispatch(cartActions.remove(ProductId));
-
-    setOpen(false);
-    setCartChanged(true);
+    try {
+      const response = await deleteFromCart(id).unwrap();
+      const message = `Deleted Item to cart!`;
+      notifySuccess(message);
+      setOpen(false);
+    } catch (error) {
+      const errorMessage = "Failed to Deleted to cart";
+      notifyError(errorMessage);
+    }
   };
   return (
     <Modal open={open}>
       <Box sx={style}>
-        <img
-          src="/delete-product.svg"
-          style={{ width: "400px", height: "300px" }}
-          alt=""
-        />
+        <img src="/delete-product.svg" alt="" />
         <h2 style={{ textAlign: "center" }}>Remove Product From Cart</h2>
         <div
           style={{
@@ -63,7 +63,7 @@ export default function DeleteModal({
               cursor: "pointer",
               flex: "1",
             }}
-            onClick={handleDeleteFromCart}
+            onClick={() => HandleMessageIsAuth(handleDeleteFromCart)}
           >
             Remove
           </button>
@@ -105,4 +105,8 @@ const style = {
   borderRadius: "10px",
 
   p: 4,
+  "& img": {
+    width: { xs: "90%", md: "400px" },
+    height: { xs: "250px", md: "320px" },
+  },
 };

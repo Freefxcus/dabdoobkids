@@ -2,11 +2,12 @@ import { Box, Modal } from "@mui/material";
 import Counter from "./counter";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getCart } from "../../utils/apiCalls";
-import { useSelector } from "react-redux";
+import { useAddToCartMutation } from "../../Redux/cartApi";
+import { notifyError, notifySuccess } from "../../utils/general";
 
 export default function SingleProductModal({
   open,
+  cartItems,
   handleClose,
   productDetails,
   selectedVariantObject,
@@ -15,27 +16,44 @@ export default function SingleProductModal({
 
   const [count, setCount] = useState(1);
 
-  console.log("productDetails", productDetails);
-  const cart = useSelector((state) => state.cart.value);
+  let itemForCart = cartItems?.find(
+    (cartItem) =>
+      cartItem?.product.id == productDetails?.id &&
+      cartItem?.variant?.id == selectedVariantObject?.id
+  );
+  const [addToCart, { isLoading: CartAddLoad }] = useAddToCartMutation();
+
+  const handleUpdateQuantity = async () => {
+    let newCount = itemForCart ? Math.trunc(count - itemForCart.count) : count;
+    if (newCount === 0) return 0;
+    let item = [
+      {
+        product: +productDetails?.id,
+        count: newCount,
+        variant: selectedVariantObject?.id,
+      },
+    ];
+    try {
+      const response = await addToCart(item).unwrap();
+      const message = `Updated Item to cart!`;
+      notifySuccess(message);
+    } catch (error) {
+      const errorMessage = "Failed to Updated to cart";
+      // notifyError(errorMessage);
+    }
+  };
+
   useEffect(() => {
-    const fetchCart = async () => {
-      const carts = await getCart();
-      let item = carts?.find((item) => item?.product?.id == productDetails.id);
-
-      setCount(+item?.count || 1);
-    };
-    fetchCart();
-  }, []);
+    let itemForCart = cartItems?.find(
+      (cartItem) =>
+        cartItem?.product.id == productDetails?.id &&
+        cartItem?.variant?.id == selectedVariantObject?.id
+    );
+    setCount(itemForCart?.count);
+  }, [cartItems]);
   useEffect(() => {
-    const fetchCart = async () => {
-      const cart = await getCart();
-      let item = cart?.find((item) => item?.product?.id === productDetails.id);
-
-      setCount(+item?.count || 1);
-    };
-    fetchCart();
-  }, [cart]);
-
+    handleUpdateQuantity();
+  }, [count]);
   return (
     <Modal open={open}>
       <Box>
@@ -78,7 +96,6 @@ export default function SingleProductModal({
                 <div>
                   <h2
                     style={{
-                   
                       fontWeight: "500",
                     }}
                   >
@@ -89,7 +106,8 @@ export default function SingleProductModal({
                   <h5
                     style={{
                       fontSize: "14px",
-                      fontWeight: "500",   whiteSpace: "pre-wrap",
+                      fontWeight: "500",
+                      whiteSpace: "pre-wrap",
                       color: "var(--placeholder-text)",
                     }}
                   >
@@ -107,7 +125,9 @@ export default function SingleProductModal({
                   <Counter
                     setCount={setCount}
                     count={+count}
+                    handleUpdateQuantity={handleUpdateQuantity}
                     item={productDetails}
+                    CartAddLoad={CartAddLoad}
                     selectedVariantObject={selectedVariantObject}
                   />
                   <h3>
@@ -125,10 +145,13 @@ export default function SingleProductModal({
             >
               <h2>Subtotal</h2>
               <h2>
-                {Math.trunc(
-                  +count *
-                    (+selectedVariantObject?.price || +productDetails?.price)
-                )}
+                {count
+                  ? Math.trunc(
+                      +count *
+                        (+selectedVariantObject?.price ||
+                          +productDetails?.price)
+                    )
+                  : null}
                 $
               </h2>
             </div>

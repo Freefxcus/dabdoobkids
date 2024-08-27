@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styles from "../styles/components/OrderCard.module.css";
 import lady from "../images/lady.png";
 import DeleteModal from "./cart/DeleteModal";
@@ -6,8 +6,9 @@ import Counter from "./singleProduct/counter";
 import CartCounter from "./cart/CartCounter";
 import EditModal from "./cart/EditModal";
 import { useDispatch, useSelector } from "react-redux";
-import { addToCart } from "../utils/apiCalls";
-import { cartActions } from "../Redux/store";
+
+import { useAddToCartMutation } from "../Redux/cartApi";
+import { notifyError, notifySuccess } from "../utils/general";
 export default function OrderCard({
   editable,
   item,
@@ -15,70 +16,49 @@ export default function OrderCard({
   setCartChanged,
   totalPrice,
 }) {
-  console.log(item, "item123123");
-
   const { product, variant } = item;
-
-  const [openDelete, setOpenDelete] = React.useState(false);
-  const [openEdit, setOpenEdit] = React.useState(false);
   const dispatch = useDispatch();
   const [productCount, setProductCount] = React.useState(item.count);
-  const total = productCount * +(variant?.price||product?.price);
-  const cart = useSelector((state) => state.cart.value);
+  const total = productCount * +(variant?.price || product?.price);
+
+  const [openDelete, setOpenDelete] = React.useState(false);
+
+  let itemForCart = allCarts?.find(
+    (cartItem) =>
+      cartItem?.product.id == product?.id &&
+      cartItem?.variant?.id == variant?.id
+  );
+  const [addToCart, { isLoading: CartAddLoad }] = useAddToCartMutation();
+
+  const handleUpdateQuantity = async (Count) => {
+    let newCount = itemForCart ? Math.trunc(Count - itemForCart.count) : Count;
+    if (newCount === 0) return 0;
+    let item = [
+      {
+        product: +product?.id,
+        count: newCount,
+        variant: variant?.id,
+      },
+    ];
+    try {
+      const response = await addToCart(item).unwrap();
+      const message = `Updated Item to cart!`;
+      notifySuccess(message);
+    } catch (error) {
+      const errorMessage = "Failed to Updated to cart";
+      notifyError(errorMessage);
+    }
+  };
 
   const increment = () => {
     setProductCount((prev) => prev + 1);
-    let cartsFormBack= allCarts.map((item) =>({ product: item?.product?.id,
-      count: item.count,
-      variant: item?.variant?.id,}))
-    let NewCarts = cartsFormBack
-      ?.filter((itemCart) =>
-        +itemCart?.product != +item.product.id 
-      )
-    ;
-    dispatch(
-      cartActions.add({
-        product: item?.product?.id,
-        count: productCount + 1,
-        variant: item?.variant?.id,
-      })
-    );
-  
-
-    addToCart([
-      ...NewCarts,
-      {
-        product: item?.product?.id,
-        count: productCount + 1,
-        variant: item?.variant?.id,
-      },
-    ]);
+    handleUpdateQuantity(productCount + 1);
   };
   const decrement = () => {
     setProductCount((prev) => prev - 1);
-    let NewCarts = cart
-    ?.filter((itemCart) =>
-      +itemCart?.product != +item.product.id 
-    )
-  ;
-  dispatch(
-    cartActions.add({
-      product: item?.product?.id,
-      count: productCount - 1,
-      variant: item?.variant?.id,
-    })
-  );
-
-
-  addToCart([
-    ...NewCarts,
-    {
-      product: item?.product?.id,
-      count: productCount - 1,
-      variant: item?.variant?.id,
-    },
-  ]);
+    handleUpdateQuantity(productCount - 1);
   };
+
   return (
     // <div className={styles.container}>
     <div style={{ display: "flex", flexDirection: "column" }}>
@@ -146,7 +126,7 @@ export default function OrderCard({
             id={item.id}
             ProductId={product?.id}
             variantId={variant?.id}
-            setCartChanged={setCartChanged}
+         
           />
         </div>
         {/* <div className={styles.number} style={{ marginLeft: "auto" }}> */}
@@ -155,7 +135,7 @@ export default function OrderCard({
           <div style={{ alignSelf: "center" }} className={styles.number}>
             <div>{productCount}</div>
             <div>x</div>
-            <div>{+variant?.price||+product.price}$</div>
+            <div>{+variant?.price || +product.price}$</div>
           </div>
           <div></div>
         </div>
@@ -163,6 +143,7 @@ export default function OrderCard({
         <div className={styles.column}>
           <span>Quantity</span>
           <CartCounter
+            CartAddLoad={CartAddLoad}
             increment={increment}
             decrement={decrement}
             count={productCount}

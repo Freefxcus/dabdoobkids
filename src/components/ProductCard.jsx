@@ -8,14 +8,62 @@ import { addToWishlist, removeFromWishlist } from "../utils/apiCalls.js";
 import { useDispatch, useSelector } from "react-redux";
 import { wishlistActions } from "../Redux/store";
 import { useNavigate } from "react-router-dom";
-import { truncateText } from "../utils/general.js";
+import { notifyError, notifySuccess, truncateText } from "../utils/general.js";
+import HandleMessageIsAuth from "../utils/message/index.js";
+import { useAddToWishListMutation, useDeleteWishListMutation, useGetAllWishListQuery } from "../Redux/wishlistApi.jsx";
 export default function Productcard({ item , setChanged }) {
   console.log(item,"item12312312");
-  const wishlist = useSelector((state) => state.wishlist.value);
-  const wished = wishlist.includes(item?.id);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { data: wishListData } = useGetAllWishListQuery();
+  const wishListItems = wishListData?.data?.[0]?.items || [];
 
+  const wished = wishListItems.some(
+    (product) => product?.product?.id == item?.id
+  );
+
+  const [
+    addToWishList,
+    {
+      isLoading: wishListAddLoad,
+      isSuccess: isSuccessAddWishList,
+      isError: isErrorAddWishList,
+      error: addWishListError, // Capture the error object
+    },
+  ] = useAddToWishListMutation();
+  
+  const [
+    deleteWishList,
+    {
+      isLoading: wishListDeleteLoad,
+      isSuccess: isSuccessDeleteWishList,
+      isError: isErrorDeleteWishList,
+      error: deleteWishListError, // Capture the error object
+    },
+  ] = useDeleteWishListMutation();
+  
+  const handleTargetWishlist = async () => {
+    try {
+      if (wished) {
+        await deleteWishList(item?.id).unwrap(); // unwrap to handle promise rejection
+    
+          notifySuccess("Removed from wishlist!");
+      } else {
+        await addToWishList(item?.id).unwrap(); // unwrap to handle promise rejection
+        
+          notifySuccess("Added to wishlist!");
+        
+      }
+    } catch (error) {
+      if (isErrorAddWishList || isErrorDeleteWishList) {
+        const errorMessage = addWishListError?.data?.message || deleteWishListError?.data?.message || "An error occurred";
+        notifyError(errorMessage);
+      }else{
+        notifyError(error||"An error occurred")
+      }
+    }
+  };
   return (
     <div
       className={styles.container}
@@ -36,17 +84,9 @@ export default function Productcard({ item , setChanged }) {
         />
         <div
           className={styles["heart-container"]}
-          onClick={ async(e) => {
+          onClick={ (e) => {
             e.stopPropagation();
-            if (wished) {
-              dispatch(wishlistActions.remove(item?.id));
-             await removeFromWishlist(item?.id);
-              setChanged(prev=>!prev);
-            } else {
-              dispatch(wishlistActions.add(item?.id));
-             await addToWishlist(item?.id);
-               
-            }
+            HandleMessageIsAuth(handleTargetWishlist)
           }}
         >
           <img src={wished ? fHeart : eHeart} width="25px" alt="heart" />

@@ -7,32 +7,29 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import delivery from "../images/delivery.png";
 import cartImg from "../images/cart.png";
-import eHeart from "../images/empty-heart.svg";
-import fHeart from "../images/filled-heart.svg";
 import { useParams } from "react-router-dom";
-import { getCart, getProductById, getRelatedProducts } from "../utils/apiCalls";
+import { getProductById, getRelatedProducts } from "../utils/apiCalls";
 import Loader from "../components/Loader";
-import { useDispatch, useSelector } from "react-redux";
-import { wishlistActions, cartActions } from "../Redux/store";
-import {
-  addToWishlist,
-  removeFromWishlist,
-  addToCart,
-  removeFromCart,
-} from "../utils/apiCalls.js";
+import { useDispatch } from "react-redux";
+
 import { toast } from "react-toastify";
 import SingleProductModal from "../components/singleProduct/SingleProductModal.jsx";
 
 import SwiperComponent from "../components/Swiper.jsx";
-import { Stack, Typography } from "@mui/material";
+import { CircularProgress, Stack, Typography } from "@mui/material";
 import { set } from "lodash";
 import Empty from "./empty.jsx";
+import HandleMessageIsAuth from "../utils/message/index.js";
+import WishlistProductDetails from "../components/singleProduct/WishlistProductDetails.jsx";
+import {
+  useAddToCartMutation,
+  useGetAllCartsQuery,
+} from "../Redux/cartApi.jsx";
+import { notifyError, notifySuccess } from "../utils/general.js";
 
 export default function Details() {
   const { id } = useParams();
-  const wishlist = useSelector((state) => state.wishlist.value);
-  const cart = useSelector((state) => state.cart.value);
-  console.log("cart================>", cart);
+
   const transformVariants = useCallback((variants) => {
     const optionsMap = {};
 
@@ -56,27 +53,45 @@ export default function Details() {
 
     return newVariants;
   }, []);
-  const wished = wishlist.includes(+id);
-  console.log(wished);
+
   const [productDetails, setProductDetails] = useState({});
-  console.log(productDetails);
+
   const [largeImage, setLargeImage] = useState("");
-  const [size, setSize] = useState("");
+
   const [counter, setCounter] = useState(1);
   const [variant, setVariant] = useState({});
   const [open, setOpen] = useState(false);
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [reload, setReload] = useState(false);
   const [loading, setLoading] = useState(true);
-  const dispatch = useDispatch();
-  const [carts, setCarts] = useState([]);
-  useEffect(() => {
-    const fetchCart = async () => {
-      const cart = await getCart();
-      setCarts(cart);
-    };
-    fetchCart();
-  }, [cart]);
+  const { data: cartData } = useGetAllCartsQuery();
+  const cartItems = cartData?.data || [];
+  const [
+    addToCart,
+    {
+      isLoading: CartAddLoad,
+      isSuccess: isSuccessAddCart,
+      isError: isErrorAddCart,
+      data: addToCartData, // Contains the response from the mutation if successful
+      error: addCartError, // Capture the error object
+    },
+  ] = useAddToCartMutation();
+  const handleAddToCart = async (item) => {
+    try {
+      const response = await addToCart(item).unwrap(); // Unwrap to handle promise rejection
+
+      if (isSuccessAddCart) {
+        const message = `Added ${productDetails?.name} to cart!`;
+        notifySuccess(message);
+      }
+    } catch (error) {
+      if (isErrorAddCart) {
+        const errorMessage =
+          addCartError?.data?.message || "Failed to add to cart";
+        notifyError(errorMessage);
+      }
+    }
+  };
   const handleChange = ({ key, value }) => {
     setVariant((prev) => ({ ...prev, [key]: value }));
     console.log(key, value, "variantvariantvariantvariant", variant);
@@ -135,16 +150,10 @@ export default function Details() {
     }
   }, [newVariants]);
   useEffect(() => {
-    console.log(selectedVariantObject, "selectedVariantObject");
     selectedVariantObject?.gallery?.[0]
       ? setLargeImage(selectedVariantObject?.gallery?.[0])
       : setLargeImage(productDetails?.images?.[0]);
   }, [selectedVariantObject]);
-  // const selectedVariantObject = productDetails?.variants?.length?   variant?.length===newVariants.length? productDetails?.variants?.find(variantItem =>
-  //   variantItem.options.every(option =>
-  //     variant[option.option.name] === option.value.value
-  //   )
-  // ):null:null;
 
   return (
     <>
@@ -294,7 +303,9 @@ export default function Details() {
                                 padding: "4px 12px",
                                 borderRadius: "8px",
                                 opacity: isAvailable ? 1 : 0.7,
-                                textDecoration:isAvailable ?"none":"line-through",
+                                textDecoration: isAvailable
+                                  ? "none"
+                                  : "line-through",
                                 backgroundColor:
                                   variant?.[variantItem?.name] === ValueVariant
                                     ? "var(--brown)"
@@ -383,7 +394,7 @@ export default function Details() {
                   pointerEvents: counter < 1 ? "none" : "initial",
                 }}
                 disabled={
-                  productDetails?.variants?.length
+                  CartAddLoad || productDetails?.variants?.length
                     ? !selectedVariantObject ||
                       productDetails?.variants?.length < 1 ||
                       counter < 1 ||
@@ -396,68 +407,55 @@ export default function Details() {
                     toast.error("Out of stock");
                     return;
                   }
-                  let cartsFormBack = carts.map((item) => ({
-                    product: item?.product?.id,
-                    count: item.count,
-                    variant: +item?.variant?.id,
-                  }));
-                  let NewCarts = cartsFormBack?.filter((itemCart) =>
-                    itemCart.product != +id && itemCart.variant
-                      ? itemCart.variant != selectedVariantObject?.id
-                      : true
+                  let itemForCart = cartItems?.find(
+                    (cartItem) =>
+                      cartItem?.product.id == +id &&
+                      cartItem?.variant?.id == selectedVariantObject?.id
                   );
-
-                  setOpen(true);
-                  dispatch(
-                    cartActions.add({
-                      product: +id,
-                      count: counter,
-                      variant: +selectedVariantObject?.id,
-                    })
-                  );
-                  addToCart([
-                    ...NewCarts,
-                    {
-                      product: +id,
-                      count: counter,
-                      variant: selectedVariantObject?.id,
-                    },
-                  ]);
-                  // if (wished) {
-                  //   dispatch(cartActions.remove(+id));
-                  //   removeFromCart(+id);
-                  // } else {
-                  //   dispatch(cartActions.add({ id: +id, count: counter }));
-                  //   addToCart(+id, counter);
-                  // }
+                  let newCount = itemForCart
+                    ? Math.trunc(counter - itemForCart.count)
+                    : counter;
+                  if(newCount === 0) return 0;
+                     HandleMessageIsAuth(() =>
+                        handleAddToCart([
+                          {
+                            product: +id,
+                            count: newCount,
+                            variant: selectedVariantObject?.id,
+                          },
+                        ])
+                      )
+                  setOpen(true)  
                 }}
               >
                 <img src={cartImg} width="16px" alt="cart" />
-                <span>Add to cart</span>
+                {CartAddLoad ? (
+                  <Stack
+                    direction="row"
+                    justifyContent={"center"}
+                    gap={2}
+                    alignItems={"center"}
+                  >
+                    {" "}
+                    <CircularProgress
+                      color="inherit"
+                      size="1rem"
+                      sx={{ width: "12px" }}
+                    />{" "}
+                    Loading
+                  </Stack>
+                ) : (
+                  <span>Add to cart</span>
+                )}
               </button>
               <SingleProductModal
                 open={open}
                 handleClose={setOpen}
                 productDetails={productDetails}
+                cartItems={cartItems}
                 selectedVariantObject={selectedVariantObject}
               />
-              <img
-                alt="heart-icon"
-                src={wished ? fHeart : eHeart}
-                className={styles["heart-icon"]}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  if (wished) {
-                    dispatch(wishlistActions.remove(+id));
-                    removeFromWishlist(+id);
-                  } else {
-                    dispatch(wishlistActions.add(+id));
-                    addToWishlist(+id);
-                  }
-                }}
-                width="30px"
-                height="30px"
-              />
+              <WishlistProductDetails id={+id} />
             </div>
             <div
               style={{

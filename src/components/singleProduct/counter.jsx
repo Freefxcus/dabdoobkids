@@ -1,79 +1,50 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { cartActions } from "../../Redux/store";
-import { addToCart } from "../../utils/apiCalls";
+import { addToCart, getCart } from "../../utils/apiCalls";
 import { toast } from "react-toastify";
+import HandleMessageIsAuth from "../../utils/message";
 
-export default function Counter({ item,count,
-  setCount,selectedVariantObject}) {
-
-  const dispatch = useDispatch();
-console.log(selectedVariantObject,"selectedVariantObjectselectedVariantObjectselectedVariantObject");
-
-
-  const cart = useSelector((state) => state.cart.value);
-
+export default function Counter({
+  count,
+  CartAddLoad,
+  setCount,
+  handleUpdateQuantity,
+}) {
   const increment = () => {
     setCount((prev) => prev + 1);
-    let NewCarts = cart
-      ?.filter((itemCart) =>
-        +itemCart?.product != +item.id 
-      )
-    ;
-    dispatch(
-      cartActions.add({
-        product: item?.id,
-        count: count + 1,
-        variant: selectedVariantObject?.id,
-      })
-    );
-  
-
-    addToCart([
-      ...NewCarts,
-      {
-        product: item?.id,
-        count: count + 1,
-        variant: selectedVariantObject?.id,
-      },
-    ]);
+ 
   };
   const decrement = () => {
-    if(count==1) return toast.error("not allowed to decrement")
+    if (count == 1) return toast.error("not allowed to decrement");
     setCount((prev) => prev - 1);
-    let NewCarts = cart
-    ?.filter((itemCart) =>
-      +itemCart?.product != +item.id 
-    )
-  ;
-  dispatch(
-    cartActions.add({
-      product: item?.id,
-      count: count - 1,
-      variant:selectedVariantObject?.id,
-    })
-  );
-
-
-  addToCart([
-    ...NewCarts,
-    {
-      product: item?.id,
-      count: count - 1,
-      variant: selectedVariantObject?.id,
-    },
-  ]);
+ 
   };
 
-
-  
   return (
-    <div style={{display : "flex" , gap : "16px" , padding : "4px" , border :"1px solid var(--unicorn-silver)"}}>
-      <button style={{background : "white" , border : "none" , fontSize :"22px"}} disabled={count === 0} onClick={decrement}>
+    <div
+      style={{
+        display: "flex",
+        gap: "16px",
+        padding: "4px",
+        border: "1px solid var(--unicorn-silver)",
+      }}
+    >
+      <button
+        style={{ background: "white", border: "none", fontSize: "22px" }}
+        disabled={CartAddLoad || count <=1}
+        onClick={() => HandleMessageIsAuth(decrement)}
+      >
         -
       </button>
-      <span style={{fontSize :"22px"}}>{count}</span>
-      <button style={{background : "white" , border : "none" , fontSize : "22px"}} onClick={increment}>+</button>
+      <span style={{ fontSize: "22px" }}>{count}</span>
+      <button
+        disabled={CartAddLoad}
+        style={{ background: "white", border: "none", fontSize: "22px" }}
+        onClick={() => HandleMessageIsAuth(increment)}
+      >
+        +
+      </button>
     </div>
   );
 }

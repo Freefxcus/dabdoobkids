@@ -1,6 +1,8 @@
 import { createSlice, configureStore, combineReducers } from "@reduxjs/toolkit";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
+import { wishlistApi } from "./wishlistApi";
+import cartApi from "./cartApi";
 
 //* slices -------------------------------------------------------------------------------------------
 //& isUser
@@ -34,7 +36,8 @@ const userInfoSlice = createSlice({
       state.value = { ...state.value, ...action.payload };
     },
     remove(state) {
-      state.value = {};}
+      state.value = {};
+    },
   },
 });
 //& products
@@ -105,7 +108,10 @@ const persistConfig = {
   storage,
 };
 
+
 const rootReducer = combineReducers({
+  [wishlistApi.reducerPath]: wishlistApi.reducer,
+  [cartApi.reducerPath]: cartApi.reducer,
   sidebar: sidebarSlice.reducer,
   popup: popupSlice.reducer,
   userInfo: userInfoSlice.reducer,
@@ -113,13 +119,15 @@ const rootReducer = combineReducers({
   wishlist: wishlistSlice.reducer,
   cart: cartSlice.reducer,
 });
+
 const persistedReducer = persistReducer(persistConfig, rootReducer);
+
 export const store = configureStore({
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false,
-    }),
+    }).concat(cartApi.middleware, wishlistApi.middleware), // Add RTK-Query middleware here
 });
 export const persistor = persistStore(store);
 

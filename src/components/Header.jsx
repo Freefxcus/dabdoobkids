@@ -25,9 +25,9 @@ import brownBag from "../images/brown-bag.svg";
 import user from "../images/user.svg";
 import dabdoob from "../images/dabdoob.svg";
 import burger from "../images/burger.png";
-import { useDispatch, useSelector } from "react-redux";
-import { cartActions, wishlistActions } from "../Redux/store";
-import { getCart, getCategories, getSubCategories } from "../utils/apiCalls";
+import {  getCategories, getSubCategories } from "../utils/apiCalls";
+import { useGetAllCartsQuery } from "../Redux/cartApi";
+import { useGetAllWishListQuery } from "../Redux/wishlistApi";
 export default function Header({ setOpen }) {
   const debouncedHandleInputChange = useCallback(
     debounce((value) => {
@@ -37,9 +37,8 @@ export default function Header({ setOpen }) {
     }, 2000),
     []
   );
-  const wishlist = useSelector((state) => state.wishlist.value);
-  const cart = useSelector((state) => state.cart.value);
-  const [carts, setCarts] = useState([]);
+  
+
   const [dropDownType, setDropDownType] = useState();
   const [dropDown, setDropDown] = useState(false);
   const [isUser, setIsUser] = useState(false);
@@ -50,35 +49,12 @@ export default function Header({ setOpen }) {
   const [subCategories, setSubCategories] = useState([]);
   const myInputRef = useRef("");
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const [animation, setAnimation] = useState(false);
-  // For the first useEffect
-  useEffect(() => {
-    const fetchCart = async () => {
-      const cart = await getCart();
-      setCarts(cart);
-      if (cart?.length) {
-        cart.map((item) =>
-          dispatch(
-            cartActions.add({
-              product: item?.product?.id,
-              count: item.count,
-              variant: item?.variant?.id,
-            })
-          )
-        );
-      }
-    };
+  const {  data: cartData} = useGetAllCartsQuery()
+  const cartItems = cartData?.data || [];
+  const {  data: wishListData} = useGetAllWishListQuery()
+  const wishListItems = wishListData?.data?.[0]?.items || [];
 
-    fetchCart();
-  }, []);
-  useEffect(() => {
-    const fetchCart = async () => {
-      const cart = await getCart();
-      setCarts(cart);
-    };
-    fetchCart();
-  }, [cart]);
 
   useEffect(() => {
     const animationTimeoutId = setTimeout(() => {
@@ -297,7 +273,7 @@ export default function Header({ setOpen }) {
                     }}
                   />
                   <div className={`${styles.clickable} ${styles.badge}`}>
-                    {wishlist.length}
+                    {wishListItems?.length||0}
                   </div>
                 </>
               ) : (
@@ -332,7 +308,7 @@ export default function Header({ setOpen }) {
                     }}
                   />
                   <div className={`${styles.clickable} ${styles.badge}`}>
-                    {carts?.length || 0}
+                    {cartItems?.length || 0}
                   </div>
                 </>
               ) : (

@@ -23,11 +23,13 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  /* background-color: var(--white); */
+  
   position: absolute;
   top: 15px;
   right: 15px;
   cursor: pointer;
+  background-color: transparent;
+  border: none;
 }
 .tags-container{
    position: absolute;

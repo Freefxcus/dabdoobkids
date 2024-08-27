@@ -1,50 +1,24 @@
 import { useEffect, useState } from "react";
 import styles from "../styles/pages/Cart.module.css";
-import promo from "../images/promo.png";
-import x from "../images/x.png";
-import add from "../images/add.png";
-import edit from "../images/edit.png";
-import fedex from "../images/fedex.png";
 import dabdobkidz from "../images/dabdobkidz.png";
 import OrderCard from "../components/OrderCard";
-import Radio from "@mui/material/Radio";
-import RadioGroup from "@mui/material/RadioGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
 import Popup from "../components/Popup";
-import { useSelector } from "react-redux";
-import { getCart } from "../utils/apiCalls";
-import { use } from "i18next";
 import { useNavigate } from "react-router-dom";
 import CartProgress from "../components/CartProgress";
+import { useGetAllCartsQuery } from "../Redux/cartApi";
 export default function Cart() {
   
   const navigate = useNavigate();
   const [promocode, setPromocode] = useState("");
 
   const [open, setOpen] = useState(false);
-  const [cartChanged, setCartChanged] = useState(false);
+
   const [address, setAddress] = useState({});
   const [paymentOption, setPaymentOption] = useState("Credit Card"); // "Cash on Delivery"
-
-  const [cart, setCart] = useState([]);
-  useEffect(() => {
-    const fetchCart = async () => {
-      const cart = await getCart();
-      setCart(cart);
-    };
-    fetchCart();
-  }, []);
-
-  useEffect(() => {
-    const fetchCart = async () => {
-      const cart = await getCart();
-      setCart(cart);
-    };
-    fetchCart();
-  }, [cartChanged]);
-
-  console.log(cart, "cart123123123");
-  const totalPrice = cart?.reduce(
+  const {  data: cartData} = useGetAllCartsQuery()
+  const cartItems = cartData?.data || [];
+ 
+  const totalPrice = cartItems?.reduce(
     (acc, item) => acc + ((+item.variant.price||+item.product.price )* item.count),
     0
   );
@@ -62,7 +36,7 @@ export default function Cart() {
   };
   const requiredPriceForDiscount = (totalPrice / 3500) * 100;
   const messageforDiscount = generateDiscountMesage(totalPrice);
-  if (!cart) {
+  if (!cartItems) {
     return (
       <div
         style={{
@@ -113,12 +87,11 @@ export default function Cart() {
             {messageforDiscount}
           </h4>
         </div>
-        {cart?.map((item) => (
+        {cartItems?.map((item) => (
           <OrderCard
             item={item}
             editable={true}
-            allCarts={cart}
-            setCartChanged={setCartChanged}
+            allCarts={cartItems}
             totalPrice={totalPrice}
           />
         ))}

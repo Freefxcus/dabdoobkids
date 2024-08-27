@@ -95,7 +95,12 @@
   background-color: #9f9f9f99;
   cursor:default;
 }
-
+.heart-button{
+  width: auto ;
+  height: auto;
+  background-color: transparent;
+  border: none;
+}
 @media (max-width: 600px) {
   .container {
     gap: 20px;
