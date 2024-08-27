@@ -37,7 +37,7 @@ export default function Counter({
       >
         -
       </button>
-      <span style={{ fontSize: "22px" }}>{count}</span>
+      <span style={{ fontSize: "22px" }}>{+count||1}</span>
       <button
         disabled={CartAddLoad}
         style={{ background: "white", border: "none", fontSize: "22px" }}
