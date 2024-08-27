@@ -416,7 +416,7 @@ export default function Details() {
                     ? Math.trunc(counter - itemForCart.count)
                     : counter;
                   if(newCount === 0) return 0;
-                     HandleMessageIsAuth(() =>
+                     HandleMessageIsAuth(() =>{
                         handleAddToCart([
                           {
                             product: +id,
@@ -424,8 +424,9 @@ export default function Details() {
                             variant: selectedVariantObject?.id,
                           },
                         ])
+                         setOpen(true)  }
                       )
-                  setOpen(true)  
+                 
                 }}
               >
                 <img src={cartImg} width="16px" alt="cart" />
