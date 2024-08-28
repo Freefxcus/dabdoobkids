@@ -36,7 +36,7 @@ export default function Cart() {
   };
   const requiredPriceForDiscount = (totalPrice / 3500) * 100;
   const messageforDiscount = generateDiscountMesage(totalPrice);
-  if (!cartItems) {
+  if (!cartItems?.length) {
     return (
       <div
         style={{

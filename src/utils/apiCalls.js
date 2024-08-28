@@ -17,7 +17,7 @@ export const getProducts = async (page, all, category, brand, query) => {
   const params = {
     page,
     all,
-    items: 2, // example default value for item
+    // items: 2, // example default value for item
     category,
     brand,
     query,
