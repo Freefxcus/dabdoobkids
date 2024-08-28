@@ -28,7 +28,7 @@ export default function Category({ item }) {
       >
         <div style={{ display: "flex", flexDirection: "column", width: "50%" }}>
           <div className={styles.title}>{item.name}</div>
-          <div className={styles.subtitle}>2310 Product</div>
+          <div className={styles.subtitle}>{item?.productsCount} Product</div>
         </div>
 
         <CardMedia
