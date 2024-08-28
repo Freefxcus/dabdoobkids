@@ -6,7 +6,7 @@ import eHeart from "../images/empty-heart.svg";
 import fHeart from "../images/filled-heart.svg";
 
 import { useNavigate } from "react-router-dom";
-import { notifyError, notifySuccess } from "../utils/general.js";
+import { notifyError, notifySuccess, truncateText } from "../utils/general.js";
 import { CardMedia } from "@mui/material";
 import HandleMessageIsAuth from "../utils/message/index.js";
 import {
@@ -109,8 +109,8 @@ export default function ClothesCard({ item }) {
         </div>
       </div>
       <div className={styles["card-bottom"]}>
-        <div style={{ fontWeight: "600" }}>{item?.brand?.name}</div>
-        {/* <div>{truncateText( item?.description, 50)}</div> */}
+        <div style={{ fontWeight: "600" }}>{item?.name}</div>
+        <div>{truncateText( item?.description, 50)}</div>
         <div style={{ fontWeight: "bold" }}>${item?.price}</div>
       </div>
     </div>
