@@ -19,32 +19,27 @@ import { useDispatch } from "react-redux";
 import { cartActions } from "../Redux/store";
 import { Box } from "@mui/material";
 import CartProgress from "./CartProgress";
+import { useGetAllCartsQuery } from "../Redux/cartApi";
 
 export default function Cart({ toggleDrawer }) {
   const navigate = useNavigate();
   const [cart, setCart] = useState([]);
   const [checkout, setCheckout] = useState({});
-  console.log("checkout:", checkout);
   const [isChecking, seIsChecking] = useState(false);
   const [useWallet, setUseWallet] = useState(false);
   const [promocode, setPromocode] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("Credit Card");
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    getCart().then((res) => {
-      console.log(res);
-      console.log(res);
-      setCart(res);
-    });
-  }, []);
+  const { data: cartData,isLoading } = useGetAllCartsQuery();
+  const cartItems = cartData?.data || [];
+ 
 
   const totalPrice = useMemo(() => {
-    return cart?.reduce(
+    return cartItems?.reduce(
       (acc, item) => acc + item?.count *(+item?.variant?.price ||+item?.product?.price),
       0
     )||0;
-  }, [cart]);
+  }, [cartItems,isLoading]);
   
   const percentage = (totalPrice / 3500) * 100;
   const handleCheckout = () => {
@@ -86,7 +81,7 @@ export default function Cart({ toggleDrawer }) {
       <Box sx={{ mb: "24px" }}>
         <CartProgress percentage={percentage} value={totalPrice} />
       </Box>
-      {cart === undefined && (
+      {cartItems == undefined ||!cartItems&& (
         <div
           style={{
             width: "80%",
@@ -98,17 +93,17 @@ export default function Cart({ toggleDrawer }) {
           No items in your cart!
         </div>
       )}
-      {cart?.length === 0 && (
+      {isLoading && (
         <div style={{ width: "80%", color: "var(--brown)" }} spacing={2}>
           <LinearProgress color="inherit" />
         </div>
       )}
-      {cart?.length > 0 && (
+      {cartItems?.length > 0 && (
         <>
           <div
             style={{ display: "flex", flexDirection: "column", gap: "20px" }}
           >
-            {cart.map((item) => (
+            {cartItems.map((item) => (
               <>
                 <div
                   style={{

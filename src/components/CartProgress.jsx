@@ -1,7 +1,8 @@
 import { Box, Stack } from "@mui/material";
 
 export default function CartProgress({ value, percentage = "100%" }) {
-  console.log(percentage, "percentagesdad");
+
+  
   return (
     <Stack direction={"row"} gap={"24px"}>
       <span>{value}</span>

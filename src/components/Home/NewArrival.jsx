@@ -3,20 +3,28 @@ import styles from "../../styles/pages/Home.module.css";
 import ClothesCard from "../ClothesCard";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
+import { getProducts } from "../../utils/apiCalls";
 
-export default function NewArrival({ categories, products }) {
-  let selectedCate = categories?.filter((item, index) =>
-    products[0]?.category?.id
-      ? products.filter((product, i) => product?.category?.id == item?.id)
-          ?.length > 0
-      : false
-  );
+export default function NewArrival({ categories }) {
+  let selectedCate = categories?.filter((item, index) =>item?.productsCount > 0  );
   const [currentCat, setCurrentCat] = useState(selectedCate?.[0]);
+  const [products, setProducts] = useState([]);
   useEffect(() => {
-
     setCurrentCat(selectedCate?.[0]);
   }, []);
-
+ useEffect(() => {
+    getProducts(
+      1,
+      false,
+      currentCat?.id,
+      "",
+      ""
+    ).then((res) => {
+      console.log(res);
+      
+      setProducts(res?.products)
+    });
+  }, [currentCat]);
   return (
     <div className="padding-container section-bottom-margin">
       <div
@@ -50,21 +58,7 @@ export default function NewArrival({ categories, products }) {
       </div>
       <div className={styles["categories-container"]}>
         {categories?.map((item, index) =>
-          products[0]?.category?.id ? (
-            products.filter((product, i) => product?.category?.id == item?.id)
-              ?.length > 0 ? (
-              <div
-                className={
-                  item?.id === currentCat?.id
-                    ? styles["category-active"]
-                    : styles.category
-                }
-                onClick={() => setCurrentCat(item)}
-              >
-                {item?.name}
-              </div>
-            ) : null
-          ) : (
+          item?.productsCount > 0 ? (
             <div
               className={
                 item?.id === currentCat?.id
@@ -75,7 +69,7 @@ export default function NewArrival({ categories, products }) {
             >
               {item?.name}
             </div>
-          )
+          ) : null
         )}
       </div>
 
@@ -121,9 +115,7 @@ export default function NewArrival({ categories, products }) {
           }}
         >
           {/* .filter((item, i) => item?.category?.id === (currentCat?.id||1)) */}
-          {products
-            .filter((item, i) => item?.category?.id === (currentCat?.id || 1))
-            ?.map((item) => (
+          {products?.map((item) => (
               <SwiperSlide
                 style={{
                   display: "flex",
