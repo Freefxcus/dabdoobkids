@@ -43,8 +43,9 @@ export default function Cart({ toggleDrawer }) {
     return cart?.reduce(
       (acc, item) => acc + item?.count *(+item?.variant?.price ||+item?.product?.price),
       0
-    );
+    )||0;
   }, [cart]);
+  
   const percentage = (totalPrice / 3500) * 100;
   const handleCheckout = () => {
     const searchParams = new URLSearchParams({
