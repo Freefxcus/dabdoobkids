@@ -22,14 +22,17 @@
   display: inline-block;
   animation: ticker 15s linear infinite;
   height: 150px;
+  width: 250px;
+  object-fit: contain;
+  object-position: center;
   -webkit-animation: ticker 15s linear infinite;
 }
 @keyframes ticker {
   0% {
-    transform: translateX(1000%);
+    transform: translateX(500%);
   }
   100% {
-    transform: translateX(-1000%);
+    transform: translateX(-500%);
   }
 }
 .countdown-container {

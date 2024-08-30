@@ -134,12 +134,11 @@ export default function Home() {
     setState({ ...state, [anchor]: open });
   };
 
-
-console.log("categories",categories,"products",products);
+  console.log("categories", categories, "products", products);
 
   return (
     <>
-        {/* <Helmet>
+      {/* <Helmet>
         <title>{"metaData.title"}</title>
         <meta name="description" content={"metaData.description"} />
       </Helmet> */}
@@ -217,18 +216,19 @@ console.log("categories",categories,"products",products);
       </div>
       {/* ticker */}
       <div className={`${styles["image-ticker"]} section-bottom-margin`}>
-            {brands &&
-              brands.map(({ images, name, id }) => (
-                <img
-                  src={images[0]}
-                  alt={name}
-                  style={{cursor:"pointer"}}
-                  onClick={() => {
-                    navigate(`search/?brandId=${id}`);
-                  }}
-                />
-              ))}
-          </div>
+        {brands &&
+          brands.map(({ images, name, id }, index) => (
+            <img
+              key={index}
+              src={images[0]}
+              alt={name}
+              style={{ cursor: "pointer" }}
+              onClick={() => {
+                navigate(`search/?brandId=${id}`);
+              }}
+            />
+          ))}
+      </div>
       {/* daily sale */}
       <div className="padding-container section-bottom-margin">
         <div
@@ -261,17 +261,22 @@ console.log("categories",categories,"products",products);
         </div>
 
         <div className="cards_container_a">
-            {products?.filter((item, i) => item?.extraInfo?.sale)
-              .slice(0, mobile ? 2 : 4)
-              .map((item) => (
-                <ClothesCard item={item} />
-              ))}
+          {products
+            ?.filter((item, i) => item?.extraInfo?.sale)
+            .slice(0, mobile ? 2 : 4)
+            .map((item) => (
+              <ClothesCard item={item} />
+            ))}
         </div>
       </div>
       {/* Best Value offers */}
       <div className={"padding-container section-bottom-margin"}>
         <div className={styles["offers-container"]}>
-          <div className={`${styles["offers-title"]}  ${styles["offers-title-sub"]}`} >Dabdoob KIDZ</div>
+          <div
+            className={`${styles["offers-title"]}  ${styles["offers-title-sub"]}`}
+          >
+            Dabdoob KIDZ
+          </div>
           <div className={styles["offers-title"]}>Best Value offers</div>
           <div className="cards_container_c">
             {[
