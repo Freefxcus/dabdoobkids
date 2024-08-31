@@ -9,6 +9,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { set } from "lodash";
 import { CircularProgress, Stack } from "@mui/material";
 import { toast } from "react-toastify";
+import { useDeleteAllCartMutation } from "../../Redux/cartApi";
 
 
 export default function ConfirmPayment({ orderSummary, address,addressActive }) {
@@ -19,6 +20,7 @@ export default function ConfirmPayment({ orderSummary, address,addressActive }) 
   const [promoCode, setPromoCode] = useState("");
   const [paymentLink, setPaymentMethod] = useState("");
   const [loading, setLoading] = useState(false);
+  const [deleteAllCart] = useDeleteAllCartMutation();
   const validatePromoCode = async () => {
     checkPromoCode(promoCode);
   };
@@ -34,7 +36,7 @@ export default function ConfirmPayment({ orderSummary, address,addressActive }) 
 
     }else if (checkout?.data?.status === "success") {
       toast.success("Order Placed Successfully");
-      emptyCart().then(() => {
+      deleteAllCart().then(() => {
         navigate("/");
       })
     }
