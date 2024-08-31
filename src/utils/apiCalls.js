@@ -126,6 +126,22 @@ export const removeFromWishlist = async (id) => {
   return returnedValue; // caught by .then()
 };
 
+export const getBanners = async () => {
+  let returnedValue;
+
+  await instance
+    .get("/banners")
+    .then((response) => {
+      returnedValue = response?.data?.data;
+    })
+    .catch((error) => {
+      console.log(error, "banners");
+      // notifyError(error);
+    });
+
+  return returnedValue; // caught by .then()
+};
+
 export const getCart = async () => {
   let returnedValue;
 

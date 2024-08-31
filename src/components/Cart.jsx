@@ -19,28 +19,32 @@ import { useDispatch } from "react-redux";
 import { cartActions } from "../Redux/store";
 import { Box } from "@mui/material";
 import CartProgress from "./CartProgress";
-import { useGetAllCartsQuery } from "../Redux/cartApi";
+import {
+  useDeleteAllCartMutation,
+  useGetAllCartsQuery,
+} from "../Redux/cartApi";
 
 export default function Cart({ toggleDrawer }) {
   const navigate = useNavigate();
-  const [cart, setCart] = useState([]);
-  const [checkout, setCheckout] = useState({});
-  const [isChecking, seIsChecking] = useState(false);
   const [useWallet, setUseWallet] = useState(false);
   const [promocode, setPromocode] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("Credit Card");
   const dispatch = useDispatch();
-  const { data: cartData,isLoading } = useGetAllCartsQuery();
+  const { data: cartData, isLoading } = useGetAllCartsQuery();
   const cartItems = cartData?.data || [];
- 
+
+  const [deleteAllCart] = useDeleteAllCartMutation();
 
   const totalPrice = useMemo(() => {
-    return cartItems?.reduce(
-      (acc, item) => acc + item?.count *(+item?.variant?.price ||+item?.product?.price),
-      0
-    )||0;
-  }, [cartItems,isLoading]);
-  
+    return (
+      cartItems?.reduce(
+        (acc, item) =>
+          acc + item?.count * (+item?.variant?.price || +item?.product?.price),
+        0
+      ) || 0
+    );
+  }, [cartItems, isLoading]);
+
   const percentage = (totalPrice / 3500) * 100;
   const handleCheckout = () => {
     const searchParams = new URLSearchParams({
@@ -64,15 +68,7 @@ export default function Cart({ toggleDrawer }) {
         <div style={{ cursor: "pointer" }}>Your cart</div>
         <div
           style={{ color: "var(--error)", cursor: "pointer" }}
-          onClick={() => {
-            setCart([]);
-            emptyCart().then(() => {
-              setCart(undefined);
-              seIsChecking(false);
-            });
-            dispatch(cartActions.clearCart());
-            toggleDrawer();
-          }}
+          onClick={deleteAllCart}
         >
           Clear all
         </div>
@@ -81,18 +77,19 @@ export default function Cart({ toggleDrawer }) {
       <Box sx={{ mb: "24px" }}>
         <CartProgress percentage={percentage} value={totalPrice} />
       </Box>
-      {cartItems == undefined ||!cartItems&& (
-        <div
-          style={{
-            width: "80%",
-            color: "var(--brown)",
-            fontSize: "20px",
-            marginTop: "30px",
-          }}
-        >
-          No items in your cart!
-        </div>
-      )}
+      {cartItems == undefined ||
+        (!cartItems && (
+          <div
+            style={{
+              width: "80%",
+              color: "var(--brown)",
+              fontSize: "20px",
+              marginTop: "30px",
+            }}
+          >
+            No items in your cart!
+          </div>
+        ))}
       {isLoading && (
         <div style={{ width: "80%", color: "var(--brown)" }} spacing={2}>
           <LinearProgress color="inherit" />
@@ -165,7 +162,7 @@ export default function Cart({ toggleDrawer }) {
                             fontWeight: "600",
                           }}
                         >
-                          {+item?.variant?.price ||+item?.product?.price}
+                          {+item?.variant?.price || +item?.product?.price}
                         </span>
                         &nbsp; &nbsp;
                         <span

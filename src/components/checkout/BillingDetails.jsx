@@ -83,22 +83,27 @@ export default function BillingDetails({
           >
             Address
           </h3>
-          <button
-            style={{
-              backgroundColor: "var(--brown)",
+{/*         
+          {address?.items?.length?  <button
+              style={{
+              backgroundColor: "transparent",
               borderRadius: "12px",
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
+               border:"none",
+               marginInline:"8px"
             }}
             onClick={() => {
               setOpenAdd(true);
             }}
           >
-            <AddIcon sx={{ color: "#fff", cursor: "pointer" }} />
-          </button>
-        </div>
-        {address?.items?.length === 0 ? (
+            <AddIcon sx={{ color:  "var(--brown)", cursor: "pointer" }} />
+            </button>
+         :null }    */}
+                </div>
+        {
+          !address||address?.items?.length === 0 ? (
           <div
             style={{
               display: "flex",
@@ -123,17 +128,19 @@ export default function BillingDetails({
             />
             <button
               style={{
-              backgroundColor: "var(--brown)",
+              backgroundColor: "transparent",
               borderRadius: "12px",
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
+               border:"none",
+               marginInline:"8px"
             }}
             onClick={() => {
               setOpenAdd(true);
             }}
           >
-            <AddIcon sx={{ color: "#fff", cursor: "pointer" }} />
+            <AddIcon sx={{ color:  "var(--brown)", cursor: "pointer" }} />
             </button>
           </div>
         ) : (

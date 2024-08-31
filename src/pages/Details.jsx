@@ -353,8 +353,8 @@ export default function Details() {
               {selectedVariantObject
                 ? selectedVariantObject.stock > 10
                   ? null
-                  : `  Only  ${selectedVariantObject.stock} left in stock `
-                : "out of stock please select another option"}
+                  :<span style={{color:"orange"}}> Only  {selectedVariantObject.stock} left in stock </span>
+                :<span style={{color:"red"}}> out of stock </span> }
             </div>
             <div className={styles["row"]}>
               <div
@@ -478,6 +478,7 @@ export default function Details() {
       <Box
         sx={{
           mx: { xs: "20px", md: "40px", lg: "60px" },
+          mb:{ xs: "20px", md: "40px", lg: "60px" }
         }}
       >
         <Typography
