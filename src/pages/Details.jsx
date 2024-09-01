@@ -331,24 +331,7 @@ export default function Details() {
                     </Box>
                   ))
               : null}
-            <div
-              style={{
-                fontSize: "16px",
-                fontWeight: "600",
-                color: "var(--errie-black)",
-              }}
-            >
-              Description
-            </div>
-            <div
-              style={{
-                fontSize: "14px",
-                fontWeight: "500",
-                color: "var(--placeholder-text)",
-              }}
-            >
-              {productDetails.description}
-            </div>
+           
             <div className={styles["row"]}>
               {selectedVariantObject
                 ? selectedVariantObject.stock > 10
@@ -356,6 +339,7 @@ export default function Details() {
                   :<span style={{color:"orange"}}> Only  {selectedVariantObject.stock} left in stock </span>
                 :<span style={{color:"red"}}> out of stock </span> }
             </div>
+
             <div className={styles["row"]}>
               <div
                 className={styles["row"]}
@@ -457,6 +441,24 @@ export default function Details() {
                 selectedVariantObject={selectedVariantObject}
               />
               <WishlistProductDetails id={+id} />
+            </div>
+            <div
+              style={{
+                fontSize: "16px",
+                fontWeight: "600",
+                color: "var(--errie-black)",
+              }}
+            >
+              Description
+            </div>
+            <div
+              style={{
+                fontSize: "14px",
+                fontWeight: "500",
+                color: "var(--placeholder-text)",
+              }}
+            >
+              {productDetails.description}
             </div>
             <div
               style={{
