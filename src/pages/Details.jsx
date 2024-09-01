@@ -80,9 +80,13 @@ export default function Details() {
     try {
       const response = await addToCart(item).unwrap(); // Unwrap to handle promise rejection
 
-      if (isSuccessAddCart) {
+      if (response?.status==="success") {
         const message = `Added ${productDetails?.name} to cart!`;
         notifySuccess(message);
+      } if (response?.status!=="success") {
+        const errorMessage =
+          addCartError?.data?.message || "Failed to add to cart";
+        notifyError(errorMessage);
       }
     } catch (error) {
       if (isErrorAddCart) {
@@ -378,12 +382,13 @@ export default function Details() {
                   pointerEvents: counter < 1 ? "none" : "initial",
                 }}
                 disabled={
-                  CartAddLoad || productDetails?.variants?.length
-                    ? !selectedVariantObject ||
+                  CartAddLoad ||
+                   selectedVariantObject?.stock==0|| 
+                     !selectedVariantObject ||
                       productDetails?.variants?.length < 1 ||
                       counter < 1 ||
                       counter > selectedVariantObject?.stock
-                    : false
+                   
                 }
                 onClick={(e) => {
                   e.stopPropagation();

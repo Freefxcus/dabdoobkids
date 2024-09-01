@@ -3,6 +3,7 @@ import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import { wishlistApi } from "./wishlistApi";
 import cartApi from "./cartApi";
+import AddressApi from "./AddressApi";
 
 //* slices -------------------------------------------------------------------------------------------
 //& isUser
@@ -111,7 +112,7 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
   [wishlistApi.reducerPath]: wishlistApi.reducer,
-  [cartApi.reducerPath]: cartApi.reducer,
+  [cartApi.reducerPath]: cartApi.reducer, [AddressApi.reducerPath]: AddressApi.reducer,
   sidebar: sidebarSlice.reducer,
   popup: popupSlice.reducer,
   userInfo: userInfoSlice.reducer,
