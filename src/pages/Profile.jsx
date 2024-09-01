@@ -99,7 +99,7 @@ export default function Profile() {
   useEffect(() => {
     //* profile
     instance
-      .get("/auth/profile", {
+      .get("/profile", {
         // params: { page: 1 },
       })
       .then((response) => {

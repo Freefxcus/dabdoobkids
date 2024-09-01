@@ -7,8 +7,10 @@
   justify-content: space-between;
   gap: 10px;
   max-width: 500px;
+  margin: auto;
   width: 90%;
   height: 90%;
+  max-height: 400px;
 }
 .card_container {
   background-color: var(--white);
@@ -70,6 +72,7 @@
   padding: 13px;
   border-radius: 10px;
   border: none;
+  max-height: 3rem;
 }
 .grey_button {
   cursor: pointer;
@@ -174,9 +177,18 @@
 .error {
   color: var(--error);
 }
+.row{
+  display: flex; 
+  width: 100%;
+  /* flex-wrap: wrap; */
+  gap: 10px;
+  align-items: center;
+  flex-direction: row;
+}
 /* Media query for screens smaller than 600px (e.g., smartphones) */
 @media (max-width: 600px) {
   .form_container {
+    max-height: 600px;
     width: 250px;
   }
   .card_container {
@@ -185,6 +197,7 @@
   .semi_item {
     width: 100%;
   }
+  .row{flex-direction: column;}
 }
 
 /* Media query for screens between 601px and 900px (e.g., tablets) */
@@ -192,6 +205,9 @@
   .semi_item {
     width: 100%;
   }
+  .row{flex-direction: column;}
+  .form_container {
+    max-height: 600px;}
 }
 
 /* Media query for screens between 901px and 1200px (e.g., larger tablets and small desktops) */

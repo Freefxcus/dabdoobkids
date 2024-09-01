@@ -9,15 +9,20 @@ import { Box, Modal } from "@mui/material";
 import { updateProfile } from "../../utils/apiCalls.js";
 import { toast } from "react-toastify";
 import CircularProgress from "@mui/material/CircularProgress";
-import CloseIcon from '@mui/icons-material/Close';
-export default function UpdateProfileModal({ ProfileData, open, setOpen ,setForceReload  }) {
+import CloseIcon from "@mui/icons-material/Close";
+export default function UpdateProfileModal({
+  ProfileData,
+  open,
+  setOpen,
+  setForceReload,
+}) {
   const onSubmit = async (values) => {
     console.log(ProfileData, "profileData13123");
     const resUpdateProfile = await updateProfile(values);
     console.log(resUpdateProfile, "resUpdateProfile");
-    if (resUpdateProfile === "success"){
+    if (resUpdateProfile === "success") {
       toast.success("Profile Updated Successfully");
-        setForceReload((prev) => !prev);
+      setForceReload((prev) => !prev);
     }
     setOpen(false);
   };
@@ -41,55 +46,65 @@ export default function UpdateProfileModal({ ProfileData, open, setOpen ,setForc
     <Modal open={open}>
       <Box sx={style} className={styles.form_container}>
         <form className={styles.form_container} onSubmit={handleSubmit}>
-          <div style={{display : "flex" , justifyContent : "space-between"}} className={`${styles.title} ${styles.item}`}>Profile
-          <CloseIcon onClick={() => setOpen(false)} className={styles.close_icon} />
+          <div
+            style={{ display: "flex", justifyContent: "space-between" }}
+            className={`${styles.title} ${styles.item}`}
+          >
+            Profile
+            <CloseIcon
+              onClick={() => setOpen(false)}
+              className={styles.close_icon}
+            />
           </div>
-          {/* first name */}
-          <div className={styles.semi_item}>
-            <div className={`${styles.label} ${styles.item}`}>
-              <span>First Name</span>
-              <span className={styles.error}> *</span>
-              {errors.firstName && touched.firstName && (
-                <span className="error">{errors.firstName}</span>
-              )}
-            </div>
-            <input
-              value={values.firstName}
-              onChange={handleChange}
-              id="firstName"
-              type="firstName"
-              onBlur={handleBlur}
-              className={
-                errors.firstName && touched.firstName
-                  ? `${styles.input} ${styles.item} ${styles.bottom_margin} input-error`
-                  : `${styles.input} ${styles.item} ${styles.bottom_margin}`
-              }
-              placeholder="Your first name"
-            ></input>
-          </div>
+          <div className={styles.row}>
+            {/* first name */}
 
-          {/* last name */}
-          <div className={styles.semi_item}>
-            <div className={`${styles.label} ${styles.item}`}>
-              <span>Last Name</span>
-              <span className={styles.error}> *</span>
-              {errors.lastName && touched.lastName && (
-                <span className="error">{errors.lastName}</span>
-              )}
+            <div className={styles.semi_item}>
+              <div className={`${styles.label} ${styles.item}`}>
+                <span>First Name</span>
+                <span className={styles.error}> *</span>
+                {errors.firstName && touched.firstName && (
+                  <span className="error">{errors.firstName}</span>
+                )}
+              </div>
+              <input
+                value={values.firstName}
+                onChange={handleChange}
+                id="firstName"
+                type="firstName"
+                onBlur={handleBlur}
+                className={
+                  errors.firstName && touched.firstName
+                    ? `${styles.input} ${styles.item} ${styles.bottom_margin} input-error`
+                    : `${styles.input} ${styles.item} ${styles.bottom_margin}`
+                }
+                placeholder="Your first name"
+              ></input>
             </div>
-            <input
-              value={values.lastName}
-              onChange={handleChange}
-              id="lastName"
-              type="lastName"
-              onBlur={handleBlur}
-              className={
-                errors.lastName && touched.lastName
-                  ? `${styles.input} ${styles.item} ${styles.bottom_margin} input-error`
-                  : `${styles.input} ${styles.item} ${styles.bottom_margin}`
-              }
-              placeholder="Your last name"
-            ></input>
+
+            {/* last name */}
+            <div className={styles.semi_item}>
+              <div className={`${styles.label} ${styles.item}`}>
+                <span>Last Name</span>
+                <span className={styles.error}> *</span>
+                {errors.lastName && touched.lastName && (
+                  <span className="error">{errors.lastName}</span>
+                )}
+              </div>
+              <input
+                value={values.lastName}
+                onChange={handleChange}
+                id="lastName"
+                type="lastName"
+                onBlur={handleBlur}
+                className={
+                  errors.lastName && touched.lastName
+                    ? `${styles.input} ${styles.item} ${styles.bottom_margin} input-error`
+                    : `${styles.input} ${styles.item} ${styles.bottom_margin}`
+                }
+                placeholder="Your last name"
+              ></input>
+            </div>
           </div>
           {/* phone */}
           <div className={styles.item}>
@@ -100,7 +115,7 @@ export default function UpdateProfileModal({ ProfileData, open, setOpen ,setForc
                 <span className="error">{errors.phone}</span>
               )}
             </div>
-            {/* <PhoneInput
+            <PhoneInput
               className={
                 errors.phone && touched.phone
                   ? `phone-input-error`
@@ -120,7 +135,7 @@ export default function UpdateProfileModal({ ProfileData, open, setOpen ,setForc
               id="phone"
               type="phone"
               onBlur={handleBlur}
-            /> */}
+            />
           </div>
           {/* email*/}
           <div className={styles.item}>

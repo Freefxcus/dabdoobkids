@@ -485,7 +485,7 @@ export const updateProfile = async (data) => {
   let returnedValue;
 
   await instance
-    .post(`/auth/profile`, data)
+    .post(`/profile`, data)
     .then((response) => {
       console.log(response);
       returnedValue = response.data.status;
