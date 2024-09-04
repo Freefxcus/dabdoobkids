@@ -74,7 +74,7 @@ export default function BannerSwiper() {
               to={item?.url}
               sx={{
                 backgroundImage: `url(${item?.image})`,
-                backgroundSize: "contain",
+                backgroundSize: "cover",
                 backgroundPosition: "center",
                 backgroundRepeat: "no-repeat",
                 height: "100%",
