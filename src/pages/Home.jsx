@@ -41,6 +41,7 @@ import CartProgress from "../components/CartProgress.jsx";
 import BannerSwiper from "../components/Home/BannerSwiper.jsx";
 import NewArrival from "../components/Home/NewArrival.jsx";
 import { Helmet } from "react-helmet";
+import BrandsSwiper from "../components/Home/BrandsSwiper.jsx";
 
 export default function Home() {
   const mobile = useMediaQuery("(max-width:300px)");
@@ -109,7 +110,7 @@ export default function Home() {
     //* brands
     instance
       .get("/brands", {
-        // params: { page: 1 },
+        params: { limit: 100 },
       })
       .then((response) => {
         console.log(response?.data?.data?.brands, "brandsasdasdsdasd");
@@ -216,18 +217,7 @@ export default function Home() {
       </div>
       {/* ticker */}
       <div className={`${styles["image-ticker"]} section-bottom-margin`}>
-        {brands &&
-          brands.map(({ images, name, id }, index) => (
-            <img
-              key={index}
-              src={images[0]}
-              alt={name}
-              style={{ cursor: "pointer" }}
-              onClick={() => {
-                navigate(`search/?brandId=${id}`);
-              }}
-            />
-          ))}
+       <BrandsSwiper />
       </div>
       {/* daily sale */}
       <div className="padding-container section-bottom-margin">
