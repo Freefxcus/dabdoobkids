@@ -14,7 +14,7 @@ export default function BrandsSwiper() {
   useEffect(() => {
     instance
       .get("/brands", {
-        //   params: { limit: 100 },
+          params: { limit: 50 },
       })
       .then((response) => {
         setBrands(response?.data?.data?.brands);

@@ -6,19 +6,19 @@ import "swiper/css/navigation";
 import { Autoplay, Pagination, Navigation } from "swiper/modules";
 import banner1 from "../../images/banner1.png";
 import banner2 from "../../images/banner2.png";
-import arrow from "../../images/arrow.svg";
-import Star from "../../components/Star";
-
 import { useEffect, useState } from "react";
 import CountdownTimer from "../CountdownTimer";
 import { Box, Typography } from "@mui/material";
 import { getBanners } from "../../utils/apiCalls";
+import { useNavigate,Link } from "react-router-dom";
 
 export default function BannerSwiper() {
   const bannerImages = [banner1, banner2];
   const [banners, setBanners] = useState([]);
   const [loading, setLoading] = useState(true); // To handle the loading state
   const [error, setError] = useState(null); // To handle the error state
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchBanners = async () => {
@@ -69,9 +69,13 @@ export default function BannerSwiper() {
         {banners?.categories.length? banners?.categories.map((item, index) => (
           <SwiperSlide>
             <Box
+             
+              component={Link}
+              to={item?.url}
               sx={{
                 backgroundImage: `url(${item?.image})`,
-                backgroundSize: "cover",
+                backgroundSize: "contain",
+                backgroundPosition: "center",
                 backgroundRepeat: "no-repeat",
                 height: "100%",
                 width: "100%",
