@@ -80,7 +80,7 @@ export default function BannerSwiper() {
                 alignItems: "center",
               }}
             >
-              <Box>
+              {/* <Box>
                 <Typography
                   variant="h1"
                   sx={{
@@ -109,7 +109,7 @@ export default function BannerSwiper() {
                   Make yourself look different without old-fashioned clothes and
                   impress others
                 </Typography>
-              </Box>
+              </Box> */}
             </Box>
           </SwiperSlide>
         )):bannerImages.map((img, index) => (
