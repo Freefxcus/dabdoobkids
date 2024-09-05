@@ -28,11 +28,10 @@
   object-position: center;
 }
 
-.image-ticker .swiper-slide {
-  height: 150px !important;
-  width: 250px !important;
-
-}
+.image-ticker .swiper-slide{
+  width: fit-content;
+ }
+ 
 .brand-slide {
   height: 150px !important;
   width: 250px !important;

@@ -3,7 +3,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-import { Autoplay, Pagination, Navigation } from "swiper/modules";
+import { Autoplay, Pagination,  } from "swiper/modules";
 import banner1 from "../../images/banner1.png";
 import banner2 from "../../images/banner2.png";
 import { useEffect, useState } from "react";
@@ -58,13 +58,13 @@ export default function BannerSwiper() {
         pagination={{
           clickable: true,
         }}
-        
+        speed={2000}
+        loop
         autoplay={{
           delay: 2000,
           disableOnInteraction: false,
         }}
         modules={[Autoplay, Pagination]}
-        // onSlideChange={(e) => setActiveSlide(e.activeIndex)}
       >
         
         {banners?.categories.length? banners?.categories.map((item, index) => (

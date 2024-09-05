@@ -6,65 +6,95 @@ import "swiper/css/navigation";
 import { Autoplay, Pagination, Navigation } from "swiper/modules";
 import { useNavigate } from "react-router-dom";
 import instance from "../../utils/interceptor";
-import styles from "../../styles/pages/Home.module.css";
+
 export default function BrandsSwiper() {
   const [brands, setBrands] = useState([]);
-
+  const [loading, setLoading] = useState(true); // To handle the loading state
+  const [error, setError] = useState(null);
+  const [limit, setLimit] = useState(() => Math.ceil(window.innerWidth / 300));
   const navigate = useNavigate();
+
   useEffect(() => {
-    instance
-      .get("/brands", {
+    const fetchBanners = async () => {
+      try {
+        const response = await instance.get("/brands", {
           params: { limit: 50 },
-      })
-      .then((response) => {
+        });
         setBrands(response?.data?.data?.brands);
-      })
-      .catch(() => {});
+      } catch (err) {
+        console.error("Failed to fetch banners:", err);
+        setError(err); // Notify the error if needed
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBanners();
   }, []);
+
+  // Update the limit on window resize
+  useEffect(() => {
+    const handleResize = () => {
+      setLimit(Math.ceil(window.innerWidth / 300));
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>; // Show a loading indicator
+  }
+
+  if (error) {
+    return <div>Error loading banners</div>; // Show an error message
+  }
+
+  const repeatCount = Math.ceil(limit / brands.length);
+
+  // Create a new array with the repeated brands
+  const newBrands = [...Array(repeatCount)].flatMap(() => brands);
+
   return (
     <Swiper
       className="mySwiper"
-      slidesPerView={"auto"}
-      centeredSlides={true}
-      loop={true}
-      spaceBetween={1}
-      grabCursor={true}
-      speed={5000}
-      pagination={{
-        clickable: true,
-      }}
+      slidesPerView={limit}
+      speed={10000}
       autoplay={{
         delay: 0,
+        disableOnInteraction: false,
       }}
-      modules={[Autoplay, Pagination]}
-      // onSlideChange={(e) => setActiveSlide(e.activeIndex)}
+      modules={[Autoplay, Pagination, Navigation]}
+      // pagination={{ clickable: true }}
+      loop={true}
     >
-      {" "}
-      {brands &&
-        brands.map(({ images, name, id }, index) => (
-          <SwiperSlide
-            key={index}
-            className={styles["brand-slide"]}
-            style={{
-              width: "150px !important",
-              height: "250px !important",
-              position: "relative",
-            }}
-          >
-            <img
-              src={images[0]}
-              alt={name}
-              style={{
-                cursor: "pointer",
-                objectFit: "contain",
-                objectPosition: "center",
-              }}
-              onClick={() => {
-                navigate(`search/?brandId=${id}`);
-              }}
-            />
-          </SwiperSlide>
-        ))}
+      <div className="swiper-container" style={{ width: "100%" }}>
+        {brands?.length
+          ? newBrands.map(({ images, name, id }, index) => (
+              <SwiperSlide
+                key={index}
+                style={{
+                  width: "fit-content !important",
+                }}
+              >
+                <div style={{ width: "250px", height: "150px" }}>
+                  <img
+                    src={images[0]}
+                    alt={name}
+                    style={{
+                      cursor: "pointer",
+                      objectFit: "contain",
+                      objectPosition: "center",
+                    }}
+                    onClick={() => {
+                      navigate(`search/?brandId=${id}`);
+                    }}
+                  />
+                </div>
+              </SwiperSlide>
+            ))
+          : null}
+      </div>
     </Swiper>
   );
 }

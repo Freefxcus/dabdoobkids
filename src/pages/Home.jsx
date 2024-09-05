@@ -50,15 +50,7 @@ export default function Home() {
   const [reload, setReload] = useState(false);
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
-  const [brands, setBrands] = useState([]);
-  const [activeSlide, setActiveSlide] = useState(0);
 
-  // let repeatedBands = [];
-  // if (brands?.array?.length) {
-  //   for (let i = 1; i <= 100; i++) {
-  //     repeatedBands = [...repeatedBands, ...brands.array];
-  //   }
-  // }
 
   const navigate = useNavigate();
   const isUser = localStorage.getItem("access_token");
@@ -107,16 +99,7 @@ export default function Home() {
       .catch((err) => {
         notifyError(err);
       });
-    //* brands
-    instance
-      .get("/brands", {
-        params: { limit: 100 },
-      })
-      .then((response) => {
-        console.log(response?.data?.data?.brands, "brandsasdasdsdasd");
-        setBrands(response?.data?.data?.brands);
-      })
-      .catch(() => {});
+  
   }, [reload]);
   const dispatch = useDispatch();
 
