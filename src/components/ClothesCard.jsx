@@ -109,8 +109,8 @@ export default function ClothesCard({ item }) {
         </div>
       </div>
       <div className={styles["card-bottom"]}>
+      <div style={{ fontWeight: "500",fontSize:"0.875rem",color:"rgba(27, 27, 27, 0.70)" }}>{item?.brand?.name}</div>
         <div style={{ fontWeight: "600" }}>{item?.name}</div>
-        <div>{truncateText( item?.description, 20)}</div>
         <div style={{ fontWeight: "bold" }}>${item?.price}</div>
       </div>
     </div>

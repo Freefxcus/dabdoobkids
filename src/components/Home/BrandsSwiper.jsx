@@ -18,7 +18,7 @@ export default function BrandsSwiper() {
     const fetchBanners = async () => {
       try {
         const response = await instance.get("/brands", {
-          params: { limit: 50 },
+          params: { items: 50, },
         });
         setBrands(response?.data?.data?.brands);
       } catch (err) {

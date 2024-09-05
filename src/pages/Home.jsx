@@ -42,6 +42,7 @@ import BannerSwiper from "../components/Home/BannerSwiper.jsx";
 import NewArrival from "../components/Home/NewArrival.jsx";
 import { Helmet } from "react-helmet";
 import BrandsSwiper from "../components/Home/BrandsSwiper.jsx";
+import DailySaleComponent from "../components/Home/DailySaleComponent.jsx";
 
 export default function Home() {
   const mobile = useMediaQuery("(max-width:300px)");
@@ -203,45 +204,7 @@ export default function Home() {
        <BrandsSwiper />
       </div>
       {/* daily sale */}
-      <div className="padding-container section-bottom-margin">
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "10px",
-            marginBottom: "20px",
-          }}
-        >
-          <div>
-            <div className={styles.title} style={{ marginBottom: "5px" }}>
-              Daily Sale
-            </div>
-            <CountdownTimer hours={5} minutes={30} seconds={20} type="b" />
-          </div>
-          <Star type="b" />
-          <div
-            style={{
-              marginLeft: "auto",
-              color: "var(--brown)",
-              fontSize: "14px",
-              cursor: "pointer",
-              textAlign: "center",
-              whiteSpace: "nowrap",
-            }}
-          >
-            All Collections
-          </div>
-        </div>
-
-        <div className="cards_container_a">
-          {products
-            ?.filter((item, i) => item?.extraInfo?.sale)
-            .slice(0, mobile ? 2 : 4)
-            .map((item) => (
-              <ClothesCard item={item} />
-            ))}
-        </div>
-      </div>
+      <DailySaleComponent categories={categories} />  
       {/* Best Value offers */}
       <div className={"padding-container section-bottom-margin"}>
         <div className={styles["offers-container"]}>

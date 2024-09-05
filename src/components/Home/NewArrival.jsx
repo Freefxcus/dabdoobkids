@@ -4,11 +4,13 @@ import ClothesCard from "../ClothesCard";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import { getProducts } from "../../utils/apiCalls";
+import { useNavigate } from "react-router-dom";
 
 export default function NewArrival({ categories }) {
   let selectedCate = categories?.filter((item, index) =>item?.productsCount > 0  );
   const [currentCat, setCurrentCat] = useState(selectedCate?.[0]);
   const [products, setProducts] = useState([]);
+  const navigate=useNavigate()
   useEffect(() => {
     setCurrentCat(selectedCate?.[0]);
   }, []);
@@ -38,7 +40,8 @@ export default function NewArrival({ categories }) {
         <div className={styles.title} style={{ marginBottom: "0" }}>
           New arrivals
         </div>
-        <div
+        <div 
+          onClick={() => navigate("/search")}
           style={{
             color: "var(--brown)",
             fontSize: "14px",

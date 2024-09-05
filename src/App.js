@@ -85,7 +85,7 @@ function App() {
                   />
                   <Route
                     path="/categories"
-                    element={<ProtectedRoute element={Categories} />}
+                    element={<Categories />}
                   />
                   <Route
                     path="/wishlist"
