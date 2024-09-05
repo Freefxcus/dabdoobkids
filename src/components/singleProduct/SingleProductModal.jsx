@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useAddToCartMutation } from "../../Redux/cartApi";
 import { notifyError, notifySuccess } from "../../utils/general";
+import { TickCircle } from "iconsax-react";
 
 export default function SingleProductModal({
   open,
@@ -62,14 +63,19 @@ export default function SingleProductModal({
             style={{
               width: "100%",
               margin: "6px",
+              maxWidth: "550px",
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",
             }}
           >
             <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <h2 style={{ marginBottom: "16px", fontWeight: "500" }}>
-                Added to Cart
+              <h2 style={{ marginBottom: "16px", fontWeight: "500", display: "flex", alignItems: "center" }}>
+                <TickCircle
+                  size="32"
+                  color="#039855"
+                  variant="Bulk"
+                />  Added to Cart
               </h2>
               <span
                 style={{ cursor: "pointer" }}
@@ -90,36 +96,38 @@ export default function SingleProductModal({
                   display: "flex",
                   flexDirection: "column",
                   justifyContent: "space-between",
-                  flex: 2,
+                  flex: 3,
                 }}
               >
                 <div>
                   <h2
                     style={{
-                      fontWeight: "500",
+                      fontWeight: "500", color: "rgba(27, 27, 27, 0.70)",
+                      fontSize: " 0.875rem"
+                    }}
+                  >
+                    {productDetails?.category?.name}
+                  </h2>
+                
+                  <h2
+                     style={{
+                      fontWeight: "600", color: "#1B1B1B",
+                      fontSize: "1rem"
                     }}
                   >
                     {productDetails?.name}
                   </h2>
                 </div>
-                <div>
-                  <h5
-                    style={{
-                      fontSize: "14px",
-                      fontWeight: "500",
-                      whiteSpace: "pre-wrap",
-                      color: "var(--placeholder-text)",
-                    }}
-                  >
-                    {productDetails?.description}
-                  </h5>
-                </div>
+
                 <div
                   style={{
                     display: "flex",
                     justifyContent: "space-between",
                     alignItems: "center",
                     width: "100%",
+                    maxHeight:"1.875rem",
+                      fontWeight: "800", color: "#1B1B1B",
+                      fontSize: "1rem"
                   }}
                 >
                   <Counter
@@ -147,10 +155,10 @@ export default function SingleProductModal({
               <h2>
                 {count
                   ? Math.trunc(
-                      +count *
-                        (+selectedVariantObject?.price ||
-                          +productDetails?.price)
-                    )
+                    +count *
+                    (+selectedVariantObject?.price ||
+                      +productDetails?.price)
+                  )
                   : null}
                 $
               </h2>

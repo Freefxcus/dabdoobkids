@@ -58,10 +58,11 @@ export default function BannerSwiper() {
         pagination={{
           clickable: true,
         }}
-        // autoplay={{
-        //   delay: 2000,
-        //   disableOnInteraction: false,
-        // }}
+        
+        autoplay={{
+          delay: 2000,
+          disableOnInteraction: false,
+        }}
         modules={[Autoplay, Pagination]}
         // onSlideChange={(e) => setActiveSlide(e.activeIndex)}
       >
