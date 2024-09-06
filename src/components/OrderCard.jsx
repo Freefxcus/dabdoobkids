@@ -8,13 +8,14 @@ import EditModal from "./cart/EditModal";
 import { useDispatch, useSelector } from "react-redux";
 
 import { useAddToCartMutation } from "../Redux/cartApi";
-import { notifyError, notifySuccess } from "../utils/general";
+import { calcDiscount, notifyError, notifySuccess } from "../utils/general";
+import { Trash } from "iconsax-react";
 export default function OrderCard({
   editable,
   item,
   allCarts,
   setCartChanged,
-  totalPrice,
+  
 }) {
   const { product, variant } = item;
   const dispatch = useDispatch();
@@ -58,105 +59,243 @@ export default function OrderCard({
     setProductCount((prev) => prev - 1);
     handleUpdateQuantity(productCount - 1);
   };
+  const finalPrice = calcDiscount(item?.variant, item?.product);
+
+  const totalPrice =item?.count * (finalPrice.discount?finalPrice.priceAfter:finalPrice.price)
 
   return (
-    // <div className={styles.container}>
-    <div style={{ display: "flex", flexDirection: "column" }}>
-      <div
-        className={styles.container}
-        style={{
-          justifyContent: "space-between",
-          paddingBottom: "20px",
-          borderBottom: " 0.5px solid #E8E8E8",
-        }}
-      >
+    <>
+      <div style={{ flexDirection: "column" }} className={styles.forDesktop}>
         <div
+          className={styles.container}
           style={{
-            display: "flex",
-            flexWrap: "wrap",
-            gap: "10px",
+            justifyContent: "space-between",
+            paddingBottom: "20px",
+            borderBottom: " 0.5px solid #E8E8E8",
           }}
         >
-          <img src={product?.images[0]} alt="product" className={styles.img} />
-          <div className={styles.column}>
-            <div className={styles.column}>
-              <div className={styles.category}>Spring Collection</div>
-              <div className={styles.title}>{product.name}</div>
-            </div>
-            <div className={`${styles.row} ${styles.subtitle}`}>
-              <div></div>
-
-              {variant?.options.length
-                ? variant?.options?.map((variantItem, index) => (
-                    <div
-                      key={index + variantItem?.id}
-                      className={styles.row}
-                      style={{ gap: "0" }}
-                    >
-                      <span>{variantItem?.option?.name} : </span>
-                      <span
-                        style={{
-                          marginLeft: "6px",
-                          marginRight: "6px",
-                          textTransform: "capitalize",
-                        }}
-                        className={styles.size}
-                      >
-                        {variantItem?.value?.value}
-                      </span>
-                    </div>
-                  ))
-                : null}
-            </div>
-          </div>
-        </div>
-        <div style={{ display: "flex", gap: "10px" }}>
-          <img
-            onClick={() => {
-              setOpenDelete(true);
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: "10px",
             }}
-            src="./remove.svg"
-            alt="remove"
-            style={{ cursor: "pointer" }}
-          />
-
-          <DeleteModal
-            open={openDelete}
-            setOpen={setOpenDelete}
-            id={item.id}
-            ProductId={product?.id}
-            variantId={variant?.id}
-         
-          />
-        </div>
-        {/* <div className={styles.number} style={{ marginLeft: "auto" }}> */}
-        <div className={styles.column}>
-          <span>price</span>
-          <div style={{ alignSelf: "center" }} className={styles.number}>
-            <div>{productCount}</div>
-            <div>x</div>
-            <div>{+variant?.price || +product.price}$</div>
+          >
+            <img
+              src={product?.images[0]}
+              alt="product"
+              className={styles.img}
+            />
+            <div className={styles.column}>
+              <div className={styles.column}>
+                {/* <div className={styles.category}>{product?.brand?.name}</div> */}
+                <div className={styles.title}>{product.name}</div>
+              </div>
+              <div className={`${styles.row} ${styles.subtitle}`}>
+                {variant?.options.length
+                  ? variant?.options?.map((variantItem, index) => (
+                      <div
+                        key={index + variantItem?.id}
+                        className={styles.row}
+                        style={{ gap: "0" }}
+                      >
+                        <span>{variantItem?.option?.name} : </span>
+                        <span
+                          style={{
+                            marginLeft: "6px",
+                            marginRight: "6px",
+                            textTransform: "capitalize",
+                          }}
+                          className={styles.size}
+                        >
+                          {variantItem?.value?.value}
+                        </span>
+                      </div>
+                    ))
+                  : null}
+              </div>
+            </div>
           </div>
-          <div></div>
-        </div>
+          <div style={{ display: "flex", gap: "10px" }}>
+            <img
+              onClick={() => {
+                setOpenDelete(true);
+              }}
+              src="./remove.svg"
+              alt="remove"
+              style={{ cursor: "pointer" }}
+            />
 
-        <div className={styles.column}>
-          <span>Quantity</span>
-          <CartCounter
-            CartAddLoad={CartAddLoad}
-            increment={increment}
-            decrement={decrement}
-            count={productCount}
-          />
-          <div></div>
-        </div>
+            <DeleteModal
+              open={openDelete}
+              setOpen={setOpenDelete}
+              id={item.id}
+              ProductId={product?.id}
+              variantId={variant?.id}
+            />
+          </div>
+          {/* <div className={styles.number} style={{ marginLeft: "auto" }}> */}
+          <div className={styles.column}>
+            <span>price</span>
+            <div style={{ alignSelf: "center" }}>
+              <div>
+                {" "}
+                {finalPrice?.discount ? (
+                  <>
+                    {" "}
+                    <s
+                      style={{
+                        fontSize: "1rem",
+                        fontWeight: "500",
+                        color: "var(--grey-text)",
+                      }}
+                    >
+                      EGP {finalPrice.price}{" "}
+                    </s>{" "}
+                    <span
+                      style={{
+                        fontSize: "1.1rem",
+                        fontWeight: "700",
+                        color: "#1B1B1B",
+                      }}
+                    >
+                      EGP {finalPrice.priceAfter}
+                    </span>
+                  </>
+                ) : (
+                  <span>EGP {finalPrice.price}</span>
+                )}
+              </div>
+            </div>
+            <div></div>
+          </div>
 
-        <div className={styles.column}>
-          <span>SubTotal</span>
-          <div className={styles.total}>{total}$</div>
-          <div></div>
+          <div className={styles.column}>
+            <span>Quantity</span>
+            <CartCounter
+              CartAddLoad={CartAddLoad}
+              increment={increment}
+              decrement={decrement}
+              count={productCount}
+            />
+            <div></div>
+          </div>
+
+          <div className={styles.column}>
+            <span>SubTotal</span>
+            <div className={styles.total}>{total}$</div>
+            <div></div>
+          </div>
         </div>
       </div>
-    </div>
+
+      {/* moblie */}
+
+      <div className={`${styles.product}   ${styles.forMobile} ` }>
+        <div className={styles.content}>
+          <div className={styles.product2}>
+            <img
+              className={styles.photoIcon}
+              src={product?.images[0]}
+              alt="product"
+            />
+            <div className={styles.productContent}>
+              <div className={styles.productName}>
+                {/* <div className={styles.springCollection}>Spring Collection</div> */}
+                <div className={styles.mensUaStorm}>{product.name}</div>
+              </div>
+              <div className={styles.frameParent}>
+                <div className={styles.frameGroup}>
+                {variant?.options.length
+                  ? variant?.options?.map((variantItem, index) => (
+                      <div
+                        key={index + variantItem?.id}
+                        className={styles.row}
+                        style={{ gap: "0" }}
+                      >
+                        <span>{variantItem?.option?.name} : </span>
+                        <span
+                          style={{
+                            marginLeft: "6px",
+                            marginRight: "6px",
+                            textTransform: "capitalize",
+                          }}
+                          className={styles.size}
+                        >
+                          {variantItem?.value?.value}
+                        </span>
+                      </div>
+                    ))
+                  : null}
+                </div>
+                <div className={styles.frameGroup}>
+                <Trash
+                color="#F04438"
+              onClick={() => {
+                setOpenDelete(true);
+              }}
+            
+              style={{ cursor: "pointer" }}
+            />
+
+            <DeleteModal
+              open={openDelete}
+              setOpen={setOpenDelete}
+              id={item.id}
+              ProductId={product?.id}
+              variantId={variant?.id}
+            />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className={styles.parent}>
+            <div className={styles.div}><div>
+                {" "}
+                {finalPrice?.discount ? (
+                  <>
+                    {" "}
+                    <s
+                      style={{
+                        fontSize: "1rem",
+                        fontWeight: "500",
+                        color: "var(--grey-text)",
+                      }}
+                    >
+                      EGP {finalPrice.price}{" "}
+                    </s>{" "}
+                    <span
+                      style={{
+                        fontSize: "1.1rem",
+                        fontWeight: "700",
+                        color: "#1B1B1B",
+                      }}
+                    >
+                      EGP {finalPrice.priceAfter}
+                    </span>
+                  </>
+                ) : (
+                  <span>EGP {finalPrice.price}</span>
+                )}
+              </div></div>
+            <div className={""}>
+            <CartCounter
+              CartAddLoad={CartAddLoad}
+              increment={increment}
+              decrement={decrement}
+              count={productCount}
+            />
+            </div>
+            <div className={styles.div2}   style={{
+                        fontSize: "1.25rem",
+                        fontWeight: "700",
+                        color: "#1B1B1B",
+                      }}>
+            EGP{totalPrice}
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
   );
 }

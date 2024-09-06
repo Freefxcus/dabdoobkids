@@ -1,13 +1,14 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import styles from "../styles/pages/Cart.module.css";
+import stylesComponent from "../styles/components/OrderCard.module.css";
 import dabdobkidz from "../images/dabdobkidz.png";
 import OrderCard from "../components/OrderCard";
 import Popup from "../components/Popup";
 import { useNavigate } from "react-router-dom";
 import CartProgress from "../components/CartProgress";
 import { useGetAllCartsQuery } from "../Redux/cartApi";
+import { calcDiscount } from "../utils/general";
 export default function Cart() {
-  
   const navigate = useNavigate();
   const [promocode, setPromocode] = useState("");
 
@@ -15,13 +16,25 @@ export default function Cart() {
 
   const [address, setAddress] = useState({});
   const [paymentOption, setPaymentOption] = useState("Credit Card"); // "Cash on Delivery"
-  const {  data: cartData} = useGetAllCartsQuery()
+  const { data: cartData } = useGetAllCartsQuery();
   const cartItems = cartData?.data || [];
- 
-  const totalPrice = cartItems?.reduce(
-    (acc, item) => acc + ((+item.variant.price||+item.product.price )* item.count),
-    0
-  );
+
+
+  
+  const totalPrice = useMemo(() => {
+    return (
+      cartItems?.reduce(
+        (acc, item) =>
+         { 
+          const finalPrice = calcDiscount(item?.variant, item?.product);
+        return  acc + item?.count * (finalPrice.discount?finalPrice.priceAfter:finalPrice.price)
+
+         },
+        0
+      ) || 0
+    );
+  }, [cartItems]);
+
   const generateDiscountMesage = (totalPrice) => {
     if (totalPrice < 3500) {
       return "Add more items to your cart to get discount";
@@ -69,24 +82,53 @@ export default function Cart() {
       </div>
     );
   }
-   
+
   return (
     <div
       style={{ minHeight: "54vh" }}
-      className={`${styles.container} padding-container`}
+      className={`${styles.container} padding-container container`}
     >
       <Popup open={open} setOpen={setOpen} type="create_address" />
       <div className={styles.column}>
         <div className={styles.title_main}>My Shopping Cart </div>
         <div style={{ margin: "0px auto" }}>
-            <CartProgress
-              value={totalPrice}
-              percentage={requiredPriceForDiscount}
-            />
+          <CartProgress
+            value={totalPrice}
+            percentage={requiredPriceForDiscount}
+          />
           <h4 style={{ textAlign: "center", marginTop: "12px" }}>
             {messageforDiscount}
           </h4>
         </div>
+        {/* <div >
+          <div
+            className={stylesComponent.container}
+            style={{
+              justifyContent: "space-between",
+              paddingBottom: "20px",
+              borderBottom: " 0.5px solid #E8E8E8",
+            }}
+          >
+            <div className={stylesComponent.column}>Product</div>
+            <div className={stylesComponent.column}>
+              <span></span>
+            </div>
+            <div className={stylesComponent.column}>
+              <span></span>
+            </div>
+            <div className={stylesComponent.column}>
+              <span>price</span>
+            </div>
+
+            <div className={stylesComponent.column}>
+              <span>Quantity</span>
+            </div>
+
+            <div className={stylesComponent.column}>
+              <span>SubTotal</span>
+            </div>
+          </div>
+        </div> */}
         {cartItems?.map((item) => (
           <OrderCard
             item={item}
