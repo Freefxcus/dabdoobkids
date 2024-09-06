@@ -59,3 +59,36 @@ export const truncateText = (text, maxLength) => {
   }
   return text;
 };
+export   const calcDiscount = (selectedVariantObject, productDetails) => {
+  // Get the base price and ensure it's a valid number
+  const price =
+    selectedVariantObject && !isNaN(+selectedVariantObject?.price)
+      ? +selectedVariantObject?.price
+      : !isNaN(+productDetails?.price)
+      ? +productDetails?.price
+      : 0; // Return 0 if price is invalid
+
+  if (!price || price <= 0) {
+    return 0; // Return 0 if the price is invalid or zero
+  }
+
+  const discountType = productDetails?.discountType;
+  const discountAmount = +productDetails?.discount || 0;
+
+  // Apply discount based on discountType
+  if (discountType === "percentage" && discountAmount) {
+    return {
+      priceAfter: +(price - (price * discountAmount) / 100),
+      price: price,
+      discount: true,
+    };
+  } else if (discountType !== "percentage" && discountAmount) {
+    return {
+      priceAfter: +(price - discountAmount),
+      price: price,
+      discount: true,
+    };
+  } else {
+    return { priceAfter: null, discount: false, price: price }; // Return original price if no valid discount type is provided
+  }
+};

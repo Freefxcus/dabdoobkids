@@ -3,7 +3,7 @@ import Counter from "./counter";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useAddToCartMutation } from "../../Redux/cartApi";
-import { notifyError, notifySuccess } from "../../utils/general";
+import { calcDiscount, notifyError, notifySuccess } from "../../utils/general";
 import { TickCircle } from "iconsax-react";
 
 export default function SingleProductModal({
@@ -55,27 +55,35 @@ export default function SingleProductModal({
   useEffect(() => {
     handleUpdateQuantity();
   }, [count]);
+
+  const finalPrice = calcDiscount(selectedVariantObject, productDetails);
+
   return (
     <Modal open={open}>
       <Box>
         <Box sx={style}>
-          <div
-            style={{
-              width: "100%",
-              margin: "6px",
-              maxWidth: "550px",
+          <Box
+            sx={{
+              
+              maxWidth: "27rem",
+              minWidth: { md: "27rem" },
               display: "flex",
               flexDirection: "column",
-              justifyContent: "center",
+              justifyContent: "space-between",
+              gap:2
             }}
           >
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <h2 style={{ marginBottom: "16px", fontWeight: "500", display: "flex", alignItems: "center" }}>
-                <TickCircle
-                  size="32"
-                  color="#039855"
-                  variant="Bulk"
-                />  Added to Cart
+            <div style={{ display: "flex", justifyContent: "space-between" ,borderBottom:"1px solid #aaaaaa33",height:"auto"}}>
+              <h2
+                style={{
+                  marginBottom: "16px",
+                  fontWeight: "500",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <TickCircle size="32" color="#039855" variant="Bulk" /> Added to
+                Cart
               </h2>
               <span
                 style={{ cursor: "pointer" }}
@@ -84,7 +92,7 @@ export default function SingleProductModal({
                 x
               </span>
             </div>
-            <div style={{ display: "flex", width: "100%", gap: "8px" }}>
+            <div style={{ display: "flex", width: "100%", gap: "8px" ,marginTop:"14px" }}>
               <img
                 style={{ width: "116px", height: "150px", flex: 1 }}
                 src={productDetails?.images[0]}
@@ -102,17 +110,19 @@ export default function SingleProductModal({
                 <div>
                   <h2
                     style={{
-                      fontWeight: "500", color: "rgba(27, 27, 27, 0.70)",
-                      fontSize: " 0.875rem"
+                      fontWeight: "500",
+                      color: "rgba(27, 27, 27, 0.70)",
+                      fontSize: " 0.875rem",
                     }}
                   >
                     {productDetails?.category?.name}
                   </h2>
-                
+
                   <h2
-                     style={{
-                      fontWeight: "600", color: "#1B1B1B",
-                      fontSize: "1rem"
+                    style={{
+                      fontWeight: "600",
+                      color: "#1B1B1B",
+                      fontSize: "1rem",
                     }}
                   >
                     {productDetails?.name}
@@ -125,9 +135,10 @@ export default function SingleProductModal({
                     justifyContent: "space-between",
                     alignItems: "center",
                     width: "100%",
-                    maxHeight:"1.875rem",
-                      fontWeight: "800", color: "#1B1B1B",
-                      fontSize: "1rem"
+                    maxHeight: "1.875rem",
+                    fontWeight: "800",
+                    color: "#1B1B1B",
+                    fontSize: "1rem",
                   }}
                 >
                   <Counter
@@ -139,7 +150,22 @@ export default function SingleProductModal({
                     selectedVariantObject={selectedVariantObject}
                   />
                   <h3>
-                    {+selectedVariantObject?.price || +productDetails?.price}$
+                  {finalPrice?.discount ? (
+                <>
+                  <span>EGP {finalPrice.priceAfter}</span>{" "}
+                  <s
+                    style={{
+                      fontSize: "1.25rem",
+                      fontWeight: "500",
+                      color: "var(--grey-text)",
+                    }}
+                  >
+                    EGP {finalPrice.price}{" "}
+                  </s>
+                </>
+              ) : (
+                <span>EGP {finalPrice.price}</span>
+              )}
                   </h3>
                 </div>
               </div>
@@ -149,19 +175,23 @@ export default function SingleProductModal({
                 display: "flex",
                 justifyContent: "space-between",
                 marginTop: "8px",
+                fontSize:"1.25rem"
               }}
             >
-              <h2>Subtotal</h2>
-              <h2>
+              <h4  style={{
+                fontSize:"1.25rem"
+              }}>Subtotal</h4>
+              <h4  style={{
+                fontSize:"1.25rem"
+              }}>
                 {count
                   ? Math.trunc(
-                    +count *
-                    (+selectedVariantObject?.price ||
-                      +productDetails?.price)
-                  )
+                      +count *
+                      +(finalPrice?.discount?finalPrice.priceAfter:finalPrice.price)
+                    )
                   : null}
                 $
-              </h2>
+              </h4>
             </div>
 
             <p style={{ marginTop: "16px" }}>
@@ -185,6 +215,7 @@ export default function SingleProductModal({
                   fontSize: "18px",
                   borderRadius: "10px",
                   cursor: "pointer",
+                  flex:"1 1 0%"
                 }}
                 onClick={() => {
                   navigate("/cart");
@@ -206,13 +237,13 @@ export default function SingleProductModal({
                   fontWeight: "400",
                   fontSize: "18px",
                   borderRadius: "10px",
-                  cursor: "pointer",
+                  cursor: "pointer",flex:"1 1 0%"
                 }}
               >
                 Checkout
               </button>
             </div>
-          </div>
+          </Box>
         </Box>
       </Box>
     </Modal>
@@ -228,9 +259,8 @@ const style = {
   flexDirection: "column",
   justifyContent: "center",
   bgcolor: "background.paper",
-
   boxShadow: 24,
   borderRadius: "10px",
 
-  p: 4,
+  p: "1.5rem 1.25rem",
 };

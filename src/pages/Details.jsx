@@ -17,7 +17,6 @@ import SingleProductModal from "../components/singleProduct/SingleProductModal.j
 
 import SwiperComponent from "../components/Swiper.jsx";
 import { CircularProgress, Stack, Typography } from "@mui/material";
-import { set } from "lodash";
 import Empty from "./empty.jsx";
 import HandleMessageIsAuth from "../utils/message/index.js";
 import WishlistProductDetails from "../components/singleProduct/WishlistProductDetails.jsx";
@@ -25,7 +24,7 @@ import {
   useAddToCartMutation,
   useGetAllCartsQuery,
 } from "../Redux/cartApi.jsx";
-import { notifyError, notifySuccess } from "../utils/general.js";
+import { calcDiscount, notifyError, notifySuccess } from "../utils/general.js";
 import { Add, AddCircle, Minus } from "iconsax-react";
 import Police from "../components/singleProduct/Police.jsx";
 
@@ -161,39 +160,7 @@ export default function Details() {
       ? setLargeImage(selectedVariantObject?.gallery?.[0])
       : setLargeImage(productDetails?.images?.[0]);
   }, [selectedVariantObject]);
-  const calcDiscount = (selectedVariantObject, productDetails) => {
-    // Get the base price and ensure it's a valid number
-    const price =
-      selectedVariantObject && !isNaN(+selectedVariantObject?.price)
-        ? +selectedVariantObject?.price
-        : !isNaN(+productDetails?.price)
-        ? +productDetails?.price
-        : 0; // Return 0 if price is invalid
 
-    if (!price || price <= 0) {
-      return 0; // Return 0 if the price is invalid or zero
-    }
-
-    const discountType = productDetails?.discountType;
-    const discountAmount = +productDetails?.discount || 0;
-
-    // Apply discount based on discountType
-    if (discountType === "percentage" && discountAmount) {
-      return {
-        priceAfter: +(price - (price * discountAmount) / 100),
-        price: price,
-        discount: true,
-      };
-    } else if (discountType !== "percentage" && discountAmount) {
-      return {
-        priceAfter: +(price - discountAmount),
-        price: price,
-        discount: true,
-      };
-    } else {
-      return { priceAfter: null, discount: false, price: price }; // Return original price if no valid discount type is provided
-    }
-  };
 
   // Example usage
   const finalPrice = calcDiscount(selectedVariantObject, productDetails);
@@ -400,11 +367,11 @@ export default function Details() {
               )}
             </div>
 
-            <div className={styles["row"]}>
+            <div className={`${styles["row"]} ${styles["btns-action"]}`}>
               <div
-                className={styles["row"]}
+                className={`${styles["row"]} ${styles["btn-count"]}`}
                 style={{
-                  minWidth: "90px",
+                  
                   padding: "13px 8px",
                   border: "1px solid var(--unicorn-silver)",
                   borderRadius: "10px",
@@ -470,7 +437,7 @@ export default function Details() {
                   let newCount = itemForCart
                     ? Math.trunc(counter - itemForCart.count)
                     : counter;
-                  if (newCount === 0) return 0;
+                  if (newCount === 0) return toast.error("please change count");
                   HandleMessageIsAuth(() => {
                     handleAddToCart([
                       {

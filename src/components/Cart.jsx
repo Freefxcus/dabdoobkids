@@ -126,7 +126,17 @@ export default function Cart({ toggleDrawer }) {
                           marginBottom: "10px",
                           fontSize: "14px",
                           fontWeight: "500",
-                          color: "#1B1B1BB2",
+                          color: "var(--grey-text)",
+                        }}
+                      >
+                        {item.product?.brand?.name}
+                      </div>
+                      <div
+                        style={{
+                          marginBottom: "10px",
+                          fontSize: "14px",
+                          fontWeight: "700",
+                          color: "#1B1B1B",
                         }}
                       >
                         {item.product.name}
@@ -223,80 +233,7 @@ export default function Cart({ toggleDrawer }) {
           >
             Taxes and shipping fee will be calculated at checkout
           </div>
-          <div
-            onClick={() => {
-              setUseWallet((prev) => !prev);
-            }}
-            style={{
-              marginTop: "20px",
-              display: "flex",
-              alignItems: "center",
-              gap: "5px",
-              cursor: "pointer",
-            }}
-          >
-            <Checkbox
-              // checked={checked}
-              checked={useWallet}
-              sx={{
-                // color: pink[800],
-                padding: 0,
-                "&.Mui-checked": {
-                  color: "var(--brown)",
-                },
-              }}
-            />
-            <div
-              style={{
-                fontSize: "14px",
-                fontWeight: "500",
-                color: "#1B1B1BB2",
-              }}
-            >
-              Use Wallet
-            </div>
-          </div>
-          <div
-            style={{
-              display: "flex",
-              gap: "10px",
-              alignItems: "flex-end",
-            }}
-          >
-            <FormControl sx={{ minWidth: 180, mt: "20px" }} size="small">
-              <InputLabel id="demo-select-small-label">
-                Payment Method
-              </InputLabel>
-              <Select
-                disabled={useWallet}
-                size="small"
-                labelId="demo-select-small-label"
-                id="demo-select-small"
-                value={paymentMethod}
-                label="Payment Method"
-                onChange={(e) => {
-                  setPaymentMethod(e.target.value);
-                }}
-              >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                <MenuItem value="Credit Card">Credit Card</MenuItem>
-                <MenuItem value="Cash on Delivery">Cash on Delivery</MenuItem>
-              </Select>
-            </FormControl>
-            <TextField
-              id="outlined-basic"
-              label="Promocode"
-              variant="outlined"
-              size="small"
-              sx={{ width: 180 }}
-              value={promocode}
-              onChange={(e) => {
-                setPromocode(e.target.value);
-              }}
-            />
-          </div>
+      
           <div
             style={{
               display: "flex",
