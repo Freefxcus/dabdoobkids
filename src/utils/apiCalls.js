@@ -12,7 +12,7 @@ const redux = (slice) => {
 };
 // ----------------------------------------------------------------
 
-export const getProducts = async (page, all, category, brand, query) => {
+export const getProducts = async (page, all, category, brand, query,sale) => {
   let returnedValue;
   const params = {
     page,
@@ -20,10 +20,10 @@ export const getProducts = async (page, all, category, brand, query) => {
     // items: 2, // example default value for item
     category,
     brand,
-    query,
+    query,sale
   };
   Object.keys(params).forEach((key) => !params[key] ? delete params[key] : params[key]);
-  console.log(params);
+  console.log("paramsparamsparams",params,sale);
   await instance
     .get("/products", {
       params,

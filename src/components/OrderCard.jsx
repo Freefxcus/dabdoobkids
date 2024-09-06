@@ -213,7 +213,7 @@ export default function OrderCard({
                         className={styles.row}
                         style={{ gap: "0" }}
                       >
-                        <span>{variantItem?.option?.name} : </span>
+                      
                         <span
                           style={{
                             marginLeft: "6px",
