@@ -20,7 +20,7 @@ export default function DailySaleComponent({ categories }) {
       return currentCategory.productsCount > maxCategory.productsCount
         ? currentCategory
         : maxCategory;
-    }, { productsCount: -Infinity });
+    }, { id:17, productsCount: -Infinity });
     const fetchDailySaleProducts = async () => {
       try {
         const response = await instance.get("/products/sale");
