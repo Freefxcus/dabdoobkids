@@ -51,7 +51,7 @@ export default function Search() {
 
   const loadProducts = (page = 1) => {
     setIsLoading(true);
-    const categoryStr = catId.length ?catId.join(",") : "";
+    const categoryStr = catId.length ? catId.join(",") : "";
     const brandStr = brandId.length ? brandId.join(",") : "";
     const queryParams = new URLSearchParams({
       page: page,
@@ -102,9 +102,12 @@ export default function Search() {
     debouncedHandleInputChange();
   };
 
-  const debouncedHandleInputChange = useCallback(debounce(() => {
-    loadProducts(page);
-  }, 300), [catId, brandId, queryStr, page]);
+  const debouncedHandleInputChange = useCallback(
+    debounce(() => {
+      loadProducts(page);
+    }, 300),
+    [catId, brandId, queryStr, page]
+  );
 
   return (
     <div className={`${styles.container} margin-container`}>
@@ -182,7 +185,15 @@ export default function Search() {
           </div>
         </div>
 
-        <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", mx: "auto" }}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            mx: "auto",
+          }}
+        >
           <div className={styles.center}>
             <div className={styles.search_container}>
               <input
@@ -207,7 +218,13 @@ export default function Search() {
             <>
               {isLoading && (
                 <>
-                  <Box sx={{ width: "100%", display: "flex", alignItems: "center" }}>
+                  <Box
+                    sx={{
+                      width: "100%",
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                  >
                     <LinearProgress />
                   </Box>
                   <div style={{ height: "500px" }} />
@@ -216,7 +233,9 @@ export default function Search() {
 
               {searchData?.products?.length > 0 &&
                 !isLoading &&
-                searchData.products.map((item) => <ClothesCard key={item.id} item={item} />)}
+                searchData.products.map((item) => (
+                  <ClothesCard key={item.id} item={item} />
+                ))}
             </>
           </div>
           <Box sx={{ width: "100%", mx: "auto", marginTop: "24px" }}>
@@ -225,12 +244,17 @@ export default function Search() {
                 display: "flex",
                 justifyContent: "center",
                 ".Mui-selected": {
-                  color: "var(--brown)",
-                  border: "1px solid rgba(173, 107, 70, 0.5)",
-                  backgroundColor: "rgba(173, 107, 70, 0.12)",
+                  color: "var(--brown)", // Brown color for selected page
+                  border: "1px solid rgba(173, 107, 70, 0.5)", // Brownish border
+                  backgroundColor: "rgba(173, 107, 70, 0.12)", // Light brownish background
+                },
+                ".MuiPaginationItem-root": {
+                  color: "var(--brown)", // Brown color for non-selected pagination items
+                  "&:hover": {
+                    backgroundColor: "rgba(173, 107, 70, 0.12)", // Hover background color
+                  },
                 },
               }}
-              color="primary"
               variant="outlined"
               count={searchData?.metadata?.totalPages || 1}
               page={+searchParams.get("page") || 1}
@@ -247,7 +271,7 @@ export default function Search() {
       </div>
 
       {/* drawer */}
-     
+
       <Drawer
         anchor="right"
         open={state}
@@ -271,7 +295,10 @@ export default function Search() {
               >
                 <Checkbox
                   checked={catId.includes(category.id)}
-                  sx={{ padding: 0, "&.Mui-checked": { color: "var(--brown)" } }}
+                  sx={{
+                    padding: 0,
+                    "&.Mui-checked": { color: "var(--brown)" },
+                  }}
                 />
                 <div className={styles.checkbox_label}>{category.name}</div>
               </div>
@@ -289,7 +316,10 @@ export default function Search() {
                   >
                     <Checkbox
                       checked={brandId.includes(brand.id)}
-                      sx={{ padding: 0, "&.Mui-checked": { color: "var(--brown)" } }}
+                      sx={{
+                        padding: 0,
+                        "&.Mui-checked": { color: "var(--brown)" },
+                      }}
                     />
                     <div className={styles.checkbox_label}>{brand.name}</div>
                   </div>
