@@ -6,7 +6,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import delivery from "../images/delivery.png";
-import cartImg from "../images/cart.png";
+import cartImg from "../images/cart1.png";
 import { useParams } from "react-router-dom";
 import { getProductById, getRelatedProducts } from "../utils/apiCalls";
 import Loader from "../components/Loader";
@@ -26,6 +26,8 @@ import {
   useGetAllCartsQuery,
 } from "../Redux/cartApi.jsx";
 import { notifyError, notifySuccess } from "../utils/general.js";
+import { Add, AddCircle, Minus } from "iconsax-react";
+import Police from "../components/singleProduct/Police.jsx";
 
 export default function Details() {
   const { id } = useParams();
@@ -80,10 +82,11 @@ export default function Details() {
     try {
       const response = await addToCart(item).unwrap(); // Unwrap to handle promise rejection
 
-      if (response?.status==="success") {
+      if (response?.status === "success") {
         const message = `Added ${productDetails?.name} to cart!`;
         notifySuccess(message);
-      } if (response?.status!=="success") {
+      }
+      if (response?.status !== "success") {
         const errorMessage =
           addCartError?.data?.message || "Failed to add to cart";
         notifyError(errorMessage);
@@ -158,6 +161,42 @@ export default function Details() {
       ? setLargeImage(selectedVariantObject?.gallery?.[0])
       : setLargeImage(productDetails?.images?.[0]);
   }, [selectedVariantObject]);
+  const calcDiscount = (selectedVariantObject, productDetails) => {
+    // Get the base price and ensure it's a valid number
+    const price =
+      selectedVariantObject && !isNaN(+selectedVariantObject?.price)
+        ? +selectedVariantObject?.price
+        : !isNaN(+productDetails?.price)
+        ? +productDetails?.price
+        : 0; // Return 0 if price is invalid
+
+    if (!price || price <= 0) {
+      return 0; // Return 0 if the price is invalid or zero
+    }
+
+    const discountType = productDetails?.discountType;
+    const discountAmount = +productDetails?.discount || 0;
+
+    // Apply discount based on discountType
+    if (discountType === "percentage" && discountAmount) {
+      return {
+        priceAfter: +(price - (price * discountAmount) / 100),
+        price: price,
+        discount: true,
+      };
+    } else if (discountType !== "percentage" && discountAmount) {
+      return {
+        priceAfter: +(price - discountAmount),
+        price: price,
+        discount: true,
+      };
+    } else {
+      return { priceAfter: null, discount: false, price: price }; // Return original price if no valid discount type is provided
+    }
+  };
+
+  // Example usage
+  const finalPrice = calcDiscount(selectedVariantObject, productDetails);
 
   return (
     <>
@@ -207,10 +246,22 @@ export default function Details() {
                 color: "var(--errie-black)",
               }}
             >
-              ${" "}
-              {selectedVariantObject
-                ? selectedVariantObject?.price
-                : productDetails?.price}
+              {finalPrice?.discount ? (
+                <>
+                  <span>EGP {finalPrice.priceAfter}</span>{" "}
+                  <s
+                    style={{
+                      fontSize: "1.25rem",
+                      fontWeight: "500",
+                      color: "var(--grey-text)",
+                    }}
+                  >
+                    EGP {finalPrice.price}{" "}
+                  </s>
+                </>
+              ) : (
+                <span>EGP {finalPrice.price}</span>
+              )}
             </div>
             <div
               style={{
@@ -335,45 +386,61 @@ export default function Details() {
                     </Box>
                   ))
               : null}
-           
+
             <div className={styles["row"]}>
-              {selectedVariantObject
-                ? selectedVariantObject.stock > 10
-                  ? null
-                  :<span style={{color:"orange"}}> Only  {selectedVariantObject.stock} left in stock </span>
-                :<span style={{color:"red"}}> out of stock </span> }
+              {selectedVariantObject ? (
+                selectedVariantObject.stock > 10 ? null : (
+                  <span style={{ color: "orange" }}>
+                    {" "}
+                    Only {selectedVariantObject.stock} left in stock{" "}
+                  </span>
+                )
+              ) : (
+                <span style={{ color: "red" }}> out of stock </span>
+              )}
             </div>
 
             <div className={styles["row"]}>
               <div
                 className={styles["row"]}
                 style={{
-                  minWidth: "70px",
-                  padding: "13px 8px 13px 8px",
+                  minWidth: "90px",
+                  padding: "13px 8px",
                   border: "1px solid var(--unicorn-silver)",
                   borderRadius: "10px",
+                  justifyContent: "space-between",
+                  alignItems: "center",
                   flexWrap: "nowrap",
                 }}
               >
-                <div
+                <Minus
                   onClick={() => {
                     if (counter > 1) {
                       setCounter((prev) => prev - 1);
                     }
                   }}
                   style={{ cursor: "pointer" }}
-                >
-                  -
-                </div>
-                <div>{counter}</div>
+                  size="20"
+                  variant="Outline"
+                  color="#1B1B1B"
+                />
                 <div
+                  style={{
+                    fontSize: "1rem",
+                    fontWeight: "600",
+                  }}
+                >
+                  {counter}
+                </div>
+                <Add
                   onClick={() => {
                     setCounter((prev) => prev + 1);
                   }}
                   style={{ cursor: "pointer" }}
-                >
-                  +
-                </div>
+                  size="20"
+                  variant="Outline"
+                  color="#1B1B1B"
+                />
               </div>
               <button
                 className={styles["cart-button"]}
@@ -383,12 +450,11 @@ export default function Details() {
                 }}
                 disabled={
                   CartAddLoad ||
-                   selectedVariantObject?.stock==0|| 
-                     !selectedVariantObject ||
-                      productDetails?.variants?.length < 1 ||
-                      counter < 1 ||
-                      counter > selectedVariantObject?.stock
-                   
+                  selectedVariantObject?.stock == 0 ||
+                  !selectedVariantObject ||
+                  productDetails?.variants?.length < 1 ||
+                  counter < 1 ||
+                  counter > selectedVariantObject?.stock
                 }
                 onClick={(e) => {
                   e.stopPropagation();
@@ -404,18 +470,17 @@ export default function Details() {
                   let newCount = itemForCart
                     ? Math.trunc(counter - itemForCart.count)
                     : counter;
-                  if(newCount === 0) return 0;
-                     HandleMessageIsAuth(() =>{
-                        handleAddToCart([
-                          {
-                            product: +id,
-                            count: newCount,
-                            variant: selectedVariantObject?.id,
-                          },
-                        ])
-                         setOpen(true)  }
-                      )
-                 
+                  if (newCount === 0) return 0;
+                  HandleMessageIsAuth(() => {
+                    handleAddToCart([
+                      {
+                        product: +id,
+                        count: newCount,
+                        variant: selectedVariantObject?.id,
+                      },
+                    ]);
+                    setOpen(true);
+                  });
                 }}
               >
                 <img src={cartImg} width="16px" alt="cart" />
@@ -482,10 +547,11 @@ export default function Details() {
           </div>
         </div>
       )}
+      <Police />
       <Box
         sx={{
           mx: { xs: "20px", md: "40px", lg: "60px" },
-          mb:{ xs: "20px", md: "40px", lg: "60px" }
+          mb: { xs: "120px", md: "140px", lg: "160px" },
         }}
       >
         <Typography

@@ -93,7 +93,7 @@ export default function Summary() {
                   <div className={styles.description}>Credit Card</div>
                 </div>
                 <div className={styles.radio_option_section}>
-                  {/* <div style={{ textAlign: "center" }}>$ 12.00</div> */}
+                  {/* <div style={{ textAlign: "center" }}>EGP 12.00</div> */}
                   <FormControlLabel
                     value="Credit Card"
                     control={<Radio />}
@@ -203,26 +203,26 @@ export default function Summary() {
         </div>
         <div className={styles.row}>
           <div className={styles.title_sub}>Total Shopping</div>
-          <div className={styles.value}>$ {`3.040.00`}</div>
+          <div className={styles.value}>EGP {`3.040.00`}</div>
         </div>
 
         <div className={styles.row}>
           <div className={styles.title_sub}>Shipping</div>
-          <div className={styles.value}>$ {`10.00`}</div>
+          <div className={styles.value}>EGP {`10.00`}</div>
         </div>
         <div className={styles.row}>
           <div className={styles.title_sub}>Tax</div>
-          <div className={styles.value}>$ {`10.00`}</div>
+          <div className={styles.value}>EGP {`10.00`}</div>
         </div>
         <div className={styles.row} style={{ color: "var(--brown)" }}>
           <div className={styles.title_sub} style={{ color: "var(--brown)" }}>
             Discount
           </div>
-          <div className={styles.value}>-$ {`50.00`}</div>
+          <div className={styles.value}>-EGP {`50.00`}</div>
         </div>
         <div className={styles.row}>
           <div className={styles.title_main}>Sub Total</div>
-          <div className={styles.title_main}>$ {`3.010.00`}</div>
+          <div className={styles.title_main}>EGP {`3.010.00`}</div>
         </div>
        
         <button

@@ -207,7 +207,7 @@ export default function Home() {
       <DailySaleComponent categories={categories} />  
       {/* Best Value offers */}
       <div className={"padding-container section-bottom-margin"}>
-        <div className={styles["offers-container"]}>
+        <div >
           <div
             className={`${styles["offers-title"]}  ${styles["offers-title-sub"]}`}
           >

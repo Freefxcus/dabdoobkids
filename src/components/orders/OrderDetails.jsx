@@ -15,7 +15,7 @@ export default function OrderDetails() {
   const [order, setOrder] = useState(null);
   const [orderInvoice, setOrderInvoice] = useState(null);
   const { id } = useParams();
-  const navigate=useNavigate()
+  const navigate = useNavigate();
   useEffect(() => {
     getSingleOrder(id).then((res) => {
       console.log(res, "order123123123order123123123");
@@ -122,7 +122,7 @@ export default function OrderDetails() {
           <div className={styles.left_title} style={{ color: "var(--brown)" }}>
             Discount
           </div>
-          <div style={{ color: "var(--brown)" }}>-$ {order?.discount}</div>
+          <div style={{ color: "var(--brown)" }}>-EGP {order?.discount}</div>
         </div>
         <div className={styles.row_wrap} style={{ fontWeight: "bold" }}>
           <div
@@ -131,7 +131,7 @@ export default function OrderDetails() {
           >
             Subtotal
           </div>
-          <div>$ {order?.totalPrice}</div>
+          <div>EGP {order?.totalPrice}</div>
         </div>
         <button
           onClick={() =>
@@ -159,11 +159,19 @@ export default function OrderDetails() {
             border: "2px solid #F04438",
             backgroundColor: "transparent",
             fontWeight: "bold",
-            cursor: order?.canSendRequest?"pointer":"not-allowed",
+            cursor: order?.canSendRequest ? "pointer" : "not-allowed",
           }}
           disabled={!order?.canSendRequest}
         >
-          {  order?.cancellable && !order?.refundable? order?.canSendRequest? "Cancel":"Cancel is under evaluation" : !order?.cancellable && order?.refundable?order?.canSendRequest?  "Refund":"Refund is under evaluation":"Return"}
+          {order?.cancellable && !order?.refundable
+            ? order?.canSendRequest
+              ? "Cancel"
+              : "Cancel is under evaluation"
+            : !order?.cancellable && order?.refundable
+            ? order?.canSendRequest
+              ? "Refund"
+              : "Refund is under evaluation"
+            : "Return"}
         </button>
       </div>
     </>

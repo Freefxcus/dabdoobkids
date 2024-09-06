@@ -5,11 +5,10 @@ import OrderOverview from "./orderOverView";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Box, Pagination } from "@mui/material";
 
-export default function OrderList({ setSearchParams,paginationInfo,orders }) {
+export default function OrderList({ setSearchParams, paginationInfo, orders }) {
   console.log(orders, "ziadorderedsdsadsaordersordersorders");
   const navigate = useNavigate();
   const [currentOrder, setCurrentOrder] = useState(null);
-
 
   return (
     <div
@@ -99,16 +98,14 @@ export default function OrderList({ setSearchParams,paginationInfo,orders }) {
             </button>
           </div>
         ))}
-        <Box sx={{mx:"auto"}}>
-          <Pagination 
-            count={paginationInfo?.totalPages} 
-
+        <Box sx={{ mx: "auto" }}>
+          <Pagination
+            count={paginationInfo?.totalPages}
             onChange={(event, value) => {
-              setSearchParams(prev=>{
-                return { ...prev, page: value }
-              })
+              setSearchParams((prev) => {
+                return { ...prev, page: value };
+              });
             }}
-          
           />
         </Box>
       </div>
@@ -203,15 +200,15 @@ export default function OrderList({ setSearchParams,paginationInfo,orders }) {
                 <div className={styles.main_title}>Payment Details</div>
                 <div className={styles.row_wrap}>
                   <div className={styles.left_title}>Total Shoping</div>
-                  <div>$ 1.500.00</div>
+                  <div>EGP 1.500.00</div>
                 </div>
                 <div className={styles.row_wrap}>
                   <div className={styles.left_title}>Shipping</div>
-                  <div>$ 10.00</div>
+                  <div>EGP 10.00</div>
                 </div>
                 <div className={styles.row_wrap}>
                   <div className={styles.left_title}>Tax</div>
-                  <div>$ 10.00</div>
+                  <div>EGP 10.00</div>
                 </div>
                 <div className={styles.row_wrap}>
                   <div
@@ -220,7 +217,7 @@ export default function OrderList({ setSearchParams,paginationInfo,orders }) {
                   >
                     Discount
                   </div>
-                  <div style={{ color: "var(--brown)" }}>-$ 50.00</div>
+                  <div style={{ color: "var(--brown)" }}>-EGP 50.00</div>
                 </div>
                 <div className={styles.row_wrap} style={{ fontWeight: "bold" }}>
                   <div
@@ -229,7 +226,7 @@ export default function OrderList({ setSearchParams,paginationInfo,orders }) {
                   >
                     Subtotal
                   </div>
-                  <div>$ 1.570.00</div>
+                  <div>EGP 1.570.00</div>
                 </div>
                 <button
                   style={{

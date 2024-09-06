@@ -1,0 +1,115 @@
+/* General Styles */
+.shippingReturns {
+    
+    line-height: 150%;
+    text-transform: capitalize;
+    font-weight: 600;
+}
+.title {
+    
+    line-height: 150%;
+    font-weight: 500;
+    color: #1b1b1b;
+    display: inline-block;
+}
+.confirmationReasonForReturn {
+    font-family: inherit;
+    font-size: inherit;
+    padding-left: 19px;
+}
+.confirmationReasonForContainer {
+    color: #8d8d8d;
+}
+.loremIpsumDolor {
+    
+    line-height: 150%;
+    font-weight: 500;
+    display: inline-block;
+}
+.confirmationReasonForReturnParent {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+.teamContactYou {
+    
+    line-height: 150%;
+    font-weight: 500;
+    white-space: pre-wrap;
+    display: inline-block;
+}
+.loremIpsumDolor1 {
+    
+    line-height: 150%;
+    font-weight: 500;
+    display: inline-block;
+}
+.paragraph {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 20px;
+    font-size: 14px;
+    color: #8d8d8d;
+}
+.titleParagraph {
+    display: flex;
+    flex: 1 1 0%;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 12px;
+}
+
+.utEtiamPretium {
+    margin: 0;
+}
+
+.content {
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+    font-size: 16px;
+}
+.reviewReturnsSection {
+    
+    /* width: 100%; */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 20px;
+    text-align: left;
+    font-size: 24px;
+    color: #1b1b1b;
+    font-family: 'Plus Jakarta Sans';
+    padding-bottom: 50px;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .content {
+        flex-direction: column;
+        gap: 20px;
+    }
+    .reviewReturnsSection {
+        font-size: 20px;
+    }
+    .paragraph {
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 480px) {
+    .content {
+        font-size: 14px;
+        gap: 15px;
+    }
+    .shippingReturns, .title {
+        font-size: 18px;
+    }
+    .reviewReturnsSection {
+        font-size: 18px;
+    }
+}

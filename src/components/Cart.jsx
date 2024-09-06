@@ -171,7 +171,7 @@ export default function Cart({ toggleDrawer }) {
                             fontWeight: "800",
                           }}
                         >
-                          $ {item.totalPrice}
+                          EGP {item.totalPrice}
                         </span>
                       </div>
                     </div>
@@ -199,7 +199,7 @@ export default function Cart({ toggleDrawer }) {
             <div>Subtotal</div>
             <div>
               {/* {!checkout?.status && !isChecking && <div>.......</div>}
-              {checkout?.status && <div>$ 3.010.00</div>}
+              {checkout?.status && <div>EGP 3.010.00</div>}
               {isChecking && (
                 <div
                   style={{ width: "100px", color: "var(--brown)" }}

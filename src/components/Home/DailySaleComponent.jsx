@@ -16,19 +16,21 @@ export default function DailySaleComponent({ categories }) {
     const navigate =useNavigate() 
   useEffect(() => {
     const categoryWithMaxProducts = categories.reduce((maxCategory, currentCategory) => {
-        if (currentCategory.productsCount > maxCategory.productsCount) {
-          return currentCategory;
-        }
-        return maxCategory;
-      }, { id: 1, productsCount: -Infinity });
+      // Return the category with the higher productsCount
+      return currentCategory.productsCount > maxCategory.productsCount
+        ? currentCategory
+        : maxCategory;
+    }, { productsCount: -Infinity });
     const fetchDailySaleProducts = async () => {
       try {
         const response = await instance.get("/products/sale");
         const responseCate = await instance.get(`/products?category=${categoryWithMaxProducts?.id}`);
-        setProductsCate(responseCate.data.data?.products)
-        setProducts(response.data?.data?.products);
+        console.log("response,responseCate)",response,
+          responseCate);
         
-      
+          setProducts(response?.data?.data?.products);
+        setProductsCate(responseCate?.data?.data?.products)
+        
         
         // Assuming data structure is suitable for ClothesCard
       } catch (err) {
