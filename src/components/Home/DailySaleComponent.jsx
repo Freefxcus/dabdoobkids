@@ -13,25 +13,27 @@ export default function DailySaleComponent({ categories }) {
   const [productsCate, setProductsCate] = useState([]);
   const [loading, setLoading] = useState(true); // Loading state
   const [error, setError] = useState(null); // Error state
-    const navigate =useNavigate() 
+  const navigate = useNavigate();
   useEffect(() => {
-    const categoryWithMaxProducts = categories.reduce((maxCategory, currentCategory) => {
-      // Return the category with the higher productsCount
-      return currentCategory.productsCount > maxCategory.productsCount
-        ? currentCategory
-        : maxCategory;
-    }, { id:17, productsCount: -Infinity });
+    const categoryWithMaxProducts = categories.reduce(
+      (maxCategory, currentCategory) => {
+        // Return the category with the higher productsCount
+        return currentCategory.productsCount > maxCategory.productsCount
+          ? currentCategory
+          : maxCategory;
+      },
+      { id: 17, productsCount: -Infinity }
+    );
     const fetchDailySaleProducts = async () => {
+      const responseCate = await instance.get(
+        `/products?category=${categoryWithMaxProducts?.id}`
+      );
+      setProductsCate(responseCate?.data?.data?.products);
       try {
         const response = await instance.get("/products/sale");
-        const responseCate = await instance.get(`/products?category=${categoryWithMaxProducts?.id}`);
-        console.log("response,responseCate)",response,
-          responseCate);
-        
-          setProducts(response?.data?.data?.products);
-        setProductsCate(responseCate?.data?.data?.products)
-        
-        
+
+        setProducts(response?.data?.data?.products);
+
         // Assuming data structure is suitable for ClothesCard
       } catch (err) {
         console.error("Failed to fetch daily sale products:", err);
@@ -69,7 +71,7 @@ export default function DailySaleComponent({ categories }) {
           <CountdownTimer hours={5} minutes={30} seconds={20} type="b" />
         </div>
         <Star type="b" />
-        <div  
+        <div
           onClick={() => navigate("/search?sale")}
           style={{
             marginLeft: "auto",

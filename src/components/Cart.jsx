@@ -23,6 +23,8 @@ import {
   useDeleteAllCartMutation,
   useGetAllCartsQuery,
 } from "../Redux/cartApi";
+import SideCartCard from "./cart/SideCartCard";
+import { calcDiscount } from "../utils/general";
 
 export default function Cart({ toggleDrawer }) {
   const navigate = useNavigate();
@@ -39,7 +41,11 @@ export default function Cart({ toggleDrawer }) {
     return (
       cartItems?.reduce(
         (acc, item) =>
-          acc + item?.count * (+item?.variant?.price || +item?.product?.price),
+         { 
+          const finalPrice = calcDiscount(item?.variant, item?.product);
+        return  acc + item?.count * (finalPrice.discount?finalPrice.priceAfter:finalPrice.price)
+
+         },
         0
       ) || 0
     );
@@ -101,100 +107,7 @@ export default function Cart({ toggleDrawer }) {
             style={{ display: "flex", flexDirection: "column", gap: "20px" }}
           >
             {cartItems.map((item) => (
-              <>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    gap: "10px",
-                  }}
-                >
-                  <img src={item.product.images[0]} height="150px" />
-                  <div
-                    style={{
-                      width: "80%",
-                      maxWidth: "400px",
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "space-between",
-                      gap: "10px",
-                    }}
-                  >
-                    <div>
-                      <div
-                        style={{
-                          marginBottom: "10px",
-                          fontSize: "14px",
-                          fontWeight: "500",
-                          color: "var(--grey-text)",
-                        }}
-                      >
-                        {item.product?.brand?.name}
-                      </div>
-                      <div
-                        style={{
-                          marginBottom: "10px",
-                          fontSize: "14px",
-                          fontWeight: "700",
-                          color: "#1B1B1B",
-                        }}
-                      >
-                        {item.product.name}
-                      </div>
-                      <div
-                        style={{
-                          fontSize: "16px",
-                          fontWeight: "600",
-                        }}
-                      >
-                        {item.product.description}
-                      </div>
-                    </div>
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <div
-                        style={{
-                          fontSize: "16px",
-                          fontWeight: "800",
-                        }}
-                      >
-                        {item.count}X
-                      </div>
-                      <div>
-                        <span
-                          style={{
-                            color: "#1B1B1BB2",
-                            fontSize: "16px",
-                            fontWeight: "600",
-                          }}
-                        >
-                          {+item?.variant?.price || +item?.product?.price}
-                        </span>
-                        &nbsp; &nbsp;
-                        <span
-                          style={{
-                            fontSize: "16px",
-                            fontWeight: "800",
-                          }}
-                        >
-                          EGP {item.totalPrice}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div
-                  style={{
-                    marginTop: "10px",
-                    borderTop: "1px solid #E8E8E8",
-                    width: "80%",
-                  }}
-                ></div>
-              </>
+            <SideCartCard item={item} key={item.id} /> 
             ))}
           </div>
           <div

@@ -65,7 +65,7 @@ export   const calcDiscount = (selectedVariantObject, productDetails) => {
     selectedVariantObject && !isNaN(+selectedVariantObject?.price)
       ? +selectedVariantObject?.price
       : !isNaN(+productDetails?.price)
-      ? +productDetails?.price
+      ? (+productDetails?.price)
       : 0; // Return 0 if price is invalid
 
   if (!price || price <= 0) {
@@ -78,14 +78,14 @@ export   const calcDiscount = (selectedVariantObject, productDetails) => {
   // Apply discount based on discountType
   if (discountType === "percentage" && discountAmount) {
     return {
-      priceAfter: +(price - (price * discountAmount) / 100),
-      price: price,
+      priceAfter: Math.trunc(price - (price * discountAmount) / 100).toFixed(),
+      price: price.toFixed(),
       discount: true,
     };
   } else if (discountType !== "percentage" && discountAmount) {
     return {
-      priceAfter: +(price - discountAmount),
-      price: price,
+      priceAfter: Math.trunc(price - discountAmount).toFixed(),
+      price: price.toFixed(),
       discount: true,
     };
   } else {
