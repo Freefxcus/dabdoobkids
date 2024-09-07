@@ -395,3 +395,8 @@ button:disabled {
     max-width: 1536px;
   }
 }
+@media (min-width: 1919px) {
+  .padding-container {
+    padding: 0 300px;
+  }
+}
