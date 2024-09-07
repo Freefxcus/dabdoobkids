@@ -18,7 +18,7 @@ export default function BrandsSwiper() {
     const fetchBanners = async () => {
       try {
         const response = await instance.get("/brands", {
-          params: { items: 50, },
+          params: { items: 50 },
         });
         setBrands(response?.data?.data?.brands);
       } catch (err) {
@@ -53,48 +53,75 @@ export default function BrandsSwiper() {
   const repeatCount = Math.ceil(limit / brands.length);
 
   // Create a new array with the repeated brands
-  const newBrands = [...Array(repeatCount)].flatMap(() => brands);
+  const newBrands = [...Array(repeatCount + 5)].flatMap(() => brands);
 
   return (
-    <Swiper
-      className="mySwiper"
-      slidesPerView={limit}
-      speed={10000}
-      autoplay={{
-        delay: 0,
-        disableOnInteraction: false,
-      }}
-      modules={[Autoplay, Pagination, Navigation]}
-      // pagination={{ clickable: true }}
-      loop={true}
+    <marquee
+      
+      // truespeed={5  }
+      scrolldelay={5}
     >
-      <div className="swiper-container" style={{ width: "100%" }}>
-        {brands?.length
-          ? newBrands.map(({ images, name, id }, index) => (
-              <SwiperSlide
-                key={index}
+      {brands?.length
+        ? newBrands.map(({ images, name, id }, index) => (
+            
+              <img
+                src={images[0]}
+                alt={name}
                 style={{
-                  width: "fit-content !important",
+                  cursor: "pointer",
+                  objectFit: "contain",
+                  objectPosition: "center",
                 }}
-              >
-                <div style={{ width: "250px", height: "150px" }}>
-                  <img
-                    src={images[0]}
-                    alt={name}
-                    style={{
-                      cursor: "pointer",
-                      objectFit: "contain",
-                      objectPosition: "center",
-                    }}
-                    onClick={() => {
-                      navigate(`search/?brandId=${id}`);
-                    }}
-                  />
-                </div>
-              </SwiperSlide>
-            ))
-          : null}
-      </div>
-    </Swiper>
+                onClick={() => {
+                  navigate(`search/?brandId=${id}`);
+                }}
+              />
+          
+          ))
+        : null}
+    </marquee>
   );
 }
+
+
+
+{/* <Swiper
+className="mySwiper"
+slidesPerView={limit}
+speed={10000}
+autoplay={{
+  delay: 0,
+  disableOnInteraction: false,
+}}
+modules={[Autoplay, Pagination, Navigation]}
+// pagination={{ clickable: true }}
+loop={true}
+>
+<div className="swiper-container" style={{ width: "100%" }}>
+  {brands?.length
+    ? newBrands.map(({ images, name, id }, index) => (
+        <SwiperSlide
+          key={index}
+          style={{
+            width: "fit-content !important",
+          }}
+        >
+          <div style={{ width: "250px", height: "150px" }}>
+            <img
+              src={images[0]}
+              alt={name}
+              style={{
+                cursor: "pointer",
+                objectFit: "contain",
+                objectPosition: "center",
+              }}
+              onClick={() => {
+                navigate(`search/?brandId=${id}`);
+              }}
+            />
+          </div>
+        </SwiperSlide>
+      ))
+    : null}
+</div>
+</Swiper> */}
