@@ -7,7 +7,7 @@ import {
 } from "../../utils/apiCalls";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { set } from "lodash";
-import { CircularProgress, Stack } from "@mui/material";
+import { Box, CircularProgress, Stack } from "@mui/material";
 import { toast } from "react-toastify";
 import { useDeleteAllCartMutation } from "../../Redux/cartApi";
 
@@ -27,7 +27,6 @@ export default function ConfirmPayment({
   const validatePromoCode = async () => {
     checkPromoCode(promoCode);
   };
-  console.log(paymentMethod, addressId, "paymentMethod123123zzzzzz");
   const handlePayment = async () => {
     setLoading(true);
     const checkout = await orderCheckout(paymentMethod, addressId);
@@ -45,88 +44,95 @@ export default function ConfirmPayment({
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        gap: "18px",
-        flex: 1,
+    <Box
+      sx={{
+        flex: 2,
         width: "70%",
       }}
     >
-      <h2>Price Summary</h2>
-      <div style={{ display: "flex", flexDirection: "column", gap: "18px" }}>
-        <h3>Promo Code</h3>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            gap: "12px",
-          }}
-        >
-          <input
+      <Box
+        sx={{
+          backgroundColor: "#fff",
+          padding: "24px",
+          borderRadius: "12px",
+          display: "flex",
+          flexDirection: "column",
+          gap: "18px",
+        }}
+      >
+        <h2>Price Summary</h2>
+        <div style={{ display: "flex", flexDirection: "column", gap: "18px" }}>
+          <h3>Promo Code</h3>
+          <div
             style={{
-              border: "2px solid var(--dreamy-cloud) ",
-              padding: "12px 12px ",
-              flex: 2,
-            }}
-            value={promoCode}
-            onChange={(e) => setPromoCode(e.target.value)}
-            type="text"
-            placeholder="Enter Promo Code"
-          />
-          <button
-            onClick={validatePromoCode}
-            style={{
-              backgroundColor: "var(--dreamy-cloud)",
-              border: "none",
-              padding: "12px 24px",
+              display: "flex",
+              justifyContent: "space-between",
+              gap: "12px",
             }}
           >
-            Add
-          </button>
-        </div>
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <h2
-            style={{
-              color: "var(rhine-castle)",
-              fontWeight: "500",
-              fontSize: "16px",
-            }}
-          >
-            Total Shopping
-          </h2>
-          <h2
-            style={{
-              color: "var(rhine-castle)",
-              fontWeight: "500",
-              fontSize: "16px",
-            }}
-          >
-            {orderSummary?.data?.data?.total}EGP
-          </h2>
-        </div>
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <h2
-            style={{
-              color: "var(rhine-castle)",
-              fontWeight: "500",
-              fontSize: "16px",
-            }}
-          >
-            Shipping
-          </h2>
-          <h2
-            style={{
-              color: "var(rhine-castle)",
-              fontWeight: "500",
-              fontSize: "16px",
-            }}
-          >
-            {orderSummary?.data?.data?.shipping}EGP
-          </h2>
-        </div>
-        {/* <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <input
+              style={{
+                border: "2px solid var(--dreamy-cloud) ",
+                padding: "12px 12px ",
+                flex: 2,
+              }}
+              value={promoCode}
+              onChange={(e) => setPromoCode(e.target.value)}
+              type="text"
+              placeholder="Enter Promo Code"
+            />
+            <button
+              onClick={validatePromoCode}
+              style={{
+                backgroundColor: "var(--dreamy-cloud)",
+                border: "none",
+                padding: "12px 24px",
+              }}
+            >
+              Add
+            </button>
+          </div>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <h2
+              style={{
+                color: "var(rhine-castle)",
+                fontWeight: "500",
+                fontSize: "16px",
+              }}
+            >
+              Total Shopping
+            </h2>
+            <h2
+              style={{
+                color: "var(rhine-castle)",
+                fontWeight: "500",
+                fontSize: "16px",
+              }}
+            >
+              {orderSummary?.data?.data?.total}EGP
+            </h2>
+          </div>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <h2
+              style={{
+                color: "var(rhine-castle)",
+                fontWeight: "500",
+                fontSize: "16px",
+              }}
+            >
+              Shipping
+            </h2>
+            <h2
+              style={{
+                color: "var(rhine-castle)",
+                fontWeight: "500",
+                fontSize: "16px",
+              }}
+            >
+              {orderSummary?.data?.data?.shipping}EGP
+            </h2>
+          </div>
+          {/* <div style={{ display: "flex", justifyContent: "space-between" }}>
           <h2
             style={{
               color: "var(rhine-castle)",
@@ -146,104 +152,105 @@ export default function ConfirmPayment({
             $10
           </h2>
         </div> */}
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            color: " #AD6B46",
-          }}
-        >
-          <h2
+          <div
             style={{
-              color: "var(rhine-castle)",
-              fontWeight: "500",
-              fontSize: "16px",
+              display: "flex",
+              justifyContent: "space-between",
+              color: " #AD6B46",
             }}
           >
-            Discount
-          </h2>
-          <h2
-            style={{
-              color: "var(rhine-castle)",
-              fontWeight: "500",
-              fontSize: "16px",
-            }}
-          >
-            {orderSummary?.data?.data?.discount}EGP
-          </h2>
-        </div>
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <h2
-            style={{
-              fontWeight: "500",
-              fontSize: "16px",
-            }}
-          >
-            SubTotal
-          </h2>
-          <h2
-            style={{
-              color: "var(rhine-castle)",
-              fontWeight: "500",
-              fontSize: "16px",
-            }}
-          >
-            {orderSummary?.data?.data?.subtotal}EGP
-          </h2>
-        </div>
-        <div style={{ textAlign: "center", color: "red" }}>
-          {!address?.items?.[0]?.id || !addressActive
-            ? "please enter address "
-            : null}
-        </div>
-        <button
-          onClick={handlePayment}
-          style={{
-            backgroundColor: "var(--brown)",
-            color: "white",
-            border: "none",
-            padding: "12px 32px",
-            fontWeight: "400",
-            fontSize: "18px",
-            borderRadius: "10px",
-            cursor: "pointer",
-          }}
-          disabled={loading || !address?.items?.[0]?.id || !addressActive}
-        >
-          {loading ? (
-            <Stack
-              direction="row"
-              justifyContent={"center"}
-              gap={2}
-              alignItems={"center"}
+            <h2
+              style={{
+                color: "var(rhine-castle)",
+                fontWeight: "500",
+                fontSize: "16px",
+              }}
             >
-              {" "}
-              <CircularProgress
-                color="inherit"
-                size="1rem"
-                sx={{ width: "12px" }}
-              />{" "}
-              Loading
-            </Stack>
-          ) : (
-            "Continue to Payment"
-          )}
-        </button>
-      </div>
+              Discount
+            </h2>
+            <h2
+              style={{
+                color: "var(rhine-castle)",
+                fontWeight: "500",
+                fontSize: "16px",
+              }}
+            >
+              {orderSummary?.data?.data?.discount}EGP
+            </h2>
+          </div>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <h2
+              style={{
+                fontWeight: "500",
+                fontSize: "16px",
+              }}
+            >
+              SubTotal
+            </h2>
+            <h2
+              style={{
+                color: "var(rhine-castle)",
+                fontWeight: "500",
+                fontSize: "16px",
+              }}
+            >
+              {orderSummary?.data?.data?.subtotal}EGP
+            </h2>
+          </div>
+          <div style={{ textAlign: "center", color: "red" }}>
+            {!address?.items?.[0]?.id || !addressActive
+              ? "please enter address "
+              : null}
+          </div>
+          <button
+            onClick={handlePayment}
+            style={{
+              backgroundColor: "var(--brown)",
+              color: "white",
+              border: "none",
+              padding: "12px 32px",
+              fontWeight: "400",
+              fontSize: "18px",
+              borderRadius: "10px",
+              cursor: "pointer",
+            }}
+            disabled={loading || !address?.items?.[0]?.id || !addressActive}
+          >
+            {loading ? (
+              <Stack
+                direction="row"
+                justifyContent={"center"}
+                gap={2}
+                alignItems={"center"}
+              >
+                {" "}
+                <CircularProgress
+                  color="inherit"
+                  size="1rem"
+                  sx={{ width: "12px" }}
+                />{" "}
+                Loading
+              </Stack>
+            ) : (
+              "Continue to Payment"
+            )}
+          </button>
+        </div>
 
-      {paymentLink && (
-        <iframe
-          src={paymentLink}
-          title="Paymob"
-          style={{
-            position: "fixed",
-            height: "100vh",
-            width: "100vw",
-            zIndex: "9999",
-            inset: "0",
-          }}
-        />
-      )}
-    </div>
+        {paymentLink && (
+          <iframe
+            src={paymentLink}
+            title="Paymob"
+            style={{
+              position: "fixed",
+              height: "100vh",
+              width: "100vw",
+              zIndex: "9999",
+              inset: "0",
+            }}
+          />
+        )}
+      </Box>
+    </Box>
   );
 }

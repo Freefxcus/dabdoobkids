@@ -183,7 +183,7 @@ export default function OrderCard({
 
           <div className={styles.column}>
             <span>SubTotal</span>
-            <div className={styles.total}>{total}$</div>
+            <div className={styles.total}>{totalPrice}EGP</div>
             <div></div>
           </div>
         </div>

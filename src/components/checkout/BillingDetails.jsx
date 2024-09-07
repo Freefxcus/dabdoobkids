@@ -2,6 +2,7 @@ import AddIcon from "@mui/icons-material/Add";
 import AddressModal from "./AddressModal";
 import { useEffect, useState } from "react";
 import {
+  Box,
   FormControl,
   FormControlLabel,
   FormLabel,
@@ -54,7 +55,6 @@ export default function BillingDetails({
         : null
     );
   }, [address]);
-  console.log(searchParams.get("paymentMethod"), "paymentMethod12312132");
   const handleChange = (event) => {
     setPaymentMethod(event.target.value);
   };
@@ -73,6 +73,13 @@ export default function BillingDetails({
       <h1 style={{ fontSize: "22px", marginBottom: "12px" }}>
         Shipping Details
       </h1>
+      <Box
+          sx={{
+            backgroundColor: "#fff",
+            padding: "24px",
+            borderRadius: "12px",
+          }}
+        >
       <div style={{ display: "grid", gap: "15px" }}>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           {" "}
@@ -281,7 +288,7 @@ export default function BillingDetails({
             <h3>Add Delivery Instructions</h3>
             <textarea
               style={{
-                width: "100%",
+                // width: "100%",
                 height: "100px",
                 border: "1px solid #E5E7EB",
                 padding: "12px",
@@ -303,6 +310,7 @@ export default function BillingDetails({
       ) : (
         <AddressModal open={openAdd} setOpen={setOpenAdd} type="add" />
       )}
+      </Box>
     </div>
   );
 }

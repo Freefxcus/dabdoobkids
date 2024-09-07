@@ -155,11 +155,11 @@ export default function Details() {
       });
     }
   }, [newVariants]);
-  useEffect(() => {
-    selectedVariantObject?.gallery?.[0]
-      ? setLargeImage(selectedVariantObject?.gallery?.[0])
-      : setLargeImage(productDetails?.images?.[0]);
-  }, [selectedVariantObject]);
+  // useEffect(() => {
+  //   selectedVariantObject?.gallery?.[0]
+  //     ? setLargeImage(selectedVariantObject?.gallery?.[0])
+  //     : setLargeImage(productDetails?.images?.[0]);
+  // }, [selectedVariantObject]);
 
 
   // Example usage
