@@ -51,20 +51,31 @@ export default function Search() {
 
   const loadProducts = (page = 1) => {
     setIsLoading(true);
+  
+    // Format category and brand as URL-encoded strings
     const categoryStr = catId.length ? catId.join(",") : "";
     const brandStr = brandId.length ? brandId.join(",") : "";
-    const queryParams = new URLSearchParams({
-      page: page,
-      category: categoryStr,
-      subcategory: brandStr, // Assuming brandId relates to subcategories
-      query: queryStr,
-      sale: urlSale, // Assuming this is a boolean or string value for sale filtering
-    }).toString();
-    getProducts(queryParams).then((res) => {
-      setSearchData(res);
-      setIsLoading(false);
-    });
+    
+    // Prepare query parameters
+    const queryParams = {
+      page: page.toString(),
+      category: categoryStr, // category encoded as a comma-separated string
+      brand: brandStr,       // brand encoded as a comma-separated string
+      query: queryStr || "", // If no query string, fallback to an empty string
+      sale: urlSale || "",   // Assuming `urlSale` is a boolean or string
+    };
+  
+    // Call the getProducts function with the formatted parameters
+    getProducts(page, false, categoryStr, brandStr, queryParams.query, queryParams.sale)
+      .then((res) => {
+        setSearchData(res); // Set the search data to state
+        setIsLoading(false); // Stop the loading spinner
+      })
+      .catch(() => {
+        setIsLoading(false); // Ensure loading stops even if there's an error
+      });
   };
+  
 
   const handleCategoryChange = (categoryId) => {
     const newCatId = catId.includes(categoryId)
@@ -76,7 +87,6 @@ export default function Search() {
       prev.delete("page");
       return prev;
     });
-    loadProducts();
   };
 
   const handleBrandChange = (id) => {
@@ -89,7 +99,6 @@ export default function Search() {
       prev.delete("page");
       return prev;
     });
-    loadProducts();
   };
 
   const handleSearch = (event) => {
@@ -109,6 +118,10 @@ export default function Search() {
     [catId, brandId, queryStr, page]
   );
 
+  useEffect(() => {
+  
+    loadProducts();
+  }, [catId, brandId, queryStr, page]);
   return (
     <div className={`${styles.container} margin-container`}>
       <div className={styles.header}>find the best clothes</div>
