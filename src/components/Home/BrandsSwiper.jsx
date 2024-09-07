@@ -1,9 +1,4 @@
-import React, { useEffect, useState } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
-import "swiper/css/pagination";
-import "swiper/css/navigation";
-import { Autoplay, Pagination, Navigation } from "swiper/modules";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import instance from "../../utils/interceptor";
 
@@ -13,6 +8,7 @@ export default function BrandsSwiper() {
   const [error, setError] = useState(null);
   const [limit, setLimit] = useState(() => Math.ceil(window.innerWidth / 300));
   const navigate = useNavigate();
+  const marqueeRef = useRef(null);
 
   useEffect(() => {
     const fetchBanners = async () => {
@@ -29,7 +25,28 @@ export default function BrandsSwiper() {
       }
     };
 
+    const handleFinish = () => {
+      if (marqueeRef.current) {
+        marqueeRef.current.style.marginLeft = "0";
+        marqueeRef.current.start();
+      }
+    };
+
+    // Ensure marqueeRef.current is not null
+    const startSlide = () => {
+      if (marqueeRef.current) {
+        marqueeRef.current.addEventListener("finish", handleFinish);
+      }
+    };
+
     fetchBanners();
+    startSlide();
+
+    return () => {
+      if (marqueeRef.current) {
+        marqueeRef.current.removeEventListener("finish", handleFinish);
+      }
+    };
   }, []);
 
   // Update the limit on window resize
@@ -56,33 +73,27 @@ export default function BrandsSwiper() {
   const newBrands = [...Array(repeatCount + 5)].flatMap(() => brands);
 
   return (
-    <marquee
-      
-      // truespeed={5  }
-      scrolldelay={5}
-    >
+    <marquee ref={marqueeRef} direction="left">
       {brands?.length
         ? newBrands.map(({ images, name, id }, index) => (
-            
-              <img
-                src={images[0]}
-                alt={name}
-                style={{
-                  cursor: "pointer",
-                  objectFit: "contain",
-                  objectPosition: "center",
-                }}
-                onClick={() => {
-                  navigate(`search/?brandId=${id}`);
-                }}
-              />
-          
+            <img
+              key={index}
+              src={images[0]}
+              alt={name}
+              style={{
+                cursor: "pointer",
+                objectFit: "contain",
+                objectPosition: "center",
+              }}
+              onClick={() => {
+                navigate(`search/?brandId=${id}`);
+              }}
+            />
           ))
         : null}
     </marquee>
   );
 }
-
 
 
 {/* <Swiper
