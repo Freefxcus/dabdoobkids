@@ -35,7 +35,6 @@ import PostPayment from "./pages/post-payment";
 
 function App() {
   const [open, setOpen] = useState(false);
-
   useEffect(() => {
     window.scrollTo({
       top: 0,

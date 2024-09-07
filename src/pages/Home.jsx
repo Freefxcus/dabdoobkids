@@ -90,6 +90,7 @@ export default function Home() {
     instance
       .get("/categories", {
         params: {
+          items:9,
           paginated: false,
         },
       })

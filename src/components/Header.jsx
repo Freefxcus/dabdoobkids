@@ -5,7 +5,7 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import Form from "../components/Form";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { debounce } from "lodash";
 import Cart from "./Cart";
 import { Link } from "react-router-dom";
@@ -42,6 +42,13 @@ export default function Header({ setOpen }) {
     }, 2000),
     []
   );
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, [pathname]);
 
   const [dropDownType, setDropDownType] = useState();
   const [dropDown, setDropDown] = useState(false);
@@ -199,7 +206,7 @@ export default function Header({ setOpen }) {
             />
 
             {categories &&
-              categories?.categories?.map((category) => (
+              categories?.categories?.slice(0,5)?.map((category) => (
                 <Dropdown
                   title={category?.name}
                   items={[{ title: "First", link: "#" }]}

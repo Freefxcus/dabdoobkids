@@ -7,7 +7,7 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import delivery from "../images/delivery.png";
 import cartImg from "../images/cart1.png";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { getProductById, getRelatedProducts } from "../utils/apiCalls";
 import Loader from "../components/Loader";
 import { useDispatch } from "react-redux";
@@ -30,7 +30,13 @@ import Police from "../components/singleProduct/Police.jsx";
 
 export default function Details() {
   const { id } = useParams();
-
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, [pathname,id]);
   const transformVariants = useCallback((variants) => {
     const optionsMap = {};
 

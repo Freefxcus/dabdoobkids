@@ -423,7 +423,7 @@ export const getCategories = async () => {
   let returnedValue;
 
   await instance
-    .get("/categories")
+    .get("/categories?items=50")
     .then((response) => {
       console.log(response);
       returnedValue = response.data.data;
@@ -439,7 +439,7 @@ export const getBrands = async () => {
   let returnedValue;
 
   await instance
-    .get("/brands")
+    .get("/brands?items=50")
     .then((response) => {
       console.log(response);
       returnedValue = response.data.data;
