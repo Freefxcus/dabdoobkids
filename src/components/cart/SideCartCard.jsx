@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { calcDiscount, notifySuccess } from "../../utils/general";
 import Counter from "../singleProduct/counter";
 import { useAddToCartMutation } from "../../Redux/cartApi";
+import { Box } from "@mui/material";
 
 export default function SideCartCard({ item }) {
   // const [count, setCount] = useState(1);
@@ -45,7 +46,45 @@ export default function SideCartCard({ item }) {
           gap: "10px",
         }}
       >
-        <img src={item.product.images[0]} height="150px" />
+        <Box
+          sx={{
+            position: "relative",
+            maxWidth: "150px",
+            width:"150px",
+            height: "auto",
+            maxHeight:"150px",
+            border: "1px solid #b1b1b133",
+            borderRadius: "20px",
+            overflow:"hidden"
+          }}
+        >
+          <Box
+            component={"img"}
+            sx={{  maxWidth: "150px",  border: "1px solid #b1b1b133",
+            width:"100%",
+            height: "auto",
+            maxHeight:"150px",
+              objectFit: "cover",
+              objectPosition: "center",
+               borderRadius: "20px",
+            }}
+            alt={item.product.name}
+            src={item.product.images[0]}
+          />
+         {finalPrice?.discount? <Box
+            sx={{
+              position: "absolute",
+              bottom: "8px",
+              left: "2px",
+              padding: "4px 6px",
+              backgroundColor:"var(--brown)",
+              borderRadius:"4px",
+              color:"#fff"
+            }}
+          >
+            {(+item?.product?.discount)?.toFixed() }{item?.product?.discountType==="percentage"?"%":"EGP"}
+          </Box>:null}
+        </Box>
         <div
           style={{
             width: "80%",
