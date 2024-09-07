@@ -23,7 +23,7 @@ export default function WishList() {
         return <Loader open={true} />
     }
   return (
-    <div style={{margin : "12px 24px" }} >
+    <div style={{margin : "50px 24px 80px",minHeight:"60vh" }} >
         <h1 style={{fontSize : "32px" , fontWeight : "400" , margin : "12px auto"}}>My WishList</h1>
         {wishListItems?.length === 0 ? (<div style={{width :"100%"}}>
             <div style={{display : "flex" , flexDirection : "column" , alignItems : "center" , gap : "12px"}}>
@@ -49,7 +49,7 @@ export default function WishList() {
         </button>
             </div>
         </div>) :
-        (<Box sx={{display : "grid" , gridTemplateColumns : {lg :"repeat(4,1fr)" , md :"repeat(2,1fr)"  , xs : "repeat(1,1fr)" }, justifyItems : "center"}}>
+        (<Box sx={{display : "grid" , gridTemplateColumns : {lg :"repeat(4,1fr)" , md :"repeat(2,1fr)"  , xs : "repeat(1,1fr)" }, justifyItems : "center",paddingY:5 }}>
             {wishListItems?.map(item => (
                 <Productcard item={item.product} setChanged = {setChanged} />
             ))}

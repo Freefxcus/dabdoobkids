@@ -37,14 +37,14 @@ export default function Footer() {
         <div className={styles.section}>
           <div className={styles.header}>Find Us</div>
           <a
-            href="https://www.instagram.com/"
+            href="https://www.instagram.com/dabdoobkidz?igsh=MTJlMXN0ZWI4MmFxeQ=="
             target="_blank"
             className={styles.link}
           >
             Instagram
           </a>
           <a
-            href="https://www.facebook.com/"
+            href="https://www.facebook.com/profile.php?id=61555247997096&mibextid=JRoKGi"
             target="_blank"
             className={styles.link}
           >
