@@ -111,11 +111,11 @@ export default function OrderDetails() {
         <div className={styles.main_title}>Payment Details</div>
         <div className={styles.row_wrap}>
           <div className={styles.left_title}>Total Shoping</div>
-          <div>{order?.totalPrice - order?.shippingFees}$</div>
+          <div>{order?.totalPrice - order?.shippingFees}EGP</div>
         </div>
         <div className={styles.row_wrap}>
           <div className={styles.left_title}>Shipping</div>
-          <div>{order?.shippingFees}$</div>
+          <div>{order?.shippingFees}EGP</div>
         </div>
 
         <div className={styles.row_wrap}>

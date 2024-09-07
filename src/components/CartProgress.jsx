@@ -1,8 +1,6 @@
 import { Box, Stack } from "@mui/material";
 
 export default function CartProgress({ value, percentage = "100%" }) {
-
-  
   return (
     <Stack direction={"row"} gap={"24px"}>
       <span>{value}</span>
@@ -10,7 +8,7 @@ export default function CartProgress({ value, percentage = "100%" }) {
         sx={{
           backgroundColor: "#D1D1D1",
           borderRadius: "50px",
-          width:{xs:"80%" ,md: "400px"},
+          width: { xs: "80%", md: "400px" },
           height: "20px",
         }}
       >
@@ -40,7 +38,7 @@ export default function CartProgress({ value, percentage = "100%" }) {
           </Box>
         </Box>
       </Box>
-      3500$
+      3500EGP
     </Stack>
   );
 }

@@ -19,19 +19,16 @@ export default function Cart() {
   const { data: cartData } = useGetAllCartsQuery();
   const cartItems = cartData?.data || [];
 
-
-  
   const totalPrice = useMemo(() => {
     return (
-      cartItems?.reduce(
-        (acc, item) =>
-         { 
-          const finalPrice = calcDiscount(item?.variant, item?.product);
-        return  acc + item?.count * (finalPrice.discount?finalPrice.priceAfter:finalPrice.price)
-
-         },
-        0
-      ) || 0
+      cartItems?.reduce((acc, item) => {
+        const finalPrice = calcDiscount(item?.variant, item?.product);
+        return (
+          acc +
+          item?.count *
+            (finalPrice.discount ? finalPrice.priceAfter : finalPrice.price)
+        );
+      }, 0) || 0
     );
   }, [cartItems]);
 
@@ -162,7 +159,7 @@ export default function Cart() {
           }}
         >
           <h2>Subtotal</h2>
-          <h2>{totalPrice}$</h2>
+          <h2>{totalPrice}EGP</h2>
         </div>
       </div>
       <div

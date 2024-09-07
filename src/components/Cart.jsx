@@ -39,15 +39,14 @@ export default function Cart({ toggleDrawer }) {
 
   const totalPrice = useMemo(() => {
     return (
-      cartItems?.reduce(
-        (acc, item) =>
-         { 
-          const finalPrice = calcDiscount(item?.variant, item?.product);
-        return  acc + item?.count * (finalPrice.discount?finalPrice.priceAfter:finalPrice.price)
-
-         },
-        0
-      ) || 0
+      cartItems?.reduce((acc, item) => {
+        const finalPrice = calcDiscount(item?.variant, item?.product);
+        return (
+          acc +
+          item?.count *
+            (finalPrice.discount ? finalPrice.priceAfter : finalPrice.price)
+        );
+      }, 0) || 0
     );
   }, [cartItems, isLoading]);
 
@@ -131,7 +130,7 @@ export default function Cart({ toggleDrawer }) {
                   <LinearProgress color="inherit" />
                 </div>
               )} */}
-              {totalPrice}$
+              {totalPrice}EGP
             </div>
           </div>
           <div

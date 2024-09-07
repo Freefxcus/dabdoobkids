@@ -11,12 +11,15 @@ import { CircularProgress, Stack } from "@mui/material";
 import { toast } from "react-toastify";
 import { useDeleteAllCartMutation } from "../../Redux/cartApi";
 
-
-export default function ConfirmPayment({ orderSummary, address,addressActive }) {
+export default function ConfirmPayment({
+  orderSummary,
+  address,
+  addressActive,
+}) {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const paymentMethod = searchParams.get("paymentMethod");
-  const addressId = addressActive||address?.items?.[0]?.id;
+  const addressId = addressActive || address?.items?.[0]?.id;
   const [promoCode, setPromoCode] = useState("");
   const [paymentLink, setPaymentMethod] = useState("");
   const [loading, setLoading] = useState(false);
@@ -28,17 +31,15 @@ export default function ConfirmPayment({ orderSummary, address,addressActive }) 
   const handlePayment = async () => {
     setLoading(true);
     const checkout = await orderCheckout(paymentMethod, addressId);
-    console.log(checkout?.data?.status, "checkout123123");
-    
+
     if (checkout?.data?.data?.url) {
       toast.success("Redirecting to Payment Gateway");
       setPaymentMethod(checkout?.data?.data?.url);
-
-    }else if (checkout?.data?.status === "success") {
+    } else if (checkout?.data?.status === "success") {
       toast.success("Order Placed Successfully");
       deleteAllCart().then(() => {
         navigate("/");
-      })
+      });
     }
     setLoading(false);
   };
@@ -102,7 +103,7 @@ export default function ConfirmPayment({ orderSummary, address,addressActive }) 
               fontSize: "16px",
             }}
           >
-            {orderSummary?.data?.data?.total}$
+            {orderSummary?.data?.data?.total}EGP
           </h2>
         </div>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -122,7 +123,7 @@ export default function ConfirmPayment({ orderSummary, address,addressActive }) 
               fontSize: "16px",
             }}
           >
-            {orderSummary?.data?.data?.shipping}$
+            {orderSummary?.data?.data?.shipping}EGP
           </h2>
         </div>
         {/* <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -168,7 +169,7 @@ export default function ConfirmPayment({ orderSummary, address,addressActive }) 
               fontSize: "16px",
             }}
           >
-            {orderSummary?.data?.data?.discount}$
+            {orderSummary?.data?.data?.discount}EGP
           </h2>
         </div>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -187,11 +188,13 @@ export default function ConfirmPayment({ orderSummary, address,addressActive }) 
               fontSize: "16px",
             }}
           >
-            {orderSummary?.data?.data?.subtotal}$
+            {orderSummary?.data?.data?.subtotal}EGP
           </h2>
         </div>
-        <div style={{textAlign:"center",color:"red"}}>
-          {!address?.items?.[0]?.id||!addressActive?"please enter address ":null}
+        <div style={{ textAlign: "center", color: "red" }}>
+          {!address?.items?.[0]?.id || !addressActive
+            ? "please enter address "
+            : null}
         </div>
         <button
           onClick={handlePayment}
@@ -205,14 +208,42 @@ export default function ConfirmPayment({ orderSummary, address,addressActive }) 
             borderRadius: "10px",
             cursor: "pointer",
           }}
-          disabled={loading||!address?.items?.[0]?.id||!addressActive}
+          disabled={loading || !address?.items?.[0]?.id || !addressActive}
         >
-        
-          {loading ? <Stack direction="row" justifyContent={"center"} gap={2} alignItems={"center"}> <CircularProgress color="inherit" size="1rem" sx={{width : "12px", }}/> Loading</Stack> : "Continue to Payment"}
+          {loading ? (
+            <Stack
+              direction="row"
+              justifyContent={"center"}
+              gap={2}
+              alignItems={"center"}
+            >
+              {" "}
+              <CircularProgress
+                color="inherit"
+                size="1rem"
+                sx={{ width: "12px" }}
+              />{" "}
+              Loading
+            </Stack>
+          ) : (
+            "Continue to Payment"
+          )}
         </button>
       </div>
 
-      {paymentLink && <iframe  src={paymentLink} title="Paymob" style={{position : "fixed" , height : "100vh" , width : "100vw" , zIndex : "9999" , inset : "0"}} />}
+      {paymentLink && (
+        <iframe
+          src={paymentLink}
+          title="Paymob"
+          style={{
+            position: "fixed",
+            height: "100vh",
+            width: "100vw",
+            zIndex: "9999",
+            inset: "0",
+          }}
+        />
+      )}
     </div>
   );
 }

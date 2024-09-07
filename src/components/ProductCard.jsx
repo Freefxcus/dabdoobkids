@@ -10,9 +10,12 @@ import { wishlistActions } from "../Redux/store";
 import { useNavigate } from "react-router-dom";
 import { notifyError, notifySuccess, truncateText } from "../utils/general.js";
 import HandleMessageIsAuth from "../utils/message/index.js";
-import { useAddToWishListMutation, useDeleteWishListMutation, useGetAllWishListQuery } from "../Redux/wishlistApi.jsx";
-export default function Productcard({ item , setChanged }) {
-  console.log(item,"item12312312");
+import {
+  useAddToWishListMutation,
+  useDeleteWishListMutation,
+  useGetAllWishListQuery,
+} from "../Redux/wishlistApi.jsx";
+export default function Productcard({ item, setChanged }) {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -32,7 +35,7 @@ export default function Productcard({ item , setChanged }) {
       error: addWishListError, // Capture the error object
     },
   ] = useAddToWishListMutation();
-  
+
   const [
     deleteWishList,
     {
@@ -42,25 +45,27 @@ export default function Productcard({ item , setChanged }) {
       error: deleteWishListError, // Capture the error object
     },
   ] = useDeleteWishListMutation();
-  
+
   const handleTargetWishlist = async () => {
     try {
       if (wished) {
         await deleteWishList(item?.id).unwrap(); // unwrap to handle promise rejection
-    
-          notifySuccess("Removed from wishlist!");
+
+        notifySuccess("Removed from wishlist!");
       } else {
         await addToWishList(item?.id).unwrap(); // unwrap to handle promise rejection
-        
-          notifySuccess("Added to wishlist!");
-        
+
+        notifySuccess("Added to wishlist!");
       }
     } catch (error) {
       if (isErrorAddWishList || isErrorDeleteWishList) {
-        const errorMessage = addWishListError?.data?.message || deleteWishListError?.data?.message || "An error occurred";
+        const errorMessage =
+          addWishListError?.data?.message ||
+          deleteWishListError?.data?.message ||
+          "An error occurred";
         notifyError(errorMessage);
-      }else{
-        notifyError(error||"An error occurred")
+      } else {
+        notifyError(error || "An error occurred");
       }
     }
   };
@@ -71,7 +76,6 @@ export default function Productcard({ item , setChanged }) {
         navigate(`/details/${item?.id}`);
       }}
     >
-        
       <div className={styles["card-top"]}>
         {/* <img src={lady} width="100%" height="380px" /> */}
         <img
@@ -79,14 +83,13 @@ export default function Productcard({ item , setChanged }) {
             item.images?.[0] || "https://i.postimg.cc/HnNLbVGh/placeholder.png"
           }
           alt="product"
-          style={{height: "356px" , width: "100%" , objectFit: "cover"}}
-
+          style={{ height: "356px", width: "100%", objectFit: "cover" }}
         />
         <div
           className={styles["heart-container"]}
-          onClick={ (e) => {
+          onClick={(e) => {
             e.stopPropagation();
-            HandleMessageIsAuth(handleTargetWishlist)
+            HandleMessageIsAuth(handleTargetWishlist);
           }}
         >
           <img src={wished ? fHeart : eHeart} width="25px" alt="heart" />
@@ -104,11 +107,9 @@ export default function Productcard({ item , setChanged }) {
         )}
       </div>
       <div className={styles["card-bottom"]}>
-        <div style={{ fontWeight: "600" }}>
-          {item?.name }
-        </div>
+        <div style={{ fontWeight: "600" }}>{item?.name}</div>
         <div>{truncateText(item.description?.en || item.description, 20)}</div>
-        <div style={{ fontWeight: "bold" }}>${item?.price}</div>
+        <div style={{ fontWeight: "bold" }}>EGP{item?.price}</div>
       </div>
     </div>
   );

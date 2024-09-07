@@ -64,16 +64,22 @@ export default function SingleProductModal({
         <Box sx={style}>
           <Box
             sx={{
-              
               maxWidth: "27rem",
               minWidth: { md: "27rem" },
               display: "flex",
               flexDirection: "column",
               justifyContent: "space-between",
-              gap:2
+              gap: 2,
             }}
           >
-            <div style={{ display: "flex", justifyContent: "space-between" ,borderBottom:"1px solid #aaaaaa33",height:"auto"}}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                borderBottom: "1px solid #aaaaaa33",
+                height: "auto",
+              }}
+            >
               <h2
                 style={{
                   marginBottom: "16px",
@@ -92,7 +98,14 @@ export default function SingleProductModal({
                 x
               </span>
             </div>
-            <div style={{ display: "flex", width: "100%", gap: "8px" ,marginTop:"14px" }}>
+            <div
+              style={{
+                display: "flex",
+                width: "100%",
+                gap: "8px",
+                marginTop: "14px",
+              }}
+            >
               <img
                 style={{ width: "116px", height: "150px", flex: 1 }}
                 src={productDetails?.images[0]}
@@ -150,22 +163,22 @@ export default function SingleProductModal({
                     selectedVariantObject={selectedVariantObject}
                   />
                   <h3>
-                  {finalPrice?.discount ? (
-                <>
-                  <span>EGP {finalPrice.priceAfter}</span>{" "}
-                  <s
-                    style={{
-                      fontSize: "1.25rem",
-                      fontWeight: "500",
-                      color: "var(--grey-text)",
-                    }}
-                  >
-                    EGP {finalPrice.price}{" "}
-                  </s>
-                </>
-              ) : (
-                <span>EGP {finalPrice.price}</span>
-              )}
+                    {finalPrice?.discount ? (
+                      <>
+                        <span>EGP {finalPrice.priceAfter}</span>{" "}
+                        <s
+                          style={{
+                            fontSize: "1.25rem",
+                            fontWeight: "500",
+                            color: "var(--grey-text)",
+                          }}
+                        >
+                          EGP {finalPrice.price}{" "}
+                        </s>
+                      </>
+                    ) : (
+                      <span>EGP {finalPrice.price}</span>
+                    )}
                   </h3>
                 </div>
               </div>
@@ -175,22 +188,30 @@ export default function SingleProductModal({
                 display: "flex",
                 justifyContent: "space-between",
                 marginTop: "8px",
-                fontSize:"1.25rem"
+                fontSize: "1.25rem",
               }}
             >
-              <h4  style={{
-                fontSize:"1.25rem"
-              }}>Subtotal</h4>
-              <h4  style={{
-                fontSize:"1.25rem"
-              }}>
+              <h4
+                style={{
+                  fontSize: "1.25rem",
+                }}
+              >
+                Subtotal
+              </h4>
+              <h4
+                style={{
+                  fontSize: "1.25rem",
+                }}
+              >
                 {count
                   ? Math.trunc(
                       +count *
-                      +(finalPrice?.discount?finalPrice.priceAfter:finalPrice.price)
+                        +(finalPrice?.discount
+                          ? finalPrice.priceAfter
+                          : finalPrice.price)
                     )
                   : null}
-                $
+                EGP
               </h4>
             </div>
 
@@ -215,7 +236,7 @@ export default function SingleProductModal({
                   fontSize: "18px",
                   borderRadius: "10px",
                   cursor: "pointer",
-                  flex:"1 1 0%"
+                  flex: "1 1 0%",
                 }}
                 onClick={() => {
                   navigate("/cart");
@@ -237,7 +258,8 @@ export default function SingleProductModal({
                   fontWeight: "400",
                   fontSize: "18px",
                   borderRadius: "10px",
-                  cursor: "pointer",flex:"1 1 0%"
+                  cursor: "pointer",
+                  flex: "1 1 0%",
                 }}
               >
                 Checkout
