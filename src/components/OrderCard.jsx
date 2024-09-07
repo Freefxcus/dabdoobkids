@@ -92,8 +92,8 @@ export default function OrderCard({
                 <div className={styles.title}>{product.name}</div>
               </div>
               <div className={`${styles.row} ${styles.subtitle}`}>
-                {variant?.options.length
-                  ? variant?.options?.map((variantItem, index) => (
+                {item?.variant?.options?.length
+                  ? item?.variant?.options?.map((variantItem, index) => (
                       <div
                         key={index + variantItem?.id}
                         className={styles.row}
@@ -206,8 +206,8 @@ export default function OrderCard({
               </div>
               <div className={styles.frameParent}>
                 <div className={styles.frameGroup}>
-                {variant?.options.length
-                  ? variant?.options?.map((variantItem, index) => (
+                {item?.variant?.options.length
+                  ? item?.variant?.options?.map((variantItem, index) => (
                       <div
                         key={index + variantItem?.id}
                         className={styles.row}

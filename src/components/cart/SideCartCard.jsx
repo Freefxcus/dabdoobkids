@@ -152,24 +152,25 @@ export default function SideCartCard({ item }) {
               {finalPrice?.discount ? (
                 <>
                   {" "}
-                  <s
-                    style={{
-                      fontSize: "1rem",
+                  <Box component={"s"}
+                    sx={{ 
+                      // display:{xs:"none",sm:"flex"},
+                      fontSize: {md:"1rem",sm: "0.75rem",xs:"0.7rem"},
                       fontWeight: "500",
                       color: "var(--grey-text)",
                     }}
                   >
                     EGP {finalPrice.price}{" "}
-                  </s>{" "}
-                  <span
-                    style={{
-                      fontSize: "1.25rem",
+                  </Box>{" "}
+                  <Box component={"span"}
+                    sx={{
+                      fontSize:  {md:"1.25rem",sm: "1rem",xs:"0.85rem"},
                       fontWeight: "700",
                       color: "#1B1B1B",
                     }}
                   >
                     EGP {finalPrice.priceAfter}
-                  </span>
+                  </Box>
                 </>
               ) : (
                 <span>EGP {finalPrice.price}</span>

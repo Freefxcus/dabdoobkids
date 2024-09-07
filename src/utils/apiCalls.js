@@ -20,13 +20,13 @@ export const getProducts = async (page, all, category, brand, query,sale) => {
     // items: 2, // example default value for item
     category,
     brand,
-    query,sale
+    query,sale,items:12
   };
   Object.keys(params).forEach((key) => !params[key] ? delete params[key] : params[key]);
   console.log("paramsparamsparams",params,sale);
   await instance
     .get("/products", {
-      params,
+      params
     })
     .then((response) => {
       console.log(response?.data?.data);

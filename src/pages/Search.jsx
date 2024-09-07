@@ -39,6 +39,7 @@ export default function Search() {
   const [categories, setCategories] = useState([]);
   const [brands, setBrands] = useState([]);
 
+
   useEffect(() => {
     getCategories().then((res) => {
       setCategories(res?.categories);
@@ -46,36 +47,32 @@ export default function Search() {
     getBrands().then((res) => {
       setBrands(res?.brands);
     });
-    loadProducts();
-  }, []);
+    loadProducts(page);  // Load products based on the current page state
+  }, [page]);
 
   const loadProducts = (page = 1) => {
     setIsLoading(true);
-  
-    // Format category and brand as URL-encoded strings
     const categoryStr = catId.length ? catId.join(",") : "";
     const brandStr = brandId.length ? brandId.join(",") : "";
-    
-    // Prepare query parameters
+
     const queryParams = {
       page: page.toString(),
-      category: categoryStr, // category encoded as a comma-separated string
-      brand: brandStr,       // brand encoded as a comma-separated string
-      query: queryStr || "", // If no query string, fallback to an empty string
-      sale: urlSale || "",   // Assuming `urlSale` is a boolean or string
+      category: categoryStr,
+      brand: brandStr,
+      query: queryStr || "",
+      sale: urlSale || "",
     };
-  
-    // Call the getProducts function with the formatted parameters
+
     getProducts(page, false, categoryStr, brandStr, queryParams.query, queryParams.sale)
       .then((res) => {
-        setSearchData(res); // Set the search data to state
-        setIsLoading(false); // Stop the loading spinner
+        setSearchData(res);
+        setTotalPages(res?.metadata?.totalPages || 1);
+        setIsLoading(false);
       })
       .catch(() => {
-        setIsLoading(false); // Ensure loading stops even if there's an error
+        setIsLoading(false);
       });
   };
-  
 
   const handleCategoryChange = (categoryId) => {
     const newCatId = catId.includes(categoryId)
@@ -118,12 +115,16 @@ export default function Search() {
     [catId, brandId, queryStr, page]
   );
 
+  const handlePageChange = (event, value) => {
+    setPage(value); // Call the product loading function with the new page
+  };
+
   useEffect(() => {
   
     loadProducts();
   }, [catId, brandId, queryStr, page]);
   return (
-    <div className={`${styles.container} margin-container`}>
+    <div className={`${styles.container} margin-container`} style={{paddingBottom:"50px"}}>
       <div className={styles.header}>find the best clothes</div>
       <div className={styles["countdown-container"]}>
         <div className={styles["countdown-title"]}>Daily sale</div>
@@ -269,15 +270,9 @@ export default function Search() {
                 },
               }}
               variant="outlined"
-              count={searchData?.metadata?.totalPages || 1}
-              page={+searchParams.get("page") || 1}
-              onChange={(e, v) => {
-                setSearchParams((prev) => {
-                  prev.set("page", v);
-                  return prev;
-                });
-                debouncedHandleInputChange();
-              }}
+          count={totalPages}
+          page={page}
+          onChange={handlePageChange}
             />
           </Box>
         </Box>

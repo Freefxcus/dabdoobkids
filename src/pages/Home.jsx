@@ -191,7 +191,8 @@ export default function Home() {
               xs: "repeat(2,1fr)",
             },
             gap: { lg: "20px", md: "10px", xs: "10px" },
-            maxWidth: "100%",
+            // maxWidth: "100%",
+            width:"auto",
             alignContent: "start",
           }}
         >
