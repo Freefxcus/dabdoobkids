@@ -187,7 +187,7 @@ export default function Details() {
       )}
       {productDetails?.id && (
         <div
-          className={`${styles["container"]} margin-container section-top-margin section-bottom-margin`}
+          className={`${styles["container"]} padding-container section-top-margin section-bottom-margin`}
         >
           <div className={styles["images-section"]}>
             <img src={largeImage} className={styles["large-image"]} />
