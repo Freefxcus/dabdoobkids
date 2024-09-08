@@ -1,6 +1,6 @@
 .container {
   /* width: 295px; */
-aspect-ratio: 0.8;
+aspect-ratio: 0.5;
   max-width: 300px;
   cursor: pointer;
 }

@@ -39,7 +39,6 @@ export default function Search() {
   const [categories, setCategories] = useState([]);
   const [brands, setBrands] = useState([]);
 
-
   useEffect(() => {
     getCategories().then((res) => {
       setCategories(res?.categories);
@@ -47,7 +46,7 @@ export default function Search() {
     getBrands().then((res) => {
       setBrands(res?.brands);
     });
-    loadProducts(page);  // Load products based on the current page state
+    loadProducts(page); // Load products based on the current page state
   }, [page]);
 
   const loadProducts = (page = 1) => {
@@ -63,7 +62,14 @@ export default function Search() {
       sale: urlSale || "",
     };
 
-    getProducts(page, false, categoryStr, brandStr, queryParams.query, queryParams.sale)
+    getProducts(
+      page,
+      false,
+      categoryStr,
+      brandStr,
+      queryParams.query,
+      queryParams.sale
+    )
       .then((res) => {
         setSearchData(res);
         setTotalPages(res?.metadata?.totalPages || 1);
@@ -120,11 +126,13 @@ export default function Search() {
   };
 
   useEffect(() => {
-  
     loadProducts();
   }, [catId, brandId, queryStr, page]);
   return (
-    <div className={`${styles.container} margin-container`} style={{paddingBottom:"50px"}}>
+    <div
+      className={`${styles.container} margin-container`}
+      style={{ paddingBottom: "50px" }}
+    >
       <div className={styles.header}>find the best clothes</div>
       <div className={styles["countdown-container"]}>
         <div className={styles["countdown-title"]}>Daily sale</div>
@@ -147,7 +155,7 @@ export default function Search() {
         <div className={styles.categories_section}>
           <div className={styles.category}>
             <div className={styles.category_title}>Categories</div>
-            {categories.map((category) => (
+            {categories?.map((category) => (
               <div
                 className={styles.checkbox_container}
                 key={category.id}
@@ -244,12 +252,22 @@ export default function Search() {
                   <div style={{ height: "500px" }} />
                 </>
               )}
-
-              {searchData?.products?.length > 0 &&
-                !isLoading &&
-                searchData.products.map((item) => (
-                  <ClothesCard key={item.id} item={item} />
-                ))}
+              <Box
+                sx={{
+                  display: { xs: "grid",  },
+                  gridTemplateColumns: {
+                    xs: "repeat(2,1fr)", sm: "repeat(3,1fr)", md: "repeat(2,1fr)",xl:"repeat(4,1fr)",
+                  },
+                  gap: { lg: "20px", md: "10px", xs: "10px" },
+                }}
+                className={styles.cards_section}
+              >
+                {searchData?.products?.length > 0 &&
+                  !isLoading &&
+                  searchData?.products?.map((item) => (
+                    <ClothesCard key={item.id} item={item} />
+                  ))}
+              </Box>
             </>
           </div>
           <Box sx={{ width: "100%", mx: "auto", marginTop: "24px" }}>
@@ -270,9 +288,9 @@ export default function Search() {
                 },
               }}
               variant="outlined"
-          count={totalPages}
-          page={page}
-          onChange={handlePageChange}
+              count={totalPages}
+              page={page}
+              onChange={handlePageChange}
             />
           </Box>
         </Box>
