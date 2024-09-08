@@ -85,36 +85,7 @@ export default function BannerSwiper() {
                 alignItems: "center",
               }}
             >
-              {/* <Box>
-                <Typography
-                  variant="h1"
-                  sx={{
-                    color: "white",
-                    fontFamily: "Playfair Display, serif",
-                    fontStyle: "italic",
-                    fontWeight: 500,
-                    fontSize : {xs : "2rem", sm : "3rem", md : "4rem", lg : "5rem"},
-                    textAlign: "center",
-                    marginBottom: "1rem",
-                  }}
-                >
-                  Dabdoob KIDZ
-                </Typography>
-                <Typography
-                  sx={{
-                    color: "white",
-                    textAlign: "center",
-                    fontSize : {xs : "1rem", sm : "1rem", md : "1rem", lg : "2rem"},
-                    fontWeight: 300,
-                    maxWidth: "80%",
-                    mx: "auto",
-                    wordBreak: "break-word",
-                  }}
-                >
-                  Make yourself look different without old-fashioned clothes and
-                  impress others
-                </Typography>
-              </Box> */}
+             
             </Box>
           </SwiperSlide>
         )):bannerImages.map((img, index) => (

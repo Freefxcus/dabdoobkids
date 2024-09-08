@@ -388,7 +388,7 @@ button:disabled {
 }
 
 
-@media (min-width: 1536px) {
+@media (min-width: 1536px) and (max-width: 1919px)  {
   .padding-container {
     padding: 0 150px;
   } .container{

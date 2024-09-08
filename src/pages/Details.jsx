@@ -11,7 +11,11 @@ import { useLocation, useParams } from "react-router-dom";
 import { getProductById, getRelatedProducts } from "../utils/apiCalls";
 import Loader from "../components/Loader";
 import { useDispatch } from "react-redux";
-
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
+import { Autoplay, Pagination } from "swiper/modules";
 import { toast } from "react-toastify";
 import SingleProductModal from "../components/singleProduct/SingleProductModal.jsx";
 
@@ -36,7 +40,7 @@ export default function Details() {
       top: 0,
       behavior: "smooth",
     });
-  }, [pathname,id]);
+  }, [pathname, id]);
   const transformVariants = useCallback((variants) => {
     const optionsMap = {};
 
@@ -167,7 +171,6 @@ export default function Details() {
   //     : setLargeImage(productDetails?.images?.[0]);
   // }, [selectedVariantObject]);
 
-
   // Example usage
   const finalPrice = calcDiscount(selectedVariantObject, productDetails);
 
@@ -189,7 +192,11 @@ export default function Details() {
         <div
           className={`${styles["container"]} padding-container section-top-margin section-bottom-margin`}
         >
-          <div className={styles["images-section"]}>
+          <Box
+            component={"div"}
+            sx={{ display: { sm: "flex", xs: "none" } }}
+            className={styles["images-section"]}
+          >
             <img src={largeImage} className={styles["large-image"]} />
             <div className={styles["small-images-container"]}>
               {productDetails.images.slice(0, 4).map((img, index) => (
@@ -204,7 +211,42 @@ export default function Details() {
                 />
               ))}
             </div>
-          </div>
+          </Box>
+          <Box  sx={{ display: { xs: "block", sm: "none" },aspectRatio:0.8,position:"relative",width:"98vw",}}>
+            <Swiper
+              className="mySwiper"
+              grabCursor={true}
+              pagination={{
+                clickable: true,
+              }}
+              speed={2000}
+              loop
+              autoplay={{
+                delay: 2000,
+                disableOnInteraction: false,
+              }}
+              modules={[Autoplay, Pagination]}
+            >
+              {productDetails.images.slice(0, 4).map((img, index) => (
+                <SwiperSlide key={index}>
+                  <Box
+                    component={"div"}
+                    sx={{
+                      backgroundImage: `url(${img})`,
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
+                      backgroundRepeat: "no-repeat",
+                    
+                      display: "flex",
+                      aspectRatio:0.8,
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  ></Box>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </Box>
           <div className={styles["order-section"]}>
             <div style={{ fontSize: "14px", color: "var(--rhine-castle)" }}>
               {productDetails.category.name}
@@ -377,7 +419,6 @@ export default function Details() {
               <div
                 className={`${styles["row"]} ${styles["btn-count"]}`}
                 style={{
-                  
                   padding: "13px 8px",
                   border: "1px solid var(--unicorn-silver)",
                   borderRadius: "10px",
