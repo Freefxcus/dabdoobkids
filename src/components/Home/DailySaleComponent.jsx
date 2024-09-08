@@ -87,7 +87,7 @@ export default function DailySaleComponent({ categories }) {
           All Collections
         </div>
       </div>
-      <div className="cards_container_a">
+      <div >
         <Swiper
           className="mySwiper"
           grabCursor={true}
