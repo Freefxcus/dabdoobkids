@@ -15,10 +15,22 @@ export default function Categories() {
 
 
   return (
-    <div style={{padding : "12px" }}>
+    <div   className={"padding-container"} style={{minHeight:"60vh",paddingTop:"50px", paddingBottom:"100px"}}>
       <div className={styles.title}>Categories</div>
-      <Box sx={{display : "grid" , gridTemplateColumns : {lg : "repeat(3, 1fr)" , md : "repeat(2,1fr)" , xs :"repeat(1, 1fr)"} , justifyItems : "center", gap : "22px"}}>
-   
+      <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: {
+              lg: "repeat(3,1fr)",
+              md: "repeat(2,1fr)",
+              xs: "repeat(2,1fr)",
+            },
+            gap: { lg: "20px", md: "10px", xs: "10px" },
+            p:"50px 0 100px",
+            alignContent: "start",
+          }}
+        
+        >
         {categoriesData?.categories?.map((category) => (
           <Category item={category} />
         ))}
