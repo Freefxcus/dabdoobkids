@@ -76,6 +76,7 @@ export default function ClothesCard({ item }) {
           sx={{
             height: { lg: "356px", md: "300px", xs: "204px" },
             width: "100%",
+            aspectRatio:0.8,
             objectFit: "cover",
           }}
           component={"img"}

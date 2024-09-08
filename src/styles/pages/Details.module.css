@@ -18,7 +18,7 @@
 }
 
 .large-image {
-aspect-ratio: 0.8;
+aspect-ratio: 0.8 !important;
   width: calc(100% - 130px);
   /* height: 650px; */
   border-radius: 9px;
