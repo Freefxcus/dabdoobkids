@@ -59,6 +59,7 @@
 .subtitle {
   font-size: 14px;
   font-weight: 500;
+  flex-wrap: wrap;
 }
 .forDesktop{
   display: flex !important;

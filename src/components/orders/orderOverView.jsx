@@ -34,7 +34,7 @@ export default function OrderOverview({
               <div className={styles.title}>{product?.name}</div>
             </div>
             <div className={`${styles.row} ${styles.subtitle}`}>
-              <div></div>
+              
 
               {variant?.options.length
                 ? variant?.options?.map((variantItem, index) => (

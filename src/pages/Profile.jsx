@@ -40,7 +40,6 @@ export default function Profile() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const [orders, setOrders] = useState(null); 
    const [PromoCodes, setPromoCodes] = useState(null);
   const [helpOption, setHelpOption] = useState("1");
   const [currentId, setCurrentId] = useState("");
@@ -58,8 +57,6 @@ export default function Profile() {
   const [openEditProfile, setOpenEditProfile] = useState(false);
   const [wallet, setWallet] = useState({});
   const [walletHistory, setWalletHistory] = useState({});
-  const [paginationInfo, setPaginationInfo] = useState({});
-  const [searchParams, setSearchParams] = useSearchParams();
 
   const handleClickOpen = () => {
     setAlertOpen(true);
@@ -129,24 +126,8 @@ export default function Profile() {
   }, [forceReload]);
 
   //get orders
-  useEffect(() => {
-    instance
-      .get("profile/orders", {
-        params: {
-          items: 5,
-          page: searchParams.get("page") || 1,
-        },
-      })
-      .then((response) => {
-        setPaginationInfo(response?.data?.data?.metadata);
-        setOrders(response.data?.data?.orders);
-        // setTotalPages(response.data.data.metadata.totalPages);
-        setIsLoading(false);
-      })
-      .catch((error) => {});
-  }, [searchParams]);
+ 
 
-  console.log(orders, "orderszdsaddsegwgfqffdq");
   // get wallet
   useEffect(() => {
     getWallet().then((res) => {
@@ -464,7 +445,7 @@ export default function Profile() {
                 )}
               </div>
             )}
-            {sidebarItem === "3" && <OrderList setSearchParams={setSearchParams} paginationInfo={paginationInfo} orders={orders} />}
+            {sidebarItem === "3" && <OrderList    />}
             {sidebarItem === "4" && (
               <div className={styles.text_container}>
                 <div className={styles.sub_header}>Returns and refunds</div>

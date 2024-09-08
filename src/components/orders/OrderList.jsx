@@ -1,15 +1,32 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "../../styles/pages/Profile.module.css";
 import OrderCard from "../OrderCard";
 import OrderOverview from "./orderOverView";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Box, Pagination } from "@mui/material";
+import instance from "../../utils/interceptor";
 
-export default function OrderList({ setSearchParams, paginationInfo, orders }) {
-  console.log(orders, "ziadorderedsdsadsaordersordersorders");
+export default function OrderList({   }) {
   const navigate = useNavigate();
-  const [currentOrder, setCurrentOrder] = useState(null);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [orders, setOrders] = useState(null); 
+  const [paginationInfo, setPaginationInfo] = useState({});
 
+ useEffect(() => {
+    instance
+      .get("profile/orders", {
+        params: {
+          items: 5,
+          page: searchParams.get("page") || 1,
+        },
+      })
+      .then((response) => {
+        setPaginationInfo(response?.data?.data?.metadata);
+        setOrders(response.data?.data?.orders);
+        // setTotalPages(response.data.data.metadata.totalPages);
+      })
+      .catch((error) => {});
+  }, [searchParams]);
   return (
     <div
       style={{
