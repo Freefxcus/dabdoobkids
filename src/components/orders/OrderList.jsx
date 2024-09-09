@@ -37,8 +37,8 @@ export default function OrderList() {
       }}
     >
       {orders === null && <Loader open={true} />}
-      {orders.length === 0 && <div>No Orders Created ...</div>}
-      {orders.length > 0  && (
+      {orders?.length === 0 && <div>No Orders Created ...</div>}
+      {orders?.length > 0  && (
 
    
       <div
