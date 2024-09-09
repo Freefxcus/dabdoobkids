@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { set } from "lodash";
 import Loader from "../components/Loader";
 import { useGetAllWishListQuery } from "../Redux/wishlistApi";
+import ClothesCard from "../components/ClothesCard";
 
 
 export default function WishList() {
@@ -23,7 +24,7 @@ export default function WishList() {
         return <Loader open={true} />
     }
   return (
-    <div style={{margin : "50px 24px 80px",minHeight:"60vh" }} >
+    <div style={{minHeight:"60vh" ,paddingTop:"50px",paddingBottom:"100px" }} className="padding-container"  >
         <h1 style={{fontSize : "32px" , fontWeight : "400" , margin : "12px auto"}}>My WishList</h1>
         {wishListItems?.length === 0 ? (<div style={{width :"100%"}}>
             <div style={{display : "flex" , flexDirection : "column" , alignItems : "center" , gap : "12px"}}>
@@ -49,9 +50,9 @@ export default function WishList() {
         </button>
             </div>
         </div>) :
-        (<Box sx={{display : "grid" , gridTemplateColumns : {lg :"repeat(4,1fr)" , md :"repeat(2,1fr)"  , xs : "repeat(1,1fr)" }, justifyItems : "center",paddingY:5 }}>
+        (<Box sx={{display : "grid" , gridTemplateColumns : {lg :"repeat(4,1fr)" , md :"repeat(3,1fr)"  , xs : "repeat(2,1fr)" }, justifyItems : "center",paddingY:5 }}>
             {wishListItems?.map(item => (
-                <Productcard item={item.product} setChanged = {setChanged} />
+                <ClothesCard item={item.product} setChanged = {setChanged} />
             ))}
         </Box>) }
     </div>

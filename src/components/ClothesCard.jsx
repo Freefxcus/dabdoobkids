@@ -32,7 +32,7 @@ export default function ClothesCard({ item }) {
       error: addWishListError, // Capture the error object
     },
   ] = useAddToWishListMutation();
-  
+
   const [
     deleteWishList,
     {
@@ -42,25 +42,27 @@ export default function ClothesCard({ item }) {
       error: deleteWishListError, // Capture the error object
     },
   ] = useDeleteWishListMutation();
-  
+
   const handleTargetWishlist = async () => {
     try {
       if (wished) {
         await deleteWishList(item?.id).unwrap(); // unwrap to handle promise rejection
-    
-          notifySuccess("Removed from wishlist!");
+
+        notifySuccess("Removed from wishlist!");
       } else {
         await addToWishList(item?.id).unwrap(); // unwrap to handle promise rejection
-        
-          notifySuccess("Added to wishlist!");
-        
+
+        notifySuccess("Added to wishlist!");
       }
     } catch (error) {
       if (isErrorAddWishList || isErrorDeleteWishList) {
-        const errorMessage = addWishListError?.data?.message || deleteWishListError?.data?.message || "An error occurred";
+        const errorMessage =
+          addWishListError?.data?.message ||
+          deleteWishListError?.data?.message ||
+          "An error occurred";
         notifyError(errorMessage);
-      }else{
-        notifyError(error||"An error occurred")
+      } else {
+        notifyError(error || "An error occurred");
       }
     }
   };
@@ -74,9 +76,8 @@ export default function ClothesCard({ item }) {
       <div className={styles["card-top"]}>
         <CardMedia
           sx={{
-           
             width: "100%",
-            aspectRatio:0.77,
+            aspectRatio: 0.77,
             objectFit: "cover",
           }}
           component={"img"}
@@ -110,7 +111,15 @@ export default function ClothesCard({ item }) {
         </div>
       </div>
       <div className={styles["card-bottom"]}>
-      <div style={{ fontWeight: "500",fontSize:"0.875rem",color:"rgba(27, 27, 27, 0.70)" }}>{item?.brand?.name}</div>
+        <div
+          style={{
+            fontWeight: "500",
+            fontSize: "0.875rem",
+            color: "rgba(27, 27, 27, 0.70)",
+          }}
+        >
+          {item?.brand?.name}
+        </div>
         <div style={{ fontWeight: "600" }}>{item?.name}</div>
         <div style={{ fontWeight: "bold" }}>EGP{item?.price}</div>
       </div>
