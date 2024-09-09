@@ -504,7 +504,7 @@ export default function Details() {
                   });
                 }}
               >
-                <ShoppingCart size="32" color="#FFF" />
+                <ShoppingCart size="24" color="#FFF" />
                 {CartAddLoad ? (
                   <Stack
                     direction="row"
