@@ -1,11 +1,13 @@
 .container {
   /* width: 295px; */
-aspect-ratio: 0.4;
+   aspect-ratio: 0.62;
   max-width: 300px;
+  width: 100%;  
   cursor: pointer;
 }
 .card-top {
   /* height: 380px; */
+  width: 100%;
   border-radius: 8px;
   position: relative;
   overflow: hidden;

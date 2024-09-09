@@ -74,9 +74,9 @@ export default function ClothesCard({ item }) {
       <div className={styles["card-top"]}>
         <CardMedia
           sx={{
-            height: { lg: "356px", md: "300px", xs: "204px" },
+           
             width: "100%",
-            aspectRatio:0.8,
+            aspectRatio:0.77,
             objectFit: "cover",
           }}
           component={"img"}
