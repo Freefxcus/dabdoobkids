@@ -35,6 +35,7 @@ import AddressModal from "../components/checkout/AddressModal.jsx";
 import UpdateProfileUpdate from "../components/profile/UpdateProfile.jsx";
 import UpdateProfileModal from "../components/profile/UpdateProfile.jsx";
 import OrderList from "../components/orders/OrderList.jsx";
+import { LogoutCurve } from "iconsax-react";
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -238,10 +239,13 @@ export default function Profile() {
                     setSidebarItem(item?.id);
                   }}
                   style={{
-                    color: item?.id === "8" ? "var(--error)" : "initial",
+                    color: item?.id === "8"||item?.id === "9" ? "var(--error)" : "initial",
                   }}
                 >
                   {item?.title}
+                  {item?.id === "9" ?
+                   <LogoutCurve size="24" color="var(--error)" />
+                  : null }
                 </div>
               ))}
             </div>

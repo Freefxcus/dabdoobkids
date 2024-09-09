@@ -5,8 +5,9 @@ import OrderOverview from "./orderOverView";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Box, Pagination } from "@mui/material";
 import instance from "../../utils/interceptor";
+import Loader from "../Loader";
 
-export default function OrderList({   }) {
+export default function OrderList() {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const [orders, setOrders] = useState(null); 
@@ -35,11 +36,11 @@ export default function OrderList({   }) {
         margin: "0px auto",
       }}
     >
-      {/* {orders === null && <Loader open={true} />} */}
-      {/* {orders.length === 0 && <div>No Orders Created ...</div>} */}
-      {/* {orders.length > 0 && currentOrder === null && (
+      {orders === null && <Loader open={true} />}
+      {orders.length === 0 && <div>No Orders Created ...</div>}
+      {orders.length > 0  && (
 
-    )} */}
+   
       <div
         style={{
           display: "flex",
@@ -125,7 +126,7 @@ export default function OrderList({   }) {
             }}
           />
         </Box>
-      </div>
+      </div> )}
       {/* {currentOrder !== null && (
         <>
           {orders

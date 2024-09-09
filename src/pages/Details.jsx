@@ -29,7 +29,7 @@ import {
   useGetAllCartsQuery,
 } from "../Redux/cartApi.jsx";
 import { calcDiscount, notifyError, notifySuccess } from "../utils/general.js";
-import { Add, AddCircle, Minus } from "iconsax-react";
+import { Add, AddCircle, Minus, ShoppingCart } from "iconsax-react";
 import Police from "../components/singleProduct/Police.jsx";
 
 export default function Details() {
@@ -212,7 +212,14 @@ export default function Details() {
               ))}
             </div>
           </Box>
-          <Box  sx={{ display: { xs: "block", sm: "none" },aspectRatio:0.8,position:"relative",width:"98vw",}}>
+          <Box
+            sx={{
+              display: { xs: "block", sm: "none" },
+              aspectRatio: 0.8,
+              position: "relative",
+              width: "98vw",
+            }}
+          >
             <Swiper
               className="mySwiper"
               grabCursor={true}
@@ -236,9 +243,9 @@ export default function Details() {
                       backgroundSize: "cover",
                       backgroundPosition: "center",
                       backgroundRepeat: "no-repeat",
-                    
+
                       display: "flex",
-                      aspectRatio:0.8,
+                      aspectRatio: 0.8,
                       justifyContent: "center",
                       alignItems: "center",
                     }}
@@ -497,7 +504,7 @@ export default function Details() {
                   });
                 }}
               >
-                <img src={cartImg} width="16px" alt="cart" />
+                <ShoppingCart size="32" color="#FFF" />
                 {CartAddLoad ? (
                   <Stack
                     direction="row"
