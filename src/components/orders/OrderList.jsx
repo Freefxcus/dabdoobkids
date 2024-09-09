@@ -6,19 +6,24 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { Box, Pagination } from "@mui/material";
 import instance from "../../utils/interceptor";
 import Loader from "../Loader";
+import EmptyOrders from "../../images/search.svg";
 
 export default function OrderList() {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
-  const [orders, setOrders] = useState(null); 
+  const [orders, setOrders] = useState(null);
   const [paginationInfo, setPaginationInfo] = useState({});
-
- useEffect(() => {
+  const [Filters, setFilters] = useState(null);
+  useEffect(() => {
+    let filtersObject = Filters?.length
+      ? { [Filters.name]: Filters.value }
+      : null;
     instance
       .get("profile/orders", {
         params: {
           items: 5,
           page: searchParams.get("page") || 1,
+          [Filters?.name]: Filters?.value,
         },
       })
       .then((response) => {
@@ -27,106 +32,239 @@ export default function OrderList() {
         // setTotalPages(response.data.data.metadata.totalPages);
       })
       .catch((error) => {});
-  }, [searchParams]);
+  }, [searchParams, Filters]);
+
+  const FilterOrder = [
+    { id: "1", name: "All", action: () => setFilters({}) },
+    {
+      id: "2",
+      name: "Order On Process",
+      action: () =>
+        setFilters({ id: "2", name: "orderStatus", value: "Pending" }),
+    },
+    {
+      id: "3",
+      name: "in delivery",
+      action: () =>
+        setFilters({ id: "3", name: "shippingStatus", value: "Pending" }),
+    },
+    {
+      id: "4",
+      name: "Complete Order",
+      action: () =>
+        setFilters({ id: "4", name: "shippingStatus", value: "Shipped" }),
+    },
+    {
+      id: "5",
+      name: "Refund",
+      action: () =>
+        setFilters({ id: "5", name: "orderStatus", value: "Refunded" }),
+    },
+  ];
+
   return (
-    <div
-      style={{
+    <Box
+      sx={{
         width: "100%",
         maxWidth: "90%",
         margin: "0px auto",
+        display: "flex",
+        flexDirection: "column",
+        gap: "1rem",
       }}
     >
-      {orders === null && <Loader open={true} />}
-      {orders?.length === 0 && <div>No Orders Created ...</div>}
-      {orders?.length > 0  && (
-
-   
-      <div
-        style={{
+      <Box
+        sx={{
+          bgcolor: "#fff",
+          borderRadius: "1rem",
+          p: 1.25,
+          pb: 2.5,
           display: "flex",
           flexDirection: "column",
-          gap: "15px",
+          gap: "0.4rem",
         }}
       >
-        {orders?.map((order) => (
-          <div
-            style={{
-              boxShadow: "rgba(0, 0, 0, 0.05) 0px 1px 2px 0px",
-              backgroundColor: "#fff",
-              padding: "20px",
-              borderRadius: "8px",
+        <Box
+          sx={{
+            p: "0.62rem",
+
+            fontSize: { md: "1rem", lg: "1.25rem" },
+            fontWeight: 600,
+          }}
+          component={"h2"}
+        >
+          Order List
+        </Box>
+        <Box
+          sx={{
+            p: "0.62rem",
+            flexDirection: "row",
+            display: "flex",
+            gap: "0.62rem",
+            fontSize: "15px",
+            whiteSpace: "nowrap",
+            overflow: "auto",
+            borderBottom: "1px solid  #EDEDED",
+          }}
+          component={"div"}
+        >
+          {FilterOrder.map((FilterAction) => (
+            <Box
+              sx={{
+                borderBottom:
+                  FilterAction.id === Filters?.id
+                    ? "1px solid  #333"
+                    : FilterAction.id === "1" && !Filters?.id
+                    ? "1px solid  #333"
+                    : null,
+                color:
+                  FilterAction.id === Filters?.id
+                    ? "#333"
+                    : FilterAction.id === "1"&& !Filters?.id
+                    ? "#333"
+                    : "#b1b1b1",
+              }}
+              key={FilterAction.id}
+              onClick={FilterAction.action}
+            >
+              {FilterAction?.name}
+            </Box>
+          ))}
+        </Box>
+      </Box>
+
+      <Box sx={{ bgcolor: "#fff", borderRadius: "1rem" }}>
+        {orders === null && <Loader open={true} />}
+        {orders?.length === 0 && (
+          <Box
+            sx={{
               display: "flex",
               flexDirection: "column",
-              gap: "10px",
+              alignItems: "center",
+              justifyContent: "center",
+              p: 12,
+              gap: "2rem",
             }}
           >
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
+            <Box
+              component={"img"}
+              src={EmptyOrders}
+              sx={{ maxWidth: { xs: "300px", sm: "400px", lg: "500px" } }}
+            />
+            <Box
+              sx={{
+                p: "4px",
+                textAlign: "center",
+                fontSize: { md: "1rem", lg: "1.25rem" },
+                fontWeight: 600,
               }}
+              component={"h3"}
             >
-              <div>Order ID : {order?.id}</div>
+              empty Order List
+            </Box>
+            <Box
+              sx={{
+                p: "4px",
+                textAlign: "center",
+                fontSize: { md: "0.6rem", lg: "0.85rem" },
+                fontWeight: 500,
+                color: "#8D8D8D",
+              }}
+              component={"p"}
+            >
+              You don't have any products in your order list.{" "}
+            </Box>
+          </Box>
+        )}
+        {orders?.length > 0 && (
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "15px",
+            }}
+          >
+            {orders?.map((order) => (
               <div
                 style={{
-                  borderRadius: "20px",
-                  padding: "6px 8px 6px 8px",
-                  backgroundColor: "#F4F5F6", // In Delivery
-                  color: "#000",
-                  // backgroundColor: "#FFF7E5", // Waiting Payment
-                  // color: "#FFAB00",
-                  // backgroundColor: "#FFF2F0", // Waiting Payment
-                  // color: "#FF5630",
+                  boxShadow: "rgba(0, 0, 0, 0.05) 0px 1px 2px 0px",
+                  backgroundColor: "#fff",
+                  padding: "20px",
+                  borderRadius: "8px",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "10px",
                 }}
               >
-                In Delivery
-              </div>
-            </div>
-            {order?.items?.map((item) => (
-              <>
-                <OrderOverview item={item} />
                 <div
                   style={{
-                    width: "100%",
-                    borderBottom: "1px solid #EDEDED",
-                    marginTop: "5px",
-                    marginBottom: "5px",
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
                   }}
-                />
-              </>
+                >
+                  <div>Order ID : {order?.id}</div>
+                  <div
+                    style={{
+                      borderRadius: "20px",
+                      padding: "6px 8px 6px 8px",
+                      backgroundColor: "#F4F5F6", // In Delivery
+                      color: "#000",
+                      // backgroundColor: "#FFF7E5", // Waiting Payment
+                      // color: "#FFAB00",
+                      // backgroundColor: "#FFF2F0", // Waiting Payment
+                      // color: "#FF5630",
+                    }}
+                  >
+                    In Delivery
+                  </div>
+                </div>
+                {order?.items?.map((item) => (
+                  <>
+                    <OrderOverview item={item} />
+                    <div
+                      style={{
+                        width: "100%",
+                        borderBottom: "1px solid #EDEDED",
+                        marginTop: "5px",
+                        marginBottom: "5px",
+                      }}
+                    />
+                  </>
+                ))}
+                <button
+                  style={{
+                    width: "140px",
+                    height: " 32px",
+                    padding: "6px 12px 6px 12px",
+                    borderRadius: "8px",
+                    backgroundColor: "#AD6B46",
+                    color: "#fff",
+                    border: "none",
+                    cursor: "pointer",
+                    marginLeft: "auto",
+                  }}
+                  onClick={() => {
+                    navigate(`/order/${order?.id}`);
+                  }}
+                >
+                  Detail
+                </button>
+              </div>
             ))}
-            <button
-              style={{
-                width: "140px",
-                height: " 32px",
-                padding: "6px 12px 6px 12px",
-                borderRadius: "8px",
-                backgroundColor: "#AD6B46",
-                color: "#fff",
-                border: "none",
-                cursor: "pointer",
-                marginLeft: "auto",
-              }}
-              onClick={() => {
-                navigate(`/order/${order?.id}`);
-              }}
-            >
-              Detail
-            </button>
+            <Box sx={{ mx: "auto" }}>
+              <Pagination
+                count={paginationInfo?.totalPages}
+                onChange={(event, value) => {
+                  setSearchParams((prev) => {
+                    return { ...prev, page: value };
+                  });
+                }}
+              />
+            </Box>
           </div>
-        ))}
-        <Box sx={{ mx: "auto" }}>
-          <Pagination
-            count={paginationInfo?.totalPages}
-            onChange={(event, value) => {
-              setSearchParams((prev) => {
-                return { ...prev, page: value };
-              });
-            }}
-          />
-        </Box>
-      </div> )}
+        )}
+      </Box>
       {/* {currentOrder !== null && (
         <>
           {orders
@@ -267,6 +405,6 @@ export default function OrderList() {
             ))}
         </>
       )} */}
-    </div>
+    </Box>
   );
 }
