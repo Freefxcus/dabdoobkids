@@ -545,7 +545,7 @@ export const checkPromoCode = async (code) => {
   let returnedValue;
 
   await instance
-    .post("/promocode/validate", {
+    .post("/promocodes/validate", {
       promocode: code,
     })
     .then((response) => {

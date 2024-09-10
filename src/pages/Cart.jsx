@@ -129,6 +129,7 @@ export default function Cart() {
         {cartItems?.map((item) => (
           <OrderCard
             item={item}
+            key={item.id}
             editable={true}
             allCarts={cartItems}
             totalPrice={totalPrice}
