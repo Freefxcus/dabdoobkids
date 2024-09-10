@@ -77,7 +77,7 @@ export default function ClothesCard({ item }) {
         <CardMedia
           sx={{
             width: "100%",
-            aspectRatio: 0.77,
+            aspectRatio: {xs:0.65 ,sm:0.77},
             objectFit: "cover",
           }}
           component={"img"}

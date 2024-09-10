@@ -142,13 +142,15 @@ export default function SingleProductModal({
                   </h2>
                 </div>
 
-                <div
-                  style={{
+                <Box
+                  sx={{
                     display: "flex",
                     justifyContent: "space-between",
                     alignItems: "center",
+                    flexWrap: "wrap",
                     width: "100%",
-                    maxHeight: "1.875rem",
+                    gap: "5px",
+                    maxHeight: { sx: "auto", sm: "1.875rem" },
                     fontWeight: "800",
                     color: "#1B1B1B",
                     fontSize: "1rem",
@@ -162,25 +164,40 @@ export default function SingleProductModal({
                     CartAddLoad={CartAddLoad}
                     selectedVariantObject={selectedVariantObject}
                   />
-                  <h3>
+                  <Box
+                    component={"h5"}
+                    sx={{
+                      fontSize: { xs: "0.7rem", sm: "1rem" },
+                      whiteSpace: "nowrap",
+                      display: "flex",
+                      px: "0.3rem",
+                      gap: "0.5rem",
+                      flexDirection: "row",
+                      flex: 1,
+                    }}
+                  >
                     {finalPrice?.discount ? (
                       <>
-                        <span>EGP {finalPrice.priceAfter}</span>{" "}
-                        <s
-                          style={{
-                            fontSize: "1.25rem",
+                        <span style={{ whiteSpace: "nowrap" }}>
+                          EGP {finalPrice.priceAfter}
+                        </span>{" "}
+                        <Box
+                          component={"s"}
+                          sx={{
+                            whiteSpace: "nowrap",
+                            fontSize: { xs: "0.5rem", sm: "0.75rem" },
                             fontWeight: "500",
                             color: "var(--grey-text)",
                           }}
                         >
                           EGP {finalPrice.price}{" "}
-                        </s>
+                        </Box>
                       </>
                     ) : (
                       <span>EGP {finalPrice.price}</span>
                     )}
-                  </h3>
-                </div>
+                  </Box>
+                </Box>
               </div>
             </div>
             <div
@@ -219,19 +236,20 @@ export default function SingleProductModal({
               Taxes and shipping fee will be calculated at checkout
             </p>
 
-            <div
-              style={{
+            <Box
+              sx={{
                 display: "flex",
-                gap: "32px",
+                gap: { sm: "32px", xs: "16px" },
                 justifyContent: "center",
                 marginTop: "16px",
               }}
             >
-              <button
-                style={{
+              <Box
+                component={"button"}
+                sx={{
                   backgroundColor: "white",
                   border: "1px solid var(--errie-black)",
-                  padding: "12px 32px",
+                  padding: { sm: "12px 32px", xs: "8px 12px" },
                   fontWeight: "400",
                   fontSize: "18px",
                   borderRadius: "10px",
@@ -244,27 +262,29 @@ export default function SingleProductModal({
                 }}
               >
                 View Cart
-              </button>
-              <button
-                onClick={() => {
-                  navigate("/checkout");
-                  handleClose(false);
-                }}
-                style={{
+              </Box>
+              <Box
+                component={"button"}
+                sx={{
                   backgroundColor: "var(--brown)",
                   color: "white",
                   border: "none",
-                  padding: "12px 32px",
+
+                  padding: { sm: "12px 32px", xs: "8px 12px" },
                   fontWeight: "400",
                   fontSize: "18px",
                   borderRadius: "10px",
                   cursor: "pointer",
                   flex: "1 1 0%",
                 }}
+                onClick={() => {
+                  navigate("/checkout");
+                  handleClose(false);
+                }}
               >
                 Checkout
-              </button>
-            </div>
+              </Box>
+            </Box>
           </Box>
         </Box>
       </Box>

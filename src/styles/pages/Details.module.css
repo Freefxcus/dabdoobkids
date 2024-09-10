@@ -239,3 +239,14 @@ aspect-ratio: 0.8 !important;
 
 /* Media query for screens larger than 1200px (e.g., large desktops) */
 @media (min-width: 1201px) {}
+@media (max-width: 350px) {
+  .btn-count {
+    min-width: 60px;
+  }
+  .btns-action {
+   
+    padding: 0.5rem 0.6rem;}
+    .row{
+      gap: 10px;
+    }
+}

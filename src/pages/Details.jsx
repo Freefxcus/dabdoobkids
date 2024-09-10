@@ -423,10 +423,10 @@ export default function Details() {
             </div>
 
             <div className={`${styles["row"]} ${styles["btns-action"]}`}>
-              <div
+              <Box
                 className={`${styles["row"]} ${styles["btn-count"]}`}
-                style={{
-                  padding: "13px 8px",
+                sx={{
+                  padding: {xs:"8px 4px"  , sm:"13px 8px"},
                   border: "1px solid var(--unicorn-silver)",
                   borderRadius: "10px",
                   justifyContent: "space-between",
@@ -462,7 +462,7 @@ export default function Details() {
                   variant="Outline"
                   color="#1B1B1B"
                 />
-              </div>
+              </Box>
               <button
                 className={styles["cart-button"]}
                 style={{
