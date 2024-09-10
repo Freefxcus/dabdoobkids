@@ -10,6 +10,7 @@ import {
 import OrderCard from "../OrderCard";
 import OrderOverview from "./orderOverView";
 import { use } from "i18next";
+import { Box } from "@mui/material";
 
 export default function OrderDetails() {
   const [order, setOrder] = useState(null);
@@ -31,14 +32,16 @@ export default function OrderDetails() {
 
   return (
     <>
-      <div
-        style={{
+         
+      <Box className="padding-container"
+        sx={{
           display: "flex",
           flexDirection: "column",
           gap: "10px",
+          paddingTop:"50px",
+          paddingBottom:"100px",
           boxShadow: "rgba(0, 0, 0, 0.05) 0px 1px 2px 0px",
           backgroundColor: "#fff",
-          padding: "20px",
           borderRadius: "8px",
         }}
       >
@@ -173,7 +176,7 @@ export default function OrderDetails() {
               : "Refund is under evaluation"
             : "Return"}
         </button>
-      </div>
+      </Box>
     </>
   );
 }

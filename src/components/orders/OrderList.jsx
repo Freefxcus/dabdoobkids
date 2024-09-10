@@ -133,7 +133,7 @@ export default function OrderList() {
         </Box>
       </Box>
 
-      <Box sx={{ bgcolor: "#fff", borderRadius: "1rem" }}>
+      <Box sx={{  }}>
         {orders === null && <Loader open={true} />}
         {orders?.length === 0 && (
           <Box
@@ -142,7 +142,7 @@ export default function OrderList() {
               flexDirection: "column",
               alignItems: "center",
               justifyContent: "center",
-              p: 12,
+              p: 12,bgcolor: "#fff", borderRadius: "1rem",
               gap: "2rem",
             }}
           >
@@ -181,16 +181,16 @@ export default function OrderList() {
             style={{
               display: "flex",
               flexDirection: "column",
-              gap: "15px",
+              gap: "1.5rem",
             }}
           >
             {orders?.map((order) => (
-              <div
+              <div key={order.id}
                 style={{
                   boxShadow: "rgba(0, 0, 0, 0.05) 0px 1px 2px 0px",
                   backgroundColor: "#fff",
                   padding: "20px",
-                  borderRadius: "8px",
+                  borderRadius: "1rem",
                   display: "flex",
                   flexDirection: "column",
                   gap: "10px",
