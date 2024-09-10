@@ -408,14 +408,8 @@ export default function Profile() {
                           {wallet ? wallet.balance : 0} EGP
                         </Box>
                       </Box>
-                      <button
-                        className={styles.brown_btn}
-                        onClick={() => {
-                          // setPopupType("profile");
-                        }}
-                      >
-                        Withdraw
-                      </button>
+                
+                
                     </Box>
                     {walletHistory.items.length > 0 ? (
                       <table className={styles.my_table}>
