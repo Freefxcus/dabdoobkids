@@ -580,7 +580,7 @@ export const orderRefund =  async (data) => {
     .post(`/order-request`,data)
     .then((response) => {
       returnedValue = response;
-      notifySuccess(" you order request has "+ data.requestType+" Success ")
+      notifySuccess(" you order request has "+ data?.requestType+" Success ")
     })
     .catch((error) => {
       notifyError(error);

@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import CartProgress from "../components/CartProgress";
 import { useGetAllCartsQuery } from "../Redux/cartApi";
 import { calcDiscount } from "../utils/general";
+import { Box } from "@mui/material";
 export default function Cart() {
   const navigate = useNavigate();
   const [promocode, setPromocode] = useState("");
@@ -150,18 +151,19 @@ export default function Cart() {
         <p style={{ flex: "2" }}>
           Taxes and shipping fee will be calculated at checkout
         </p>
-        <div
-          style={{
+        <Box
+          sx={{
             display: "flex",
             justifyContent: "space-between ",
             flexWrap: "wrap",
             flex: "1",
             gap: "12px",
+            fontSize:{md:"1rem",xs:"0.75rem"}
           }}
         >
           <h2>Subtotal</h2>
           <h2>{totalPrice}EGP</h2>
-        </div>
+        </Box>
       </div>
       <div
         style={{
@@ -172,13 +174,13 @@ export default function Cart() {
           flexWrap: "wrap",
         }}
       >
-        <button
-          style={{
+        <Box component={"button"}
+          sx={{
             backgroundColor: "white",
             border: "1px solid var(--errie-black)",
-            padding: "12px 32px",
+            padding: {md:"12px 32px",xs:"8px 16px"},
             fontWeight: "400",
-            fontSize: "18px",
+            fontSize:{md:"1.2rem",xs:"1rem"},
             borderRadius: "10px",
             cursor: "pointer",
           }}
@@ -187,24 +189,23 @@ export default function Cart() {
           }}
         >
           Continue Shopping
-        </button>
-        <button
-          onClick={() => {
-            navigate("/checkout");
-          }}
-          style={{
+        </Box>
+        <Box component={"button"}
+          sx={{
             backgroundColor: "var(--brown)",
             color: "white",
             border: "none",
-            padding: "12px 32px",
+          padding: {md:"12px 32px",xs:"8px 16px"},
             fontWeight: "400",
-            fontSize: "18px",
+             fontSize:{md:"1.2rem",xs:"1rem"},
             borderRadius: "10px",
             cursor: "pointer",
+          }} onClick={() => {
+            navigate("/checkout");
           }}
         >
           Checkout
-        </button>
+        </Box>
       </div>
     </div>
   );

@@ -265,7 +265,7 @@ margin:0 auto;
   color: rgba(27, 27, 27, 0.7);
   font-family: 'Plus Jakarta Sans';
   }
-  @media (max-width: 350px) {
+  @media (max-width: 365px) {
     .parent {
       width: 250px;}
       .frameParent {

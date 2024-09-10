@@ -23,7 +23,7 @@
   background-color: #fff;
 }
 .title_main {
-  font-size: 40px;
+  font-size:  2.5rem;
   font-weight: 600;
 }
 .title_sub {
@@ -155,6 +155,8 @@
 }
 
 @media (max-width: 600px) {
+  .title_main {
+    font-size:  1.5rem;}
   .categories_section {
     display: none;
   }
