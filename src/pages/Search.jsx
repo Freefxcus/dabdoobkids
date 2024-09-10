@@ -256,7 +256,7 @@ export default function Search() {
                 sx={{
                   display: { xs: "grid",  },
                   gridTemplateColumns: {
-                    xs: "repeat(2,1fr)", sm: "repeat(3,1fr)", md: "repeat(2,1fr)",xl:"repeat(4,1fr)",
+                    xs: "repeat(2,1fr)", sm: "repeat(3,1fr)", md: "repeat(3,1fr)",xl:"repeat(4,1fr)",
                   },
                   gap: { lg: "20px", md: "10px", xs: "10px" },
                 }}
