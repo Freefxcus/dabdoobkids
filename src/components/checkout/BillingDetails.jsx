@@ -19,8 +19,11 @@ export default function BillingDetails({
 }) {
   const [openEdit, setOpenEdit] = useState(false);
   const [openAdd, setOpenAdd] = useState(false);
+  const [ForceReload, setForceReload] = useState(false);
+
   const [wallet, setWallet] = useState();
-  const [addressInfo, setAddressInfo] = useState(null);
+  const [addressInfo, setAddressInfo] = useState(null)
+  ;
   const [searchParams, setSearchParams] = useSearchParams();
   const [payemntMethod, setPaymentMethod] = useState(
     searchParams.get("paymentMethod")
@@ -54,7 +57,7 @@ export default function BillingDetails({
             address?.items?.[0]?.id
         : null
     );
-  }, [address]);
+  }, [address,ForceReload]);
   const handleChange = (event) => {
     setPaymentMethod(event.target.value);
   };
@@ -304,11 +307,12 @@ export default function BillingDetails({
             open={openEdit}
             setOpen={setOpenEdit}
             addressInfo={addressInfo}
+            setForceReload={setForceReload}
             type="edit"
           />
         ) : null
       ) : (
-        <AddressModal open={openAdd} setOpen={setOpenAdd} type="add" />
+        <AddressModal open={openAdd} setOpen={setOpenAdd} type="add" setForceReload={setForceReload}/>
       )}
       </Box>
     </div>

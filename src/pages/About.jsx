@@ -11,20 +11,68 @@ export default function About() {
         gap: "10px",
         mt: "20px",
         mb: "20px",
+        minHeight: "80vh",
       }}
     >
       {/* <Box component="img" src={logo} sx={{ maxWidth: "100px" }} /> */}
-      <Box sx={{ fontWeight: "bold", fontSize: "30px" }}>About Dabdoobkidz</Box>
-      <Box sx={{ maxWidth: "800px", fontSize: "20px", lineHeight: "2" }}>
-        Lorem Ipsum is simply dummy text of the printing and typesetting
-        industry. Lorem Ipsum has been the industry's standard dummy text ever
-        since the 1500s, when an unknown printer took a galley of type and
-        scrambled it to make a type specimen book. It has survived not only five
-        centuries, but also the leap into electronic typesetting, remaining
-        essentially unchanged. It was popularised in the 1960s with the release
-        of Letraset sheets containing Lorem Ipsum passages, and more recently
-        with desktop publishing software like Aldus PageMaker including versions
-        of Lorem Ipsum.
+      <Box
+        sx={{ fontSize: "2rem", textAlign: "center", color: "var(--brown)" }}
+        component={"h1"}
+      >
+        ABOUT US
+      </Box>
+      <Box sx={{ fontSize: "1.5rem", color: "var(--brown)" }} component={"h3"}>
+        • Our Identity
+      </Box>
+      <Box sx={{ fontSize: "0.8", lineHeight: "1.5" ,pb:"2.5rem" }}>
+        Dabdoob Kids Group Is One Of Most Unique Groups In Egypt That
+        Specializes In All The Baby Needs Since Day 1. We Offer A Special
+        Service Which We Can Bring You The Highest Quality International Brands
+        For All Your Baby Needs. Each With Its Own Unique Identity, All Our
+        Brands Are United By A Passion For Fashion And Quality And Highest Level
+        Of Comfort And The Drive To Dress Our Precious Kids In A Sustainable
+        Way. The Commitment Of Our Employees Is Key To Our Success. We Are
+        Dedicated To Creating A Better Accessibility To The Most Popular Brands
+        And Deliver It To You In Egypt With The Best Pricing Possible. We Are
+        Dedicated To Always Create The Best Offering And The Best Experience For
+        Our Customers. We All Share A Values-driven Way Of Working, Based On A
+        Fundamental Respect For The Individual. Our Shared Values Help Create An
+        Open, Dynamic And Down-toearth Company Culture Where Anything Is
+        Possible The Dabdoob Kidz Group Is One Of The Most Unique Groups In
+        Egypt That Specializes In All The Needs Of Both The Baby Needs Since Day
+        One. We Offer A Special Service That We Can Offer You The Highest
+        Quality International Brands For All Your Child's Needs.
+      </Box>
+      <Box sx={{ fontSize: "1.5rem", color: "var(--brown)" }} component={"h3"}>
+        • Our Story
+      </Box>
+      <Box sx={{ fontSize: "0.8", lineHeight: "1.5"  ,pb:"2.5rem"}}>
+        3 Friends 1 Ambition Endless Spirit Of Adventure Back In 2023 When The
+        Economical Crisis Hit And It Became Almost Impossible To Provide Mothers
+        And Fathers In Egypt Who Care About Their Baby's Skin And Body With
+        These Organic Soft Materials From The Most Unique UK Brands, It Came To
+        Us That We Can Do So Because Babies Need The Best Care They Can Get And
+        Their Skins To Touch The Softest Fabric, And Their Movement In Their
+        Strollers To Be The Safest And The Easiest So We Decided To Study All
+        The Baby Needs Also Of Course The Great Person Who Carried Them , Our
+        Precious Mommy's Needs And Create A Space Where All Of It Is Available
+        For Easy Quick Purchase. With Our Dedication And Ambition We Completed
+        Our Amazing Space And We Are In Continuous Progress And Always Following
+        Up With The Latest Fashion Trends And The Safest Baby Accessories And
+        Also Following Up With Your Constructive Criticism To Always Do Our Best
+        And More.
+      </Box>
+
+      <Box sx={{ fontSize: "1.5rem", color: "var(--brown)"}} component={"h3"}>
+        • Our Goal
+      </Box>
+      <Box sx={{ fontSize: "0.8", lineHeight: "1.5"  ,pb:"2.5rem"}}>
+        We Want To Become The First Group In Egypt Dedicated To The Care And
+        Health Of Mothers And Their Children. Our Priority Is To Dedicate
+        Ourselves Every Day To Improving Our Offer, Through Our Careful Studies
+        And The Best Choices For You And Your Children. Our Goal Is To Take Care
+        Of Your Family By Providing For Each Of Your Families. With The Hope Of
+        Letting You Into Our Dabdoob Kidz Family
       </Box>
     </Box>
   );
