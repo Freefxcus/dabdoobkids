@@ -37,6 +37,7 @@ export default function Form({ type, toggleDrawer }) {
       .then((response) => {
         actions.resetForm();
         notifySuccess("Success!");
+      
         if (type === "register") {
           navigate("/login");
         }
@@ -46,7 +47,7 @@ export default function Form({ type, toggleDrawer }) {
             "refresh_token",
             response.data.data.refreshToken
           );
-          // toggleDrawer();
+          toggleDrawer();
           navigate("/");
         }
       })

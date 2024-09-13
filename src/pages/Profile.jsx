@@ -244,6 +244,7 @@ export default function Profile() {
                       localStorage.removeItem("access_token");
                       localStorage.removeItem("refresh_token");
                       navigate("/login");
+                      return;
                     }
                     setSidebarItem(item?.id);
                     navigate("/profile/" + item?.id);
