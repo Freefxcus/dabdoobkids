@@ -65,7 +65,7 @@ export default function OrderList() {
   return (
     <Box
       sx={{
-       maxWidth:{xs:"max(85vw,78%)",sm:"auto"},
+      //  maxWidth:{xs:"max(85vw,78%)",sm:"auto"},
     flexGrow:1,
         display: "flex",
         flexDirection: "column",
@@ -73,14 +73,16 @@ export default function OrderList() {
       }}
     >
       <Box
-        sx={{
+        sx={{    
           bgcolor: "#fff",
+          flex:1,
           borderRadius: "1rem",
           p: 1.25,
           pb: 2.5,
           display: "flex",
           flexDirection: "column",
           gap: "0.4rem",
+          position:"relative"
         }}
       >
         <Box
@@ -94,10 +96,13 @@ export default function OrderList() {
         >
           Order List
         </Box>
-        <Box
+        <Box 
           sx={{
             p: "0.62rem",
+          // flex:1,
             flexDirection: "row",
+            // maxWidth:"100%",
+            width:{xs:"calc(100vw - 4.5rem)",sm:"auto"},
             display: "flex",
             gap: "0.62rem",
             fontSize: "15px",
@@ -108,7 +113,7 @@ export default function OrderList() {
           component={"div"}
         >
           {FilterOrder.map((FilterAction) => (
-            <Box
+            <Box  component={"div"} className={styles.sidebar_item}
               sx={{
                 borderBottom:
                   FilterAction.id === Filters?.id
