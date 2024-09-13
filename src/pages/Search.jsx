@@ -18,16 +18,15 @@ import CloseIcon from "@mui/icons-material/Close";
 
 export default function Search() {
   const location = useLocation();
-  const [searchParams, setSearchParams] = useState(
-    new URLSearchParams(location.search)
-  );
+  const [searchParams, setSearchParams] = useSearchParams();
   const urlCatId = searchParams.get("categoryId")?.split(",") || [];
   const urlBrandId = searchParams.get("brandId")?.split(",") || [];
   const urlQuery = searchParams.get("query") || "";
   const urlSale = searchParams.get("sale") || "";
+  console.log(urlCatId, "urlCatId");
 
-  const [catId, setCatId] = useState(urlCatId);
-  const [brandId, setBrandId] = useState(urlBrandId);
+  const [catId, setCatId] = useState(urlCatId.map(i=>+i));
+  const [brandId, setBrandId] = useState(urlBrandId.map(i=>+i));
   const [queryStr, setQuery] = useState(urlQuery);
   const [searchData, setSearchData] = useState([]);
   const [filterCount, setFilterCount] = useState(0);
@@ -48,6 +47,11 @@ export default function Search() {
     });
     loadProducts(page); // Load products based on the current page state
   }, [page]);
+
+  useEffect(() => {
+    setCatId([...urlCatId].map(i=>+i));
+    setBrandId([...urlBrandId].map(i=>+i));
+  }, []);
 
   const loadProducts = (page = 1) => {
     setIsLoading(true);
@@ -81,12 +85,14 @@ export default function Search() {
   };
 
   const handleCategoryChange = (categoryId) => {
+
     const newCatId = catId.includes(categoryId)
-      ? catId.filter((id) => id !== categoryId)
+      ? catId.filter((id) => id != categoryId)
       : [...catId, categoryId];
-    setCatId(newCatId);
+    let uniqueNewCatId = [...new Set(newCatId)];
+    setCatId(uniqueNewCatId);
     setSearchParams((prev) => {
-      prev.set("categoryId", newCatId.join(","));
+      prev.set("categoryId", uniqueNewCatId.join(","));
       prev.delete("page");
       return prev;
     });
@@ -96,9 +102,10 @@ export default function Search() {
     const newBrandId = brandId.includes(id)
       ? brandId.filter((brand) => brand !== id)
       : [...brandId, id];
-    setBrandId(newBrandId);
+      let uniqueNewBrandId = [...new Set(newBrandId.map(i=>+i))];
+    setBrandId(uniqueNewBrandId);
     setSearchParams((prev) => {
-      prev.set("brandId", newBrandId.join(","));
+      prev.set("brandId", uniqueNewBrandId.join(","));
       prev.delete("page");
       return prev;
     });
@@ -162,7 +169,7 @@ export default function Search() {
                 onClick={() => handleCategoryChange(category.id)}
               >
                 <Checkbox
-                  checked={catId.includes(category.id)}
+                   checked={catId.some((id) => +id == category.id)}
                   sx={{
                     padding: 0,
                     "&.Mui-checked": { color: "var(--brown)" },
@@ -183,7 +190,8 @@ export default function Search() {
                     onClick={() => handleBrandChange(brand.id)}
                   >
                     <Checkbox
-                      checked={brandId.includes(brand.id)}
+                     checked={brandId.some((id) => +id == brand.id)}
+                   
                       sx={{
                         padding: 0,
                         "&.Mui-checked": { color: "var(--brown)" },
@@ -254,9 +262,12 @@ export default function Search() {
               )}
               <Box
                 sx={{
-                  display: { xs: "grid",  },
+                  display: { xs: "grid" },
                   gridTemplateColumns: {
-                    xs: "repeat(2,1fr)", sm: "repeat(3,1fr)", md: "repeat(3,1fr)",xl:"repeat(4,1fr)",
+                    xs: "repeat(2,1fr)",
+                    sm: "repeat(3,1fr)",
+                    md: "repeat(3,1fr)",
+                    xl: "repeat(4,1fr)",
                   },
                   gap: { lg: "20px", md: "10px", xs: "10px" },
                 }}
@@ -320,7 +331,7 @@ export default function Search() {
                 onClick={() => handleCategoryChange(category.id)}
               >
                 <Checkbox
-                  checked={catId.includes(category.id)}
+                  checked={catId.some((id) => +id == category.id)}
                   sx={{
                     padding: 0,
                     "&.Mui-checked": { color: "var(--brown)" },
@@ -341,7 +352,7 @@ export default function Search() {
                     onClick={() => handleBrandChange(brand.id)}
                   >
                     <Checkbox
-                      checked={brandId.includes(brand.id)}
+                     checked={brandId.some((id) => +id == brand.id)}
                       sx={{
                         padding: 0,
                         "&.Mui-checked": { color: "var(--brown)" },
