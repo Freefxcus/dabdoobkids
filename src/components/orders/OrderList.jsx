@@ -65,9 +65,8 @@ export default function OrderList() {
   return (
     <Box
       sx={{
-        width: "100%",
-        maxWidth: "90%",
-        margin: "0px auto",
+       maxWidth:{xs:"max(85vw,78%)",sm:"auto"},
+    flexGrow:1,
         display: "flex",
         flexDirection: "column",
         gap: "1rem",
@@ -133,7 +132,7 @@ export default function OrderList() {
         </Box>
       </Box>
 
-      <Box sx={{  }}>
+      <Box sx={{ flex:1 }}>
         {orders === null && <Loader open={true} />}
         {orders?.length === 0 && (
           <Box
@@ -181,6 +180,7 @@ export default function OrderList() {
             style={{
               display: "flex",
               flexDirection: "column",
+              flex:1,
               gap: "1.5rem",
             }}
           >
@@ -220,17 +220,17 @@ export default function OrderList() {
                   </div>
                 </div>
                 {order?.items?.map((item) => (
-                  <>
+                  <Box  sx={{flex:1,maxWidth:{xs:"80vw",sm:"auto"}}}>
                     <OrderOverview item={item} />
                     <div
                       style={{
-                        width: "100%",
+                        flex:1,
                         borderBottom: "1px solid #EDEDED",
                         marginTop: "5px",
                         marginBottom: "5px",
                       }}
                     />
-                  </>
+                  </Box>
                 ))}
                 <button
                   style={{

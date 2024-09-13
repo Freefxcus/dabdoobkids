@@ -261,11 +261,13 @@ export default function Profile() {
               ))}
             </div>
             {/* "Profile" */}
-            <Box
+            <Box component={"div"}
+            className={styles.container}
               sx={{
                 minHeight: "50vh",
                 display: "flex",
                 flex:1,
+                py:0,
                 justifyContent: "space-between",
                 alignItems: "flex-start",
               }}
