@@ -36,6 +36,8 @@ import UpdateProfileUpdate from "../components/profile/UpdateProfile.jsx";
 import UpdateProfileModal from "../components/profile/UpdateProfile.jsx";
 import OrderList from "../components/orders/OrderList.jsx";
 import { LogoutCurve } from "iconsax-react";
+import { faqs } from "./FAQPage.jsx";
+import { Typography } from "@mui/material";
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -54,7 +56,7 @@ export default function Profile() {
   const userInfo = useSelector((state) => state.userInfo.value);
   const [alertOpen, setAlertOpen] = useState(false);
   const [openAddAddress, setOpenAddAddress] = useState(false);
-  const [openEditAddress, setOpenEditAddress] = useState(false);  
+  const [openEditAddress, setOpenEditAddress] = useState(false);
   const [EditAddress, setEditAddress] = useState(null);
   const [openEditProfile, setOpenEditProfile] = useState(false);
   const [wallet, setWallet] = useState({});
@@ -363,12 +365,14 @@ export default function Profile() {
                         </div>
                       </>
                     ))}
-                   {EditAddress&&openEditAddress? <AddressModal
-                      open={openEditAddress}
-                      setOpen={setOpenEditAddress}
-                      type="edit"
-                      addressInfo={EditAddress}
-                    />:null}
+                    {EditAddress && openEditAddress ? (
+                      <AddressModal
+                        open={openEditAddress}
+                        setOpen={setOpenEditAddress}
+                        type="edit"
+                        addressInfo={EditAddress}
+                      />
+                    ) : null}
                     {/* ***** */}
                     {/* <div className={styles.v_line}></div>
                   <div className={styles.title}>Office</div>
@@ -631,278 +635,36 @@ Please Note That The Duration Is In Accordance To The Relevant Applicable Laws I
                     backgroundColor: "#fff",
                     padding: "20px",
                     borderRadius: "8px",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "0.5rem",
                   }}
                 >
-                  {helpOption === "1" && (
-                    <>
-                      <div
-                        className={styles.sub_header}
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "5px",
-                          cursor: "pointer",
-                        }}
-                        onClick={() => {
-                          setHelpOption("3");
-                        }}
-                      >
-                        <img src="./back.png" height="25px" />
-                        <div>Refund Order</div>
-                      </div>
-                      <ol>
-                        {[
-                          "Confirm the reason for returning, if you experience problems with the product you purchased, please confirm with the Customer Service Team from Erigo via chat on the Official Erigo Product Sales Account available on the marketplace you used when purchasing the product.",
-                          "The Team Contacts You After you confirm, the team will immediately contact you via telephone / Whatsapp via the telephone number listed in your order details to ensure that the return requirements for the product you confirmed are complete, such as product tags that are still hanging and products that have not been used / washed. then will provide the exchange / return procedure.",
-                          "Attach Return Label Next, prepare your package to send back to us. Make sure the Product, the product tag that is still hanging and the return procedure form you attach to the package.",
-                          "Attach Return Label Next, prepare your package to send back to us. Add your items and securely attach your package. Be sure to remove or cover the original shipping label and attach your new return label to the package. You're all set! Simply schedule a pick-up or drop-off at any authorized facility for the courier service designated on your shipping label. Please allow approximately 7 - 14 days for return processing. You will receive a notification from us when your return has been received and is ready to be processed. The last stage, you just have to wait for the notification of the receipt number which will be informed by our team.",
-                        ].map((item, index) => (
-                          <li
-                            style={{
-                              listStylePosition: "inside",
-                            }}
-                          >
-                            {item}
-                          </li>
-                        ))}
-                      </ol>
-                      <div className={styles.sub_header}>Shipping</div>
-                      <div>
-                        We package and ship your order as soon as possible. We
-                        will continue to process according to your order. Orders
-                        that are processed continue to adjust the order of
-                        incoming orders and there may be delays if order traffic
-                        is very high. However, we will do everything we can to
-                        ensure your order is delivered on time, and Erigo is not
-                        responsible for conditions beyond our control such as
-                        bad weather, service interruptions, etc. You can check
-                        periodically for the delivery status of your order
-                        through your order details page found on the marketplace
-                        or the official Erigo website page that you used when
-                        placing your order.
-                      </div>
-                    </>
-                  )}
-                  {helpOption === "2" && (
-                    <>
-                      <div
-                        className={styles.sub_header}
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "5px",
-                          cursor: "pointer",
-                        }}
-                        onClick={() => {
-                          setHelpOption("1");
-                        }}
-                      >
-                        <img src="./back.png" height="25px" />
-                        <div>Payment Information</div>
-                      </div>
-                      {[
-                        {
-                          title: "Card",
-                          array: [
-                            "./cards/a1.svg",
-                            "./cards/a2.svg",
-                            "./cards/a3.svg",
-                          ],
-                        },
-                        {
-                          title: "Virtual Account",
-                          array: [
-                            "./cards/b1.svg",
-                            "./cards/b2.svg",
-                            "./cards/b3.svg",
-                            "./cards/b4.svg",
-                            "./cards/b5.svg",
-                            "./cards/b6.svg",
-                            "./cards/b7.svg",
-                          ],
-                        },
-                      ].map(({ title, array }) => (
-                        <>
-                          <div>{title}</div>
-                          <div
-                            style={{
-                              display: "flex",
-                              gap: "10px",
-                              flexWrap: "wrap",
-                            }}
-                          >
-                            {array.map((card) => (
-                              <img src={card} style={{ width: "50px" }} />
-                            ))}
-                          </div>
-                        </>
-                      ))}
-                    </>
-                  )}
-                  {helpOption === "3" && (
-                    <div>
-                      <div
-                        className={styles.sub_header}
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "5px",
-                          cursor: "pointer",
-                          marginBottom: "10px",
-                        }}
-                        onClick={() => {
-                          setHelpOption("2");
-                        }}
-                      >
-                        <img src="./back.png" height="25px" />
-                        <div>Frequently asked questions</div>
-                      </div>
-                      {[
-                        {
-                          title: "WHAT DELIVERY OPTION DO YOU OFFER?",
-                          description: `We Offer A Home Delivery Option As Well As A Click And Collect Service For Selected Stores. Times And Cost For Deliveries Will Vary Depending On The Location. For More Information, Please See Our Delivery Information Page.`,
-                        },
-                        {
-                          title:
-                            "WHAT TIME DOES THE DABDOOB KIDZ CUSTOMER CARE TEAM OPERATE, AND HOW CAN I GET IN CONTACT?",
-                          description: `You Can Contact Our Customer Care Team On The Following Number :`,
-                        },
-                        {
-                          title: "DABDOOB KIDZ CUSTOMER SERVICE:",
-                          description: `We Are Open Saturday To Thursday 12 p.m. to 21 p.m. & Friday 12 p.m. to 21 p.m. (Including Public Holidays).
-You Can Also Contact Us Using Our Quick Form And Our Team Will Get Back To You As Soon As Possible.`,
-                        },
-                        {
-                          title: "CAN I VIEW MY ORDER HISTORY?",
-                          description: `You Can View Your Orders At Any Time Using Our Website. Simply Follow The Steps Below.
-Log In To Our Website And Click On 'My Account' At The Top Of The Page.
-Click On The Link ‘View Orders’ On The Left Of The Page. This Will Show You Your Order History.`,
-                        },
-                        {
-                          title: "CAN I TRACK MY ORDER ONLINE?",
-                          description: `Yes, You Will Receive A Unique Tracking Via Email Once Your Order Is Packed. 
-This Link Will Allow You To Track Your Order At Any Time Letting You Know When Your Order Will Be Delivered.`,
-                        },
-                        {
-                          title:
-                            "WHEN I PLACE AN ORDER, HOW LONG DOESE DELIVERY TAKE?",
-                          description: `Your Order Confirmation Email Will Inform You Of The Expected Lead Time For Delivery. 
-Our Courier Company Will Attempt To Call You Should They Not Have Enough Delivery Information To Deliver Your Order. 
-Please Visit Our Delivery Information Page For Full Details.`,
-                        },
-                        {
-                          title:
-                            "I’VE RECEIVED MY ORDER, BUT IT’S NOT SUITABLE. HOW DO I RETURN IT?",
-                          description: `Dabdoob Kidz Is Dedicated To Offering The Highest Levels Of Quality And Service. 
-We Will Be Happy To Refund Or Exchange Any Item(s)* That You Are Not Completely Satisfied With, As Long As They Are Returned In An Unused Condition And In Their Original Packaging, Within 14 Days Of Receipt Of Your Order With A Copy Of The Invoice. Please Visit Our Returns And Refunds Page For Full Details.`,
-                        },
-                        {
-                          title:
-                            " I’VE RECEIVED A DISCOUNT VOUCHER, BUT THE CODE DOESN’T WORK ONLINE, WHY THIS?",
-                          description: `Please Be Aware That Once You’ve Applied The Voucher Code, It Cannot Be Used Again, So Please Do Not Apply It Until You’re Sure That You’re Ready To Place And Pay For Your Order.
-Most Common Reasons For Promotion Codes Not Working Are Being Out Of Date; Being Applied To Products That Are Not Eligible Or The Set Order Limit Not Being Reached.
-If You’re Still Having Problems, You Can Also Contact Us Using Our Quick Form And We'll Be Happy To Explain How You Can Redeem Your Discount Online.`,
-                        },
-                        {
-                          title:
-                            "HOW CAN I REMOVE MY DETAILS FROM YOUR MAILING LIST?",
-                          description: `We’re sorry to hear you’re thinking about unsubscribing. Simply login to your 
-account on our website and follow the quick steps below.
-Click on the 'My Account' link at the top of the website.
-Click on the 'Communication Preferences'
-Simply un-tick the email check box and click 'Save'.
-You will see a message telling you that the subscription has been removed.
-If you wish to subscribe to the newsletters again at any time, simply navigate to this section, tick the check box and click 'Save'.
-You can also unsubscribe by clicking on the unsubscribe link at the end of any promotional email. On click, you will navigate to the un-subscription page on the website where once you enter the reason for un-subscription and click 'Unsubscribe', you can start a new shopping journey.`,
-                        },
-                        {
-                          title: "WHY HAS MY ORDER BEEN CANCELLED?",
-                          description: `Your Order May Be Cancelled For A Number Of Reasons. The Most Common Reasons For This Are: -
-High Demand Of Goods – In This Event, You Will Receive An Email Confirming The Cancellation And What To Do Next.
-If You Requested A Cancellation. You’ll Receive A Confirmation Email Once This Has Been Done.
-]If We’ve Been Unsuccessful In Delivering The Order To Your Chosen Delivery Address.
-If Payment Was Not Successful If The Order Was Not Collected From The Selected Store Within The Collection Period Of 14 Days.`,
-                        },
-                        {
-                          title:
-                            "I’VE PLACED AN ORDER ONLINE AND IT LOOKED AS THOUGH IT WAS PROCESSED; YET I HAVEN’T RECEIVED A CONFIRMATION EMAIL. WHY?",
-                          description: `We’re Sorry That You Haven't Received Your Confirmation Email. If Our Email Address Is Not In Your Address Book Or Safe List, It May Have Been Classed As Spam Mail, Meaning That It Might Not Have Appeared In Your Inbox. It Is Also Worth Checking That Your Email Address Has Been Entered Into Your Account Correctly.
-Usually Our Confirmation Emails Are Sent Within A Few Minutes Of An Order Being Placed. However, When Our Site Is Very Busy, You May Have To Wait A Little Bit Longer Before You Receive Your Email.`,
-                        },
-                        {
-                          title: "HOW DO I CHANGE MY DELIVERY ADRESS?",
-                          description: `You May Update Your Dabbdob Kidz Address Book By Clicking The 'My Account' Link At The Top Of The Page, Logging In Using Your Username And Password And Selecting 'Address Book' From Where You Can Add, Remove And Amend Your Addresses.
-If You Have Already Placed An Order Changes Made In This Area Will Not Alter Their Delivery Details. Once An Order Has Been Placed It Is Often Not Possible For Us To Change The Delivery Address.`,
-                        },
-                        {
-                          title:
-                            "HOW DO I KNOW IF MY ONLINE ORDER HAS BEEN SUCCESFUL?",
-                          description: `When You Place An Order On Our Website, We Will Reply To You With An Email Confirming Your Order And All Delivery And Billing Address Details, Including All The Items You Have Ordered.
-Please Check That All The Information Is Correct On This Confirmation Email As Incorrect Information Can Cause Delays On Your Order.`,
-                        },
-                        {
-                          title:
-                            "I HAVE FORGOTTEN MY PASSWORD. WHAT SHOULD I DO?",
-                          description: `If You Have An Existing Account With Us And Have Forgotten Your Password, Please Click Here 'Sign In / Register'. Click The 'Forgotten Your Password?' Link. 
-We Will Then Send You An Email With Instructions To Reset Your Password.
-If You Don't Receive Your Password Reset Email Within 1 Hour, Please Check Your Spam Folder. If The Email Is Not In Your Spam Folder, Please Request Another By Contacting Our Customer Care Team Number:`,
-                        },
-                        {
-                          title: "CAN I CHANGE MY PAYMENT INFORMATION?",
-                          description: `Once An Order Has Been Placed, We Are Unable To Change Your Payment Information. By Default, We Do Not Store Any Payment Information On Our Systems.
-To Update Or Change Your Personal Information Please Log-in To Dabdoobkidz.Com Using The 'Sign In / Register' Link. If You Are Already Signed In, Please Click The 'My Account' Link At The Top Of The Page. Then Select 'My Details And Contact Preferences'. From This Section You May View And Amend Your Password, Address, Wish List And Contact Details Including Choosing How You Would Like Us To Contact You.`,
-                        },
-                        {
-                          title: "WASHING INSTRUCTIONS:",
-                          description: `Paying Some Extra Attention To How You Wash Your Clothes Will Not Only Prolong Their Life, But Also Help Minimize The Environmental Impact And Save Our Natural Resources. The Washing Instructions On The Label Will Give You Advise On How To Best Care For Your Garment, And Here Are Some Other Resourceful Advices.`,
-                        },
-                        {
-                          title: "CONSCIOUS WASHING:",
-                          description: `Washing, Drying And Ironing Your Clothes Accounts For 36% Of The Total Environmental Impact Of The Average Garment During Its Lifetime! This Can Be More Than Halved If We Make Smarter Choices. You Can Help The Planet And Your Wardrobe By Washing Your Clothes Less Frequently, Reducing The Washing Temperature, Ironing Less And Avoiding Tumble-drying.
-Choosing Smart Care Methods Can Help You To Extend The Life Of Your Wardrobe Favourites While Also Reducing Your Environmental Impact, And Your Clothes Will Be Just As Clean.
-Don’t Wash Clothes Unnecessarily.
-Don’t Wash Clothes That Are Not Dirty. Often, Airing And Brushing Clothes Is Enough.
-Lower The Washing Temperature Dabdoob Kidz Recommends That Heavily Soiled Clothes And Underwear Are Always Washed At The Highest Temperature Allowed. Do Not Wash Your Clothes At Temperatures Hotter Than Those Stated In The Care Instructions.
-Sort The Clothes By Colour And Washing Temperature. Fill Up Your Washing Machine, But Don’t Stuff Too Much In. A Washing Machine Is Full When You Can Place A Clenched Fist On Top Of The Washing Without Compressing The Clothes. 
-Use An Energy Saving Programme – Most Modern Washing Machines Have One.
-Choose An Eco-friendly Laundry Detergent Use An Environmentally Friendly Detergent That Is Free From Optical Whiteners And Phosphates, Since These Have A Negative Environmental Impact When Released Into Nature. Dose The Detergent As Stated On The Packaging. Overdosing Detergent Will Not Make Your Clothes Cleaner. To Get The Dose Right, You Need To Know Whether You Have Hard Or Soft Water.
-Leave Your Washing Out To Dry It Is Preferable To Leave Your Washing Out To Dry Since Tumble Drying And Drying Cabinets Use A Lot Of Energy. To Reduce Drying Time, Gentle Cycle The Clothes Well Before Taking Them Out Of The Washing Machine.`,
-                        },
-                        {
-                          title: "Give Away Your Clothes!!!!!!!",
-                          description: `When You No Longer Have A Use For Clothes, Give Them To An Organisation That Can Extend The Garment’s Life.`,
-                        },
-                      ].map(({ title, description }) => (
-                        <div
-                          style={{
-                            border: "1px solid #F4F4F4",
-                            borderRadius: "8px",
-                            paddingLeft: "10px",
-                            paddingRight: "10px",
-                            marginBottom: "10px",
-                          }}
+                  {faqs.map((faq, index) => (
+                    <Box
+                      key={index}
+                      sx={{
+                        border: "1px solid #ddd",
+                        borderRadius: "1rem",
+                        marginBottom: "10px",
+                        boxShadow: "0px 2px 10px rgba(0, 0, 0, 0.1)", padding: '10px 16px'
+                      }}
+                    >
+                      <Accordion>
+                        <AccordionSummary
+                          expandIcon={<ExpandMoreIcon />}
+                          aria-controls={`panel${index}-content`}
+                          id={`panel${index}-header`}
+                          
                         >
-                          <Accordion>
-                            <AccordionSummary
-                              expandIcon={<ExpandMoreIcon />}
-                              aria-controls="panel1-content"
-                              id="panel1-header"
-                              sx={{ fontWeight: "bold" }}
-                            >
-                              {title}
-                            </AccordionSummary>
-                            <AccordionDetails
-                              sx={{
-                                whiteSpace: "pre-wrap",
-                              }}
-                            >
-                              {description}
-                            </AccordionDetails>
-                          </Accordion>
-                        </div>
-                      ))}
-                    </div>
-                  )}
+                          <Typography>{faq.question}</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails >
+                          <Typography>{faq.answer}</Typography>
+                        </AccordionDetails>
+                      </Accordion>
+                    </Box>
+                  ))}
                 </div>
               )}
               {sidebarItem === "8" && (

@@ -34,6 +34,9 @@ import OrderDetails from "./components/orders/OrderDetails";
 import ForgetPassword from "./pages/ForgetPassword";
 import PostPayment from "./pages/post-payment";
 import ReturnsRefunds from "./pages/ReturnsRefunds";
+import PrivacyPolicy from "./pages/ReturnsRefunds copy";
+import PaymentInformation from "./pages/PaymentInformation";
+import FAQ from "./pages/FAQPage";
 
 function App() {
   const [open, setOpen] = useState(false);
@@ -64,6 +67,9 @@ function App() {
                   <Route path="/search" element={<Search />} />
                   <Route path="/about" element={<About />} /> 
                   <Route path="/returns-refunds" element={<ReturnsRefunds />} />
+                  <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                  <Route path="/payment-information" element={<PaymentInformation />} />
+                  <Route path="/faq" element={<FAQ />} />
                   <Route path="/news" element={<News />} />
                   <Route
                     path="/checkout"

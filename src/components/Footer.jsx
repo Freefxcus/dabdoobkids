@@ -18,10 +18,10 @@ export default function Footer() {
         <img src={logo} className={styles.logo} />
         <div className={styles.section}>
           <div className={styles.header}>Help</div>
-          <div className={styles.link}>Exchanges & Returns</div>
-          <div className={styles.link}>Payment Information</div>
-          <div className={styles.link}>Track Your Order</div>
-          <div className={styles.link}>FAQs</div>
+          <Link to="/returns-refunds" className={styles.link}>Exchanges & Returns</Link>
+          <Link to="/payment-information" className={styles.link}>Payment Information</Link>
+          <Link to="/privacy-policy" className={styles.link}>privacy policy</Link>
+          <Link to="/faq" className={styles.link}>FAQs</Link>
         </div>
         <div className={styles.section}>
           <div className={styles.header}>Business</div>
