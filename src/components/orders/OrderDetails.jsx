@@ -61,6 +61,7 @@ export default function OrderDetails() {
 
                 navigate("/profile/" + item?.id);
               }}
+              className={styles.sidebar_item}
               style={{
                 color:
                   item?.id === "8" || item?.id === "9"
