@@ -76,7 +76,7 @@ export default function Popup({
           country: values.country,
           city: values.city,
           province: values.province,
-          district: values.district,
+          // district: values.district,
           address: values.address,
           postalCode: values.postal_code,
           phone: "string",
@@ -408,8 +408,8 @@ export default function Popup({
                 placeholder="City"
               ></input>
             </div>
-            {/* district */}
-            <div className={styles.semi_item}>
+            {/* {/* district */}
+           {/*   <div className={styles.semi_item}>
               <div className={`${styles.label} ${styles.item}`}>
                 <span>District</span>
                 <span className={styles.error}> *</span>
@@ -431,9 +431,9 @@ export default function Popup({
                 }
                 placeholder="District"
               ></input>
-            </div>
+            </div> */}
             {/* postal code */}
-            <div className={styles.semi_item}>
+            <div className={styles.item}>
               <div className={`${styles.label} ${styles.item}`}>
                 <span>Postal code</span>
                 <span className={styles.error}> *</span>

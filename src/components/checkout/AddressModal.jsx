@@ -84,7 +84,7 @@ export default function AddressModal({
     type: addressInfo?.type || "Home",
     last_name: addressInfo?.name.split(" ")[1] || "",
     governorate: addressInfo?.governorate.id || "",
-    district: addressInfo?.district || "",
+    // district: addressInfo?.district || "",
     city: addressInfo?.city || "",
     postal_code: addressInfo?.postal_code || "",
   };
@@ -308,10 +308,12 @@ export default function AddressModal({
               )}
             </div>
             <select
-              value={values.governorate}
+              value={values.governorate?values.governorate:governorates?.data?.data?.[0].id}
+              
               onChange={handleChange}
               id="governorate"
               type="number"
+              required
               onBlur={handleBlur}
               className={
                 errors.governrate && touched.governrate
@@ -342,6 +344,7 @@ export default function AddressModal({
               id="city"
               type="number"
               onBlur={handleBlur}
+              required
               className={
                 errors.city && touched.city
                   ? `${styles.input} ${styles.item} ${styles.bottom_margin} input-error`
@@ -349,13 +352,13 @@ export default function AddressModal({
               }
               placeholder="City"
             >
-              {cities?.data?.data?.map((city) => (
+              {cities?.data?.data?.filter(city=>city.governorate==(values.governorate?values.governorate:governorates?.data?.data?.[0].id)).map((city) => (
                 <option value={city.id}>{city.name.en}</option>
               ))}
             </select>
           </div>
           {/* district */}
-          <div className={styles.semi_item}>
+          {/* <div className={styles.semi_item}>
             <div className={`${styles.label} ${styles.item}`}>
               <span>District</span>
               <span className={styles.error}> *</span>
@@ -377,9 +380,9 @@ export default function AddressModal({
               }
               placeholder="District"
             ></input>
-          </div>
+          </div> */}
           {/* postal code */}
-          <div className={styles.semi_item}>
+          <div className={styles.item}>
             <div className={`${styles.label} ${styles.item}`}>
               <span>Postal code</span>
               <span className={styles.error}> *</span>

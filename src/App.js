@@ -33,6 +33,7 @@ import ProtectedRoute from "./components/auth/ProtectedRoute";
 import OrderDetails from "./components/orders/OrderDetails";
 import ForgetPassword from "./pages/ForgetPassword";
 import PostPayment from "./pages/post-payment";
+import ReturnsRefunds from "./pages/ReturnsRefunds";
 
 function App() {
   const [open, setOpen] = useState(false);
@@ -61,7 +62,8 @@ function App() {
                   <Route path="/auth/google" element={<OAuth />} />
                   <Route path="/otp" element={<Otp />} />
                   <Route path="/search" element={<Search />} />
-                  <Route path="/about" element={<About />} />
+                  <Route path="/about" element={<About />} /> 
+                  <Route path="/returns-refunds" element={<ReturnsRefunds />} />
                   <Route path="/news" element={<News />} />
                   <Route
                     path="/checkout"

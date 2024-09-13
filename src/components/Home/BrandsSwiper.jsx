@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import instance from "../../utils/interceptor";
-
+import "./style.css"
 export default function BrandsSwiper() {
   const [brands, setBrands] = useState([]);
   const [loading, setLoading] = useState(true); // To handle the loading state
@@ -73,8 +73,12 @@ export default function BrandsSwiper() {
   const newBrands = [...Array(repeatCount + 5)].flatMap(() => brands);
 
   return (
-    <marquee ref={marqueeRef} direction="left">
-      {brands?.length
+    
+
+<article class="wrapper">
+  <div class="marquee">
+    <div class="marquee__group">
+    {brands?.length
         ? newBrands.map(({ images, name, id }, index) => (
             <img
               key={index}
@@ -91,7 +95,12 @@ export default function BrandsSwiper() {
             />
           ))
         : null}
-    </marquee>
+    </div>
+  </div>
+
+ </article>
+
+   
   );
 }
 
@@ -100,7 +109,9 @@ export default function BrandsSwiper() {
 className="mySwiper"
 slidesPerView={limit}
 speed={10000}
-autoplay={{
+autoplay={{ <marquee ref={marqueeRef} direction="left">
+    
+    </marquee>
   delay: 0,
   disableOnInteraction: false,
 }}

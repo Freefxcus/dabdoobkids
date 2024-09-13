@@ -28,10 +28,10 @@ export const addressSchema = yup.object().shape({
     .number()
     .min(2, "Must be at least 3 characters long")
     .required("Required"),
-  district: yup
-    .string()
-    .min(3, "Must be at least 3 characters long")
-    .required("Required"),
+  // district: yup
+  //   .string()
+  //   .min(3, "Must be at least 3 characters long")
+  //   .required("Required"),
   postal_code: yup
     .string()
     .min(3, "Must be at least 3 characters long")
@@ -47,6 +47,6 @@ export const addressSchemaInitialValues = {
   address: "",
   governorate: "",
   city: "",
-  district: "",
+  // district: "",
   postal_code: "",
 };
