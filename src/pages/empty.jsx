@@ -9,10 +9,12 @@ export default function Empty({title , message}) {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
+          justifyContent:"center",
           gap: "12px",
+          minHeight:"80vh"
         }}
       >
-        <img src="/empty-wishlist.svg" alt="empy cart" />
+        <img src="/error 404.svg" alt="empy cart" />
         <h2>{title}</h2>
         <p>{message}</p>
         <button

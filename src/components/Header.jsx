@@ -351,7 +351,7 @@ export default function Header({ setOpen }) {
                 className={styles.clickable}
                 style={{ marginLeft: "10px" }}
                 onClick={() => {
-                  navigate("/profile");
+                  navigate("/profile/1");
                 }}
               />
             ) : (

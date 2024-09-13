@@ -9,8 +9,8 @@ export default function About() {
         display: "flex",
         flexDirection: "column",
         gap: "10px",
-        mt: "20px",
-        mb: "20px",
+        mt: "50px",
+        mb: "80px",
         minHeight: "80vh",
       }}
     >

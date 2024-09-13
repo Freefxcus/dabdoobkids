@@ -19,6 +19,7 @@ import Summary from "./pages/Summary";
 import Cart from "./pages/Cart";
 import Profile from "./pages/Profile";
 import Error from "./pages/Error";
+import Empty from "./pages/empty";
 import Categories from "./pages/Categories";
 import Plans from "./components/Plans";
 // --
@@ -75,7 +76,7 @@ function App() {
                     element={<ProtectedRoute element={Cart} />}
                   />
                   <Route
-                    path="/profile"
+                    path="/profile/:step"
                     element={<ProtectedRoute element={Profile} />}
                   />
                   <Route
@@ -99,6 +100,7 @@ function App() {
                     path="/order/:id"
                     element={<ProtectedRoute element={OrderDetails} />}
                   />
+                   <Route path="*" element={<Empty/>} />
                 </>
               )}
             </Routes>
