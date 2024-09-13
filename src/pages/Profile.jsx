@@ -54,7 +54,8 @@ export default function Profile() {
   const userInfo = useSelector((state) => state.userInfo.value);
   const [alertOpen, setAlertOpen] = useState(false);
   const [openAddAddress, setOpenAddAddress] = useState(false);
-  const [openEditAddress, setOpenEditAddress] = useState(false);
+  const [openEditAddress, setOpenEditAddress] = useState(false);  
+  const [EditAddress, setEditAddress] = useState(null);
   const [openEditProfile, setOpenEditProfile] = useState(false);
   const [wallet, setWallet] = useState({});
   const [walletHistory, setWalletHistory] = useState({});
@@ -66,11 +67,10 @@ export default function Profile() {
     setAlertOpen(false);
   };
   useEffect(() => {
- 
     if (step) {
       setSidebarItem(step);
-    }else {
-      navigate("/profile/"+ "1")
+    } else {
+      navigate("/profile/" + "1");
     }
   }, [step]);
   const handleAgree = () => {
@@ -244,7 +244,7 @@ export default function Profile() {
                       navigate("/login");
                     }
                     setSidebarItem(item?.id);
-                    navigate("/profile/"+item?.id)
+                    navigate("/profile/" + item?.id);
                   }}
                   style={{
                     color:
@@ -261,13 +261,14 @@ export default function Profile() {
               ))}
             </div>
             {/* "Profile" */}
-            <Box component={"div"}
-            className={styles.container}
+            <Box
+              component={"div"}
+              className={styles.container}
               sx={{
                 minHeight: "50vh",
                 display: "flex",
-                flex:1,
-                py:0,
+                flex: 1,
+                py: 0,
                 justifyContent: "space-between",
                 alignItems: "flex-start",
               }}
@@ -343,6 +344,7 @@ export default function Profile() {
                           <div
                             onClick={() => {
                               setOpenEditAddress(true);
+                              setEditAddress(address);
                             }}
                             className={styles.edit_link}
                           >
@@ -358,16 +360,15 @@ export default function Profile() {
                           >
                             Delete
                           </div>
-                          <AddressModal
-                            open={openEditAddress}
-                            setOpen={setOpenEditAddress}
-                            type="edit"
-                            addressInfo={address}
-                          />
                         </div>
                       </>
                     ))}
-
+                   {EditAddress&&openEditAddress? <AddressModal
+                      open={openEditAddress}
+                      setOpen={setOpenEditAddress}
+                      type="edit"
+                      addressInfo={EditAddress}
+                    />:null}
                     {/* ***** */}
                     {/* <div className={styles.v_line}></div>
                   <div className={styles.title}>Office</div>
