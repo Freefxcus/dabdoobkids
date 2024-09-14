@@ -24,6 +24,7 @@ export default function Checkout() {
   const [cart, setCart] = useState([]);
   const [order, setOrder] = useState([]);
   const [address, setAddress] = useState([]);
+  const [ForceReload, setForceReload] = useState(false);
   useEffect(() => {
     const fetchCart = async () => {
       const cartData = await getCart();
@@ -43,7 +44,7 @@ export default function Checkout() {
 
     fetchCart();
     fetchAddress();
-  }, []);
+  }, [ForceReload]);
 
   useEffect(() => {
     if (!searchParams.get("paymentMethod")) {
@@ -88,7 +89,6 @@ export default function Checkout() {
           flexDirection: "column",
           gap: "24px",
           flex: 3,
-
         }}
       >
         <h1 style={{ fontSize: "24px", fontWeight: "500" }}>Summary Order</h1>
@@ -102,13 +102,15 @@ export default function Checkout() {
         >
           {" "}
           {cart?.map((item) => (
-          <SummaryOrderProductCard item={item} key={item.id} />
+            <SummaryOrderProductCard item={item} key={item.id} />
           ))}
         </Box>
         <BillingDetails
           address={address}
           addressActive={addressActive}
           setAddressActive={setAddressActive}
+          ForceReload={ForceReload}
+          setForceReload={setForceReload}
         />
       </div>
 

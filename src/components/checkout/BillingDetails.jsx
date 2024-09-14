@@ -15,11 +15,11 @@ import { Prev } from "react-bootstrap/esm/PageItem";
 export default function BillingDetails({
   address,
   addressActive,
-  setAddressActive,
+  setAddressActive,ForceReload, setForceReload
 }) {
   const [openEdit, setOpenEdit] = useState(false);
   const [openAdd, setOpenAdd] = useState(false);
-  const [ForceReload, setForceReload] = useState(false);
+
 
   const [wallet, setWallet] = useState();
   const [addressInfo, setAddressInfo] = useState(null)
