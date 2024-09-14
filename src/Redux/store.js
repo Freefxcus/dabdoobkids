@@ -107,6 +107,7 @@ const cartSlice = createSlice({
 const persistConfig = {
   key: "root",
   storage,
+  blacklist: ['cartItems', 'Wishlist',"addresses"],
 };
 
 
@@ -128,7 +129,7 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false,
-    }).concat(cartApi.middleware, wishlistApi.middleware), // Add RTK-Query middleware here
+    }).concat(cartApi.middleware, wishlistApi.middleware , AddressApi.middleware), // Add RTK-Query middleware here
 });
 export const persistor = persistStore(store);
 

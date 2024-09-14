@@ -43,7 +43,7 @@ const cartApi = createApi({
           count: payload.count,
         },
       }),
-      invalidatesTags: ["Cart"],
+      invalidatesTags: ["cartItems"],
     }),
     addToCart: builder.mutation({
       query: (payload) => ({

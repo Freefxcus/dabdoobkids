@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const AddressApi = createApi({
-  reducerPath: "addressApi",
+  reducerPath: "addresses",
   baseQuery: fetchBaseQuery({
     baseUrl: "https://api.dabdoobkidz.com/",
     prepareHeaders: (headers) => {
@@ -13,6 +13,10 @@ const AddressApi = createApi({
     },
   }),
   endpoints: (builder) => ({
+     getAddress: builder.query({
+      query: () => "/addresses",
+      providesTags: ["addresses"],
+    }),
     addAddress: builder.mutation({
       query: (body) => {
         const governorate = +body.governorate;
@@ -22,11 +26,9 @@ const AddressApi = createApi({
           method: "POST",
           body: { ...body, governorate, city },
         };
-      },
+      },    invalidatesTags: ["addresses"],
     }),
-    getAddress: builder.query({
-      query: () => "/addresses",
-    }),
+   
     updateAddress: builder.mutation({
       query: ({ id, body }) => {
         const governorate = +body.governorate;
@@ -36,13 +38,13 @@ const AddressApi = createApi({
           method: "PUT",
           body: { ...body, governorate, city },
         };
-      },
+      },   invalidatesTags: ["addresses"],
     }),
     deleteAddress: builder.mutation({
       query: (id) => ({
         url: `/addresses/${id}`,
         method: "DELETE",
-      }),
+      }),   invalidatesTags: ["addresses"],
     }),
   }),
 });
