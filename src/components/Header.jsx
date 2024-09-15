@@ -231,7 +231,20 @@ export default function Header({ setOpen }) {
             // style={{ gap: 0, overflow: "hidden" }}
             style={{ gap: 0 }}
           >
-          {!isSubscription&&  <img
+          <div
+              className={`${styles.tag} hidden-on-small-screen`}
+              style={{
+                marginLeft: "10px",
+                position: "relative",
+                left: animation ? 0 : "-220px",
+                transition: "left 1s ease-in-out",
+              }}
+              onClick={() => {
+                navigate("/plans");
+              }}
+            >
+Subscription            </div>
+          {/* {!isSubscription&&  <img
               src={dabdoob}
               className={`${styles.clickable} hidden-on-small-screen`}
               style={{
@@ -271,7 +284,7 @@ export default function Header({ setOpen }) {
               }}
             >
               For Upgrade
-            </div>}
+            </div>} */}
             <img
               src={lense}
               className={styles.clickable}
