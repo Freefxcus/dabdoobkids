@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -12,13 +12,28 @@ import {
   getSubCategories,
   getUserPlan,
 } from "../utils/apiCalls";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate,useLocation } from "react-router-dom";
 export default function Sidebar({ setOpen, open }) {
   const navigate = useNavigate();
+  const location=useLocation()
   const [isUser, setIsUser] = useState(false);
   const [categories, setCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
   const [isSubscription, setIsSubscription] = useState(false);
+  const isFirstRender = useRef(true);
+
+  useEffect(() => {
+    if (isFirstRender.current) {
+      // Skip the first render
+      isFirstRender.current = false;
+    } else {
+      // Only execute this after the first render
+      if (open) {
+        setOpen(false);
+      }
+    }
+  }, [location.pathname, open]);
+
   useEffect(() => {
     if (document && open) {
       const searchIcon = document.getElementById("action-component");
@@ -50,6 +65,8 @@ export default function Sidebar({ setOpen, open }) {
       setSubCategories(res);
     });
   }, []);
+
+
   useEffect(() => {
     if (localStorage.getItem("access_token")) {
       setIsUser(true);
