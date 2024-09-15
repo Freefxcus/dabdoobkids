@@ -24,7 +24,7 @@ import bag from "../images/bag.svg";
 import brownBag from "../images/brown-bag.svg";
 import user from "../images/user.svg";
 import dabdoob from "../images/dabdoob.svg";
-import premium from "../images/premium.png";
+import premium from "../images/logoPrem.svg";
 import burger from "../images/burger.png";
 import {
   getCategories,
@@ -206,7 +206,7 @@ export default function Header({ setOpen }) {
             <img
               src={isSubscription?premium :logo}
               className={styles["logo"]}
-              style={{width: isSubscription?"50px":"100px"}}
+              style={{width:"100px"}}
               alt="logo "
               onClick={() => {
                 navigate("/");
@@ -235,7 +235,7 @@ export default function Header({ setOpen }) {
               src={isSubscription? premium:dabdoob}
               className={`${styles.clickable} hidden-on-small-screen`}
               style={{
-                  width:isSubscription?"50px":"auto",
+                  width:"auto",
                 marginLeft: "10px",
                 position: "relative",
                 left: animation ? 0 : "160px",
