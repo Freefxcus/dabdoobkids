@@ -4,7 +4,7 @@
     --color-bg-accent: #ecdcc0;
     --size: clamp(10rem, 1rem + 40vmin, 30rem);
     --gap: calc(var(--size) / 14);
-    --duration: 60s;
+    --duration: 120s;
     --scroll-start: 0;
     --scroll-end: calc(-100% - var(--gap));
   }
@@ -86,18 +86,18 @@
   }
   
   /* Element styles */
-  .marquee svg {
+  .marquee img {
     display: grid;
     place-items: center;
     width: var(--size);
     fill: var(--color-text);
-    background: var(--color-bg-accent);
+    /* background: var(--color-bg-accent); */
     aspect-ratio: 16/9;
     padding: calc(var(--size) / 10);
     border-radius: 0.5rem;
   }
   
-  .marquee--vertical svg {
+  .marquee--vertical img {
     aspect-ratio: 1;
     width: calc(var(--size) / 1.5);
     padding: calc(var(--size) / 6);
@@ -115,58 +115,6 @@
   .wrapper--vertical {
     flex-direction: row;
     height: 100vh;
-  }
-  
-  /* Toggle direction button */
-  .toggle {
-    --size: 3rem;
-    position: relative;
-    position: fixed;
-    top: 1rem;
-    left: 1rem;
-    width: var(--size);
-    height: var(--size);
-    font: inherit;
-    text-align: center;
-    cursor: pointer;
-    outline: none;
-    border: none;
-    border-radius: 50%;
-    color: inherit;
-    background-color: var(--color-bg-accent);
-    z-index: 1;
-  }
-  
-  .toggle:focus-visible {
-    box-shadow: 0 0 0 2px var(--color-text);
-  }
-  
-  .toggle span {
-    position: absolute;
-    display: inline-block;
-    top: 50%;
-    left: calc(100% + 0.4em);
-    width: fit-content;
-    white-space: nowrap;
-    transform: translateY(-50%);
-    animation: fade 400ms 4s ease-out forwards;
-    user-select: none;
-  }
-  
-  .toggle svg {
-    --size: 1.5rem;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: var(--size);
-    height: var(--size);
-    fill: currentcolor;
-    transform: translate(-50%, -50%);
-    transition: transform 300ms cubic-bezier(0.25, 1, 0.5, 1);
-  }
-  
-  .toggle--vertical svg {
-    transform: translate(-50%, -50%) rotate(-90deg);
   }
   
   @keyframes fade {

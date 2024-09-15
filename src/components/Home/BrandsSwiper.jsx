@@ -8,7 +8,6 @@ export default function BrandsSwiper() {
   const [error, setError] = useState(null);
   const [limit, setLimit] = useState(() => Math.ceil(window.innerWidth / 300));
   const navigate = useNavigate();
-  const marqueeRef = useRef(null);
 
   useEffect(() => {
     const fetchBanners = async () => {
@@ -25,28 +24,10 @@ export default function BrandsSwiper() {
       }
     };
 
-    const handleFinish = () => {
-      if (marqueeRef.current) {
-        marqueeRef.current.style.marginLeft = "0";
-        marqueeRef.current.start();
-      }
-    };
-
-    // Ensure marqueeRef.current is not null
-    const startSlide = () => {
-      if (marqueeRef.current) {
-        marqueeRef.current.addEventListener("finish", handleFinish);
-      }
-    };
+    
 
     fetchBanners();
-    startSlide();
-
-    return () => {
-      if (marqueeRef.current) {
-        marqueeRef.current.removeEventListener("finish", handleFinish);
-      }
-    };
+   
   }, []);
 
   // Update the limit on window resize
@@ -70,7 +51,7 @@ export default function BrandsSwiper() {
   const repeatCount = Math.ceil(limit / brands.length);
 
   // Create a new array with the repeated brands
-  const newBrands = [...Array(repeatCount + 5)].flatMap(() => brands);
+  const newBrands = [...Array(repeatCount + 3)].flatMap(() => brands);
 
   return (
     
