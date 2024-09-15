@@ -141,10 +141,10 @@ export default function Search() {
       style={{ paddingBottom: "50px" }}
     >
       <div className={styles.header}>find the best clothes</div>
-      <div className={styles["countdown-container"]}>
+      {/* <div className={styles["countdown-container"]}>
         <div className={styles["countdown-title"]}>Daily sale</div>
         <CountdownTimer hours={5} minutes={30} seconds={20} type="a" />
-      </div>
+      </div> */}
       <div className={styles.options}>
         <img
           style={{ cursor: "pointer" }}
