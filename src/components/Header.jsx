@@ -245,7 +245,7 @@ export default function Header({ setOpen }) {
                 navigate("/plans");
               }}
             />}
-          {!isSubscription && <div
+          {!isSubscription ? <div
               className={`${styles.tag} hidden-on-small-screen`}
               style={{
                 marginLeft: "10px",
@@ -258,6 +258,19 @@ export default function Header({ setOpen }) {
               }}
             >
               Try Dabdoob Premium
+            </div>:<div
+              className={`${styles.tag} hidden-on-small-screen`}
+              style={{
+                marginLeft: "10px",
+                position: "relative",
+                left: animation ? 0 : "-220px",
+                transition: "left 1s ease-in-out",
+              }}
+              onClick={() => {
+                navigate("/plans");
+              }}
+            >
+              For Upgrade
             </div>}
             <img
               src={lense}
