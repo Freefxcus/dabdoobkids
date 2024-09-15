@@ -231,8 +231,8 @@ export default function Header({ setOpen }) {
             // style={{ gap: 0, overflow: "hidden" }}
             style={{ gap: 0 }}
           >
-            <img
-              src={isSubscription? premium:dabdoob}
+          {!isSubscription&&  <img
+              src={dabdoob}
               className={`${styles.clickable} hidden-on-small-screen`}
               style={{
                   width:"auto",
@@ -244,7 +244,7 @@ export default function Header({ setOpen }) {
               onClick={() => {
                 navigate("/plans");
               }}
-            />
+            />}
           {!isSubscription && <div
               className={`${styles.tag} hidden-on-small-screen`}
               style={{
