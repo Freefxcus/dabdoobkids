@@ -78,7 +78,7 @@ export default function Popup({
           province: values.province,
           // district: values.district,
           address: values.address,
-          postalCode: values.postal_code,
+          postalCode: values.postalCode,
           phone: "string",
           name: values.address_label,
         };
@@ -438,18 +438,18 @@ export default function Popup({
                 <span>Postal code</span>
                 <span className={styles.error}> *</span>
 
-                {errors.postal_code && touched.postal_code && (
-                  <span className="error">{errors.postal_code}</span>
+                {errors.postalCode && touched.postalCode && (
+                  <span className="error">{errors.postalCode}</span>
                 )}
               </div>
               <input
-                value={values.postal_code}
+                value={values.postalCode}
                 onChange={handleChange}
-                id="postal_code"
-                type="postal_code"
+                id="postalCode"
+                type="postalCode"
                 onBlur={handleBlur}
                 className={
-                  errors.postal_code && touched.postal_code
+                  errors.postalCode && touched.postalCode
                     ? `${styles.input} ${styles.item} ${styles.bottom_margin} input-error`
                     : `${styles.input} ${styles.item} ${styles.bottom_margin}`
                 }

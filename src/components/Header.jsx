@@ -106,6 +106,14 @@ export default function Header({ setOpen }) {
   useEffect(() => {
     if (localStorage.getItem("access_token")) {
       setIsUser(true);
+      getUserPlan().then((res) => {
+        if (res?.data?.data?.plan?.id) {
+          setIsSubscription(true);
+        }
+      });
+    }else{
+      setIsUser(false);
+      setIsSubscription(false);
     }
   }, [localStorage.getItem("access_token")]);
 
@@ -367,6 +375,7 @@ export default function Header({ setOpen }) {
               </div>
             )}
             <img
+            id="action-component"
               src={burger}
               className={`${styles.clickable} hidden-on-large-screen show-on-small-screen`}
               style={{ marginLeft: "10px", width: "30px" }}

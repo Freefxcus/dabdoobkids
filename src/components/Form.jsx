@@ -35,6 +35,7 @@ export default function Form({ type, toggleDrawer }) {
     await instance
       .post(endpoint, body)
       .then((response) => {
+        
         actions.resetForm();
         notifySuccess("Success!");
       
@@ -47,7 +48,7 @@ export default function Form({ type, toggleDrawer }) {
             "refresh_token",
             response.data.data.refreshToken
           );
-          toggleDrawer();
+          toggleDrawer&&toggleDrawer();
           navigate("/");
         }
       })

@@ -124,6 +124,7 @@ export default function Profile() {
         //   }
         // });
       });
+console.log("forceReload",forceReload);
 
     //* address
     getAddress()
@@ -372,6 +373,7 @@ export default function Profile() {
                         setOpen={setOpenEditAddress}
                         type="edit"
                         addressInfo={EditAddress}
+                        setForceReload={setForceReload}
                       />
                     ) : null}
                     {/* ***** */}

@@ -356,8 +356,8 @@ export const updateAddress = async (id, body) => {
   await instance
     .put(`/addresses/${id}`, body)
     .then((response) => {
-      notifySuccess("Address Updated!");
-      returnedValue = response.data.data;
+      // notifySuccess("Address Updated!");
+      returnedValue = response.data;
     })
     .catch((error) => {
       notifyError(error);

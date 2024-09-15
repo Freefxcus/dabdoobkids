@@ -13,12 +13,35 @@ import {
   getUserPlan,
 } from "../utils/apiCalls";
 import { Link, useNavigate } from "react-router-dom";
-export default function Sidebar({ setOpen }) {
+export default function Sidebar({ setOpen, open }) {
   const navigate = useNavigate();
   const [isUser, setIsUser] = useState(false);
   const [categories, setCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
   const [isSubscription, setIsSubscription] = useState(false);
+  useEffect(() => {
+    if (document && open) {
+      const searchIcon = document.getElementById("action-component");
+      const SidebarContent = document.getElementById("sidebar-content");
+
+      const handleCloseOutside = (e) => {
+        if (
+          !searchIcon?.contains(e.target) &&
+          !SidebarContent?.contains(e.target)
+        ) {
+          return setOpen(false);
+        }
+      };
+      const handlePress = (e) => {
+        if (e.keyCode === 27) {
+          setOpen(false);
+        }
+      };
+      document.addEventListener("keydown", handlePress);
+      document.addEventListener("click", handleCloseOutside);
+      return () => document.removeEventListener("click", handleCloseOutside);
+    }
+  }, [open]);
   useEffect(() => {
     getCategories().then((res) => {
       setCategories(res);
@@ -28,12 +51,19 @@ export default function Sidebar({ setOpen }) {
     });
   }, []);
   useEffect(() => {
-    getUserPlan().then((res) => {
-      if (res?.data?.data?.plan?.id) {
-        setIsSubscription(true);
-      }
-    });
-  }, []);
+    if (localStorage.getItem("access_token")) {
+      setIsUser(true);
+      getUserPlan().then((res) => {
+        if (res?.data?.data?.plan?.id) {
+          setIsSubscription(true);
+        }
+      });
+    } else {
+      setIsUser(false);
+      setIsSubscription(false);
+    }
+  }, [localStorage.getItem("access_token")]);
+
   const formattedSybCategoriesLinks =
     subCategories?.data?.data?.categories?.map((subCategory) => {
       return {
@@ -51,7 +81,7 @@ export default function Sidebar({ setOpen }) {
   }, [localStorage.getItem("access_token")]);
 
   return (
-    <div className={`${styles.sidebar} padding-container`}>
+    <div className={`${styles.sidebar} padding-container`} id="sidebar-content">
       {categories
         ? categories?.categories?.map((category) => (
             <Accordion>
@@ -98,11 +128,11 @@ export default function Sidebar({ setOpen }) {
             </Accordion>
           ))
         : null}
-        
-      <button 
-       onClick={() => {
-            navigate("/plans");
-          }}
+
+      <button
+        onClick={() => {
+          navigate("/plans");
+        }}
         style={{
           display: "flex",
           justifyContent: "center",
@@ -116,7 +146,7 @@ export default function Sidebar({ setOpen }) {
           padding: "10px",
           color: "white",
           fontFamily: "600",
-          cursor:"pointer"
+          cursor: "pointer",
         }}
         type="button"
       >

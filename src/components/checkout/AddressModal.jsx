@@ -46,7 +46,7 @@ export default function AddressModal({
   type,
   addressInfo,
   addressId,
-  setForceReload
+  setForceReload,
 }) {
   console.log(addressInfo, "addressInfo123123");
   const [governorates, setGovernorates] = useState([]);
@@ -56,7 +56,7 @@ export default function AddressModal({
     const parametres = {
       phone: values?.phone_number,
       name: values.first_name + " " + values.last_name,
-      postalCode: values.postal_code,
+      postalCode: values.postalCode,
       governorate: +values.governorate,
       city: +values.city,
       ...values,
@@ -64,16 +64,18 @@ export default function AddressModal({
     if (type === "edit") {
       const resUpdate = await updateAddress(addressInfo?.id, parametres);
       console.log(resUpdate, "resUpdate123");
-      if (resUpdate.status) {toast.success("Address updated successfully")
-      setOpen(false);
-      setForceReload((prev) => !prev);
+      if (resUpdate.status) {
+        setForceReload((prev) => !prev);
+        toast.success("Address updated successfully");
+        setOpen(false);
       }
     } else if (type === "add") {
       const resAddress = await AddAddress(parametres);
-      if (resAddress.status) {toast.success("Address added successfully")
-      setOpen(false);
-      setForceReload((prev) => !prev);
-      };
+      if (resAddress.status) {
+        setForceReload((prev) => !prev);
+        toast.success("Address added successfully");
+        setOpen(false);
+      }
     }
   };
   const initialAddressValues = {
@@ -85,9 +87,12 @@ export default function AddressModal({
     last_name: addressInfo?.name.split(" ")[1] || "",
     governorate: addressInfo?.governorate.id || "",
     // district: addressInfo?.district || "",
-    city: addressInfo?.city || "",
-    postal_code: addressInfo?.postal_code || "",
+    city: addressInfo?.city.id || "",
+    postalCode: addressInfo?.postalCode || "",
   };
+
+  console.log("addressInfoaddressInfoaddressInfo",addressInfo);
+  
   const {
     values,
     errors,
@@ -105,14 +110,32 @@ export default function AddressModal({
   });
   useEffect(() => {
     getGovernorates().then((res) => {
-      setGovernorates(res);
+      setGovernorates(res?.data?.data);
     });
     getCitites().then((res) => {
-      setCities(res);
-    })
+      setCities(res?.data?.data);
+    });
   }, []);
 
-  console.log(governorates, "values123123");
+
+useEffect(() => {
+  // Check if governorate exists and if it does, set the city based on the selected governorate
+  if (values.governorate) {
+    const filteredCities = cities?.filter(
+      (city) => city.governorate == values.governorate
+    );
+    console.log("firstCityId",filteredCities,values.governorate );
+    
+    if (filteredCities?.length) {
+      const firstCityId = filteredCities?.[0]?.id;
+      
+      setFieldValue('city', firstCityId); // Set the city to the first one in the filtered list
+    }
+  }
+}, [values.governorate, cities, setFieldValue]); // Run this effect when governorate or cities change
+
+  
+
   return (
     <Modal open={open}>
       <form onSubmit={handleSubmit}>
@@ -221,7 +244,7 @@ export default function AddressModal({
               )}
             </div>
             <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Type</InputLabel>
+              {/* <InputLabel id="demo-simple-select-label">Type</InputLabel> */}
               <Select
                 labelId="demo-simple-select-label"
                 id="type"
@@ -253,7 +276,7 @@ export default function AddressModal({
               )}
             </div>
             <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Primary</InputLabel>
+              {/* <InputLabel id="demo-simple-select-label">Primary</InputLabel> */}
               <Select
                 labelId="demo-simple-select-label"
                 id="primary"
@@ -298,65 +321,71 @@ export default function AddressModal({
             ></input>
           </div>
           {/* province */}
+          {/* governorate select */}
           <div className={styles.semi_item}>
-            <div className={`${styles.label} ${styles.item}`}>
-              <span>governorate</span>
-              <span className={styles.error}> *</span>
+          <div className={`${styles.label} ${styles.item}`}>
+            <span>Governorate</span>
+            <span className={styles.error}> *</span>
 
-              {errors.governorate && touched.governorate && (
-                <span className="error">{errors.governorate}</span>
-              )}
-            </div>
-            <select
-              value={values.governorate?values.governorate:governorates?.data?.data?.[0].id}
-              
-              onChange={handleChange}
-              id="governorate"
-              type="number"
-              required
-              onBlur={handleBlur}
-              className={
-                errors.governrate && touched.governrate
-                  ? `${styles.input} ${styles.item} ${styles.bottom_margin} input-error`
-                  : `${styles.input} ${styles.item} ${styles.bottom_margin}`
-              }
-              placeholder="Province"
-            >
-              {governorates?.data?.data?.map((gov) => (
-                <option value={gov.id}>{gov.name.en}</option>
-              ))}
-
-            </select>
+            {errors.governorate && touched.governorate && (
+              <span className="error">{errors.governorate}</span>
+            )}
           </div>
-          {/* city */}
-          <div className={styles.semi_item}>
-            <div className={`${styles.label} ${styles.item}`}>
-              <span>City</span>
-              <span className={styles.error}> *</span>
+          <select
+            value={values.governorate || governorates?.[0]?.id}
+            onChange={handleChange}
+            id="governorate"
+            type="number"
+            required
+            onBlur={handleBlur}
+            className={
+              errors.governrate && touched.governrate
+                ? `${styles.input} ${styles.item} ${styles.bottom_margin} input-error`
+                : `${styles.input} ${styles.item} ${styles.bottom_margin}`
+            }
+            placeholder="Governorate"
+          >
+            {governorates?.map((gov) => (
+              <option key={gov.id} value={gov.id}>
+                {gov.name.en}
+              </option>
+            ))}
+          </select>
+        </div>
 
-              {errors.city && touched.city && (
-                <span className="error">{errors.city}</span>
-              )}
-            </div>
-            <select
-              value={values.city}
-              onChange={handleChange}
-              id="city"
-              type="number"
-              onBlur={handleBlur}
-              required
-              className={
-                errors.city && touched.city
-                  ? `${styles.input} ${styles.item} ${styles.bottom_margin} input-error`
-                  : `${styles.input} ${styles.item} ${styles.bottom_margin}`
-              }
-              placeholder="City"
-            >
-              {cities?.data?.data?.filter(city=>city.governorate==(values.governorate?values.governorate:governorates?.data?.data?.[0].id)).map((city) => (
-                <option value={city.id}>{city.name.en}</option>
-              ))}
-            </select>
+        {/* city select */}
+        <div className={styles.semi_item}>
+          <div className={`${styles.label} ${styles.item}`}>
+            <span>City</span>
+            <span className={styles.error}> *</span>
+
+            {errors.city && touched.city && (
+              <span className="error">{errors.city}</span>
+            )}
           </div>
+          <select
+            value={values.city}
+            onChange={handleChange}
+            id="city"
+            type="number"
+            onBlur={handleBlur}
+            required
+            className={
+              errors.city && touched.city
+                ? `${styles.input} ${styles.item} ${styles.bottom_margin} input-error`
+                : `${styles.input} ${styles.item} ${styles.bottom_margin}`
+            }
+            placeholder="City"
+          >
+            {cities
+              ?.filter((city) => city.governorate == values.governorate)
+              .map((city) => (
+                <option key={city.id} value={city.id}>
+                  {city.name.en}
+                </option>
+              ))}
+          </select>
+        </div>
           {/* district */}
           {/* <div className={styles.semi_item}>
             <div className={`${styles.label} ${styles.item}`}>
@@ -387,18 +416,18 @@ export default function AddressModal({
               <span>Postal code</span>
               <span className={styles.error}> *</span>
 
-              {errors.postal_code && touched.postal_code && (
-                <span className="error">{errors.postal_code}</span>
+              {errors.postalCode && touched.postalCode && (
+                <span className="error">{errors.postalCode}</span>
               )}
             </div>
             <input
-              value={values.postal_code}
+              value={values.postalCode}
               onChange={handleChange}
-              id="postal_code"
-              type="postal_code"
+              id="postalCode"
+              type="postalCode"
               onBlur={handleBlur}
               className={
-                errors.postal_code && touched.postal_code
+                errors.postalCode && touched.postalCode
                   ? `${styles.input} ${styles.item} ${styles.bottom_margin} input-error`
                   : `${styles.input} ${styles.item} ${styles.bottom_margin}`
               }

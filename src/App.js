@@ -113,7 +113,7 @@ function App() {
               )}
             </Routes>
             {!open && <Footer />}
-            {open && <Sidebar setOpen={setOpen} />}
+            {open && <Sidebar setOpen={setOpen} open={open} />}
           </div>
         </PersistGate>
       </Provider>
