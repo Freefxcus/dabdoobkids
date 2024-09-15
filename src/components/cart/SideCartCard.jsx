@@ -69,7 +69,7 @@ export default function SideCartCard({ item }) {
                borderRadius: "20px",
             }}
             alt={item.product.name}
-            src={item.product.images[0]}
+            src={item?.product?.images?.[0]}
           />
          {finalPrice?.discount? <Box
             sx={{
