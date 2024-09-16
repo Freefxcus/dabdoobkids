@@ -113,7 +113,8 @@
 /* Media query for screens smaller than 600px (e.g., smartphones) */
 @media (max-width: 600px) {
   .logo {
-    width: 70px;
+    width: 90px;
+    height: auto;
   }
   .container {
     font-size: 10px;
@@ -128,7 +129,7 @@
 /* Media query for screens between 601px and 900px (e.g., tablets) */
 @media (min-width: 601px) and (max-width: 900px) {
   .logo {
-    width: 80px;
+    width: 90px;
   }
   .container {
     font-size: 12px;
@@ -140,7 +141,7 @@
 /* Media query for screens between 901px and 1200px (e.g., larger tablets and small desktops) */
 @media (min-width: 901px) and (max-width: 1200px) {
   .logo {
-    width: 90px;
+    width: 100px;
   }
   .container {
     font-size: 14px;

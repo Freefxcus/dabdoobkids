@@ -12,10 +12,10 @@ import {
   getSubCategories,
   getUserPlan,
 } from "../utils/apiCalls";
-import { Link, useNavigate,useLocation } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 export default function Sidebar({ setOpen, open }) {
   const navigate = useNavigate();
-  const location=useLocation()
+  const location = useLocation();
   const [isUser, setIsUser] = useState(false);
   const [categories, setCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
@@ -66,7 +66,6 @@ export default function Sidebar({ setOpen, open }) {
     });
   }, []);
 
-
   useEffect(() => {
     if (localStorage.getItem("access_token")) {
       setIsUser(true);
@@ -100,7 +99,7 @@ export default function Sidebar({ setOpen, open }) {
   return (
     <div className={`${styles.sidebar} padding-container`} id="sidebar-content">
       {categories
-        ? categories?.categories?.map((category) => (
+        ? categories?.categories?.slice(0,5)?.map((category) => (
             <Accordion>
               <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
@@ -167,36 +166,19 @@ export default function Sidebar({ setOpen, open }) {
         }}
         type="button"
       >
-        <img
-          src={isSubscription ? premium : dabdoob}
-          className={``}
+        <div
           style={{
-            width: isSubscription ? "50px" : "auto",
             marginLeft: "10px",
             position: "relative",
 
             transition: "left 1s ease-in-out",
           }}
-          alt="logo"
           onClick={() => {
             navigate("/plans");
           }}
-        />
-        {!isSubscription && (
-          <div
-            style={{
-              marginLeft: "10px",
-              position: "relative",
-
-              transition: "left 1s ease-in-out",
-            }}
-            onClick={() => {
-              navigate("/plans");
-            }}
-          >
-            Try Dabdoob Premium
-          </div>
-        )}
+        >
+          Subscription
+        </div>
       </button>
       <div className={styles.line}></div>
       {isUser ? (
