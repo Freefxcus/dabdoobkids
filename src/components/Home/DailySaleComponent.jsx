@@ -66,13 +66,13 @@ export default function DailySaleComponent({ categories }) {
           marginBottom: "20px",
         }}
         >
-          {/* <div>
+          <div>
             <div className={styles.title} style={{ marginBottom: "5px" }}>
               Daily Sale
             </div>
             <CountdownTimer hours={5} minutes={30} seconds={20} type="b" />
           </div>
-          <Star type="b" /> */}
+          <Star type="b" />
         <div
           onClick={() => navigate("/search?sale=true")}
           style={{
