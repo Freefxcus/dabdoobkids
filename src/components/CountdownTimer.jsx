@@ -26,7 +26,6 @@ const CountdownTimer = ({ hours = 0, minutes = 0, seconds = 0, type }) => {
         totalSeconds -= 1;
       } else {
         clearInterval(countdownInterval);
-        // Handle countdown completion, e.g., display a message or trigger an action
       }
     }, 1000);
 

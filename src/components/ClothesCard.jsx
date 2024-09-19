@@ -6,7 +6,7 @@ import eHeart from "../images/empty-heart.svg";
 import fHeart from "../images/filled-heart.svg";
 
 import { useNavigate } from "react-router-dom";
-import { notifyError, notifySuccess, truncateText } from "../utils/general.js";
+import { calcDiscount, notifyError, notifySuccess, truncateText } from "../utils/general.js";
 import { CardMedia } from "@mui/material";
 import HandleMessageIsAuth from "../utils/message/index.js";
 import {
@@ -66,6 +66,9 @@ export default function ClothesCard({ item }) {
       }
     }
   };
+
+  const finalPrice = calcDiscount(null, item);
+
   return (
     <div
       className={styles.container}
@@ -121,7 +124,31 @@ export default function ClothesCard({ item }) {
           {item?.brand?.name}
         </div>
         <div style={{ fontWeight: "600" }}>{item?.name}</div>
-        <div style={{ fontWeight: "bold" }}>EGP{item?.price}</div>
+        {/* <div style={{ fontWeight: "bold" }}>EGP{item?.price}</div> */}
+        <div
+              style={{
+                fontSize: "1.2rem",
+                fontWeight: "700",
+                color: "var(--errie-black)",
+              }}
+            >
+              {finalPrice?.discount ? (
+                <>
+                  <span>EGP {finalPrice.priceAfter}</span>{" "}
+                  <s
+                    style={{
+                      fontSize: "1rem",
+                      fontWeight: "500",
+                      color: "var(--grey-text)",
+                    }}
+                  >
+                    EGP {finalPrice.price}{" "}
+                  </s>
+                </>
+              ) : (
+                <span>EGP {finalPrice.price}</span>
+              )}
+            </div>
       </div>
     </div>
   );
