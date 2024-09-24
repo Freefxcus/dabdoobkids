@@ -6,7 +6,7 @@ export default function BrandsSwiper() {
   const [brands, setBrands] = useState([]);
   const [loading, setLoading] = useState(true); // To handle the loading state
   const [error, setError] = useState(null);
-  const [limit, setLimit] = useState(() => Math.ceil(window.innerWidth / 300));
+  const [limit, setLimit] = useState(() => Math.ceil(window.innerWidth / 300)||1);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -15,7 +15,7 @@ export default function BrandsSwiper() {
         const response = await instance.get("/brands", {
           params: { items: 50 },
         });
-        setBrands(response?.data?.data?.brands);
+        setBrands(response?.data?.data?.brands||[]);
       } catch (err) {
         console.error("Failed to fetch banners:", err);
         setError(err); // Notify the error if needed
@@ -48,10 +48,10 @@ export default function BrandsSwiper() {
     return <div>Error loading banners</div>; // Show an error message
   }
 
-  const repeatCount = Math.ceil(limit / brands.length);
+  const repeatCount = Math.ceil(limit / (brands?.length||1));
 
   // Create a new array with the repeated brands
-  const newBrands = [...Array(repeatCount + 3)].flatMap(() => brands);
+  const newBrands = [...Array((repeatCount||1) + 3)].flatMap(() => brands);
 
   return (
     

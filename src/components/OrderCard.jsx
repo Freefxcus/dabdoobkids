@@ -82,7 +82,7 @@ export default function OrderCard({
             }}
           >
             <img
-              src={product?.images[0]}
+              src={product?.images?.[0]}
               alt="product"
               className={styles.img}
             />
