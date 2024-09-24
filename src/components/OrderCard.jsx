@@ -19,7 +19,7 @@ export default function OrderCard({
 }) {
   const { product, variant } = item;
   const dispatch = useDispatch();
-  const [productCount, setProductCount] = React.useState(item.count);
+  const [productCount, setProductCount] = React.useState(item?.count);
   const total = productCount * +(variant?.price || product?.price);
 
   const [openDelete, setOpenDelete] = React.useState(false);
@@ -32,7 +32,7 @@ export default function OrderCard({
   const [addToCart, { isLoading: CartAddLoad }] = useAddToCartMutation();
 
   const handleUpdateQuantity = async (Count) => {
-    let newCount = itemForCart ? Math.trunc(Count - itemForCart.count) : Count;
+    let newCount = itemForCart ? Math.trunc(Count - itemForCart?.count) : Count;
     if (newCount === 0) return 0;
     let item = [
       {
@@ -89,7 +89,7 @@ export default function OrderCard({
             <div className={styles.column}>
               <div className={styles.column}>
                 {/* <div className={styles.category}>{product?.brand?.name}</div> */}
-                <div className={styles.title}>{product.name}</div>
+                <div className={styles.title}>{product?.name}</div>
               </div>
               <div className={`${styles.row} ${styles.subtitle}`}>
                 {item?.variant?.options?.length
@@ -129,7 +129,7 @@ export default function OrderCard({
             <DeleteModal
               open={openDelete}
               setOpen={setOpenDelete}
-              id={item.id}
+              id={item?.id}
               ProductId={product?.id}
               variantId={variant?.id}
             />
@@ -150,7 +150,7 @@ export default function OrderCard({
                         color: "var(--grey-text)",
                       }}
                     >
-                      EGP {finalPrice.price}{" "}
+                      EGP {finalPrice?.price}{" "}
                     </s>{" "}
                     <span
                       style={{
@@ -159,11 +159,11 @@ export default function OrderCard({
                         color: "#1B1B1B",
                       }}
                     >
-                      EGP {finalPrice.priceAfter}
+                      EGP {finalPrice?.priceAfter}
                     </span>
                   </>
                 ) : (
-                  <span>EGP {finalPrice.price}</span>
+                  <span>EGP {finalPrice?.price}</span>
                 )}
               </div>
             </div>
@@ -196,17 +196,17 @@ export default function OrderCard({
           <div className={styles.product2}>
             <img
               className={styles.photoIcon}
-              src={product?.images[0]}
+              src={product?.images?.[0]}
               alt="product"
             />
             <div className={styles.productContent}>
               <div className={styles.productName}>
                 {/* <div className={styles.springCollection}>Spring Collection</div> */}
-                <div className={styles.mensUaStorm}>{product.name}</div>
+                <div className={styles.mensUaStorm}>{product?.name}</div>
               </div>
               <div className={styles.frameParent}>
                 <div className={styles.frameGroup}>
-                {item?.variant?.options.length
+                {item?.variant?.options?.length
                   ? item?.variant?.options?.map((variantItem, index) => (
                       <div
                         key={index + variantItem?.id}
@@ -241,7 +241,7 @@ export default function OrderCard({
             <DeleteModal
               open={openDelete}
               setOpen={setOpenDelete}
-              id={item.id}
+              id={item?.id}
               ProductId={product?.id}
               variantId={variant?.id}
             />
@@ -262,7 +262,7 @@ export default function OrderCard({
                         color: "var(--grey-text)",
                       }}
                     >
-                      EGP {finalPrice.price}{" "}
+                      EGP {finalPrice?.price}{" "}
                     </s>{" "}
                     <span
                       style={{
@@ -271,11 +271,11 @@ export default function OrderCard({
                         color: "#1B1B1B",
                       }}
                     >
-                      EGP {finalPrice.priceAfter}
+                      EGP {finalPrice?.priceAfter}
                     </span>
                   </>
                 ) : (
-                  <span>EGP {finalPrice.price}</span>
+                  <span>EGP {finalPrice?.price}</span>
                 )}
               </div></div>
             <div className={""}>

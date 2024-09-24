@@ -27,7 +27,7 @@ export default function OrderOverview({
         style={{ justifyContent: "space-between" }}
       >
         <div style={{ display: "flex", gap: "10px" }}>
-          <img src={product?.images[0]} alt="product" className={styles.img} />
+          <img src={product?.images?.[0]} alt="product" className={styles.img} />
           <div className={styles.column}>
             <div className={styles.column}>
               {/* <div className={styles.category}>Spring Collection</div> */}
