@@ -10,7 +10,8 @@ import { set } from "lodash";
 import { Box, CircularProgress, Stack } from "@mui/material";
 import { toast } from "react-toastify";
 import { useDeleteAllCartMutation } from "../../Redux/cartApi";
-import "./style.css"
+import "./style.css";
+import CloseIcon from "@mui/icons-material/Close";
 export default function ConfirmPayment({
   orderSummary,
   address,
@@ -21,11 +22,32 @@ export default function ConfirmPayment({
   const paymentMethod = searchParams.get("paymentMethod");
   const addressId = addressActive || address?.items?.[0]?.id;
   const [promoCode, setPromoCode] = useState("");
+  const [promoSuccess, setPromoSuccess] = useState();
   const [paymentLink, setPaymentMethod] = useState("");
   const [loading, setLoading] = useState(false);
   const [deleteAllCart] = useDeleteAllCartMutation();
   const validatePromoCode = async () => {
-    checkPromoCode(promoCode);
+    let data = await checkPromoCode(promoCode);
+
+    if (data?.data?.status === "success") {
+      console.log(data);
+      setPromoSuccess(data?.data?.data);
+    } else {
+      setPromoSuccess();
+    }
+  };
+
+
+  const clearPromoCode = async () => {
+    setPromoCode("");
+    let data = await checkPromoCode("");
+
+    if (data?.data?.status === "success") {
+      console.log(data);
+      setPromoSuccess(data?.data?.data);
+    } else {
+      setPromoSuccess();
+    }
   };
   const handlePayment = async () => {
     setLoading(true);
@@ -69,20 +91,27 @@ export default function ConfirmPayment({
               justifyContent: "space-between",
               gap: "12px",
             }}
-          ><div className="input-code-container">
-            <input
-            
-              value={promoCode}
-              onChange={(e) => setPromoCode(e.target.value)}
-              type="text"
-              className="btn input-code"
-              placeholder="Enter Promo Code"
-            /></div>
+          >
+            <div className="input-code-container">
+              <input
+                value={promoCode}
+                onChange={(e) => setPromoCode(e.target.value)}
+                type="text"
+                className="btn input-code"
+                placeholder="Enter Promo Code"
+              />
+              {promoSuccess ? (
+                <CloseIcon
+                  onClick={() => clearPromoCode()
+                  }
+                  className="btn-clear"
+                />
+              ) : null}
+            </div>
             <button
               onClick={validatePromoCode}
-              disabled={!promoCode}
-             className="btn promo-code"
-
+              disabled={!promoCode || promoSuccess}
+              className="btn promo-code"
             >
               Add
             </button>
