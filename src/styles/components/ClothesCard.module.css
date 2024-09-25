@@ -34,6 +34,10 @@
   background-color: transparent;
   border: none;
 }
+.heart-container img{
+    background-color: none;
+  border: none;
+}
 .tags-container{
    position: absolute;
   top: 15px;
@@ -88,7 +92,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: var(--white);
+    background-color: none;
+    border: none;
     position: absolute;
     top: 10px;
     right: 15px;

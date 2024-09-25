@@ -435,6 +435,22 @@ export const getCategories = async () => {
   return returnedValue; // caught by .then()
 };
 
+export const getTestimonials = async () => {
+  let returnedValue;
+
+  await instance
+    .get("/testimonials??order=asc&items=50")
+    .then((response) => {
+      console.log(response);
+      returnedValue = response.data.data;
+    })
+
+    .catch((error) => {
+      // notifyError(error);
+    });
+  return returnedValue; // caught by .then()
+};
+
 export const getBrands = async () => {
   let returnedValue;
 

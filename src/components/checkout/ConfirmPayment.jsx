@@ -10,7 +10,7 @@ import { set } from "lodash";
 import { Box, CircularProgress, Stack } from "@mui/material";
 import { toast } from "react-toastify";
 import { useDeleteAllCartMutation } from "../../Redux/cartApi";
-
+import "./style.css"
 export default function ConfirmPayment({
   orderSummary,
   address,
@@ -69,25 +69,20 @@ export default function ConfirmPayment({
               justifyContent: "space-between",
               gap: "12px",
             }}
-          >
+          ><div className="input-code-container">
             <input
-              style={{
-                border: "2px solid var(--dreamy-cloud) ",
-                padding: "12px 12px ",
-                flex: 2,
-              }}
+            
               value={promoCode}
               onChange={(e) => setPromoCode(e.target.value)}
               type="text"
+              className="btn input-code"
               placeholder="Enter Promo Code"
-            />
+            /></div>
             <button
               onClick={validatePromoCode}
-              style={{
-                backgroundColor: "var(--dreamy-cloud)",
-                border: "none",
-                padding: "12px 24px",
-              }}
+              disabled={!promoCode}
+             className="btn promo-code"
+
             >
               Add
             </button>

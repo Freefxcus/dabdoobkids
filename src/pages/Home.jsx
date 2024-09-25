@@ -43,6 +43,7 @@ import NewArrival from "../components/Home/NewArrival.jsx";
 import { Helmet } from "react-helmet";
 import BrandsSwiper from "../components/Home/BrandsSwiper.jsx";
 import DailySaleComponent from "../components/Home/DailySaleComponent.jsx";
+import TestimonialsList from "../components/Home/TestimonialsList.jsx";
 
 export default function Home() {
   const mobile = useMediaQuery("(max-width:300px)");
@@ -207,6 +208,9 @@ export default function Home() {
       </div>
       {/* daily sale */}
       <DailySaleComponent categories={categories} />  
+
+ {/* Testimonials*/}
+      <TestimonialsList />
       {/* Best Value offers */}
       <div className={"padding-container section-bottom-margin"}>
         <div >
