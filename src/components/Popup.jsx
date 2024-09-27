@@ -522,7 +522,7 @@ export default function Popup({
                   <span className="error">{errors.phone}</span>
                 )}
               </div>
-              <PhoneInput
+              {/* <PhoneInput
                 className={
                   errors.phone && touched.phone
                     ? `phone-input-error`
@@ -530,6 +530,8 @@ export default function Popup({
                 }
                 placeholder="Enter phone number"
                 name="rating"
+                country="EGY"
+defaultCountry="EG"
                 value={values.phone}
                 onChange={(event, newValue) => {
                   // setFieldValue("phone", newValue);
@@ -542,7 +544,24 @@ export default function Popup({
                 id="phone"
                 type="phone"
                 onBlur={handleBlur}
-              />
+              /> */}
+              <input
+              value={values.phone}
+            
+              onChange={handleChange}
+              id="phone"
+              type="phone"
+            
+              country="EGY"
+
+              onBlur={handleBlur}
+              className={
+                
+                errors.phone && touched.phone
+                  ? `phone-input-error`
+                  : `phone-input`}
+           placeholder="Enter phone number"
+            />
             </div>
             {/* email*/}
             <div className={styles.item}>

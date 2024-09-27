@@ -115,7 +115,7 @@ export default function UpdateProfileModal({
                 <span className="error">{errors.phone}</span>
               )}
             </div>
-            <PhoneInput
+            {/* <PhoneInput
               className={
                 errors.phone && touched.phone
                   ? `phone-input-error`
@@ -123,6 +123,7 @@ export default function UpdateProfileModal({
               }
               placeholder="Enter phone number"
               name="rating"
+              country="EGY"
               value={values.phone}
               onChange={(event, newValue) => {
                 // setFieldValue("phone", newValue);
@@ -135,6 +136,23 @@ export default function UpdateProfileModal({
               id="phone"
               type="phone"
               onBlur={handleBlur}
+            /> */}
+            <input
+              value={values.phone}
+            
+              onChange={handleChange}
+              id="phone"
+              type="phone"
+            
+              country="EGY"
+ placeholder="Enter phone number"
+              onBlur={handleBlur}
+              className={
+                
+                errors.phone && touched.phone
+                  ? `phone-input-error`
+                  : `phone-input`}
+             
             />
           </div>
           {/* email*/}

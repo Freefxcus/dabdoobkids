@@ -2,6 +2,8 @@ import { Box, CardMedia } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { getTestimonials } from '../../utils/apiCalls';
 import styles from "../../styles/pages/Home.module.css";
+import { Navigation } from 'swiper/modules';
+import { Swiper, SwiperSlide } from "swiper/react";
 export default function TestimonialsList() {
     const [Testimonials, setTestimonials] = useState([]);
     const [loading, setLoading] = useState(true); // To handle the loading state
@@ -47,19 +49,63 @@ export default function TestimonialsList() {
   
     </div>
     <Box
+    component={Swiper}
     sx={{
       display: "grid",
-      gridTemplateColumns: {
-        lg: "repeat(3,1fr)",
-        md: "repeat(2,1fr)",
-        xs: "repeat(1,1fr)",
-      },
-      justifyItems: "center",
+  
       paddingY: 5,
       gap:{xs:1,sm:2,lg:3}
     }}
-  >
-    {Testimonials?.categories?.map((item) => (
+  
+     className="mySwiper"
+          grabCursor={true}
+          autoplay={{
+            delay: 2000,
+            disableOnInteraction: false,
+          }}
+          navigation={false}
+          modules={[Navigation]}
+          breakpoints={{
+            // when window width is >= 320px
+            320: {
+              slidesPerView: 1,
+              spaceBetween: 10,
+            },
+            // when window width is >= 480px
+            480: {
+              slidesPerView: 1,
+              spaceBetween: 20,
+            },
+            // when window width is >= 768px
+            768: {
+              slidesPerView: 2,
+              spaceBetween: 30,
+            },
+            // when window width is >= 1024px
+            1024: {
+              slidesPerView: 3,
+              spaceBetween: 40,
+            },
+            1700: {
+              slidesPerView: 3,
+              spaceBetween: 40,
+            },
+            2700: {
+              slidesPerView: 4,
+              spaceBetween: 40,
+            },
+          }}
+        >
+    {Testimonials?.categories?.map((item,index) => (
+      <SwiperSlide
+                key={(item.id || item._id)+index}
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  aspectRatio:0.9
+                  // alignItems: "center",
+                }}
+              >
         <CardMedia
           sx={{
             width: "100%",
@@ -72,6 +118,7 @@ export default function TestimonialsList() {
             item?.image|| "https://i.postimg.cc/HnNLbVGh/placeholder.png"
           }
         />
+        </SwiperSlide>
     ))}
   </Box>
   </div>

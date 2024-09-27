@@ -174,6 +174,8 @@ useEffect(() => {
               value={values?.phone_number}
               onChange={handleChange}
               id="phone_number"
+              country="EGY"
+
               onBlur={handleBlur}
               className={
                 errors.phone_number && touched.phone_number
@@ -181,7 +183,7 @@ useEffect(() => {
                   : `${styles.input} ${styles.item} ${styles.bottom_margin}`
               }
               placeholder="phone"
-            ></input>
+            />
           </div>
           <div style={{ display: "flex", width: "100%" }}>
             {/* First Name */}
