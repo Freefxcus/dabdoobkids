@@ -23,7 +23,6 @@ export default function Search() {
   const urlBrandId = searchParams.get("brandId")?.split(",") || [];
   const urlQuery = searchParams.get("query") || "";
   const urlSale = searchParams.get("sale") || "";
-  console.log(urlCatId, "urlCatId");
 
   const [catId, setCatId] = useState(urlCatId.map(i=>+i));
   const [brandId, setBrandId] = useState(urlBrandId.map(i=>+i));

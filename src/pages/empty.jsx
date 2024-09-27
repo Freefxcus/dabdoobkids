@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import emptyImg from "../images/empty.svg";
 
 export default function Empty({title , message}) {
   const navigate = useNavigate();
@@ -14,7 +15,7 @@ export default function Empty({title , message}) {
           minHeight:"80vh"
         }}
       >
-        <img src="/error 404.svg" alt="empy cart" />
+        <img src={emptyImg} alt="empy cart" />
         <h2>{title}</h2>
         <p>{message}</p>
         <button
