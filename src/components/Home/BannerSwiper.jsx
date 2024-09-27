@@ -11,6 +11,7 @@ import CountdownTimer from "../CountdownTimer";
 import { Box, Typography } from "@mui/material";
 import { getBanners } from "../../utils/apiCalls";
 import { useNavigate,Link } from "react-router-dom";
+import LoadingAnimation from "../LoadingAnimation";
 
 export default function BannerSwiper() {
   const bannerImages = [banner1, banner2];
@@ -39,7 +40,9 @@ export default function BannerSwiper() {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>; // Show a loading indicator
+    return <div  className={`${styles["banner-container"]} section-bottom-margin`}
+      style={{ display:"flex",justifyContent:"center",alignItems:"center"}}>  <LoadingAnimation />
+      </div>; // Show a loading indicator
   }
 
   if (error) {

@@ -63,7 +63,7 @@ export default function TestimonialsList() {
             delay: 2000,
             disableOnInteraction: false,
           }}
-          navigation={false}
+          navigation={true}
           modules={[Navigation]}
           breakpoints={{
             // when window width is >= 320px
