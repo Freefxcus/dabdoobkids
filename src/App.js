@@ -108,7 +108,7 @@ function App() {
                     path="/order/:id"
                     element={<ProtectedRoute element={OrderDetails} />}
                   />
-                   <Route path="*" element={<Empty/>} />
+                   <Route path="*" element={<Error/>} />
                 </>
               )}
             </Routes>
