@@ -547,7 +547,7 @@ defaultCountry="EG"
               /> */}
               <input
               value={values.phone}
-            
+              style={{width:"100%",boxSizing:"border-box"}}
               onChange={handleChange}
               id="phone"
               type="phone"

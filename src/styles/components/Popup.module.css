@@ -25,6 +25,7 @@
 }
 .item {
   width: 100%;
+  position: relative;
   box-sizing: border-box;
 }
 .semi_item {

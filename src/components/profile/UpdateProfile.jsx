@@ -137,13 +137,14 @@ export default function UpdateProfileModal({
               type="phone"
               onBlur={handleBlur}
             /> */}
+            <div className={styles.item}>
             <input
               value={values.phone}
             
               onChange={handleChange}
               id="phone"
               type="phone"
-            
+              style={{width:"100%",boxSizing:"border-box"}}
               country="EGY"
  placeholder="Enter phone number"
               onBlur={handleBlur}
@@ -154,6 +155,7 @@ export default function UpdateProfileModal({
                   : `phone-input`}
              
             />
+          </div>
           </div>
           {/* email*/}
           <div className={styles.item}>
