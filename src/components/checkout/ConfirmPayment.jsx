@@ -15,13 +15,14 @@ import CloseIcon from "@mui/icons-material/Close";
 export default function ConfirmPayment({
   orderSummary,
   address,
-  addressActive,
+  addressActive,promoCodeMain,
+  setPromoCodeMain
 }) {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const paymentMethod = searchParams.get("paymentMethod");
   const addressId = addressActive || address?.items?.[0]?.id;
-  const [promoCode, setPromoCode] = useState("");
+  const [promoCode, setPromoCode] = useState(promoCodeMain);
   const [promoSuccess, setPromoSuccess] = useState();
   const [paymentLink, setPaymentMethod] = useState("");
   const [loading, setLoading] = useState(false);
@@ -31,23 +32,29 @@ export default function ConfirmPayment({
 
     if (data?.data?.status === "success") {
       console.log(data);
+      setPromoCodeMain(promoCode)
+      setSearchParams((prev) => {
+        prev.set("promocode", promoCode);
+        return prev;
+      });
       setPromoSuccess(data?.data?.data);
     } else {
       setPromoSuccess();
+      setPromoCodeMain("")
     }
   };
 
 
   const clearPromoCode = async () => {
     setPromoCode("");
-    let data = await checkPromoCode("");
+   
+    setSearchParams((prev) => {
+      prev.set("promocode", "");
+      return prev;
+    });
+    setPromoCodeMain("");
+    setPromoSuccess("");
 
-    if (data?.data?.status === "success") {
-      console.log(data);
-      setPromoSuccess(data?.data?.data);
-    } else {
-      setPromoSuccess();
-    }
   };
   const handlePayment = async () => {
     setLoading(true);

@@ -67,8 +67,8 @@ export default function Checkout() {
       setOrder(orderData);
     };
     fetchOrder();
-  }, [address?.items, payemntMethod, promoCode]);
-  console.log(order, "orderrrrr123123");
+  }, [address?.items, payemntMethod, promoCode,searchParams]);
+
 
   return (
     <div
@@ -118,6 +118,8 @@ export default function Checkout() {
         address={address}
         addressActive={addressActive}
         orderSummary={order}
+        promoCodeMain={promoCode}
+        setPromoCodeMain={setPromoCode}
       />
     </div>
   );
