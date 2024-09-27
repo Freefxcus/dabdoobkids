@@ -1,22 +1,27 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   checkPromoCode,
   emptyCart,
+  getWallet,
   orderCheckout,
   ordersCallback,
 } from "../../utils/apiCalls";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { set } from "lodash";
-import { Box, CircularProgress, Stack } from "@mui/material";
+import { Box, CircularProgress, Stack, Switch } from "@mui/material";
 import { toast } from "react-toastify";
 import { useDeleteAllCartMutation } from "../../Redux/cartApi";
 import "./style.css";
 import CloseIcon from "@mui/icons-material/Close";
+import { Wallet3 } from "iconsax-react";
 export default function ConfirmPayment({
   orderSummary,
   address,
-  addressActive,promoCodeMain,
-  setPromoCodeMain
+  addressActive,
+  promoCodeMain,
+  setPromoCodeMain,
+  isUseWallet,
+  setIsUseWallet,
 }) {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -27,12 +32,20 @@ export default function ConfirmPayment({
   const [paymentLink, setPaymentMethod] = useState("");
   const [loading, setLoading] = useState(false);
   const [deleteAllCart] = useDeleteAllCartMutation();
+  const [wallet, setWallet] = useState();
+
+  useEffect(() => {
+    getWallet().then((res) => {
+      setWallet(res);
+    });
+  }, []);
+
   const validatePromoCode = async () => {
     let data = await checkPromoCode(promoCode);
 
     if (data?.data?.status === "success") {
       console.log(data);
-      setPromoCodeMain(promoCode)
+      setPromoCodeMain(promoCode);
       setSearchParams((prev) => {
         prev.set("promocode", promoCode);
         return prev;
@@ -40,21 +53,19 @@ export default function ConfirmPayment({
       setPromoSuccess(data?.data?.data);
     } else {
       setPromoSuccess();
-      setPromoCodeMain("")
+      setPromoCodeMain("");
     }
   };
 
-
   const clearPromoCode = async () => {
     setPromoCode("");
-   
+
     setSearchParams((prev) => {
       prev.set("promocode", "");
       return prev;
     });
     setPromoCodeMain("");
     setPromoSuccess("");
-
   };
   const handlePayment = async () => {
     setLoading(true);
@@ -90,6 +101,54 @@ export default function ConfirmPayment({
         }}
       >
         <h2>Price Summary</h2>
+        <Box
+          sx={{
+            backgroundColor: "#fff",
+            padding: "0.751rem",
+            border: "1px solid  #F4F4F4",
+
+            borderRadius: "12px",
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            gap: "18px",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              gap: "4px",
+            }}
+          >
+            <Wallet3 />{" "}
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+
+                gap: "4px",
+              }}
+            >
+              <h4>Use wallet credits</h4>
+              <h5>you have {wallet?.balance} EGP</h5>
+            </div>
+          </div>
+          <Switch
+            checked={isUseWallet}
+            // disabled={wallet?.balance == 0}
+            onChange={() => {
+              setIsUseWallet((prev) => !prev);
+              setSearchParams((prev) => {
+                prev.set("useWallet", !isUseWallet);
+                return prev;
+              });
+            }}
+            inputProps={{ "aria-label": "controlled" }}
+          />
+        </Box>
+
         <div style={{ display: "flex", flexDirection: "column", gap: "18px" }}>
           <h3>Promo Code</h3>
           <div
@@ -109,8 +168,7 @@ export default function ConfirmPayment({
               />
               {promoSuccess ? (
                 <CloseIcon
-                  onClick={() => clearPromoCode()
-                  }
+                  onClick={() => clearPromoCode()}
                   className="btn-clear"
                 />
               ) : null}

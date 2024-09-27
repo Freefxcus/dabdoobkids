@@ -21,7 +21,6 @@ export default function BillingDetails({
   const [openAdd, setOpenAdd] = useState(false);
 
 
-  const [wallet, setWallet] = useState();
   const [addressInfo, setAddressInfo] = useState(null)
   ;
   const [searchParams, setSearchParams] = useSearchParams();
@@ -39,9 +38,7 @@ export default function BillingDetails({
     });
   }, []);
   useEffect(() => {
-    getWallet().then((res) => {
-      setWallet(res);
-    });
+
     setAddressActive(
       address?.items?.length
         ? address?.items?.filter((item) => item?.primary).id ||
@@ -241,7 +238,7 @@ export default function BillingDetails({
             <Radio
               onClick={() => {
                 setSearchParams((prev) => {
-                  prev.set("paymentMethod", "wallet");
+                  prev.set("paymentMethod", "E-Wallet");
                   return prev;
                 });
               }}
@@ -250,8 +247,8 @@ export default function BillingDetails({
                   color: "var(--brown)",
                 },
               }}
-              disabled={wallet?.balance == 0}
-              {...controlProps("wallet")}
+             
+              {...controlProps("E-Wallet")}
             />
           </div>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
