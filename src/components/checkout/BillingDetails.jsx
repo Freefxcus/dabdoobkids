@@ -63,13 +63,12 @@ export default function BillingDetails({
   };
   const initialValue = searchParams.get("paymentMethod") || "Cash on Delivery";
   const controlProps = (item) => ({
-    checked: payemntMethod === item,
+    checked: initialValue === item,
     onChange: handleChange,
     value: item,
     name: "color-radio-button-demo",
     inputProps: { "aria-label": item },
   });
-  console.log(controlProps, "controlProps123123");
 
   return (
     <div>
