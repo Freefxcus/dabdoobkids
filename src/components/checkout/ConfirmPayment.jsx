@@ -21,7 +21,7 @@ export default function ConfirmPayment({
   promoCodeMain,
   setPromoCodeMain,
   isUseWallet,
-  setIsUseWallet,
+  setIsUseWallet,DataSubmit
 }) {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -41,6 +41,7 @@ export default function ConfirmPayment({
   }, []);
 
   const validatePromoCode = async () => {
+
     let data = await checkPromoCode(promoCode);
 
     if (data?.data?.status === "success") {
@@ -68,8 +69,10 @@ export default function ConfirmPayment({
     setPromoSuccess("");
   };
   const handlePayment = async () => {
+
+
     setLoading(true);
-    const checkout = await orderCheckout(paymentMethod, addressId);
+    const checkout = await orderCheckout(DataSubmit);
 
     if (checkout?.data?.data?.url) {
       toast.success("Redirecting to Payment Gateway");
@@ -136,8 +139,8 @@ export default function ConfirmPayment({
             </div>
           </div>
           <Switch
-            checked={isUseWallet}
-            // disabled={wallet?.balance == 0}
+            checked={wallet?.balance === 0?false:isUseWallet}
+            disabled={wallet?.balance === 0}
             onChange={() => {
               setIsUseWallet((prev) => !prev);
               setSearchParams((prev) => {
@@ -303,7 +306,9 @@ export default function ConfirmPayment({
               borderRadius: "10px",
               cursor: "pointer",
             }}
-            disabled={loading || !address?.items?.[0]?.id || !addressActive}
+            disabled={loading || !address?.items?.[0]?.id || !addressActive||
+            (DataSubmit.paymentMethod==="E-Wallet"&&
+              DataSubmit?.phone?.length<11)}
           >
             {loading ? (
               <Stack

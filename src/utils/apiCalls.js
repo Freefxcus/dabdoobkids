@@ -225,14 +225,16 @@ export const removeFromCart = async (ProductId) => {
   return returnedValue; // caught by .then()
 };
 
-export const orderCheckout = async (paymentMethod, address) => {
+export const orderCheckout = async (data) => {
   let returnedValue;
-  const body = {
-    // promocode  ,
 
-    useWallet: paymentMethod === "wallet" ? true : false,
-    paymentMethod: paymentMethod,
-    address: address,
+    // promocode  ,
+    const body = {
+      useWallet: data?.useWallet,
+      paymentMethod: data?.paymentMethod,
+      address: data?.address,
+      promocode: data?.promocode,
+    phone:data?.phone  
 
     // example default value for item
   };
@@ -259,6 +261,7 @@ export const orderSummary = async (data) => {
     paymentMethod: data?.paymentMethod,
     address: data?.address,
     promocode: data?.promocode,
+  phone:data?.phone  
 
     // example default value for item
   };

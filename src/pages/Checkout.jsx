@@ -24,6 +24,8 @@ export default function Checkout() {
   const [cart, setCart] = useState([]);
   const [order, setOrder] = useState([]);
   const [address, setAddress] = useState([]);
+  const [DataSubmit, setDataSubmit] = useState()
+  const [phone, setPhone] = useState("");
   const [ForceReload, setForceReload] = useState(false);
   const [isUseWallet, setIsUseWallet] = useState(  searchParams.get("useWallet") ||false);
   useEffect(() => {
@@ -62,7 +64,20 @@ export default function Checkout() {
       useWallet: isUseWallet,
       paymentMethod: searchParams.get("paymentMethod"),
       address: address?.items?.[0]?.id,
+      phone:phone
     };
+    setDataSubmit(data)
+  }, [address?.items, payemntMethod, promoCode,searchParams,phone]);
+
+  useEffect(() => {
+    const data = {
+      promocode: promoCode,
+      useWallet: isUseWallet,
+      paymentMethod: searchParams.get("paymentMethod"),
+      address: address?.items?.[0]?.id,
+      phone:phone
+    };
+    setDataSubmit(data)
     const fetchOrder = async () => {
       const orderData = await orderSummary(data);
       setOrder(orderData);
@@ -110,6 +125,8 @@ export default function Checkout() {
           address={address}
           addressActive={addressActive}
           setAddressActive={setAddressActive}
+          phone={phone}
+setPhone={setPhone}
           ForceReload={ForceReload}
           setForceReload={setForceReload}
         />
@@ -122,6 +139,7 @@ export default function Checkout() {
         promoCodeMain={promoCode}
         setPromoCodeMain={setPromoCode}
         isUseWallet={isUseWallet}
+        DataSubmit={DataSubmit}
 setIsUseWallet={setIsUseWallet}
       />
     </div>
