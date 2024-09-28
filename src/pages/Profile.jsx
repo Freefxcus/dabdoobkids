@@ -207,17 +207,7 @@ console.log("forceReload",forceReload);
         <div className={`${styles.bg} padding-container`}>
           <div className={styles.row}>
             <div className={styles.header}>Profile</div>
-            <div className={styles.delete_account}>
-              <img src={trash} width="20px" />{" "}
-              <span
-                onClick={() => {
-                  handleClickOpen();
-                  setAlertType("delete_account");
-                }}
-              >
-                Delete account
-              </span>
-            </div>
+
           </div>
           <div className={styles.container}>
             <div className={styles.sidebar}>
@@ -306,8 +296,8 @@ console.log("forceReload",forceReload);
                       </div>
                       <div>
                         <div className={styles.title}>Phone Number</div>
-                        <div className={styles.body}>
-                          {userInfo?.phone || "012345678"}
+                        <div className={styles.body} style={{textAlign : "center"}}>
+                          {userInfo?.phone || "N/A"}
                         </div>
                       </div>
                       <div>

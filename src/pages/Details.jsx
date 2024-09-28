@@ -153,6 +153,9 @@ export default function Details() {
       (option) => variant[option.option.name] === option.value.value
     )
   );
+
+  console.log("selectedVariantObject", selectedVariantObject);
+  
   useEffect(() => {
     if (newVariants?.length) {
       newVariants.forEach((VariantItem) => {
@@ -414,7 +417,7 @@ export default function Details() {
                 selectedVariantObject.stock > 10 ? null : (
                   <span style={{ color: "orange" }}>
                     {" "}
-                    Only {selectedVariantObject.stock} left in stock{" "}
+                    {/* Only {selectedVariantObject.stock} left in stock{" "} */}
                   </span>
                 )
               ) : (
@@ -571,14 +574,14 @@ export default function Details() {
       <Police />
       <Box
         sx={{
-          mx: { xs: "20px", md: "40px", lg: "60px" },
+          mx: { xs: "20px", md: "40px", lg: "150px" },
           mb: { xs: "120px", md: "140px", lg: "160px" },
         }}
       >
         <Typography
           variant="h4"
           sx={{
-            marginLeft: { xs: "5px", md: "10px", lg: "20px" },
+            marginLeft: { xs: "5px", md: "10px", lg: "0px" },
             marginBottom: "16px",
             fontWeight: "400",
             fontSize: { xs: "24px", md: "32px", lg: "40px" },
