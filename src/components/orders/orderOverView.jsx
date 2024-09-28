@@ -17,7 +17,7 @@ export default function OrderOverview({
   const { product, variant } = item;
 
   const [productCount, setProductCount] = React.useState(item.count);
-  // const total = productCount * +item?.price
+const finalPrice =Math.trunc(Number(item?.totalPrice)- Number(item?.discount))||item?.totalPrice
 
   return (
     // <div className={styles.container}>
@@ -63,7 +63,7 @@ export default function OrderOverview({
 
         {/* <div className={styles.number} style={{ marginLeft: "auto" }}> */}
 
-        <div className={styles.total}>{item?.totalPrice}$</div>
+        <div className={styles.total}>{finalPrice}EGY</div>
       </div>
     </div>
   );
