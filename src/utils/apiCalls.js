@@ -230,7 +230,7 @@ export const orderCheckout = async (data) => {
 
     // promocode  ,
     const body = {
-      useWallet: data?.useWallet,
+      useWallet: data?.useWallet==="true"?true:data?.useWallet==="false"?false:data?.useWallet,
       paymentMethod: data?.paymentMethod,
       address: data?.address,
       promocode: data?.promocode,
@@ -257,7 +257,7 @@ export const orderSummary = async (data) => {
   let returnedValue;
   console.log(data);
   const body = {
-    useWallet: data?.useWallet,
+    useWallet: data?.useWallet==="true"?true:data?.useWallet==="false"?false:data?.useWallet,
     paymentMethod: data?.paymentMethod,
     address: data?.address,
     promocode: data?.promocode,
