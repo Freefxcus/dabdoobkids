@@ -67,7 +67,7 @@ export default function Checkout() {
       phone:phone
     };
     setDataSubmit(data)
-  }, [address?.items, payemntMethod, promoCode,searchParams,phone]);
+  }, [address?.items, payemntMethod, promoCode,searchParams,phone,isUseWallet]);
 
   useEffect(() => {
     const data = {
@@ -83,7 +83,7 @@ export default function Checkout() {
       setOrder(orderData);
     };
     fetchOrder();
-  }, [address?.items, payemntMethod, promoCode,searchParams]);
+  }, [address?.items, payemntMethod, promoCode,searchParams,isUseWallet]);
 
 
   return (

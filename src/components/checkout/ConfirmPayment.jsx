@@ -139,8 +139,10 @@ export default function ConfirmPayment({
             </div>
           </div>
           <Switch
-            checked={wallet?.balance === 0?false:isUseWallet}
-            disabled={wallet?.balance === 0}
+            checked={isUseWallet}
+            // checked={wallet?.balance === 0?false:isUseWallet}
+
+            // disabled={wallet?.balance === 0}
             onChange={() => {
               setIsUseWallet((prev) => !prev);
               setSearchParams((prev) => {
