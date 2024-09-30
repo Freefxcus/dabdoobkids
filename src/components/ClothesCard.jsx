@@ -123,7 +123,7 @@ export default function ClothesCard({ item }) {
         >
           {item?.brand?.name}
         </div>
-        <div style={{ fontWeight: "600" }}>{item?.name}</div>
+        <div style={{ fontWeight: "400" }}>{item?.name}</div>
         {/* <div style={{ fontWeight: "bold" }}>EGP{item?.price}</div> */}
         <div
               style={{
