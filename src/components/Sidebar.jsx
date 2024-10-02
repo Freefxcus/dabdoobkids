@@ -84,7 +84,7 @@ export default function Sidebar({ setOpen, open }) {
     subCategories?.data?.data?.categories?.map((subCategory) => {
       return {
         title: subCategory?.name,
-        link: `/search&categoryId=${subCategory?.id}`,
+        link: `/search?categoryId=${subCategory?.id}`,
         parentId: subCategory?.category?.id,
       };
     }) || [];

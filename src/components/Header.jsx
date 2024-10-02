@@ -130,7 +130,7 @@ export default function Header({ setOpen }) {
     subCategories?.data?.data?.categories?.map((subCategory) => {
       return {
         title: subCategory?.name,
-        link: `/search&categoryId=${subCategory?.id}`,
+        link: `/search?categoryId=${subCategory?.id}`,
         parentId: subCategory?.category?.id,
       };
     }) || [];
