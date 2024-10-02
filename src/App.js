@@ -37,7 +37,6 @@ import ReturnsRefunds from "./pages/ReturnsRefunds";
 import PrivacyPolicy from "./pages/ReturnsRefunds copy";
 import PaymentInformation from "./pages/PaymentInformation";
 import FAQ from "./pages/FAQPage";
-import SalePage from "./pages/SalePage";
 
 function App() {
   const [open, setOpen] = useState(false);

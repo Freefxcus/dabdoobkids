@@ -78,7 +78,7 @@ export default function Popup({
           province: values.province,
           // district: values.district,
           address: values.address,
-          postalCode: values.postalCode,
+          // postalCode: values.postalCode,
           phone: "string",
           name: values.address_label,
         };
@@ -433,7 +433,7 @@ export default function Popup({
               ></input>
             </div> */}
             {/* postal code */}
-            <div className={styles.item}>
+            {/* <div className={styles.item}>
               <div className={`${styles.label} ${styles.item}`}>
                 <span>Postal code</span>
                 <span className={styles.error}> *</span>
@@ -455,7 +455,7 @@ export default function Popup({
                 }
                 placeholder="Enter Code"
               ></input>
-            </div>
+            </div> */}
 
             <button className={`${styles.brown_button} ${styles.item}`}>
               Save

@@ -32,10 +32,10 @@ export const addressSchema = yup.object().shape({
   //   .string()
   //   .min(3, "Must be at least 3 characters long")
   //   .required("Required"),
-  postalCode: yup
-    .string()
-    .min(3, "Must be at least 3 characters long")
-    .required("Required"),
+  // postalCode: yup
+  //   .string()
+  //   .min(3, "Must be at least 3 characters long")
+  //   .required("Required"),
 });
 
 export const addressSchemaInitialValues = {

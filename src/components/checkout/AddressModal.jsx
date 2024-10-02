@@ -48,15 +48,13 @@ export default function AddressModal({
   addressId,
   setForceReload,
 }) {
-  console.log(addressInfo, "addressInfo123123");
   const [governorates, setGovernorates] = useState([]);
   const [cities, setCities] = useState([]);
   const onSubmit = async (values) => {
-    console.log(+values.governorate, "values123123dassdasd");
     const parametres = {
       phone: values?.phone_number,
       name: values.first_name + " " + values.last_name,
-      postalCode: values.postalCode,
+      // postalCode: values.postalCode,
       governorate: +values.governorate,
       city: +values.city,
       ...values,
@@ -88,10 +86,9 @@ export default function AddressModal({
     governorate: addressInfo?.governorate.id || "",
     // district: addressInfo?.district || "",
     city: addressInfo?.city.id || "",
-    postalCode: addressInfo?.postalCode || "",
+    // postalCode: addressInfo?.postalCode || "",
   };
 
-  console.log("addressInfoaddressInfoaddressInfo",addressInfo);
   
   const {
     values,
@@ -111,29 +108,28 @@ export default function AddressModal({
   useEffect(() => {
     getGovernorates().then((res) => {
       setGovernorates(res?.data?.data);
+      setFieldValue('governorate', values.governorate||res?.data?.data?.[0]?.id);
     });
-    getCitites().then((res) => {
-      setCities(res?.data?.data);
-    });
+   
   }, []);
 
 
 useEffect(() => {
   // Check if governorate exists and if it does, set the city based on the selected governorate
-  if (values.governorate) {
-    const filteredCities = cities?.filter(
-      (city) => city.governorate == values.governorate
-    );
-    console.log("firstCityId",filteredCities,values.governorate );
-    
-    if (filteredCities?.length) {
-      const firstCityId = filteredCities?.[0]?.id;
-      
-      setFieldValue('city', firstCityId); // Set the city to the first one in the filtered list
-    }
-  }
-}, [values.governorate, cities, setFieldValue]); // Run this effect when governorate or cities change
+  if (values.governorate||addressInfo?.governorate.id ) {
+    getCitites(values.governorate||addressInfo?.governorate.id ).then((res) => {
+      setCities(res?.data?.data);
+    });
 
+ 
+  }
+}, [values.governorate, setFieldValue]); 
+
+  useEffect(() => {
+    if(!values.city){
+      setFieldValue('city', addressInfo?.city ||cities?.[0]?.id);
+    }
+  }, [cities])
   
 
   return (
@@ -365,7 +361,7 @@ useEffect(() => {
               <span className="error">{errors.city}</span>
             )}
           </div>
-          <select
+          {cities.length?<select
             value={values.city}
             onChange={handleChange}
             id="city"
@@ -379,14 +375,13 @@ useEffect(() => {
             }
             placeholder="City"
           >
-            {cities
-              ?.filter((city) => city.governorate == values.governorate)
-              .map((city) => (
+            {cities?.map((city) => (
                 <option key={city.id} value={city.id}>
                   {city.name.en}
                 </option>
               ))}
-          </select>
+          </select>:
+          <span className="error">Please select Governorate first</span>}
         </div>
           {/* district */}
           {/* <div className={styles.semi_item}>
@@ -413,7 +408,7 @@ useEffect(() => {
             ></input>
           </div> */}
           {/* postal code */}
-          <div className={styles.item}>
+          {/* <div className={styles.item}>
             <div className={`${styles.label} ${styles.item}`}>
               <span>Postal code</span>
               <span className={styles.error}> *</span>
@@ -435,7 +430,7 @@ useEffect(() => {
               }
               placeholder="Enter Code"
             ></input>
-          </div>
+          </div> */}
           <button className={`${styles.brown_button} ${styles.item}`}>
             {isSubmitting ? "loading" : type === "edit" ? "Edit" : "Add"}
           </button>

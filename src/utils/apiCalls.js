@@ -723,11 +723,11 @@ export const getGovernorates = async () => {
   return returnedValue; // caught by .then()
 };
 
-export const getCitites = async () => {
+export const getCitites = async (id) => {
   let returnedValue;
-
+  if(!id)return;
   await instance
-    .get(`/city`)
+    .get(`/city?governorate=${id}`)
     .then((response) => {
       returnedValue = response;
     })
@@ -740,7 +740,7 @@ export const getCitites = async () => {
 
 export const getUserPlan = async () => {
   let returnedValue;
-
+  if (localStorage.getItem("access_token")) 
   await instance
     .get(`/profile/subscription`)
     .then((response) => {
