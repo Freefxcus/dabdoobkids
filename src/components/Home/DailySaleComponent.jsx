@@ -88,7 +88,7 @@ export default function DailySaleComponent({ categories }) {
           </div>
           <Star type="b" />
         <div
-          onClick={() => navigate("/search?sale=true")}
+          onClick={() => navigate("/products/sale")}
           style={{
             marginLeft: "auto",
             color: "var(--brown)",

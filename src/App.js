@@ -37,6 +37,7 @@ import ReturnsRefunds from "./pages/ReturnsRefunds";
 import PrivacyPolicy from "./pages/ReturnsRefunds copy";
 import PaymentInformation from "./pages/PaymentInformation";
 import FAQ from "./pages/FAQPage";
+import SalePage from "./pages/SalePage";
 
 function App() {
   const [open, setOpen] = useState(false);
@@ -65,6 +66,7 @@ function App() {
                   <Route path="/auth/google" element={<OAuth />} />
                   <Route path="/otp" element={<Otp />} />
                   <Route path="/search" element={<Search />} />
+                  <Route path="/products/sale" element={<SalePage />} />
                   <Route path="/about" element={<About />} /> 
                   <Route path="/returns-refunds" element={<ReturnsRefunds />} />
                   <Route path="/privacy-policy" element={<PrivacyPolicy />} />
