@@ -23,7 +23,7 @@ export default function Search() {
   const urlBrandId = searchParams.get("brandId")?.split(",") || [];
   const urlQuery = searchParams.get("query") || "";
   const urlSale = searchParams.get("sale") || "";
-
+  const endDate = searchParams.get("endDate") || "";
   const [catId, setCatId] = useState(urlCatId.map(i=>+i));
   const [brandId, setBrandId] = useState(urlBrandId.map(i=>+i));
   const [queryStr, setQuery] = useState(urlQuery);
@@ -36,6 +36,28 @@ export default function Search() {
 
   const [categories, setCategories] = useState([]);
   const [brands, setBrands] = useState([]);
+
+  const [timeLeft, setTimeLeft] = useState({
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+  });
+    const calculateTimeLeft = (saleEndTime) => {
+ 
+      const end=new Date(saleEndTime).getTime()
+      const now = new Date().getTime();
+      const difference = end - now;
+      if (difference > 0) {
+        const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+        setTimeLeft({ hours, minutes, seconds });
+      } else {
+        // Sale has ended
+        setTimeLeft({ hours: 0, minutes: 0, seconds: 0 });
+      }
+    };
+
 
   useEffect(() => {
     getCategories().then((res) => {
@@ -50,6 +72,7 @@ export default function Search() {
   useEffect(() => {
     setCatId([...urlCatId].map(i=>+i));
     setBrandId([...urlBrandId].map(i=>+i));
+    endDate&&calculateTimeLeft(endDate)
   }, []);
 
   const loadProducts = (page = 1) => {
@@ -142,7 +165,10 @@ export default function Search() {
       <div className={styles.header}>find the best clothes</div>
      {urlSale? <div className={styles["countdown-container"]}>
         <div className={styles["countdown-title"]}>Daily sale</div>
-        <CountdownTimer hours={5} minutes={30} seconds={20} type="a" />
+        <CountdownTimer  hours={timeLeft.hours} 
+      minutes={timeLeft.minutes} 
+      seconds={timeLeft.seconds} 
+      type="a" />
       </div>:null}
       <div className={styles.options}>
         <img

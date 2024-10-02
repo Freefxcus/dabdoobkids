@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios"; // Import axios for API calls
 
 import styles from "../../styles/pages/Home.module.css";
 import CountdownTimer from "../CountdownTimer";
@@ -10,9 +9,10 @@ import { useNavigate } from "react-router-dom";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
-export default function DailySaleComponent({ categories }) {
-  const [products, setProducts] = useState([]); // State to store fetched products
-  const [timeLeft, setTimeLeft] = useState({
+export default function DailySaleComponent() {
+  const [products, setProducts] = useState([]);
+  const [endDate, setEndDate] = useState([]);
+    const [timeLeft, setTimeLeft] = useState({
     hours: 0,
     minutes: 0,
     seconds: 0,
@@ -46,6 +46,7 @@ export default function DailySaleComponent({ categories }) {
         if (productsData) {
           setProducts(productsData);
           calculateTimeLeft(saleEndTime);
+          setEndDate(saleEndTime)
         }
       } catch (err) {
         console.error("Failed to fetch daily sale products:", err);
@@ -88,7 +89,7 @@ export default function DailySaleComponent({ categories }) {
           </div>
           <Star type="b" />
         <div
-          onClick={() => navigate("/search?sale=true")}
+          onClick={() => navigate(`/search?sale=true&endDate=${endDate}`)}
           style={{
             marginLeft: "auto",
             color: "var(--brown)",
