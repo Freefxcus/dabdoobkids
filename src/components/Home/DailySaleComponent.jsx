@@ -12,34 +12,44 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 export default function DailySaleComponent({ categories }) {
   const [products, setProducts] = useState([]); // State to store fetched products
-  const [productsCate, setProductsCate] = useState([]);
+  const [timeLeft, setTimeLeft] = useState({
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+  });
   const [loading, setLoading] = useState(true); // Loading state
   const [error, setError] = useState(null); // Error state
   const navigate = useNavigate();
   useEffect(() => {
-    const categoryWithMaxProducts = categories.reduce(
-      (maxCategory, currentCategory) => {
-        // Return the category with the higher productsCount
-        return currentCategory.productsCount > maxCategory.productsCount
-          ? currentCategory
-          : maxCategory;
-      },
-      { id: 17, productsCount: -Infinity }
-    );
+    const calculateTimeLeft = (saleEndTime) => {
+ 
+      const end=new Date(saleEndTime).getTime()
+      const now = new Date().getTime();
+      const difference = end - now;
+      if (difference > 0) {
+        const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+        setTimeLeft({ hours, minutes, seconds });
+      } else {
+        // Sale has ended
+        setTimeLeft({ hours: 0, minutes: 0, seconds: 0 });
+      }
+    };
+
     const fetchDailySaleProducts = async () => {
-      const responseCate = await instance.get(
-        `/products?category=${categoryWithMaxProducts?.id}`
-      );
-      setProductsCate(responseCate?.data?.data?.products);
       try {
         const response = await instance.get("/products/sale");
+        const productsData = response?.data?.data?.products;
+        const saleEndTime = response?.data?.data?.sale?.end;
 
-        setProducts(response?.data?.data?.products);
-
-        // Assuming data structure is suitable for ClothesCard
+        if (productsData) {
+          setProducts(productsData);
+          calculateTimeLeft(saleEndTime);
+        }
       } catch (err) {
         console.error("Failed to fetch daily sale products:", err);
-        setError(err); // Handle error appropriately
+        setError(err);
       } finally {
         setLoading(false);
       }
@@ -56,6 +66,7 @@ export default function DailySaleComponent({ categories }) {
     return <div>Error fetching daily sale products: {error.message}</div>;
   }
 
+ 
   return (
     <div className="padding-container section-bottom-margin">
       <div
@@ -70,7 +81,10 @@ export default function DailySaleComponent({ categories }) {
             <div className={styles.title} style={{ marginBottom: "5px" }}>
               Daily Sale
             </div>
-            <CountdownTimer hours={5} minutes={30} seconds={20} type="b" />
+            <CountdownTimer hours={timeLeft.hours} 
+      minutes={timeLeft.minutes} 
+      seconds={timeLeft.seconds} 
+      type="b"  />
           </div>
           <Star type="b" />
         <div
@@ -140,19 +154,6 @@ export default function DailySaleComponent({ categories }) {
                 }}
               >
                 <ClothesCard item={item} />
-              </SwiperSlide>
-            ))
-          ) : productsCate?.length ? (
-            productsCate?.map((item) => (
-              <SwiperSlide
-                key={item.id || item._id}
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  // alignItems: "center",
-                }}
-              >
-                <ClothesCard key={item.id || item._id} item={item} />
               </SwiperSlide>
             ))
           ) : (
