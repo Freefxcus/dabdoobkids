@@ -38,6 +38,32 @@ export const getProducts = async (page, all, category, brand, query,sale) => {
     });
   return returnedValue; // caught by .then()
 };
+export const getProductsSale = async (page, all, category, brand, query,sale) => {
+  let returnedValue;
+  const params = {
+    page,
+    all,
+    // items: 2, // example default value for item
+    category,
+    brand,
+    query,sale,items:12
+  };
+  Object.keys(params).forEach((key) => !params[key] ? delete params[key] : params[key]);
+  console.log("paramsparamsparams",params,sale);
+  await instance
+    .get("/products/sale", {
+      params
+    })
+    .then((response) => {
+      console.log(response?.data?.data);
+      returnedValue = response?.data?.data;
+    })
+    .catch((error) => {
+      console.log(error, "responseeeefromproducts");
+      // notifyError(error);
+    });
+  return returnedValue; // caught by .then()
+};
 export const getProductById = async (id) => {
   let returnedValue;
 
