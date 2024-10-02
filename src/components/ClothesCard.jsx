@@ -84,6 +84,7 @@ export default function ClothesCard({ item }) {
             objectFit: "cover",
           }}
           component={"img"}
+          alt={item?.name}
           src={
             item?.images?.[0] || "https://i.postimg.cc/HnNLbVGh/placeholder.png"
           }
