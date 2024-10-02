@@ -1,12 +1,11 @@
 import React from "react";
 import styles from "../styles/components/ClothesCard.module.css";
-import lady from "../images/lady.png";
 import hot from "../images/hot.svg";
 import eHeart from "../images/empty-heart.svg";
 import fHeart from "../images/filled-heart.svg";
 
 import { useNavigate } from "react-router-dom";
-import { calcDiscount, notifyError, notifySuccess, truncateText } from "../utils/general.js";
+import { calcDiscount, notifyError, notifySuccess } from "../utils/general.js";
 import { CardMedia } from "@mui/material";
 import HandleMessageIsAuth from "../utils/message/index.js";
 import {
@@ -84,6 +83,7 @@ export default function ClothesCard({ item }) {
             objectFit: "cover",
           }}
           component={"img"}
+          alt={item?.name}
           src={
             item?.images?.[0] || "https://i.postimg.cc/HnNLbVGh/placeholder.png"
           }
