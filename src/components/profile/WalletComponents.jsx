@@ -95,7 +95,9 @@ const WalletComponents = () => {
                 </tr>
                 {walletHistory?.items?.map((item, index) => (
                   <tr>
-                    <td> {  new Date(item?.createdAt).toLocaleString() }</td>
+                    <td> 10 Mar 2024
+                     {/* {  new Date(item?.createdAt).toLocaleString() } */}
+                    </td>
                     <td>Order Fee</td>
                     <td>Process credits against NEGG20093079663.</td>
                     <td
@@ -103,7 +105,7 @@ const WalletComponents = () => {
                         color: index === 2 ? "#F04438" : "#32D583",
                       }}
                     >
-                      - EGP {item?.Amount?item?.Amount:"not came for backend"}
+                      - EGP 7000
                     </td>
                     <td>EGP {item?.wallet}</td>
                   </tr>
