@@ -18,8 +18,7 @@ import {
   authorize,
   getAddress,
   deleteAddress,
-  getWallet,
-  getWalletHistory,
+
   getPromoCode,
 } from "../utils/apiCalls.js";
 import Loader from "../components/Loader.jsx";
@@ -38,6 +37,7 @@ import OrderList from "../components/orders/OrderList.jsx";
 import { LogoutCurve } from "iconsax-react";
 import { faqs } from "./FAQPage.jsx";
 import { Typography } from "@mui/material";
+import WalletComponents from "../components/profile/WalletComponents.jsx";
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -59,8 +59,6 @@ export default function Profile() {
   const [openEditAddress, setOpenEditAddress] = useState(false);
   const [EditAddress, setEditAddress] = useState(null);
   const [openEditProfile, setOpenEditProfile] = useState(false);
-  const [wallet, setWallet] = useState({});
-  const [walletHistory, setWalletHistory] = useState({});
 
   const handleClickOpen = () => {
     setAlertOpen(true);
@@ -124,7 +122,6 @@ export default function Profile() {
         //   }
         // });
       });
-console.log("forceReload",forceReload);
 
     //* address
     getAddress()
@@ -140,21 +137,7 @@ console.log("forceReload",forceReload);
   //get orders
 
   // get wallet
-  useEffect(() => {
-    getWallet().then((res) => {
-      setWallet(res);
-    });
 
-    getWalletHistory().then((res) => {
-      setWalletHistory(res);
-    });
-    // getPromoCode().then((res) => {
-    //   console.log("res1313213213213213213132",res);
-    //   setPromoCodes(res);
-    // });
-  }, []);
-
-  console.log(wallet, "wallet123123132");
   return (
     <>
       <Dialog
@@ -381,85 +364,7 @@ console.log("forceReload",forceReload);
                 </>
               )}
               {sidebarItem === "2" && (
-                <div
-                  style={{
-                    width: "100%",
-                  }}
-                >
-                  {false && <Loader open={true} />}
-                  {false && <div>No Orders Created ...</div>}
-                  {true && (
-                    <Box
-                      className={styles.text_container}
-                      style={{
-                        boxShadow: "rgba(0, 0, 0, 0.05) 0px 1px 2px 0px",
-                        backgroundColor: "#fff",
-                        padding: "20px",
-                        borderRadius: "8px",
-                        // display: "flex",
-                        // flexDirection: "column",
-                        // gap: "15px",
-                      }}
-                    >
-                      <Box
-                        sx={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                        }}
-                      >
-                        <Box>
-                          <Box
-                            sx={{
-                              color: "#000",
-                              fontSize: "24px",
-                              fontWeight: "600",
-                            }}
-                          >
-                            wallet
-                          </Box>
-                          <Box
-                            sx={{
-                              color: "#AD6B46",
-                              fontSize: "36px",
-                              fontWeight: "700",
-                            }}
-                          >
-                            {wallet ? wallet.balance : 0} EGP
-                          </Box>
-                        </Box>
-                      </Box>
-                      {walletHistory.items.length > 0 ? (
-                        <table className={styles.my_table}>
-                          <tr>
-                            <th>Created</th>
-                            <th>Type</th>
-                            <th>Details</th>
-                            <th>Amount</th>
-                            <th>Balance</th>
-                          </tr>
-                          {walletHistory.items.map((item, index) => (
-                            <tr>
-                              <td>10 Feb 2024</td>
-                              <td>Order Fee</td>
-                              <td>Process credits against NEGG20093079663.</td>
-                              <td
-                                style={{
-                                  color: index === 2 ? "#F04438" : "#32D583",
-                                }}
-                              >
-                                - EGP 7000
-                              </td>
-                              <td>EGP 500</td>
-                            </tr>
-                          ))}
-                        </table>
-                      ) : (
-                        <h1>No Wallet History</h1>
-                      )}
-                    </Box>
-                  )}
-                </div>
+               <WalletComponents />
               )}
               {sidebarItem === "3" && <OrderList />}
               {sidebarItem === "4" && (
