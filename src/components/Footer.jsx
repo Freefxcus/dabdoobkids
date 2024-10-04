@@ -15,7 +15,7 @@ export default function Footer() {
       <div
         className={`${styles["primary-footer-container"]} padding-container`}
       >
-        <img src={logo} className={styles.logo} />
+        <img loading="lazy" src={logo} className={styles.logo} alt="logo"/>
         <div className={styles.section}>
           <div className={styles.header}>Help</div>
           <Link to="/returns-refunds" className={styles.link}>Exchanges & Returns</Link>
@@ -78,7 +78,7 @@ export default function Footer() {
                 setEmailInputValue(e.target.value);
               }}
             />
-            <img src={brownEmail} />
+            <img src={brownEmail} alt="email" />
           </div>
         </div>
       </div>

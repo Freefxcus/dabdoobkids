@@ -107,6 +107,7 @@ export default function TestimonialsList() {
                 }}
               >
         <CardMedia
+        loading='lazy'
           sx={{
             width: "100%",
             aspectRatio: {xs:0.9 ,sm:0.9},

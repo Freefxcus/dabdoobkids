@@ -33,6 +33,7 @@ export default function Category({ item }) {
 
         <CardMedia
           component={"img"}
+          loading="lazy"
           sx={{
             width: { lg: "140px", md: "110px", xs: "60px" },
             height: { lg: "120px", md: "90px", xs: "60px" },

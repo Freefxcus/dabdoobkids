@@ -9,7 +9,7 @@ import {
 } from "../../utils/apiCalls";
 import OrderCard from "../OrderCard";
 import OrderOverview from "./orderOverView";
-import { use } from "i18next";
+// import { use } from "i18next";
 import { Box } from "@mui/material";
 import { LogoutCurve } from "iconsax-react";
 

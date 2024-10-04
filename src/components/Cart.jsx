@@ -14,7 +14,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { use } from "i18next";
+
 import { useDispatch } from "react-redux";
 import { cartActions } from "../Redux/store";
 import { Box } from "@mui/material";

@@ -41,7 +41,7 @@ export default function DeleteModal({
   return (
     <Modal open={open}>
       <Box sx={style}>
-        <img src="/delete-product.svg" alt="" />
+        <img src="/delete-product.svg" alt="delete" />
         <h2 style={{ textAlign: "center" }}>Remove Product From Cart</h2>
         <div
           style={{

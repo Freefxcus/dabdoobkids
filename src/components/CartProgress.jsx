@@ -22,7 +22,7 @@ export default function CartProgress({ value, percentage = "100%" }) {
                 height: "20px",
                 borderRadius: "50px",
               }}
-              alt=""
+              alt="bar"
             />
             <img
               style={{
@@ -33,7 +33,7 @@ export default function CartProgress({ value, percentage = "100%" }) {
                 right: "-8px",
               }}
               src="/dabdoobbar.svg"
-              alt=""
+              alt="dabdoob"
             />
           </Box>
         </Box>

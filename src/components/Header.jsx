@@ -172,7 +172,7 @@ export default function Header({ setOpen }) {
                 gap: "5px",
               }}
             >
-              <img src={email} />
+              <img src={email} alt="email" />
               <div>blabla@gmail.com</div>
             </div>
             <div
@@ -183,7 +183,7 @@ export default function Header({ setOpen }) {
                 gap: "5px",
               }}
             >
-              <img src={phone} />
+              <img src={phone} alt="phone"/>
               <div>099-88293-03</div>
             </div>
           </div>
@@ -211,6 +211,7 @@ export default function Header({ setOpen }) {
               onClick={() => {
                 navigate("/");
               }}
+           
             />
 
             {categories &&
@@ -293,6 +294,7 @@ Subscription            </div>
               onClick={() => {
                 setSearchInput(true);
               }}
+
             />
 
             <input
@@ -327,6 +329,7 @@ Subscription            </div>
                     onClick={() => {
                       navigate("/wishlist");
                     }}
+                    alt="brownheart"
                   />
                   <div className={`${styles.clickable} ${styles.badge}`}>
                     {wishListItems?.length || 0}
@@ -341,6 +344,7 @@ Subscription            </div>
                     setSidebar("login");
                     toggleDrawer();
                   }}
+                  alt="heart"
                 />
               )}
             </div>
@@ -362,6 +366,7 @@ Subscription            </div>
                       setSidebar("cart");
                       toggleDrawer();
                     }}
+                    alt="brownbag"
                   />
                   <div className={`${styles.clickable} ${styles.badge}`}>
                     {cartItems?.length || 0}
@@ -376,6 +381,7 @@ Subscription            </div>
                     setSidebar("login");
                     toggleDrawer();
                   }}
+                  alt="bag"
                 />
               )}
             </div>
@@ -387,6 +393,7 @@ Subscription            </div>
                 onClick={() => {
                   navigate("/profile/1");
                 }}
+                alt="user"
               />
             ) : (
               <div
@@ -408,6 +415,7 @@ Subscription            </div>
               onClick={() => {
                 setOpen((prev) => !prev);
               }}
+              alt="burger"
             />
           </div>
         </div>

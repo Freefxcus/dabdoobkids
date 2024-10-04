@@ -18,7 +18,7 @@ export default function Otp() {
     <div className={styles.container}>
       {!isSuccess && (
         <>
-          <img src={envelope} width="70px" />
+          <img src={envelope} width="70px" alt="envelope"/>
           <div>Email Verification</div>
           <div>Check your spam folder if you cannot find it.</div>
           <OtpInput

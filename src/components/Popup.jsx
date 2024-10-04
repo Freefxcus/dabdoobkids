@@ -594,7 +594,7 @@ defaultCountry="EG"
         )}
         {type === "reset_password" && (
           <Box sx={style} className={styles.card_container}>
-            <img src={reset} width="50%" className={styles.card_img} />
+            <img src={reset} width="50%" className={styles.card_img} alt="reset" />
             <div className={styles.card_title}>Reset Password</div>
             <div className={styles.card_description}>
               Enter your registered email address, we will send instructions to
@@ -630,7 +630,7 @@ defaultCountry="EG"
         )}
         {type === "set_new_password" && (
           <Box sx={style} className={styles.card_container}>
-            <img src={resetPassword} width="50%" className={styles.card_img} />
+            <img src={resetPassword} width="50%" className={styles.card_img} alt="reset"/>
             <div className={styles.card_title}>Reset Password</div>
             <div className={styles.card_description}>
               Enter a new password for&nbsp;
@@ -691,7 +691,7 @@ defaultCountry="EG"
         )}
         {type === "successful_reset_new_password" && (
           <Box sx={style} className={styles.card_container}>
-            <img src={resetSuccess} width="50%" className={styles.card_img} />
+            <img src={resetSuccess} width="50%" className={styles.card_img} alt="reset" />
             <div className={styles.card_title}>Successfully Reset Password</div>
             <div className={styles.card_description}>
               Password has been changed successfully
@@ -703,7 +703,7 @@ defaultCountry="EG"
         )}
         {type === "reset_success" && (
           <Box sx={style} className={styles.card_container}>
-            <img src={resetSuccess} width="50%" className={styles.card_img} />
+            <img src={resetSuccess} width="50%" className={styles.card_img} alt="reset"/>
             <div className={styles.card_title}>Reset Password</div>
             <div className={styles.card_description}>
               Check your email, we’ve sent you an email with a link to update
@@ -716,7 +716,7 @@ defaultCountry="EG"
         )}
         {type === "remove_account" && (
           <Box sx={style} className={styles.card_container}>
-            <img src={remove} width="50%" className={styles.card_img} />
+            <img src={remove} width="50%" className={styles.card_img} alt="reset"/>
             <div className={styles.card_title}>Remove Account</div>
             <div className={styles.card_description}>
               Are you sure you want to remove your account?
@@ -729,7 +729,7 @@ defaultCountry="EG"
         )}
         {type === "remove_address" && (
           <Box sx={style} className={styles.card_container}>
-            <img src={remove} width="50%" className={styles.card_img} />
+            <img src={remove} width="50%" className={styles.card_img} alt="reset" />
             <div className={styles.card_title}>Remove Address</div>
             <div className={styles.card_description}>
               Are you sure you want to remove your address?

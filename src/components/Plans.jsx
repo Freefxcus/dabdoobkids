@@ -99,7 +99,7 @@ export default function Plans() {
                   style={{ width: "calc(100% - 30px)" }}
                 >
                   <div className={styles.row}>
-                    <img src={premium} width="50px" />
+                    <img src={premium} width="50px" alt="premium" />
                     <div>{plan?.name}</div>
                   </div>
                   <div className={styles.row}>

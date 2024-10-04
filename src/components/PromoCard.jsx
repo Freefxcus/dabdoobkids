@@ -42,6 +42,7 @@ export default function OrderCard() {
             copy("🦄🌈");
             notifySuccess();
           }}
+          alt="copy"
         />
       </div>
       <div className={styles.v_line}></div>

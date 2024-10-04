@@ -1,61 +1,33 @@
-import React, { useState, useEffect } from "react";
-import Drawer from "@mui/material/Drawer";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemText from "@mui/material/ListItemText";
+import React, { useState, useEffect, lazy, Suspense } from "react";
 import styles from "../styles/pages/Home.module.css";
-import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-
-import { Autoplay, Pagination, Navigation } from "swiper/modules";
-
-import CountdownTimer from "../components/CountdownTimer";
-import Form from "../components/Form";
-import { Box, Container } from "@mui/material";
-import ClothesCard from "../components/ClothesCard";
+import { Box } from "@mui/material";
 import OfferCard from "../components/OfferCard";
 import Loader from "../components/Loader";
 import Category from "../components/Category";
-import Star from "../components/Star";
-import Popup from "../components/Popup";
-import axiosInstance from "../utils/interceptor";
-import { userInfoActions, dataActions, wishlistActions } from "../Redux/store";
-import { useDispatch, useSelector } from "react-redux";
+import { wishlistActions } from "../Redux/store";
+import { useDispatch } from "react-redux";
 import instance from "../utils/interceptor.js";
 import { useNavigate } from "react-router-dom";
-import {
-  getProducts,
-  getWishlistItems,
-  addToWishlist,
-  authorize,
-} from "../utils/apiCalls.js";
+import { getProducts, getWishlistItems, authorize } from "../utils/apiCalls.js";
 import { notifyError } from "../utils/general.js";
-import useMediaQuery from "@mui/material/useMediaQuery";
-import { current } from "@reduxjs/toolkit";
-import banner1 from "../images/banner1.png";
-import banner2 from "../images/banner2.png";
-import arrow from "../images/arrow.svg";
-import CartProgress from "../components/CartProgress.jsx";
 import BannerSwiper from "../components/Home/BannerSwiper.jsx";
 import NewArrival from "../components/Home/NewArrival.jsx";
-import { Helmet } from "react-helmet";
-import BrandsSwiper from "../components/Home/BrandsSwiper.jsx";
-import DailySaleComponent from "../components/Home/DailySaleComponent.jsx";
-import TestimonialsList from "../components/Home/TestimonialsList.jsx";
+
+// Lazy load components
+const BrandsSwiper = lazy(() => import("../components/Home/BrandsSwiper.jsx"));
+const DailySaleComponent = lazy(() => import("../components/Home/DailySaleComponent.jsx"));
+const TestimonialsList = lazy(() => import("../components/Home/TestimonialsList.jsx"));
 
 export default function Home() {
-  const mobile = useMediaQuery("(max-width:300px)");
-
-  const [currentCat, setCurrentCat] = useState("");
   const [reload, setReload] = useState(false);
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
-
-
   const navigate = useNavigate();
   const isUser = localStorage.getItem("access_token");
+
   useEffect(() => {
     if (isUser) {
       getWishlistItems()
@@ -76,59 +48,47 @@ export default function Home() {
         });
     }
   }, [reload]);
+
   useEffect(() => {
-    //* products
     getProducts()
       .then((res) => {
-        console.log(res?.products, "<<<<<<<<ressss");
         setProducts(res?.products);
       })
       .catch((err) => {
         notifyError(err);
       });
 
-    //* categories
     instance
       .get("/categories", {
         params: {
-          items:9,
+          items: 9,
           paginated: false,
         },
       })
       .then((response) => {
-        console.log(response?.data?.data?.categories, "categoriesasdasdsdasd");
         setCategories(response?.data?.data?.categories);
       })
       .catch((err) => {
         notifyError(err);
       });
-  
   }, [reload]);
+
   const dispatch = useDispatch();
 
-  // *********
   const [state, setState] = React.useState({
     right: false,
   });
+
   const toggleDrawer = (anchor, open) => (event) => {
-    if (
-      event.type === "keydown" &&
-      (event.key === "Tab" || event.key === "Shift")
-    ) {
+    if (event.type === "keydown" && (event.key === "Tab" || event.key === "Shift")) {
       return;
     }
-
     setState({ ...state, [anchor]: open });
   };
 
-  console.log("categories", categories, "products", products);
 
   return (
     <>
-      {/* <Helmet>
-        <title>{"metaData.title"}</title>
-        <meta name="description" content={"metaData.description"} />
-      </Helmet> */}
       <BannerSwiper />
       {products?.length < 0 && (
         <>
@@ -150,16 +110,11 @@ export default function Home() {
           </div>
         </>
       )}
-
       {products?.length > 0 && (
         <>
-          {/* swiper */}
-          {/* new arrival */}
-
           <NewArrival products={products} categories={categories} />
         </>
       )}
-      {/* shop by category */}
       <div className="padding-container section-bottom-margin">
         <div
           style={{
@@ -169,7 +124,6 @@ export default function Home() {
           }}
         >
           <h1 className={styles.title}>Shop by category</h1>
-
           <span
             onClick={() => navigate("/categories")}
             style={{
@@ -192,8 +146,7 @@ export default function Home() {
               xs: "repeat(2,1fr)",
             },
             gap: { lg: "20px", md: "10px", xs: "10px" },
-            // maxWidth: "100%",
-            width:"auto",
+            width: "auto",
             alignContent: "start",
           }}
         >
@@ -202,21 +155,16 @@ export default function Home() {
           ))}
         </Box>
       </div>
-      {/* ticker */}
-      <div className={`${styles["image-ticker"]} section-bottom-margin`}>
-       <BrandsSwiper />
-      </div>
-      {/* daily sale */}
-      <DailySaleComponent categories={categories} />  
-
- {/* Testimonials*/}
-      <TestimonialsList />
-      {/* Best Value offers */}
+      <Suspense fallback={<Loader open={true} />}>
+        <div className={`${styles["image-ticker"]} section-bottom-margin`}>
+          <BrandsSwiper />
+        </div>
+        <DailySaleComponent categories={categories} />
+        <TestimonialsList />
+      </Suspense>
       <div className={"padding-container section-bottom-margin"}>
-        <div >
-          <div
-            className={`${styles["offers-title"]}  ${styles["offers-title-sub"]}`}
-          >
+        <div>
+          <div className={`${styles["offers-title"]}  ${styles["offers-title-sub"]}`}>
             Dabdoob KIDZ
           </div>
           <div className={styles["offers-title"]}>Best Value offers</div>
@@ -252,18 +200,7 @@ export default function Home() {
           </div>
         </div>
       </div>
-      {/* xxx */}
       <Loader open={false} />
-      {/* <Popup open={open} setOpen={setOpen} type="set_new_password" /> */}
-      {/* ******* */}
-      {/* <form onSubmit={handleSubmit}>
-        <label>
-          File:
-          <input type="file" name="file" onChange={handleFileChange} />
-        </label>
-        <br />
-        <button type="submit">Submit</button>
-      </form> */}
     </>
   );
 }

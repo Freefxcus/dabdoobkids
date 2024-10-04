@@ -1,23 +1,23 @@
+import React, { useEffect, useState, memo } from "react";
 import styles from "../../styles/pages/Home.module.css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-import { Autoplay, Pagination,  } from "swiper/modules";
+import { Autoplay, Pagination } from "swiper/modules";
 import banner1 from "../../images/banner1.png";
 import banner2 from "../../images/banner2.png";
-import { useEffect, useState } from "react";
-import CountdownTimer from "../CountdownTimer";
+
 import { Box, Typography } from "@mui/material";
 import { getBanners } from "../../utils/apiCalls";
-import { useNavigate,Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import LoadingAnimation from "../LoadingAnimation";
 
-export default function BannerSwiper() {
+const BannerSwiper = () => {
   const bannerImages = [banner1, banner2];
   const [banners, setBanners] = useState([]);
-  const [loading, setLoading] = useState(true); // To handle the loading state
-  const [error, setError] = useState(null); // To handle the error state
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const navigate = useNavigate();
 
@@ -25,12 +25,11 @@ export default function BannerSwiper() {
     const fetchBanners = async () => {
       try {
         const data = await getBanners();
-        console.log("fetchBanners",data);
-        
+        console.log("fetchBanners", data);
         setBanners(data);
       } catch (err) {
-        console.error('Failed to fetch banners:', err);
-        setError(err); // You can also notify the error to the user if needed
+        console.error("Failed to fetch banners:", err);
+        setError(err);
       } finally {
         setLoading(false);
       }
@@ -40,105 +39,62 @@ export default function BannerSwiper() {
   }, []);
 
   if (loading) {
-    return <div  className={`${styles["banner-container"]} section-bottom-margin`}
-      style={{ display:"flex",justifyContent:"center",alignItems:"center"}}>  <LoadingAnimation />
-      </div>; // Show a loading indicator
+    return (
+      <div
+        className={`${styles["banner-container"]} section-bottom-margin`}
+        style={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+      >
+        <LoadingAnimation />
+      </div>
+    );
   }
 
   if (error) {
-    return <div>Error loading banners</div>; // Show an error message
+    return <div>Error loading banners</div>;
   }
 
-  
   return (
-    <div
-      className={`${styles["banner-container"]} section-bottom-margin`}
-      style={{ position: "relative" }}
-    >
+    <div className={`${styles["banner-container"]} section-bottom-margin`} style={{ position: "relative" }}>
       <Swiper
         className="mySwiper"
         grabCursor={true}
-        pagination={{
-          clickable: true,
-        }}
+        pagination={{ clickable: true }}
         speed={2000}
         loop
-        autoplay={{
-          delay: 2000,
-          disableOnInteraction: false,
-        }}
+        autoplay={{ delay: 2000, disableOnInteraction: false }}
         modules={[Autoplay, Pagination]}
       >
-        
-        {banners?.categories.length? banners?.categories.map((item, index) => (
-          <SwiperSlide>
-            <Box
-             
-              component={Link}
-              to={item?.url}
-              sx={{
-                backgroundImage: `url(${item?.image})`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                backgroundRepeat: "no-repeat",
-                height: "100%",
-                width: "100%",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-             
-            </Box>
-          </SwiperSlide>
-        )):bannerImages.map((img, index) => (
-          <SwiperSlide>
-            <Box
-              sx={{
-                backgroundImage: `url(${img})`,
-                backgroundSize: "cover",
-                backgroundRepeat: "no-repeat",
-                height: "100%",
-                width: "100%",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <Box>
-                <Typography
-                  variant="h1"
-                  sx={{
-                    color: "white",
-                    fontFamily: "Playfair Display, serif",
-                    fontStyle: "italic",
-                    fontWeight: 500,
-                    fontSize : {xs : "2rem", sm : "3rem", md : "4rem", lg : "5rem"},
-                    textAlign: "center",
-                    marginBottom: "1rem",
-                  }}
+        {banners?.categories.length
+          ? banners.categories.map((item, index) => (
+              <SwiperSlide key={index}>
+                <Box
+                  component={Link}
+                  to={item?.url}
+                  className={styles.bannerBox}
+                  style={{ backgroundImage: `url(${item?.image})` }}
+                ></Box>
+              </SwiperSlide>
+            ))
+          : bannerImages.map((img, index) => (
+              <SwiperSlide key={index}>
+                <Box
+                  className={styles.bannerBox}
+                  style={{ backgroundImage: `url(${img})` }}
                 >
-                  Dabdoob KIDZ
-                </Typography>
-                <Typography
-                  sx={{
-                    color: "white",
-                    textAlign: "center",
-                    fontSize : {xs : "1rem", sm : "1rem", md : "1rem", lg : "2rem"},
-                    fontWeight: 300,
-                    maxWidth: "80%",
-                    mx: "auto",
-                    wordBreak: "break-word",
-                  }}
-                >
-                  Make yourself look different without old-fashioned clothes and
-                  impress others
-                </Typography>
-              </Box>
-            </Box>
-          </SwiperSlide>
-        ))}
+                  <Box>
+                    <Typography variant="h1" className={styles.bannerTitle}>
+                      Dabdoob KIDZ
+                    </Typography>
+                    <Typography className={styles.bannerSubtitle}>
+                      Make yourself look different without old-fashioned clothes and impress others
+                    </Typography>
+                  </Box>
+                </Box>
+              </SwiperSlide>
+            ))}
       </Swiper>
     </div>
   );
-}
+};
+
+export default memo(BannerSwiper);

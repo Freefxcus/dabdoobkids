@@ -50,7 +50,7 @@ export default function BrandsSwiper() {
 
   const repeatCount = Math.ceil(limit / (brands?.length||1));
 
-  // Create a new array with the repeated brands
+  // Create a new array with the repeated brandshome
   const newBrands = [...Array((repeatCount||1) + 3)].flatMap(() => brands);
 
   return (
