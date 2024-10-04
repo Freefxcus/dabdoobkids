@@ -66,7 +66,13 @@ export default function ClothesCard({ item }) {
     }
   };
 
-  const finalPrice = calcDiscount(null, item);
+  const finalPrice = item?.sale
+    ? calcDiscount(null, {
+        price: item.price,
+        discountType: item?.sale?.discountType,
+        discount: item?.sale?.discountAmount,
+      })
+    : calcDiscount(null, item);
 
   return (
     <div
@@ -79,7 +85,7 @@ export default function ClothesCard({ item }) {
         <CardMedia
           sx={{
             width: "100%",
-            aspectRatio: {xs:0.65 ,sm:0.77},
+            aspectRatio: { xs: 0.65, sm: 0.77 },
             objectFit: "cover",
           }}
           component={"img"}
@@ -126,29 +132,29 @@ export default function ClothesCard({ item }) {
         <div style={{ fontWeight: "400" }}>{item?.name}</div>
         {/* <div style={{ fontWeight: "bold" }}>EGP{item?.price}</div> */}
         <div
-              style={{
-                fontSize: "1.2rem",
-                fontWeight: "700",
-                color: "var(--errie-black)",
-              }}
-            >
-              {finalPrice?.discount ? (
-                <>
-                  <span>EGP {finalPrice.priceAfter}</span>{" "}
-                  <s
-                    style={{
-                      fontSize: "1rem",
-                      fontWeight: "500",
-                      color: "var(--grey-text)",
-                    }}
-                  >
-                    EGP {finalPrice.price}{" "}
-                  </s>
-                </>
-              ) : (
-                <span>EGP {finalPrice.price}</span>
-              )}
-            </div>
+          style={{
+            fontSize: "1.2rem",
+            fontWeight: "700",
+            color: "var(--errie-black)",
+          }}
+        >
+          {finalPrice?.discount ? (
+            <>
+              <span>EGP {finalPrice.priceAfter}</span>{" "}
+              <s
+                style={{
+                  fontSize: "1rem",
+                  fontWeight: "500",
+                  color: "var(--grey-text)",
+                }}
+              >
+                EGP {finalPrice.price}{" "}
+              </s>
+            </>
+          ) : (
+            <span>EGP {finalPrice.price}</span>
+          )}
+        </div>
       </div>
     </div>
   );
