@@ -171,6 +171,16 @@
   font-size: 18px;
   font-weight: 500;
 }
+
+.my_table th {
+  white-space: nowrap;
+}
+
+.my_table td {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 @media (max-width: 600px) {
   .text_container {
     /* max-width: 1150px; */
