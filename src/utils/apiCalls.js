@@ -310,9 +310,11 @@ export const getInvoiceOrder = async (id) => {
 
   await instance
     .get(`orders/${id}/invoice`, {
-      responseType: 'blob',  })
+      responseType: 'file',  })
     .then((response) => {
       returnedValue = response.data;
+      console.log(response);
+      
     })
     .catch((error) => {
       // notifyError(error);
