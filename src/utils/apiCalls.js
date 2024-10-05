@@ -304,6 +304,22 @@ export const orderSummary = async (data) => {
 
   return returnedValue; // caught by .then()
 };
+
+export const getInvoiceOrder = async (id) => {
+  let returnedValue;
+
+  await instance
+    .get(`orders/${id}/invoice`, {
+      responseType: 'blob',  })
+    .then((response) => {
+      returnedValue = response.data;
+    })
+    .catch((error) => {
+      // notifyError(error);
+    });
+
+  return returnedValue; // caught by .then()
+};
 export const getSingleOrder = async (id) => {
   let returnedValue;
 

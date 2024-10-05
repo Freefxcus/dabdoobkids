@@ -2,6 +2,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import styles from "../../styles/pages/Profile.module.css";
 import { useEffect, useState } from "react";
 import {
+  getInvoiceOrder,
   getOrderInvoice,
   getSingleOrder,
   orderRefund,
@@ -20,7 +21,6 @@ export default function OrderDetails() {
   const navigate = useNavigate();
   useEffect(() => {
     getSingleOrder(id).then((res) => {
-      console.log(res, "order123123123order123123123");
       setOrder(res?.data?.data);
     });
 
@@ -28,9 +28,31 @@ export default function OrderDetails() {
       setOrderInvoice(res?.data?.data);
     });
   }, []);
-  console.log(orderInvoice, "order123123123", order);
   const purchaseDate = new Date(order?.createdAt).toLocaleString();
-
+  const handleGetInvoice = async (id) => {
+    try {
+      const response = await getInvoiceOrder(id);
+      
+      // Check if the response has a blob method (i.e., it's a valid Response object)
+      // if (!response.ok) {
+      //   throw new Error('Failed to fetch the invoice.'); // Handle error response
+      // }
+  
+      const blob = await response.blob(); // Convert to blob
+  
+      console.log("blob", blob);
+      
+      // Create a link element to download the file
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.setAttribute('download', 'file.pdf'); // Specify the file name
+      document.body.appendChild(link);
+      link.click();
+      link.remove(); // Clean up
+    } catch (error) {
+      console.error("Error while fetching the invoice:", error);
+    }
+  };
   return (
     <div className={`${styles.bg} padding-container`}>
       <div className={styles.row}>
@@ -140,7 +162,7 @@ export default function OrderDetails() {
           </div>
           <div className={styles.row_wrap}>
             <div className={styles.left_title}>Invoice</div>
-            <div
+            <div onClick={()=>handleGetInvoice(id)}
               style={{
                 color: "var(--brown)",
               }}
