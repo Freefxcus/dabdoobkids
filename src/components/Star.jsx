@@ -4,7 +4,7 @@ import star1 from "../images/star1.svg";
 import star2 from "../images/star2.svg";
 import CountdownTimer from "../components/CountdownTimer";
 
-export default function Star({ type }) {
+export default function Star({ type,value }) {
   return (
     <>
       <img
@@ -16,7 +16,7 @@ export default function Star({ type }) {
           type === "a" ? styles["star-contentA"] : styles["star-contentB"]
         }
       >
-        <div>50%</div>
+        <div>{value}%</div>
         <div>Off</div>
       </div>
     </>

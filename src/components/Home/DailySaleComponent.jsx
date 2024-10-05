@@ -12,6 +12,7 @@ import { Navigation } from "swiper/modules";
 export default function DailySaleComponent() {
   const [products, setProducts] = useState([]);
   const [endDate, setEndDate] = useState([]);
+  const [percentage, setPercentage] = useState(0);
     const [timeLeft, setTimeLeft] = useState({
     hours: 0,
     minutes: 0,
@@ -42,7 +43,9 @@ export default function DailySaleComponent() {
         const response = await instance.get("/products/sale");
         const productsData = response?.data?.data?.products;
         const saleEndTime = response?.data?.data?.sale?.end;
-
+        setPercentage(response?.data?.data?.sale?.percentage);
+        console.log("saleEndTime", percentage);
+        
         if (productsData) {
           setProducts(productsData);
           calculateTimeLeft(saleEndTime);
@@ -91,7 +94,7 @@ export default function DailySaleComponent() {
       seconds={timeLeft.seconds} 
       type="b"  />
           </div>
-          <Star type="b" />
+          <Star type="b" value={percentage} />
         <div
           onClick={() => navigate(`/search?sale=true&endDate=${endDate}`)}
           style={{
