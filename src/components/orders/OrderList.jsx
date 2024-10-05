@@ -221,7 +221,7 @@ export default function OrderList() {
                       // color: "#FF5630",
                     }}
                   >
-                    In Delivery
+                    {order?.shippingStatus}
                   </div>
                 </div>
                 {order?.items?.map((item) => (

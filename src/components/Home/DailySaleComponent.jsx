@@ -67,6 +67,10 @@ export default function DailySaleComponent() {
     return <div>Error fetching daily sale products: {error.message}</div>;
   }
 
+  if (!products.length) {
+    return <></>;
+  }
+
  
   return (
     <div className="padding-container section-bottom-margin">
