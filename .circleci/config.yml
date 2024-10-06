@@ -16,7 +16,7 @@ jobs:
             pwd
             bash deploy.sh npm i # source nvm and install
       - run:
-          name: Build NestJS Application
+          name: Build Application
           command: |
             bash deploy.sh npm run build # build project
 
