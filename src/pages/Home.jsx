@@ -168,7 +168,7 @@ export default function Home() {
             Dabdoob KIDZ
           </div>
           <div className={styles["offers-title"]}>Best Value offers</div>
-          <div className="cards_container_c">
+          <div className={styles['bottom-container']}>
             {[
               {
                 id: "1",
