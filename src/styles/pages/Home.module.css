@@ -170,7 +170,28 @@
   padding-bottom: 5px;
   cursor: pointer;
 }
+.bottom-container{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 20px;
 
+}
+
+/* @media (max-width: 1200px) {
+  .bottom-container{
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+} */
+@media (max-width: 1200px) {
+  .bottom-container{
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (max-width: 600px) {
+  .bottom-container{
+    grid-template-columns: 1fr;
+  }
+}
 .cards-container {
   /* display: flex; */
   /* justify-content: space-between; */
@@ -242,6 +263,8 @@
     line-height: 1.2;
     margin-bottom: 10px;
   }
+
+
 
   .shop_collection {
     background-color: #ad6b46;
