@@ -50,7 +50,6 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "start:dev": "PORT=3060 npm start",
     "build": "CI= react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
