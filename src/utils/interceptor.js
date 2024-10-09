@@ -1,8 +1,8 @@
 import axios from "axios";
-
+console.log('url', process.env.REACT_APP_BASE_URL)
 const instance = axios.create({
   // baseURL: "https://dabdoobkidz-api.onrender.com", // Set your API base URL
-  baseURL: "https://api.dabdoobkidz.com/", // Set your API base URL
+  baseURL: process.env.REACT_APP_BASE_URL, // Set your API base URL
 });
 
 // Request interceptor
