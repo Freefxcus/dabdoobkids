@@ -25,9 +25,7 @@ export const addressSchema = yup.object().shape({
     .number()
     .required("Required"),
   city: yup
-    .number()
-    .min(2, "Must be at least 3 characters long")
-    .required("Required"),
+    .number().required("Required"),
   // district: yup
   //   .string()
   //   .min(3, "Must be at least 3 characters long")
