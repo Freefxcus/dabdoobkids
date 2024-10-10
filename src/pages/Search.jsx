@@ -58,7 +58,13 @@ export default function Search() {
       }
     };
 
-
+    useEffect(() => {
+      window.scroll({
+        top: 0,
+        left: 0,
+        behavior: 'smooth'
+      })
+    } , [page]);
   useEffect(() => {
     getCategories().then((res) => {
       setCategories(res?.categories);

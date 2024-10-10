@@ -31,8 +31,16 @@ import {
 import { calcDiscount, notifyError, notifySuccess } from "../utils/general.js";
 import { Add, AddCircle, Minus, ShoppingCart } from "iconsax-react";
 import Police from "../components/singleProduct/Police.jsx";
-
+import { format } from 'date-fns';
 export default function Details() {
+  const currentDate = new Date();
+  const startDate = new Date(currentDate);
+  startDate.setDate(currentDate.getDate() + 7);
+  const endDate = new Date(currentDate);
+  endDate.setDate(currentDate.getDate() + 14);
+
+  const formattedStartDate = format(startDate, 'dd MMMM');
+  const formattedEndDate = format(endDate, 'dd MMMM');
   const { id } = useParams();
   const { pathname } = useLocation();
   useEffect(() => {
@@ -46,8 +54,8 @@ export default function Details() {
 
     variants?.forEach((variant) => {
       variant?.options?.forEach((option) => {
-        const { name } = option.option;
-        const { value } = option.value;
+        const { name } = option.option || {};
+        const { value } = option.value || {};
 
         if (!optionsMap[name]) {
           optionsMap[name] = new Set();
@@ -148,7 +156,7 @@ export default function Details() {
     [productDetails?.variants, transformVariants]
   );
 
-  const selectedVariantObject = productDetails?.variants?.find((variantItem) =>
+  const selectedVariantObject = productDetails?.varaints && productDetails?.variants?.find((variantItem) =>
     variantItem.options.every(
       (option) => variant[option.option.name] === option.value.value
     )
@@ -360,7 +368,7 @@ export default function Details() {
                                   ValueVariant == option?.value?.value
                               )
                             );
-                          const isAvailable = matchingVariant.options.some(
+                          const isAvailable = matchingVariant?.options.some(
                             (option) =>
                               newVariants?.[0]?.name == option?.option?.name &&
                               variant?.[newVariants?.[0]?.name] ==
@@ -565,7 +573,7 @@ export default function Details() {
               <img src={delivery} className={styles["delivery-icon"]} />
               <div>
                 <div>Delivery details</div>
-                <div>Door delivery between 07 February and 10 February</div>
+                <div>Door delivery between {formattedStartDate}  and 10 {formattedEndDate}</div>
               </div>
             </div>
           </div>

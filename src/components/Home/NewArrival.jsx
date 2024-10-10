@@ -8,11 +8,11 @@ import { useNavigate } from "react-router-dom";
 
 export default function NewArrival({ categories }) {
   let selectedCate = categories?.filter((item, index) =>item?.productsCount > 0  );
-  const [currentCat, setCurrentCat] = useState(selectedCate?.[0]);
+  const [currentCat, setCurrentCat] = useState(categories?.[0]);
   const [products, setProducts] = useState([]);
   const navigate=useNavigate()
   useEffect(() => {
-    setCurrentCat(selectedCate?.[0]);
+    setCurrentCat(categories?.[0]);
   }, []);
  useEffect(() => {
     getProducts(
