@@ -35,7 +35,7 @@ import { format } from 'date-fns';
 export default function Details() {
   const currentDate = new Date();
   const startDate = new Date(currentDate);
-  startDate.setDate(currentDate.getDate() + 7);
+  startDate.setDate(currentDate.getDate() + 10);
   const endDate = new Date(currentDate);
   endDate.setDate(currentDate.getDate() + 14);
 
@@ -573,7 +573,7 @@ export default function Details() {
               <img src={delivery} className={styles["delivery-icon"]} />
               <div>
                 <div>Delivery details</div>
-                <div>Door delivery between {formattedStartDate}  and 10 {formattedEndDate}</div>
+                <div>Door delivery between {formattedStartDate}  and  {formattedEndDate}</div>
               </div>
             </div>
           </div>
