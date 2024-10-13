@@ -156,9 +156,9 @@ export default function Details() {
     [productDetails?.variants, transformVariants]
   );
 
-  const selectedVariantObject = productDetails?.varaints && productDetails?.variants?.find((variantItem) =>
+  const selectedVariantObject = productDetails?.variants && productDetails?.variants?.find((variantItem) =>
     variantItem.options.every(
-      (option) => variant[option.option.name] === option.value.value
+      (option) => variant[option?.option?.name] === option?.value?.value
     )
   );
 
