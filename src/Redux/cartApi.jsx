@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 const cartApi = createApi({
   reducerPath: "cartItems",
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://api.dabdoobkidz.com/",
+    baseUrl: `${process.env.REACT_APP_BASE_URL}`,
     prepareHeaders: (headers) => {
       // Do something before request is sent
       if (localStorage.getItem("access_token")) {
