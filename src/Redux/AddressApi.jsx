@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 const AddressApi = createApi({
   reducerPath: "addresses",
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://api.dabdoobkidz.com/",
+    baseUrl:`${process.env.REACT_APP_BASE_URL}` ,
     prepareHeaders: (headers) => {
       const token = localStorage.getItem("access_token");
       if (token) {
