@@ -67,7 +67,7 @@ export default function Form({ type, toggleDrawer }) {
   };
 
   const handleGoogleAuth = async () => {
-    window.open(`${process.env.REACT_APP_BASE_URL}auth/google`, "_self");
+    window.open(`${process.env.REACT_APP_BASE_URL}/auth/google`, "_self");
   };
 
   const loginInitialValues = {
