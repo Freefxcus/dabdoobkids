@@ -3,7 +3,7 @@ jobs:
   build:
     machine: true
     resource_class: azha/dev
-    working_directory: ./dabdoobkidz/staging/dabdoobkids
+    working_directory: ./dabdoobkidz/production/dabdoobkids
     steps:
       - run:
           working_directory: ~/
@@ -23,7 +23,7 @@ jobs:
   deploy:
     machine: true
     resource_class: azha/dev
-    working_directory: ./dabdoobkidz/staging/dabdoobkids
+    working_directory: ./dabdoobkidz/production/dabdoobkids
     steps:
       - run:
           name: Restart PM2
@@ -41,11 +41,11 @@ workflows:
           filters:
                 branches:
                   only: 
-                    - staging
+                    - main
       - deploy:
           requires:
             - build
           filters:
             branches:
               only: 
-                - staging
+                - main
