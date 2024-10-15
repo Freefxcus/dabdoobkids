@@ -72,7 +72,7 @@ export default function Search() {
     getBrands().then((res) => {
       setBrands(res?.brands);
     });
-    loadProducts(page); // Load products based on the current page state
+    // loadProducts(page); // Load products based on the current page state
   }, [page]);
 
   useEffect(() => {
@@ -81,7 +81,7 @@ export default function Search() {
     endDate&&calculateTimeLeft(endDate)
   }, []);
 
-  const loadProducts = (page = 1) => {
+  const loadProducts = () => {
     setIsLoading(true);
     const categoryStr = catId.length ? catId.join(",") : "";
     const brandStr = brandId.length ? brandId.join(",") : "";
