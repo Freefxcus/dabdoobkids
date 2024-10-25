@@ -31,7 +31,7 @@ import {
 import { calcDiscount, notifyError, notifySuccess } from "../utils/general.js";
 import { Add, AddCircle, Minus, ShoppingCart } from "iconsax-react";
 import Police from "../components/singleProduct/Police.jsx";
-import { format } from 'date-fns';
+import { format } from "date-fns";
 export default function Details() {
   const currentDate = new Date();
   const startDate = new Date(currentDate);
@@ -39,8 +39,8 @@ export default function Details() {
   const endDate = new Date(currentDate);
   endDate.setDate(currentDate.getDate() + 14);
 
-  const formattedStartDate = format(startDate, 'dd MMMM');
-  const formattedEndDate = format(endDate, 'dd MMMM');
+  const formattedStartDate = format(startDate, "dd MMMM");
+  const formattedEndDate = format(endDate, "dd MMMM");
   const { id } = useParams();
   const { pathname } = useLocation();
   useEffect(() => {
@@ -156,14 +156,16 @@ export default function Details() {
     [productDetails?.variants, transformVariants]
   );
 
-  const selectedVariantObject = productDetails?.variants && productDetails?.variants?.find((variantItem) =>
-    variantItem.options.every(
-      (option) => variant[option?.option?.name] === option?.value?.value
-    )
-  );
+  const selectedVariantObject =
+    productDetails?.variants &&
+    productDetails?.variants?.find((variantItem) =>
+      variantItem.options.every(
+        (option) => variant[option?.option?.name] === option?.value?.value
+      )
+    );
 
   console.log("selectedVariantObject", selectedVariantObject);
-  
+
   useEffect(() => {
     if (newVariants?.length) {
       newVariants.forEach((VariantItem) => {
@@ -361,21 +363,24 @@ export default function Details() {
                         {variantItem?.values?.map((ValueVariant, index) => {
                           // Find the variant that matches the current ValueVariant
                           const matchingVariant =
-                            productDetails?.variants?.find((variant) =>
+                            productDetails?.variants?.filter((variant) =>
                               variant?.options.some(
                                 (option) =>
                                   variantItem?.name == option?.option?.name &&
                                   ValueVariant == option?.value?.value
                               )
                             );
-                          const isAvailable = matchingVariant?.options.some(
-                            (option) =>
-                              newVariants?.[0]?.name == option?.option?.name &&
-                              variant?.[newVariants?.[0]?.name] ==
-                                option?.value?.value
+                          const isAvailable = matchingVariant?.some(
+                            (item) =>
+                              item.options.some(
+                                (option) =>
+                                  newVariants?.[0]?.name ==
+                                    option?.option?.name &&
+                                  variant?.[newVariants?.[0]?.name] ==
+                                    option?.value?.value
+                              ) && item?.stock != 0
                           );
                           // Check if the matching variant is in stock
-
                           return (
                             <button
                               onClick={() =>
@@ -437,7 +442,7 @@ export default function Details() {
               <Box
                 className={`${styles["row"]} ${styles["btn-count"]}`}
                 sx={{
-                  padding: {xs:"8px 4px"  , sm:"13px 8px"},
+                  padding: { xs: "8px 4px", sm: "13px 8px" },
                   border: "1px solid var(--unicorn-silver)",
                   borderRadius: "10px",
                   justifyContent: "space-between",
@@ -573,7 +578,10 @@ export default function Details() {
               <img src={delivery} className={styles["delivery-icon"]} />
               <div>
                 <div>Delivery details</div>
-                <div>Door delivery between {formattedStartDate}  and  {formattedEndDate}</div>
+                <div>
+                  Door delivery between {formattedStartDate} and{" "}
+                  {formattedEndDate}
+                </div>
               </div>
             </div>
           </div>
