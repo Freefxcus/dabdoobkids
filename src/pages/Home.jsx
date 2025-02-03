@@ -18,8 +18,12 @@ import NewArrival from "../components/Home/NewArrival.jsx";
 
 // Lazy load components
 const BrandsSwiper = lazy(() => import("../components/Home/BrandsSwiper.jsx"));
-const DailySaleComponent = lazy(() => import("../components/Home/DailySaleComponent.jsx"));
-const TestimonialsList = lazy(() => import("../components/Home/TestimonialsList.jsx"));
+const DailySaleComponent = lazy(() =>
+  import("../components/Home/DailySaleComponent.jsx")
+);
+const TestimonialsList = lazy(() =>
+  import("../components/Home/TestimonialsList.jsx")
+);
 
 export default function Home() {
   const [reload, setReload] = useState(false);
@@ -27,6 +31,7 @@ export default function Home() {
   const [products, setProducts] = useState([]);
   const navigate = useNavigate();
   const isUser = localStorage.getItem("access_token");
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (isUser) {
@@ -47,7 +52,7 @@ export default function Home() {
           }
         });
     }
-  }, [reload]);
+  }, [dispatch, isUser, reload]); // Add dispatch and isUser to the dependency array
 
   useEffect(() => {
     getProducts()
@@ -72,20 +77,6 @@ export default function Home() {
         notifyError(err);
       });
   }, [reload]);
-
-  const dispatch = useDispatch();
-
-  const [state, setState] = React.useState({
-    right: false,
-  });
-
-  const toggleDrawer = (anchor, open) => (event) => {
-    if (event.type === "keydown" && (event.key === "Tab" || event.key === "Shift")) {
-      return;
-    }
-    setState({ ...state, [anchor]: open });
-  };
-
 
   return (
     <>
@@ -164,11 +155,13 @@ export default function Home() {
       </Suspense>
       <div className={"padding-container section-bottom-margin"}>
         <div>
-          <div className={`${styles["offers-title"]}  ${styles["offers-title-sub"]}`}>
+          <div
+            className={`${styles["offers-title"]}  ${styles["offers-title-sub"]}`}
+          >
             Dabdoob KIDZ
           </div>
           <div className={styles["offers-title"]}>Best Value offers</div>
-          <div className={styles['bottom-container']}>
+          <div className={styles["bottom-container"]}>
             {[
               {
                 id: "1",

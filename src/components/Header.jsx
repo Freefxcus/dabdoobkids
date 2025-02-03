@@ -1,9 +1,6 @@
 import React, { useEffect, useRef, useCallback } from "react";
 import { useState } from "react";
 import Drawer from "@mui/material/Drawer";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemText from "@mui/material/ListItemText";
 import Form from "../components/Form";
 import { useLocation, useNavigate } from "react-router-dom";
 import { debounce } from "lodash";
@@ -12,9 +9,6 @@ import { Link } from "react-router-dom";
 import Dropdown from "./Dropdown";
 import styles from "../styles/components/Header.module.css";
 import logo from "../images/logo.svg";
-import gift from "../images/gift.svg";
-import baby1 from "../images/baby1.svg";
-import baby2 from "../images/baby2.svg";
 import email from "../images/email.svg";
 import phone from "../images/phone.svg";
 import lense from "../images/lense.svg";
@@ -23,7 +17,7 @@ import brownHeart from "../images/brown-heart.svg";
 import bag from "../images/bag.svg";
 import brownBag from "../images/brown-bag.svg";
 import user from "../images/user.svg";
-import dabdoob from "../images/dabdoob.svg";
+
 import premium from "../images/logoPrem.svg";
 import burger from "../images/burger.png";
 import {
@@ -33,6 +27,7 @@ import {
 } from "../utils/apiCalls";
 import { useGetAllCartsQuery } from "../Redux/cartApi";
 import { useGetAllWishListQuery } from "../Redux/wishlistApi";
+
 export default function Header({ setOpen }) {
   const debouncedHandleInputChange = useCallback(
     debounce((value) => {
@@ -111,7 +106,7 @@ export default function Header({ setOpen }) {
           setIsSubscription(true);
         }
       });
-    }else{
+    } else {
       setIsUser(false);
       setIsSubscription(false);
     }
@@ -183,7 +178,7 @@ export default function Header({ setOpen }) {
                 gap: "5px",
               }}
             >
-              <img src={phone} alt="phone"/>
+              <img src={phone} alt="phone" />
               <div>099-88293-03</div>
             </div>
           </div>
@@ -204,27 +199,28 @@ export default function Header({ setOpen }) {
         >
           <div className={styles["sub-container"]}>
             <img
-              src={isSubscription?premium :logo}
+              src={isSubscription ? premium : logo}
               className={styles["logo"]}
-              style={{width:"100px"}}
+              style={{ width: "100px" }}
               alt="logo "
               onClick={() => {
                 navigate("/");
               }}
-           
             />
 
             {categories &&
-              categories?.categories?.slice(0,5)?.map((category) => (
-                <Dropdown
-                  title={category?.name}
-                  items={[{ title: "First", link: "#" }]}
-                  id={category?.id}
-                  dropDown={dropDown}
-                  setDropDown={setDropDown}
-                  setDropDownType={setDropDownType}
-                />
-              ))}
+              categories?.categories
+                ?.slice(0, 5)
+                ?.map((category) => (
+                  <Dropdown
+                    title={category?.name}
+                    items={[{ title: "First", link: "#" }]}
+                    id={category?.id}
+                    dropDown={dropDown}
+                    setDropDown={setDropDown}
+                    setDropDownType={setDropDownType}
+                  />
+                ))}
           </div>
           {/* <div className={styles["sub-container"]}> */}
           <div
@@ -232,7 +228,7 @@ export default function Header({ setOpen }) {
             // style={{ gap: 0, overflow: "hidden" }}
             style={{ gap: 0 }}
           >
-          <div
+            <div
               className={`${styles.tag} hidden-on-small-screen`}
               style={{
                 marginLeft: "10px",
@@ -244,8 +240,9 @@ export default function Header({ setOpen }) {
                 navigate("/plans");
               }}
             >
-Subscription            </div>
-          {/* {!isSubscription&&  <img
+              Subscription{" "}
+            </div>
+            {/* {!isSubscription&&  <img
               src={dabdoob}
               className={`${styles.clickable} hidden-on-small-screen`}
               style={{
@@ -294,7 +291,6 @@ Subscription            </div>
               onClick={() => {
                 setSearchInput(true);
               }}
-
             />
 
             <input
@@ -408,7 +404,7 @@ Subscription            </div>
               </div>
             )}
             <img
-            id="action-component"
+              id="action-component"
               src={burger}
               className={`${styles.clickable} hidden-on-large-screen show-on-small-screen`}
               style={{ marginLeft: "10px", width: "30px" }}
@@ -434,7 +430,7 @@ Subscription            </div>
         <div className={`padding-container ${styles["dropdown-content"]}`}>
           <div className={styles["dropdown-section"]} style={{ flex: "1" }}>
             {subCategoryLinks
-              .filter((sub) => sub.parentId == dropDownType)
+              .filter((sub) => sub.parentId === dropDownType)
               .map(({ title, link }) => (
                 <Link to={link} className={styles.link}>
                   {title}
