@@ -42,7 +42,11 @@ const BannerSwiper = () => {
     return (
       <div
         className={`${styles["banner-container"]} section-bottom-margin`}
-        style={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
       >
         <LoadingAnimation />
       </div>
@@ -54,7 +58,10 @@ const BannerSwiper = () => {
   }
 
   return (
-    <div className={`${styles["banner-container"]} section-bottom-margin`} style={{ position: "relative" }}>
+    <div
+      className={`${styles["banner-container"]} section-bottom-margin`}
+      style={{ position: "relative" }}
+    >
       <Swiper
         className="mySwiper"
         grabCursor={true}
@@ -86,7 +93,8 @@ const BannerSwiper = () => {
                       Dabdoob KIDZ
                     </Typography>
                     <Typography className={styles.bannerSubtitle}>
-                      Make yourself look different without old-fashioned clothes and impress others
+                      Make yourself look different without old-fashioned clothes
+                      and impress others
                     </Typography>
                   </Box>
                 </Box>

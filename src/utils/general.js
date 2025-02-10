@@ -1,10 +1,13 @@
 import instance from "../utils/interceptor.js";
 import { toast } from "react-toastify";
+import { baseUrl } from "./baseUrl";
 
 export const isValidUser = async () => {
   const pathname = window.location.pathname;
   const pathSegments = pathname.split("/").filter((segment) => segment !== "");
   const firstEndpoint = pathSegments[0];
+
+  const backendUrl = baseUrl.production;
 
   if (
     // ["profile"].includes(firstEndpoint) &&
@@ -14,7 +17,7 @@ export const isValidUser = async () => {
     return true;
   } else {
     await instance
-      .post("/auth/refresh", {
+      .post(`${backendUrl}/auth/refresh`, {
         refreshToken: localStorage.getItem("access_token"),
       })
       .then((response) => {
@@ -59,13 +62,13 @@ export const truncateText = (text, maxLength) => {
   }
   return text;
 };
-export   const calcDiscount = (selectedVariantObject, productDetails) => {
+export const calcDiscount = (selectedVariantObject, productDetails) => {
   // Get the base price and ensure it's a valid number
   const price =
     selectedVariantObject && !isNaN(+selectedVariantObject?.price)
       ? +selectedVariantObject?.price
       : !isNaN(+productDetails?.price)
-      ? (+productDetails?.price)
+      ? +productDetails?.price
       : 0; // Return 0 if price is invalid
 
   if (!price || price <= 0) {

@@ -1,4 +1,4 @@
 export const baseUrl = {
   // production: "",
-  production: "", // staging
+  production: "https://api-staging.dabdoobkidz.com", // staging
 };

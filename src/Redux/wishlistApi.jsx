@@ -1,5 +1,9 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
+import { baseUrl } from "../utils/baseUrl";
+
+const backendUrl = baseUrl.production;
+
 export const wishlistApi = createApi({
   reducerPath: "Wishlist",
   baseQuery: fetchBaseQuery({
@@ -18,13 +22,13 @@ export const wishlistApi = createApi({
   endpoints: (builder) => ({
     //  SavedProductS ENDPOINTS =>
     getAllWishList: builder.query({
-      query: () => `/wishlists`,
+      query: () => `${backendUrl}/wishlists`,
       providesTags: ["Wishlist"],
     }),
 
     addToWishList: builder.mutation({
       query: (productId) => ({
-        url: `/wishlists/`,
+        url: `${backendUrl}/wishlists/`,
         body: {
           product: productId,
         },
@@ -34,7 +38,7 @@ export const wishlistApi = createApi({
     }),
     deleteWishList: builder.mutation({
       query: (productId) => ({
-        url: `/wishlists`,
+        url: `${backendUrl}/wishlists`,
         body: {
           product: productId,
         },

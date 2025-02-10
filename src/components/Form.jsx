@@ -5,20 +5,26 @@ import { registerSchema } from "../utils/schemas/registerSchema.js";
 import { loginSchema } from "../utils/schemas/loginSchema.js";
 import { useFormik } from "formik";
 import Loader from "./Loader";
-import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import instance from "../utils/interceptor.js";
 import { useNavigate } from "react-router-dom";
 import { notifySuccess, notifyError } from "../utils/general.js";
 import closed from "../images/closed.png";
 import open from "../images/open.png";
-import { googleAuth } from "../utils/apiCalls.js";
+import { baseUrl } from "../utils/baseUrl";
+
+const backendUrl = baseUrl.production;
+
 export default function Form({ type, toggleDrawer }) {
   const [show, setShow] = useState(false);
   const navigate = useNavigate();
 
   const onSubmit = async (values, actions) => {
-    const endpoint = type === "register" ? "/auth/register" : "/auth/login";
+    const endpoint =
+      type === "register"
+        ? `${backendUrl}/auth/register`
+        : `${backendUrl}/auth/login`;
+
     const body =
       type === "register"
         ? {
@@ -35,10 +41,9 @@ export default function Form({ type, toggleDrawer }) {
     await instance
       .post(endpoint, body)
       .then((response) => {
-        
         actions.resetForm();
         notifySuccess("Success!");
-      
+
         if (type === "register") {
           navigate("/login");
         }
@@ -48,12 +53,12 @@ export default function Form({ type, toggleDrawer }) {
             "refresh_token",
             response.data.data.refreshToken
           );
-          toggleDrawer&&toggleDrawer();
+          toggleDrawer && toggleDrawer();
           navigate("/");
         }
       })
       .catch((error) => {
-        console.log(error,error.response, "<<<<errrrrrrrrrrrrr");
+        console.log(error, error.response, "<<<<errrrrrrrrrrrrr");
         if (type === "login") {
           console.log(error);
           notifyError("Wrong username or password!");
@@ -61,7 +66,8 @@ export default function Form({ type, toggleDrawer }) {
         }
         notifyError(
           error.response?.data?.errors[0]?.message ||
-            error.response?.data?.message||error
+            error.response?.data?.message ||
+            error
         );
       });
   };

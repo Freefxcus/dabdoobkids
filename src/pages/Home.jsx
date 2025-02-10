@@ -16,6 +16,10 @@ import { notifyError } from "../utils/general.js";
 import BannerSwiper from "../components/Home/BannerSwiper.jsx";
 import NewArrival from "../components/Home/NewArrival.jsx";
 
+import { baseUrl } from "../utils/baseUrl.js";
+
+const backendUrl = baseUrl.production;
+
 // Lazy load components
 const BrandsSwiper = lazy(() => import("../components/Home/BrandsSwiper.jsx"));
 const DailySaleComponent = lazy(() =>
@@ -64,7 +68,7 @@ export default function Home() {
       });
 
     instance
-      .get("/categories", {
+      .get(`${backendUrl}/categories`, {
         params: {
           items: 9,
           paginated: false,

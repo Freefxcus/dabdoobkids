@@ -1,10 +1,7 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styles from "../styles/components/OrderCard.module.css";
-import lady from "../images/lady.png";
 import DeleteModal from "./cart/DeleteModal";
-import Counter from "./singleProduct/counter";
 import CartCounter from "./cart/CartCounter";
-import EditModal from "./cart/EditModal";
 import { useDispatch, useSelector } from "react-redux";
 
 import { useAddToCartMutation } from "../Redux/cartApi";
@@ -15,7 +12,6 @@ export default function OrderCard({
   item,
   allCarts,
   setCartChanged,
-  
 }) {
   const { product, variant } = item;
   const dispatch = useDispatch();
@@ -61,7 +57,9 @@ export default function OrderCard({
   };
   const finalPrice = calcDiscount(item?.variant, item?.product);
 
-  const totalPrice =item?.count * (finalPrice.discount?finalPrice.priceAfter:finalPrice.price)
+  const totalPrice =
+    item?.count *
+    (finalPrice.discount ? finalPrice.priceAfter : finalPrice.price);
 
   return (
     <>
@@ -191,7 +189,7 @@ export default function OrderCard({
 
       {/* moblie */}
 
-      <div className={`${styles.product}   ${styles.forMobile} ` }>
+      <div className={`${styles.product}   ${styles.forMobile} `}>
         <div className={styles.content}>
           <div className={styles.product2}>
             <img
@@ -206,51 +204,50 @@ export default function OrderCard({
               </div>
               <div className={styles.frameParent}>
                 <div className={styles.frameGroup}>
-                {item?.variant?.options?.length
-                  ? item?.variant?.options?.map((variantItem, index) => (
-                      <div
-                        key={index + variantItem?.id}
-                        className={styles.row}
-                        style={{ gap: "0" }}
-                      >
-                      
-                        <span
-                          style={{
-                            marginLeft: "6px",
-                            marginRight: "6px",
-                            textTransform: "capitalize",
-                          }}
-                          className={styles.size}
+                  {item?.variant?.options?.length
+                    ? item?.variant?.options?.map((variantItem, index) => (
+                        <div
+                          key={index + variantItem?.id}
+                          className={styles.row}
+                          style={{ gap: "0" }}
                         >
-                          {variantItem?.value?.value}
-                        </span>
-                      </div>
-                    ))
-                  : null}
+                          <span
+                            style={{
+                              marginLeft: "6px",
+                              marginRight: "6px",
+                              textTransform: "capitalize",
+                            }}
+                            className={styles.size}
+                          >
+                            {variantItem?.value?.value}
+                          </span>
+                        </div>
+                      ))
+                    : null}
                 </div>
                 <div className={styles.frameGroup}>
-                <Trash
-                color="#F04438"
-              onClick={() => {
-                setOpenDelete(true);
-              }}
-            
-              style={{ cursor: "pointer" }}
-            />
+                  <Trash
+                    color="#F04438"
+                    onClick={() => {
+                      setOpenDelete(true);
+                    }}
+                    style={{ cursor: "pointer" }}
+                  />
 
-            <DeleteModal
-              open={openDelete}
-              setOpen={setOpenDelete}
-              id={item?.id}
-              ProductId={product?.id}
-              variantId={variant?.id}
-            />
+                  <DeleteModal
+                    open={openDelete}
+                    setOpen={setOpenDelete}
+                    id={item?.id}
+                    ProductId={product?.id}
+                    variantId={variant?.id}
+                  />
                 </div>
               </div>
             </div>
           </div>
           <div className={styles.parent}>
-            <div className={styles.div}><div>
+            <div className={styles.div}>
+              <div>
                 {" "}
                 {finalPrice?.discount ? (
                   <>
@@ -277,21 +274,25 @@ export default function OrderCard({
                 ) : (
                   <span>EGP {finalPrice?.price}</span>
                 )}
-              </div></div>
-            <div className={""}>
-            <CartCounter
-              CartAddLoad={CartAddLoad}
-              increment={increment}
-              decrement={decrement}
-              count={productCount}
-            />
+              </div>
             </div>
-            <div className={styles.div2}   style={{
-                        fontSize: "1.25rem",
-                        fontWeight: "700",
-                        color: "#1B1B1B",
-                      }}>
-            EGP{totalPrice}
+            <div className={""}>
+              <CartCounter
+                CartAddLoad={CartAddLoad}
+                increment={increment}
+                decrement={decrement}
+                count={productCount}
+              />
+            </div>
+            <div
+              className={styles.div2}
+              style={{
+                fontSize: "1.25rem",
+                fontWeight: "700",
+                color: "#1B1B1B",
+              }}
+            >
+              EGP{totalPrice}
             </div>
           </div>
         </div>
