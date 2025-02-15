@@ -1,4 +1,4 @@
-name: Deploy React App
+name: Deploy Frontend Dabdoobkids (portal react app)
 
 on:
   push:
@@ -29,7 +29,7 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          npm install || echo "Error: npm install failed, skipping..."
+          npm install --legacy-peer-deps || echo "Error: npm install failed, skipping..."
       
       - name: Build React App
         run: |
@@ -65,6 +65,6 @@ jobs:
           script: |
             cd ${{ env.DEPLOY_PATH }} || echo "Error: Deployment path not found, skipping..."
             git pull origin ${{ github.ref_name }} || echo "Error: git pull failed, skipping..."
-            npm install || echo "Error: npm install failed, skipping..."
+            npm install --legacy-peer-deps || echo "Error: npm install failed, skipping..."
             npm run build || echo "Error: Build failed, skipping..."
             sudo systemctl restart nginx || echo "Error: Nginx restart failed, skipping..."
