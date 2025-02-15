@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import PasswordRequirements from "./PasswordRequirements";
 import styles from "../styles/components/Form.module.css";
 import google from "../images/google.png";
 import { registerSchema } from "../utils/schemas/registerSchema.js";
@@ -17,6 +18,18 @@ const backendUrl = baseUrl.production;
 
 export default function Form({ type, toggleDrawer }) {
   const [show, setShow] = useState(false);
+  const [password, setPassword] = useState("");
+
+  const validationRules = [
+    { regex: /.{8,}/, text: "At least 8 characters" },
+    { regex: /[a-z]/, text: "Include at least one lowercase letter" },
+    { regex: /[A-Z]/, text: "Include at least one uppercase letter" },
+    { regex: /\d/, text: "Include at least one number" },
+    {
+      regex: /[@$!%*?&]/,
+      text: "Include at least one special character (@, $, etc.)",
+    },
+  ];
   const navigate = useNavigate();
 
   const onSubmit = async (values, actions) => {
@@ -110,6 +123,23 @@ export default function Form({ type, toggleDrawer }) {
       item.type = show ? "text" : "password";
     });
   }, [show]);
+
+  const formik = useFormik({
+    initialValues:
+      type === "register"
+        ? {
+            firstName: "",
+            lastName: "",
+            email: "",
+            password: "",
+            confirmPassword: "",
+          }
+        : { email: "", password: "" },
+    validationSchema: type === "register" ? registerSchema : loginSchema,
+    onSubmit: (values) => {
+      console.log(values);
+    },
+  });
   return (
     <form className={styles.container} onSubmit={handleSubmit}>
       {type === "login" && (
@@ -224,7 +254,6 @@ export default function Form({ type, toggleDrawer }) {
               Forgot password
             </div>
           </div>
-
           <button className={styles.brown_button}>Login</button>
           <button className={styles.grey_button} onClick={handleGoogleAuth}>
             <img src={google} width="25px" alt="google" /> <div>Google</div>
@@ -316,27 +345,49 @@ export default function Form({ type, toggleDrawer }) {
             }
             placeholder="Your last email"
           ></input>
-          {/* password */}
+          {/* PASSWORD FIELD */}
           <div className={styles.label}>
             <span>Password</span>
             <span className={styles.error}> *</span>
-            {errors.password && touched.password && (
-              <span className="error">{errors.password}</span>
-            )}
           </div>
-          <input
-            value={values.password}
-            onChange={handleChange}
-            id="password"
-            type="password"
-            onBlur={handleBlur}
-            className={
-              errors.password && touched.password
-                ? `${styles.input} ${styles.bottom_margin} input-error`
-                : `${styles.input} ${styles.bottom_margin}`
-            }
-            placeholder="Your last password"
-          ></input>
+          <div className={styles.inputWrapper}>
+            <input
+              type={show ? "text" : "password"}
+              id="password"
+              name="password"
+              value={formik.values.password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                formik.handleChange(e);
+              }}
+              onBlur={formik.handleBlur}
+              className={styles.input}
+              placeholder="Enter your password"
+            />
+            <img
+              src={show ? open : closed}
+              onClick={() => setShow((prev) => !prev)}
+              width="20px"
+              height="20px"
+              style={{ cursor: "pointer" }}
+              alt="show/hide password"
+            />
+          </div>
+
+          {/* PASSWORD VALIDATION RULES */}
+          <ul className={styles.validationList}>
+            {validationRules.map((rule, index) => (
+              <li
+                key={index}
+                style={{
+                  color: rule.regex.test(password) ? "green" : "brown",
+                }}
+              >
+                {rule.text}
+              </li>
+            ))}
+          </ul>
+
           {/* repeat password */}
           <div className={styles.label}>
             <span>Repeat password</span>

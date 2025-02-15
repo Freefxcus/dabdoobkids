@@ -13,6 +13,7 @@ import { Navigation } from "swiper/modules";
 import { baseUrl } from "../../utils/baseUrl";
 const backendUrl = baseUrl.production;
 export default function DailySaleComponent() {
+  console.log("dailySale component rendered");
   const [products, setProducts] = useState([]);
   const [endDate, setEndDate] = useState([]);
   const [percentage, setPercentage] = useState(0);

@@ -9,7 +9,10 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Popup from "../components/Popup";
+
 export default function Summary() {
+  console.log("Summary component rendered");
+
   const [promocode, setPromocode] = useState("");
   const [open, setOpen] = useState(false);
   const [address, setAddress] = useState({});
@@ -17,18 +20,17 @@ export default function Summary() {
 
   return (
     <div className={`${styles.container} padding-container`}>
-      <Popup
-        open={open}
-        setOpen={setOpen}
-        type="create_address"
-        option="no_api"
-        setAddress={setAddress}
-        address={address}
+      open={open}
+      setOpen={setOpen}
+      type="create_address" option="no_api" setAddress={setAddress}
+      address={address}
       />
       <div className={styles.column}>
-        <div className={styles.title_main}>Summary Order</div>
+        <div className={styles.title_main} style={{ color: "red" }}>
+          Summary Orderr
+        </div>
         <div className={styles.order_summary}>
-          <OrderCard />
+          <OrderCard /> //"correct"
           <OrderCard />
         </div>
         <div className={styles.title_main}>Shipping Details</div>
@@ -165,7 +167,7 @@ export default function Summary() {
         </div>
       </div>
       <div className={styles.price_summary}>
-        <div className={styles.title_main}>Price Summary**</div>
+        <div className={styles.title_main}>Price Summary</div>
         <div>
           <div className={styles.title_sub}>Promo Code</div>
           <div
@@ -230,7 +232,7 @@ export default function Summary() {
           // disabled={!address.address || !promocode}
           disabled={!address.address}
         >
-          Continue to payment
+          Continue to paymentppp
         </button>
       </div>
     </div>

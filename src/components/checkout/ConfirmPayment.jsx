@@ -21,7 +21,8 @@ export default function ConfirmPayment({
   promoCodeMain,
   setPromoCodeMain,
   isUseWallet,
-  setIsUseWallet,DataSubmit
+  setIsUseWallet,
+  DataSubmit,
 }) {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -41,7 +42,6 @@ export default function ConfirmPayment({
   }, []);
 
   const validatePromoCode = async () => {
-
     let data = await checkPromoCode(promoCode);
 
     if (data?.data?.status === "success") {
@@ -69,8 +69,6 @@ export default function ConfirmPayment({
     setPromoSuccess("");
   };
   const handlePayment = async () => {
-
-
     setLoading(true);
     const checkout = await orderCheckout(DataSubmit);
 
@@ -140,8 +138,7 @@ export default function ConfirmPayment({
           </div>
           <Switch
             // checked={isUseWallet}
-            checked={wallet?.balance === 0?false:isUseWallet}
-
+            checked={wallet?.balance === 0 ? false : isUseWallet}
             disabled={wallet?.balance === 0}
             onChange={() => {
               setIsUseWallet((prev) => !prev);
@@ -194,7 +191,7 @@ export default function ConfirmPayment({
                 fontSize: "16px",
               }}
             >
-              Total Shopping
+              SubTotal
             </h2>
             <h2
               style={{
@@ -279,7 +276,7 @@ export default function ConfirmPayment({
                 fontSize: "16px",
               }}
             >
-              SubTotal
+              Total Shipping
             </h2>
             <h2
               style={{
@@ -308,9 +305,13 @@ export default function ConfirmPayment({
               borderRadius: "10px",
               cursor: "pointer",
             }}
-            disabled={loading || !address?.items?.[0]?.id || !addressActive||
-            (DataSubmit.paymentMethod==="E-Wallet"&&
-              DataSubmit?.phone?.length<11)}
+            disabled={
+              loading ||
+              !address?.items?.[0]?.id ||
+              !addressActive ||
+              (DataSubmit.paymentMethod === "E-Wallet" &&
+                DataSubmit?.phone?.length < 11)
+            }
           >
             {loading ? (
               <Stack

@@ -8,6 +8,8 @@ import { useGetAllCartsQuery } from "../Redux/cartApi";
 import { calcDiscount } from "../utils/general";
 import { Box } from "@mui/material";
 export default function Cart() {
+  console.log("View Cart component rendered");
+
   const navigate = useNavigate();
   const [promocode, setPromocode] = useState("");
 

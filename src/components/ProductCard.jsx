@@ -16,6 +16,7 @@ import {
   useGetAllWishListQuery,
 } from "../Redux/wishlistApi.jsx";
 export default function Productcard({ item, setChanged }) {
+  console.log("Productcard rendered not used");
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -76,6 +77,7 @@ export default function Productcard({ item, setChanged }) {
         navigate(`/details/${item?.id}`);
       }}
     >
+      <h1>product card</h1>
       <div className={styles["card-top"]}>
         {/* <img src={lady} width="100%" height="380px" /> */}
         <img

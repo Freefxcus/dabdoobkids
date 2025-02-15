@@ -14,6 +14,7 @@ import { useNavigate, Link } from "react-router-dom";
 import LoadingAnimation from "../LoadingAnimation";
 
 const BannerSwiper = () => {
+  console.log("brandSwipper1 component rendered");
   const bannerImages = [banner1, banner2];
   const [banners, setBanners] = useState([]);
   const [loading, setLoading] = useState(true);

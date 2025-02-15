@@ -33,6 +33,7 @@ import { Add, AddCircle, Minus, ShoppingCart } from "iconsax-react";
 import Police from "../components/singleProduct/Police.jsx";
 import { format } from "date-fns";
 export default function Details() {
+  console.log("details component rendered");
   const currentDate = new Date();
   const startDate = new Date(currentDate);
   startDate.setDate(currentDate.getDate() + 10);

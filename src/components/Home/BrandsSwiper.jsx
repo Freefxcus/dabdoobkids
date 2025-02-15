@@ -5,6 +5,7 @@ import "./style.css";
 import { baseUrl } from "../../utils/baseUrl";
 const backendUrl = baseUrl.production;
 export default function BrandsSwiper() {
+  console.log("brandSwiper 2 component rendered");
   const [brands, setBrands] = useState([]);
   const [loading, setLoading] = useState(true); // To handle the loading state
   const [error, setError] = useState(null);

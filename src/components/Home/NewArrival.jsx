@@ -7,24 +7,21 @@ import { getProducts } from "../../utils/apiCalls";
 import { useNavigate } from "react-router-dom";
 
 export default function NewArrival({ categories }) {
-  let selectedCate = categories?.filter((item, index) =>item?.productsCount > 0  );
+  console.log("newArrival component rendered");
+  let selectedCate = categories?.filter(
+    (item, index) => item?.productsCount > 0
+  );
   const [currentCat, setCurrentCat] = useState(categories?.[0]);
   const [products, setProducts] = useState([]);
-  const navigate=useNavigate()
+  const navigate = useNavigate();
   useEffect(() => {
     setCurrentCat(categories?.[0]);
   }, []);
- useEffect(() => {
-    getProducts(
-      1,
-      false,
-      currentCat?.id,
-      "",
-      ""
-    ).then((res) => {
+  useEffect(() => {
+    getProducts(1, false, currentCat?.id, "", "").then((res) => {
       console.log(res);
-      
-      setProducts(res?.products)
+
+      setProducts(res?.products);
     });
   }, [currentCat]);
   return (
@@ -40,7 +37,7 @@ export default function NewArrival({ categories }) {
         <div className={styles.title} style={{ marginBottom: "0" }}>
           New arrivals
         </div>
-        <div 
+        <div
           onClick={() => navigate("/search")}
           style={{
             color: "var(--brown)",
@@ -119,16 +116,16 @@ export default function NewArrival({ categories }) {
         >
           {/* .filter((item, i) => item?.category?.id === (currentCat?.id||1)) */}
           {products?.map((item) => (
-              <SwiperSlide
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  // alignItems: "center",
-                }}
-              >
-                <ClothesCard item={item} />
-              </SwiperSlide>
-            ))}
+            <SwiperSlide
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                // alignItems: "center",
+              }}
+            >
+              <ClothesCard item={item} />
+            </SwiperSlide>
+          ))}
         </Swiper>
       </div>
     </div>

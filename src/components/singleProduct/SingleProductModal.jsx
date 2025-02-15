@@ -64,7 +64,7 @@ export default function SingleProductModal({
         <Box sx={style}>
           <Box
             sx={{
-              width:  "clamp(15rem, 80vw, 30rem)",
+              width: "clamp(15rem, 80vw, 30rem)",
               display: "flex",
               flexDirection: "column",
               justifyContent: "space-between",
