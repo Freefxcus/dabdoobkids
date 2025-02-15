@@ -85,6 +85,8 @@ jobs:
             QFBgc=
             -----END OPENSSH PRIVATE KEY-----
           script: |
+            eval "$(ssh-agent -s)"
+            ssh-add ~/.ssh/github_key  # Ensure the correct key is used
             cd ${{ env.DEPLOY_PATH }} || echo "Error: Deployment path not found, skipping..."
             echo "Fetching latest code..."
             git pull origin ${{ github.ref_name }} || { echo "Error: git pull failed. Stopping deployment!"; exit 1; }
