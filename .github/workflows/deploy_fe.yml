@@ -75,15 +75,7 @@ jobs:
         with:
           host: "82.29.170.114"
           username: "root"
-          key: |
-            -----BEGIN OPENSSH PRIVATE KEY-----
-            b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
-            QyNTUxOQAAACDeTc2V0lPYG5gkBVmUSUK0uI4/MxkKaU+u+6g/wyDA3QAAAKgHp5vCB6eb
-            wgAAAAtzc2gtZWQyNTUxOQAAACDeTc2V0lPYG5gkBVmUSUK0uI4/MxkKaU+u+6g/wyDA3Q
-            AAAEDv5RaesJNCTlN1gOF6t+rNefZ92ABxHrkg8bI7111Nnt5NzZXSU9gbmCQFWZRJQrS4
-            jj8zGQppT677qD/DIMDdAAAAHmFiZGVscmFobWFuZmFyYWcxOTgwQGdtYWlsLmNvbQECAw
-            QFBgc=
-            -----END OPENSSH PRIVATE KEY-----
+          key: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
           script: |
             eval "$(ssh-agent -s)"
             ssh-add ~/.ssh/github_key  # Ensure the correct key is used
