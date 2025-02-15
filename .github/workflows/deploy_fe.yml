@@ -38,7 +38,18 @@ jobs:
   test:
     needs: build
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ github.workspace }}
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
       - name: Run Tests
         run: |
           npm test || echo "Error: Tests failed, skipping..."
@@ -46,6 +57,9 @@ jobs:
   deploy:
     needs: test
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ github.workspace }}
     steps:
       - name: Determine Deployment Environment
         id: set-env
@@ -61,18 +75,11 @@ jobs:
         with:
           host: "82.29.170.114"
           username: "root"
-          key: |
-            -----BEGIN OPENSSH PRIVATE KEY-----
-            b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW 
-            QyNTUxOQAAACDeTc2V0lPYG5gkBVmUSUK0uI4/MxkKaU+u+6g/wyDA3QAAAKgHp5vCB6eb
-            wgAAAAtzc2gtZWQyNTUxOQAAACDeTc2V0lPYG5gkBVmUSUK0uI4/MxkKaU+u+6g/wyDA3Q
-            AAAEDv5RaesJNCTlN1gOF6t+rNefZ92ABxHrkg8bI7111Nnt5NzZXSU9gbmCQFWZRJQrS4
-            jj8zGQppT677qD/DIMDdAAAAHmFiZGVscmFobWFuZmFyYWcxOTgwQGdtYWlsLmNvbQECAw
-            QFBgc=
-            -----END OPENSSH PRIVATE KEY-----
+          key: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
           script: |
             cd ${{ env.DEPLOY_PATH }} || echo "Error: Deployment path not found, skipping..."
-            git pull origin ${{ github.ref_name }} || echo "Error: git pull failed, skipping..."
+            echo "Fetching latest code..."
+            git pull origin ${{ github.ref_name }} || { echo "Error: git pull failed. Stopping deployment!"; exit 1; }
             npm install --legacy-peer-deps || echo "Error: npm install failed, skipping..."
             npm run build || echo "Error: Build failed, skipping..."
             sudo systemctl restart nginx || echo "Error: Nginx restart failed, skipping..."
