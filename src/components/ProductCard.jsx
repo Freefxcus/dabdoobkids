@@ -77,7 +77,6 @@ export default function Productcard({ item, setChanged }) {
         navigate(`/details/${item?.id}`);
       }}
     >
-      <h1>product card</h1>
       <div className={styles["card-top"]}>
         {/* <img src={lady} width="100%" height="380px" /> */}
         <img

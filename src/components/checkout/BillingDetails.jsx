@@ -2,6 +2,12 @@ import AddIcon from "@mui/icons-material/Add";
 import AddressModal from "./AddressModal";
 import { useEffect, useState } from "react";
 import styles from "../../styles/components/Popup.module.css";
+import payment1 from "../../images/image1.png";
+import payment2 from "../../images/image2.png";
+import payment3 from "../../images/image3.png";
+import payment4 from "../../images/image4.png";
+import FirstValuIcon from "../../images/image6.png";
+import SecondValuIcon from "../../images/Payment Name.png";
 
 import {
   Box,
@@ -191,6 +197,7 @@ export default function BillingDetails({
             ))
           )}
         </div>
+
         {/* Payment Method */}
         <div style={{ marginTop: "12px" }}>
           <h1>Expedition</h1>
@@ -202,7 +209,14 @@ export default function BillingDetails({
               marginTop: "16px",
             }}
           >
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
+            {/* Credit Card Option */}
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
               <div
                 style={{ display: "flex", gap: "12px", alignItems: "center" }}
               >
@@ -228,13 +242,45 @@ export default function BillingDetails({
                 }}
               />
             </div>
+
+            {/* Payment Icons (Under Credit Card) */}
+            <div
+              style={{
+                display: "flex",
+                gap: "12px",
+                marginTop: "8px",
+                justifyContent: "start",
+              }}
+            >
+              <img
+                src={payment1}
+                style={{ height: "20px", width: "20px" }}
+                alt="Payment Option 1"
+              />
+              <img
+                src={payment2}
+                style={{ height: "20px", width: "20px" }}
+                alt="Payment Option 2"
+              />
+              <img
+                src={payment3}
+                style={{ height: "20px", width: "20px" }}
+                alt="Payment Option 3"
+              />
+              <img
+                src={payment4}
+                style={{ height: "20px", width: "20px" }}
+                alt="Payment Option 4"
+              />
+            </div>
+
+            {/* E-Wallet Option */}
             <div
               style={{
                 display: "flex",
                 flexDirection: "column",
                 height: "auto",
-                transition: "all",
-                transitionDuration: "0.5s",
+                transition: "all 0.5s ease-in-out",
               }}
             >
               <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -246,9 +292,8 @@ export default function BillingDetails({
                     style={{ height: "28px", width: "28px" }}
                     alt="Wallet Icon"
                   />
-                  Wallet
+                  E-Wallet
                 </div>
-
                 <Radio
                   onClick={() => {
                     setSearchParams((prev) => {
@@ -271,23 +316,97 @@ export default function BillingDetails({
                     <span>Phone Number </span>
                     <span className={styles.error}> *</span>
                   </div>
-
                   <input
                     value={phone}
-                    style={{ width: "100%", boxSizing: "border-box" }}
+                    style={{
+                      width: "100%",
+                      boxSizing: "border-box",
+                      padding: "10px",
+                      border: "1px solid #ccc",
+                      borderRadius: "4px",
+                    }}
                     onChange={(e) => setPhone(e.target.value?.trim())}
                     id="phone"
                     type="tel"
-                    pattern="^01[0-2,5]\d{8}$" // Phone number pattern (11 digits)
-                    minLength={11} // Ensure phone number is at least 11 characters long
-                    maxLength={11} // Limit phone number to 11 characters
+                    pattern="^01[0-2,5]\d{8}$"
+                    minLength={11}
+                    maxLength={11}
                     required={searchParams.get("paymentMethod") === "E-Wallet"}
-                    className={`phone-input`}
                     placeholder="Enter phone number"
                   />
                 </div>
               ) : null}
             </div>
+
+            {/* valu Option */}
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                height: "auto",
+                transition: "all 0.5s ease-in-out",
+              }}
+            >
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <div
+                  style={{ display: "flex", gap: "12px", alignItems: "center" }}
+                >
+                  <img
+                    src={FirstValuIcon}
+                    style={{ height: "20px", width: "20px" }}
+                    alt="Valu Icon"
+                  />
+                  <img
+                    src={SecondValuIcon}
+                    style={{ height: "20px", width: "20px" }}
+                    alt="Valu Icon"
+                  />
+                </div>
+                <Radio
+                  onClick={() => {
+                    setSearchParams((prev) => {
+                      prev.set("paymentMethod", "Valu");
+                      return prev;
+                    });
+                  }}
+                  sx={{
+                    "&.Mui-checked": {
+                      color: "var(--brown)",
+                    },
+                  }}
+                  {...controlProps("Valu")}
+                />
+              </div>
+
+              {searchParams.get("paymentMethod") === "Valu" ? (
+                <div className={styles.item}>
+                  <div className={`${styles.label} ${styles.item}`}>
+                    <span>Phone Number </span>
+                    <span className={styles.error}> *</span>
+                  </div>
+                  <input
+                    value={phone}
+                    style={{
+                      width: "100%",
+                      boxSizing: "border-box",
+                      padding: "10px",
+                      border: "1px solid #ccc",
+                      borderRadius: "4px",
+                    }}
+                    onChange={(e) => setPhone(e.target.value?.trim())}
+                    id="phone"
+                    type="tel"
+                    pattern="^01[0-2,5]\d{8}$"
+                    minLength={11}
+                    maxLength={11}
+                    required={searchParams.get("paymentMethod") === "Valu"}
+                    placeholder="Enter phone number"
+                  />
+                </div>
+              ) : null}
+            </div>
+
+            {/* Cash on Delivery Option */}
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <div
                 style={{ display: "flex", gap: "12px", alignItems: "center" }}
@@ -295,11 +414,10 @@ export default function BillingDetails({
                 <img
                   src="/cash.svg"
                   style={{ height: "28px", width: "28px" }}
-                  alt="cash Icon"
+                  alt="Cash Icon"
                 />
-                Cash
+                Cash on Delivery
               </div>
-
               <Radio
                 onClick={() => {
                   setSearchParams((prev) => {
@@ -316,6 +434,7 @@ export default function BillingDetails({
               />
             </div>
 
+            {/* Delivery Instructions */}
             <div
               style={{
                 marginTop: "6px",
@@ -327,11 +446,13 @@ export default function BillingDetails({
               <h3>Add Delivery Instructions</h3>
               <textarea
                 style={{
-                  // width: "100%",
+                  width: "100%",
                   height: "100px",
                   border: "1px solid #E5E7EB",
                   padding: "12px",
+                  borderRadius: "4px",
                 }}
+                placeholder="Enter delivery instructions..."
               />
             </div>
           </div>
