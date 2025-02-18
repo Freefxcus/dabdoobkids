@@ -9,6 +9,7 @@ import { calcDiscount } from "../utils/general";
 import { Box } from "@mui/material";
 export default function Cart() {
   console.log("View Cart component rendered");
+  //cart
 
   const navigate = useNavigate();
   const [promocode, setPromocode] = useState("");

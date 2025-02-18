@@ -98,24 +98,6 @@ export default function BillingDetails({
             >
               Address
             </h3>
-            {/*         
-          {address?.items?.length?  <button
-              style={{
-              backgroundColor: "transparent",
-              borderRadius: "12px",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-               border:"none",
-               marginInline:"8px"
-            }}
-            onClick={() => {
-              setOpenAdd(true);
-            }}
-          >
-            <AddIcon sx={{ color:  "var(--brown)", cursor: "pointer" }} />
-            </button>
-         :null }    */}
           </div>
           {!address || address?.items?.length === 0 ? (
             <div
@@ -243,7 +225,7 @@ export default function BillingDetails({
               />
             </div>
 
-            {/* Payment Icons (Under Credit Card) */}
+            {/* Payment Icons */}
             <div
               style={{
                 display: "flex",
