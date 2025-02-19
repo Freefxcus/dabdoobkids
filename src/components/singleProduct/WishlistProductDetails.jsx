@@ -10,6 +10,7 @@ import styles from "../../styles/pages/Details.module.css";
 import eHeart from "../../images/empty-heart.svg";
 import fHeart from "../../images/filled-heart.svg";
 export default function WishlistProductDetails({ id }) {
+  console.log("wishListProductDetails rendered");
   const { data: wishListData } = useGetAllWishListQuery();
   const wishListItems = wishListData?.data?.[0]?.items || [];
 

@@ -16,6 +16,7 @@ import {
   useGetAllWishListQuery,
 } from "../Redux/wishlistApi.jsx";
 export default function Productcard({ item, setChanged }) {
+  console.log("Productcard rendered not used");
 
   const dispatch = useDispatch();
   const navigate = useNavigate();

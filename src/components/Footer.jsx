@@ -15,13 +15,26 @@ export default function Footer() {
       <div
         className={`${styles["primary-footer-container"]} padding-container`}
       >
-        <img loading="lazy" src={logo} className={styles.logo} alt="logo"/>
+        <img
+          loading="lazy"
+          src="/images/Footer Logo.png"
+          className={styles.logo}
+          alt="logo"
+        />
         <div className={styles.section}>
           <div className={styles.header}>Help</div>
-          <Link to="/returns-refunds" className={styles.link}>Exchanges & Returns</Link>
-          <Link to="/payment-information" className={styles.link}>Payment Information</Link>
-          <Link to="/privacy-policy" className={styles.link}>privacy policy</Link>
-          <Link to="/faq" className={styles.link}>FAQs</Link>
+          <Link to="/returns-refunds" className={styles.link}>
+            Exchanges & Returns
+          </Link>
+          <Link to="/payment-information" className={styles.link}>
+            Payment Information
+          </Link>
+          <Link to="/privacy-policy" className={styles.link}>
+            privacy policy
+          </Link>
+          <Link to="/faq" className={styles.link}>
+            FAQs
+          </Link>
         </div>
         <div className={styles.section}>
           <div className={styles.header}>Business</div>

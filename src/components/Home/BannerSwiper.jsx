@@ -14,6 +14,7 @@ import { useNavigate, Link } from "react-router-dom";
 import LoadingAnimation from "../LoadingAnimation";
 
 const BannerSwiper = () => {
+  console.log("brandSwipper1 component rendered");
   const bannerImages = [banner1, banner2];
   const [banners, setBanners] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -42,7 +43,11 @@ const BannerSwiper = () => {
     return (
       <div
         className={`${styles["banner-container"]} section-bottom-margin`}
-        style={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
       >
         <LoadingAnimation />
       </div>
@@ -54,7 +59,10 @@ const BannerSwiper = () => {
   }
 
   return (
-    <div className={`${styles["banner-container"]} section-bottom-margin`} style={{ position: "relative" }}>
+    <div
+      className={`${styles["banner-container"]} section-bottom-margin`}
+      style={{ position: "relative" }}
+    >
       <Swiper
         className="mySwiper"
         grabCursor={true}
@@ -86,7 +94,8 @@ const BannerSwiper = () => {
                       Dabdoob KIDZ
                     </Typography>
                     <Typography className={styles.bannerSubtitle}>
-                      Make yourself look different without old-fashioned clothes and impress others
+                      Make yourself look different without old-fashioned clothes
+                      and impress others
                     </Typography>
                   </Box>
                 </Box>

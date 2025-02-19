@@ -4,14 +4,15 @@ import promo from "../images/promo.png";
 import x from "../images/x.png";
 import add from "../images/add.png";
 import edit from "../images/edit.png";
-import fedex from "../images/fedex.png";
-import dabdobkidz from "../images/dabdobkidz.png";
 import OrderCard from "../components/OrderCard";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Popup from "../components/Popup";
+
 export default function Summary() {
+  console.log("Summary component rendered");
+
   const [promocode, setPromocode] = useState("");
   const [open, setOpen] = useState(false);
   const [address, setAddress] = useState({});
@@ -19,16 +20,15 @@ export default function Summary() {
 
   return (
     <div className={`${styles.container} padding-container`}>
-      <Popup
-        open={open}
-        setOpen={setOpen}
-        type="create_address"
-        option="no_api"
-        setAddress={setAddress}
-        address={address}
+      open={open}
+      setOpen={setOpen}
+      type="create_address" option="no_api" setAddress={setAddress}
+      address={address}
       />
       <div className={styles.column}>
-        <div className={styles.title_main}>Summary Order</div>
+        <div className={styles.title_main} style={{ color: "red" }}>
+          Summary Orderr
+        </div>
         <div className={styles.order_summary}>
           <OrderCard />
           <OrderCard />
@@ -202,11 +202,12 @@ export default function Summary() {
           </div>
         </div>
         <div className={styles.row}>
-          <div className={styles.title_sub}>Total Shopping</div>
+          <div className={styles.title_sub}>otal Shopping</div>
           <div className={styles.value}>EGP {`3.040.00`}</div>
         </div>
 
         <div className={styles.row}>
+          <h1>hi shipping</h1>
           <div className={styles.title_sub}>Shipping</div>
           <div className={styles.value}>EGP {`10.00`}</div>
         </div>
@@ -215,22 +216,23 @@ export default function Summary() {
           <div className={styles.value}>EGP {`10.00`}</div>
         </div>
         <div className={styles.row} style={{ color: "var(--brown)" }}>
-          <div className={styles.title_sub} style={{ color: "var(--brown)" }}>
-            Discount
-          </div>
+          <div
+            className={styles.title_sub}
+            style={{ color: "var(--brown)" }}
+          ></div>
           <div className={styles.value}>-EGP {`50.00`}</div>
         </div>
         <div className={styles.row}>
           <div className={styles.title_main}>Sub Total</div>
           <div className={styles.title_main}>EGP {`3.010.00`}</div>
         </div>
-       
+
         <button
           className={styles.brown_button}
           // disabled={!address.address || !promocode}
           disabled={!address.address}
         >
-          Continue to payment
+          Continue to paymentppp
         </button>
       </div>
     </div>

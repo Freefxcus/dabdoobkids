@@ -15,6 +15,7 @@
   gap: 10px;
 }
 .logo {
+  width: 100%;
   cursor: pointer;
   align-self: flex-start;
 }

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { createContext, useEffect } from "react";
+import { useEffect } from "react";
 import { Route, Routes, BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 // import store from "./Redux/store";
@@ -65,10 +65,13 @@ function App() {
                   <Route path="/auth/google" element={<OAuth />} />
                   <Route path="/otp" element={<Otp />} />
                   <Route path="/search" element={<Search />} />
-                  <Route path="/about" element={<About />} /> 
+                  <Route path="/about" element={<About />} />
                   <Route path="/returns-refunds" element={<ReturnsRefunds />} />
                   <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-                  <Route path="/payment-information" element={<PaymentInformation />} />
+                  <Route
+                    path="/payment-information"
+                    element={<PaymentInformation />}
+                  />
                   <Route path="/faq" element={<FAQ />} />
                   <Route path="/news" element={<News />} />
                   <Route
@@ -91,10 +94,7 @@ function App() {
                     path="/plans"
                     element={<ProtectedRoute element={Plans} />}
                   />
-                  <Route
-                    path="/categories"
-                    element={<Categories />}
-                  />
+                  <Route path="/categories" element={<Categories />} />
                   <Route
                     path="/wishlist"
                     element={<ProtectedRoute element={WishList} />}
@@ -108,7 +108,7 @@ function App() {
                     path="/order/:id"
                     element={<ProtectedRoute element={OrderDetails} />}
                   />
-                   <Route path="*" element={<Error/>} />
+                  <Route path="*" element={<Error />} />
                 </>
               )}
             </Routes>

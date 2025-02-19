@@ -2,6 +2,8 @@ import React from "react";
 import { Box } from "@mui/material";
 import logo from "../images/logo.svg";
 export default function About() {
+  console.log("About component rendered");
+
   return (
     <Box
       className="padding-container"
@@ -24,7 +26,7 @@ export default function About() {
       <Box sx={{ fontSize: "1.5rem", color: "var(--brown)" }} component={"h3"}>
         • Our Identity
       </Box>
-      <Box sx={{ fontSize: "0.8", lineHeight: "1.5" ,pb:"2.5rem" }}>
+      <Box sx={{ fontSize: "0.8", lineHeight: "1.5", pb: "2.5rem" }}>
         Dabdoob Kids Group Is One Of Most Unique Groups In Egypt That
         Specializes In All The Baby Needs Since Day 1. We Offer A Special
         Service Which We Can Bring You The Highest Quality International Brands
@@ -46,7 +48,7 @@ export default function About() {
       <Box sx={{ fontSize: "1.5rem", color: "var(--brown)" }} component={"h3"}>
         • Our Story
       </Box>
-      <Box sx={{ fontSize: "0.8", lineHeight: "1.5"  ,pb:"2.5rem"}}>
+      <Box sx={{ fontSize: "0.8", lineHeight: "1.5", pb: "2.5rem" }}>
         3 Friends 1 Ambition Endless Spirit Of Adventure Back In 2023 When The
         Economical Crisis Hit And It Became Almost Impossible To Provide Mothers
         And Fathers In Egypt Who Care About Their Baby's Skin And Body With
@@ -63,10 +65,10 @@ export default function About() {
         And More.
       </Box>
 
-      <Box sx={{ fontSize: "1.5rem", color: "var(--brown)"}} component={"h3"}>
+      <Box sx={{ fontSize: "1.5rem", color: "var(--brown)" }} component={"h3"}>
         • Our Goal
       </Box>
-      <Box sx={{ fontSize: "0.8", lineHeight: "1.5"  ,pb:"2.5rem"}}>
+      <Box sx={{ fontSize: "0.8", lineHeight: "1.5", pb: "2.5rem" }}>
         We Want To Become The First Group In Egypt Dedicated To The Care And
         Health Of Mothers And Their Children. Our Priority Is To Dedicate
         Ourselves Every Day To Improving Our Offer, Through Our Careful Studies

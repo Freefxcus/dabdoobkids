@@ -12,6 +12,8 @@ import BillingDetails from "../components/checkout/BillingDetails";
 import { Box } from "@mui/material";
 import SummaryOrderProductCard from "../components/checkout/SummaryOrderProductCard";
 export default function Checkout() {
+  console.log("Checkout component rendered");
+
   const [searchParams, setSearchParams] = useSearchParams();
   const [payemntMethod, setPaymentMethod] = useState(
     searchParams.get("paymentMethod") || "cash"
@@ -24,10 +26,12 @@ export default function Checkout() {
   const [cart, setCart] = useState([]);
   const [order, setOrder] = useState([]);
   const [address, setAddress] = useState([]);
-  const [DataSubmit, setDataSubmit] = useState()
+  const [DataSubmit, setDataSubmit] = useState();
   const [phone, setPhone] = useState("");
   const [ForceReload, setForceReload] = useState(false);
-  const [isUseWallet, setIsUseWallet] = useState(  searchParams.get("useWallet") ||false);
+  const [isUseWallet, setIsUseWallet] = useState(
+    searchParams.get("useWallet") || false
+  );
   useEffect(() => {
     const fetchCart = async () => {
       const cartData = await getCart();
@@ -64,10 +68,17 @@ export default function Checkout() {
       useWallet: isUseWallet,
       paymentMethod: searchParams.get("paymentMethod"),
       address: address?.items?.[0]?.id,
-      phone:phone
+      phone: phone,
     };
-    setDataSubmit(data)
-  }, [address?.items, payemntMethod, promoCode,searchParams,phone,isUseWallet]);
+    setDataSubmit(data);
+  }, [
+    address?.items,
+    payemntMethod,
+    promoCode,
+    searchParams,
+    phone,
+    isUseWallet,
+  ]);
 
   useEffect(() => {
     const data = {
@@ -75,16 +86,15 @@ export default function Checkout() {
       useWallet: isUseWallet,
       paymentMethod: searchParams.get("paymentMethod"),
       address: address?.items?.[0]?.id,
-      phone:phone
+      phone: phone,
     };
-    setDataSubmit(data)
+    setDataSubmit(data);
     const fetchOrder = async () => {
       const orderData = await orderSummary(data);
       setOrder(orderData);
     };
     fetchOrder();
-  }, [address?.items, payemntMethod, promoCode,searchParams,isUseWallet]);
-
+  }, [address?.items, payemntMethod, promoCode, searchParams, isUseWallet]);
 
   return (
     <div
@@ -126,7 +136,7 @@ export default function Checkout() {
           addressActive={addressActive}
           setAddressActive={setAddressActive}
           phone={phone}
-setPhone={setPhone}
+          setPhone={setPhone}
           ForceReload={ForceReload}
           setForceReload={setForceReload}
         />
@@ -140,7 +150,7 @@ setPhone={setPhone}
         setPromoCodeMain={setPromoCode}
         isUseWallet={isUseWallet}
         DataSubmit={DataSubmit}
-setIsUseWallet={setIsUseWallet}
+        setIsUseWallet={setIsUseWallet}
       />
     </div>
   );

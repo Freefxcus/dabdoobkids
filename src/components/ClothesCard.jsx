@@ -14,6 +14,7 @@ import {
   useGetAllWishListQuery,
 } from "../Redux/wishlistApi.jsx";
 export default function ClothesCard({ item }) {
+  console.log("clothesCard rendered");
   const navigate = useNavigate();
   const { data: wishListData } = useGetAllWishListQuery();
   const wishListItems = wishListData?.data?.[0]?.items || [];

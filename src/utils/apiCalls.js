@@ -1,4 +1,3 @@
-import axios from "axios";
 import { baseUrl } from "./baseUrl";
 import { store } from "../Redux/store";
 import instance from "../utils/interceptor.js";
@@ -11,8 +10,10 @@ const redux = (slice) => {
   return store.getState()[slice].value;
 };
 // ----------------------------------------------------------------
+const backendUrl = baseUrl.production;
+console.log(backendUrl);
 
-export const getProducts = async (page, all, category, brand, query,sale) => {
+export const getProducts = async (page, all, category, brand, query, sale) => {
   let returnedValue;
   const params = {
     page,
@@ -20,13 +21,17 @@ export const getProducts = async (page, all, category, brand, query,sale) => {
     // items: 2, // example default value for item
     category,
     brand,
-    query,sale,items:12
+    query,
+    sale,
+    items: 12,
   };
-  Object.keys(params).forEach((key) => !params[key] ? delete params[key] : params[key]);
-  console.log("paramsparamsparams",params,sale);
+  Object.keys(params).forEach((key) =>
+    !params[key] ? delete params[key] : params[key]
+  );
+  console.log("paramsparamsparams", params, sale);
   await instance
-    .get("/products", {
-      params
+    .get(`${backendUrl}/products`, {
+      params,
     })
     .then((response) => {
       console.log(response?.data?.data);
@@ -38,7 +43,14 @@ export const getProducts = async (page, all, category, brand, query,sale) => {
     });
   return returnedValue; // caught by .then()
 };
-export const getProductsSale = async (page, all, category, brand, query,sale) => {
+export const getProductsSale = async (
+  page,
+  all,
+  category,
+  brand,
+  query,
+  sale
+) => {
   let returnedValue;
   const params = {
     page,
@@ -46,13 +58,17 @@ export const getProductsSale = async (page, all, category, brand, query,sale) =>
     // items: 2, // example default value for item
     category,
     brand,
-    query,sale,items:12
+    query,
+    sale,
+    items: 12,
   };
-  Object.keys(params).forEach((key) => !params[key] ? delete params[key] : params[key]);
-  console.log("paramsparamsparams",params,sale);
+  Object.keys(params).forEach((key) =>
+    !params[key] ? delete params[key] : params[key]
+  );
+  console.log("paramsparamsparams", params, sale);
   await instance
-    .get("/products/sale", {
-      params
+    .get(`${backendUrl}/products/sale`, {
+      params,
     })
     .then((response) => {
       console.log(response?.data?.data);
@@ -68,7 +84,7 @@ export const getProductById = async (id) => {
   let returnedValue;
 
   await instance
-    .get(`/products/${id}`, {
+    .get(`${backendUrl}/products/${id}`, {
       // params: { page: 1 },
     })
     .then((response) => {
@@ -86,7 +102,7 @@ export const getRelatedProducts = async (id) => {
   let returnedValue;
 
   await instance
-    .get(`/products/${id}/related`)
+    .get(`${backendUrl}/products/${id}/related`)
     .then((response) => {
       console.log(response);
       returnedValue = response;
@@ -102,7 +118,7 @@ export const getWishlistItems = async () => {
   let returnedValue;
 
   await instance
-    .get("/wishlists")
+    .get(`${backendUrl}/wishlists`)
     .then((response) => {
       returnedValue = response.data.data.length
         ? response.data.data[0].items
@@ -119,7 +135,7 @@ export const addToWishlist = async (id) => {
   let returnedValue;
 
   await instance
-    .post("/wishlists", {
+    .post(`${backendUrl}/wishlists`, {
       product: id,
     })
     .then((response) => {
@@ -137,7 +153,7 @@ export const addToWishlist = async (id) => {
 export const removeFromWishlist = async (id) => {
   let returnedValue;
   await instance
-    .put("/wishlists", {
+    .put(`${backendUrl}/wishlists`, {
       product: id,
     })
     .then((response) => {
@@ -156,7 +172,7 @@ export const getBanners = async () => {
   let returnedValue;
 
   await instance
-    .get("/banners")
+    .get(`${backendUrl}/banners`)
     .then((response) => {
       returnedValue = response?.data?.data;
     })
@@ -172,7 +188,7 @@ export const getCart = async () => {
   let returnedValue;
 
   await instance
-    .get("/cart")
+    .get(`${backendUrl}/cart`)
     .then((response) => {
       returnedValue = response.data.data;
     })
@@ -188,7 +204,7 @@ export const updateCart = async (productId, variantId, body) => {
   let returnedValue;
 
   await instance
-    .put("/cart", {
+    .put(`{backendUrl}/cart`, {
       product: productId,
       variant: variantId,
     })
@@ -207,7 +223,7 @@ export const addToCart = async (data) => {
   let returnedValue;
 
   await instance
-    .post("/cart", {"items": data})
+    .post(`${backendUrl}/cart`, { items: data })
     .then((response) => {
       notifySuccess("Added to cart!");
       returnedValue = response.data.data;
@@ -223,7 +239,7 @@ export const addToCart = async (data) => {
 export const emptyCart = async (id) => {
   let returnedValue;
   await instance
-    .delete("/cart")
+    .delete(`${backendUrl}/cart`)
     .then((response) => {
       console.log(response);
 
@@ -238,7 +254,7 @@ export const emptyCart = async (id) => {
 export const removeFromCart = async (ProductId) => {
   let returnedValue;
   await instance
-    .delete("/cart/"+ProductId)
+    .delete(`${backendUrl}/cart/` + ProductId)
     .then((response) => {
       console.log(response);
       notifySuccess("Removed from cart!");
@@ -254,13 +270,18 @@ export const removeFromCart = async (ProductId) => {
 export const orderCheckout = async (data) => {
   let returnedValue;
 
-    // promocode  ,
-    const body = {
-      useWallet: data?.useWallet==="true"?true:data?.useWallet==="false"?false:data?.useWallet,
-      paymentMethod: data?.paymentMethod,
-      address: data?.address,
-      promocode: data?.promocode,
-    phone:data?.phone  
+  // promocode  ,
+  const body = {
+    useWallet:
+      data?.useWallet === "true"
+        ? true
+        : data?.useWallet === "false"
+        ? false
+        : data?.useWallet,
+    paymentMethod: data?.paymentMethod,
+    address: data?.address,
+    promocode: data?.promocode,
+    phone: data?.phone,
 
     // example default value for item
   };
@@ -268,7 +289,7 @@ export const orderCheckout = async (data) => {
   Object.keys(body).forEach((key) => body[key] === "" && delete body[key]);
   console.log(body);
   await instance
-    .post("/orders/checkout", body)
+    .post(`${backendUrl}/orders/checkout`, body)
     .then((response) => {
       console.log(response);
       returnedValue = response;
@@ -283,11 +304,16 @@ export const orderSummary = async (data) => {
   let returnedValue;
   console.log(data);
   const body = {
-    useWallet: data?.useWallet==="true"?true:data?.useWallet==="false"?false:data?.useWallet,
+    useWallet:
+      data?.useWallet === "true"
+        ? true
+        : data?.useWallet === "false"
+        ? false
+        : data?.useWallet,
     paymentMethod: data?.paymentMethod,
     address: data?.address,
     promocode: data?.promocode,
-  phone:data?.phone  
+    phone: data?.phone,
 
     // example default value for item
   };
@@ -295,7 +321,7 @@ export const orderSummary = async (data) => {
   Object.keys(body).forEach((key) => body[key] === "" && delete body[key]);
   console.log(body);
   await instance
-    .post("/orders/summary", body)
+    .post(`${backendUrl}/orders/summary`, body)
     .then((response) => {
       console.log(response);
       returnedValue = response;
@@ -309,12 +335,12 @@ export const getInvoiceOrder = async (id) => {
   let returnedValue;
 
   await instance
-    .get(`orders/${id}/invoice`, {
-      responseType: 'file',  })
+    .get(`${backendUrl}/orders/${id}/invoice`, {
+      responseType: "file",
+    })
     .then((response) => {
       returnedValue = response.data;
       console.log(response);
-      
     })
     .catch((error) => {
       // notifyError(error);
@@ -326,7 +352,7 @@ export const getSingleOrder = async (id) => {
   let returnedValue;
 
   await instance
-    .get(`/profile/orders/${id}`)
+    .get(`${backendUrl}/profile/orders/${id}`)
     .then((response) => {
       console.log(response);
       returnedValue = response;
@@ -341,7 +367,7 @@ export const authorize = async (setForceReload) => {
   window.stop();
   if (localStorage.getItem("refresh_token")) {
     instance
-      .post("/auth/refresh", {
+      .post(`${backendUrl}/auth/refresh`, {
         refreshToken: localStorage.getItem("refresh_token"),
       })
       .then((response) => {
@@ -365,7 +391,7 @@ export const AddAddress = async (body) => {
   console.log(body, "bodyacxssadasds");
   let returnedValue;
   await instance
-    .post("/addresses", body)
+    .post(`${backendUrl}/addresses`, body)
     .then((response) => {
       console.log(response);
       returnedValue = response;
@@ -381,7 +407,7 @@ export const getAddress = async () => {
   let returnedValue;
 
   await instance
-    .get("/addresses")
+    .get(`${backendUrl}/addresses`)
     .then((response) => {
       console.log(response);
       returnedValue = response.data.data;
@@ -401,7 +427,7 @@ export const updateAddress = async (id, body) => {
   let returnedValue;
 
   await instance
-    .put(`/addresses/${id}`, body)
+    .put(`${backendUrl}/addresses/${id}`, body)
     .then((response) => {
       // notifySuccess("Address Updated!");
       returnedValue = response.data;
@@ -417,7 +443,7 @@ export const deleteAddress = async (id) => {
   let returnedValue;
 
   await instance
-    .delete(`/addresses/${id}`)
+    .delete(`${backendUrl}/addresses/${id}`)
     .then((response) => {
       console.log(response);
       returnedValue = response.data.data;
@@ -433,7 +459,7 @@ export const googleAuth = async () => {
   let returnedValue;
 
   await instance
-    .get("/auth/google")
+    .get(`${backendUrl}/auth/google`)
     .then((response) => {
       console.log(response, "<<<<googleAuth");
       // localStorage.setItem("access_token", response.data.data.accessToken);
@@ -451,7 +477,7 @@ export const googleCallback = async (code) => {
   let returnedValue;
 
   await instance
-    .get(`/auth/google/callback?${code}`, {
+    .get(`${backendUrl}/auth/google/callback?${code}`, {
       code,
     })
     .then((response) => {
@@ -470,7 +496,7 @@ export const getCategories = async () => {
   let returnedValue;
 
   await instance
-    .get("/categories?items=50")
+    .get(`${backendUrl}/categories?items=50`)
     .then((response) => {
       console.log(response);
       returnedValue = response.data.data;
@@ -486,7 +512,7 @@ export const getTestimonials = async () => {
   let returnedValue;
 
   await instance
-    .get("/testimonials??order=asc&items=50")
+    .get(`${backendUrl}/testimonials??order=asc&items=50`)
     .then((response) => {
       console.log(response);
       returnedValue = response.data.data;
@@ -502,7 +528,7 @@ export const getBrands = async () => {
   let returnedValue;
 
   await instance
-    .get("/brands?items=50")
+    .get(`${backendUrl}/brands?items=50`)
     .then((response) => {
       console.log(response);
       returnedValue = response.data.data;
@@ -514,11 +540,12 @@ export const getBrands = async () => {
   return returnedValue; // caught by .then()
 };
 
+//subcategories
 export const getSubCategories = async () => {
   let returnedValue;
 
   await instance
-    .get("/subcategories")
+    .get(`${backendUrl}/subcategories`)
     .then((response) => {
       console.log(response);
       returnedValue = response;
@@ -529,11 +556,12 @@ export const getSubCategories = async () => {
     });
   return returnedValue; // caught by .then()
 };
+
 export const getWishList = async () => {
   let returnedValue;
 
   await instance
-    .get("/wishlists")
+    .get(`${backendUrl}/wishlists`)
     .then((response) => {
       console.log(response);
       returnedValue = response.data.data;
@@ -548,7 +576,7 @@ export const updateProfile = async (data) => {
   let returnedValue;
 
   await instance
-    .post(`/profile`, data)
+    .post(`${backendUrl}/profile`, data)
     .then((response) => {
       console.log(response);
       returnedValue = response.data.status;
@@ -563,7 +591,7 @@ export const getWallet = async () => {
   let returnedValue;
 
   await instance
-    .get("/wallets")
+    .get(`${backendUrl}/wallets`)
     .then((response) => {
       returnedValue = response.data.data;
     })
@@ -578,7 +606,7 @@ export const getWalletHistory = async () => {
   let returnedValue;
 
   await instance
-    .get("/wallets/history")
+    .get(`${backendUrl}/wallets/history`)
     .then((response) => {
       returnedValue = response.data.data;
     })
@@ -593,7 +621,7 @@ export const getPromoCode = async () => {
   let returnedValue;
 
   await instance
-    .get("/promocode")
+    .get(`${backendUrl}/promocode`)
     .then((response) => {
       returnedValue = response.data.data;
     })
@@ -608,7 +636,7 @@ export const checkPromoCode = async (code) => {
   let returnedValue;
 
   await instance
-    .post("/promocodes/validate", {
+    .post(`${backendUrl}/promocodes/validate`, {
       promocode: code,
     })
     .then((response) => {
@@ -625,7 +653,7 @@ export const ordersCallback = async () => {
   let returnedValue;
 
   await instance
-    .post("/orders/callback")
+    .post(`${backendUrl}/orders/callback`)
     .then((response) => {
       returnedValue = response.data.data;
     })
@@ -636,14 +664,16 @@ export const ordersCallback = async () => {
   return returnedValue; // caught by .then()
 };
 
-export const orderRefund =  async (data) => {
+export const orderRefund = async (data) => {
   let returnedValue;
 
   await instance
-    .post(`/order-request`,data)
+    .post(`${backendUrl}/order-request`, data)
     .then((response) => {
       returnedValue = response;
-      notifySuccess(" you order request has "+ data?.requestType+" Success ")
+      notifySuccess(
+        " you order request has " + data?.requestType + " Success "
+      );
     })
     .catch((error) => {
       notifyError(error);
@@ -652,12 +682,11 @@ export const orderRefund =  async (data) => {
   return returnedValue;
 };
 
-
-export const orderCancel =  async (id,data) => {
+export const orderCancel = async (id, data) => {
   let returnedValue;
 
   await instance
-    .post(`/orders/${id}/ship/cancel`)
+    .post(`${backendUrl}/orders/${id}/ship/cancel`)
     .then((response) => {
       returnedValue = response;
     })
@@ -667,11 +696,11 @@ export const orderCancel =  async (id,data) => {
 
   return returnedValue;
 };
-export const orderReturn =  async (id) => {
+export const orderReturn = async (id) => {
   let returnedValue;
 
   await instance
-    .post(`/orders/${id}/return`)
+    .post(`${backendUrl}/orders/${id}/return`)
     .then((response) => {
       returnedValue = response.data.data;
     })
@@ -685,7 +714,7 @@ export const getPlans = async () => {
   let returnedValue;
 
   await instance
-    .get("/plans")
+    .get(`${backendUrl}/plans`)
     .then((response) => {
       returnedValue = response.data.data;
     })
@@ -700,7 +729,7 @@ export const resetPassword = async (data) => {
   let returnedValue;
 
   await instance
-    .post("/auth/reset-password", data)
+    .post(`${backendUrl}/auth/reset-password`, data)
     .then((response) => {
       returnedValue = response;
     })
@@ -715,7 +744,7 @@ export const getOrderInvoice = async (id) => {
   let returnedValue;
 
   await instance
-    .get(`/orders/${id}/invoice`)
+    .get(`${backendUrl}/orders/${id}/invoice`)
     .then((response) => {
       returnedValue = response;
     })
@@ -730,7 +759,7 @@ export const getGovernorates = async () => {
   let returnedValue;
 
   await instance
-    .get("/governorate")
+    .get(`${backendUrl}/governorate`)
     .then((response) => {
       returnedValue = response;
     })
@@ -743,9 +772,9 @@ export const getGovernorates = async () => {
 
 export const getCitites = async (id) => {
   let returnedValue;
-  if(!id)return;
+  if (!id) return;
   await instance
-    .get(`/city?governorate=${id}`)
+    .get(`${backendUrl}/city?governorate=${id}`)
     .then((response) => {
       returnedValue = response;
     })
@@ -758,15 +787,15 @@ export const getCitites = async (id) => {
 
 export const getUserPlan = async () => {
   let returnedValue;
-  if (localStorage.getItem("access_token")) 
-  await instance
-    .get(`/profile/subscription`)
-    .then((response) => {
-      returnedValue = response;
-    })
-    .catch((error) => {
-      // notifyError(error);
-    });
+  if (localStorage.getItem("access_token"))
+    await instance
+      .get(`${backendUrl}/profile/subscription`)
+      .then((response) => {
+        returnedValue = response;
+      })
+      .catch((error) => {
+        // notifyError(error);
+      });
 
   return returnedValue; // caught by .then()
 };
@@ -775,7 +804,7 @@ export const subscribeToPlan = async (planId) => {
   let returnedValue;
   console.log(planId, "planid");
   await instance
-    .post(`/subscriptions`, {
+    .post(`${backendUrl}/subscriptions`, {
       plan: +planId,
     })
     .then((response) => {

@@ -1,21 +1,26 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import instance from "../../utils/interceptor";
-import "./style.css"
+import "./style.css";
+import { baseUrl } from "../../utils/baseUrl";
+const backendUrl = baseUrl.production;
 export default function BrandsSwiper() {
+  console.log("brandSwiper 2 component rendered");
   const [brands, setBrands] = useState([]);
   const [loading, setLoading] = useState(true); // To handle the loading state
   const [error, setError] = useState(null);
-  const [limit, setLimit] = useState(() => Math.ceil(window.innerWidth / 300)||1);
+  const [limit, setLimit] = useState(
+    () => Math.ceil(window.innerWidth / 300) || 1
+  );
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchBanners = async () => {
       try {
-        const response = await instance.get("/brands", {
+        const response = await instance.get(`${backendUrl}/brands`, {
           params: { items: 50 },
         });
-        setBrands(response?.data?.data?.brands||[]);
+        setBrands(response?.data?.data?.brands || []);
       } catch (err) {
         console.error("Failed to fetch banners:", err);
         setError(err); // Notify the error if needed
@@ -24,10 +29,7 @@ export default function BrandsSwiper() {
       }
     };
 
-    
-
     fetchBanners();
-   
   }, []);
 
   // Update the limit on window resize
@@ -48,45 +50,40 @@ export default function BrandsSwiper() {
     return <div>Error loading banners</div>; // Show an error message
   }
 
-  const repeatCount = Math.ceil(limit / (brands?.length||1));
+  const repeatCount = Math.ceil(limit / (brands?.length || 1));
 
   // Create a new array with the repeated brandshome
-  const newBrands = [...Array((repeatCount||1) + 3)].flatMap(() => brands);
+  const newBrands = [...Array((repeatCount || 1) + 3)].flatMap(() => brands);
 
   return (
-    
-
-<article class="wrapper">
-  <div class="marquee">
-    <div class="marquee__group">
-    {brands?.length
-        ? newBrands.map(({ images, name, id }, index) => (
-            <img
-              key={index}
-              src={images[0]}
-              alt={name}
-              style={{
-                cursor: "pointer",
-                objectFit: "contain",
-                objectPosition: "center",
-              }}
-              onClick={() => {
-                navigate(`search/?brandId=${id}`);
-              }}
-            />
-          ))
-        : null}
-    </div>
-  </div>
-
- </article>
-
-   
+    <article class="wrapper">
+      <div class="marquee">
+        <div class="marquee__group">
+          {brands?.length
+            ? newBrands.map(({ images, name, id }, index) => (
+                <img
+                  key={index}
+                  src={images[0]}
+                  alt={name}
+                  style={{
+                    cursor: "pointer",
+                    objectFit: "contain",
+                    objectPosition: "center",
+                  }}
+                  onClick={() => {
+                    navigate(`search/?brandId=${id}`);
+                  }}
+                />
+              ))
+            : null}
+        </div>
+      </div>
+    </article>
   );
 }
 
-
-{/* <Swiper
+{
+  /* <Swiper
 className="mySwiper"
 slidesPerView={limit}
 speed={10000}
@@ -127,4 +124,5 @@ loop={true}
       ))
     : null}
 </div>
-</Swiper> */}
+</Swiper> */
+}

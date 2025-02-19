@@ -7,28 +7,26 @@ import filter from "../images/filter.png";
 import Drawer from "@mui/material/Drawer";
 import CountdownTimer from "../components/CountdownTimer";
 import Pagination from "@mui/material/Pagination";
-import Loader from "../components/Loader";
 import { getBrands, getCategories, getProducts } from "../utils/apiCalls";
 import Box from "@mui/material/Box";
 import LinearProgress from "@mui/material/LinearProgress";
 import { debounce } from "lodash";
-import { useLocation, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import Empty from "./empty";
 import CloseIcon from "@mui/icons-material/Close";
 
 export default function Search() {
-  const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
   const urlCatId = searchParams.get("categoryId")?.split(",") || [];
   const urlBrandId = searchParams.get("brandId")?.split(",") || [];
   const urlQuery = searchParams.get("query") || "";
   const urlSale = searchParams.get("sale") || "";
   const endDate = searchParams.get("endDate") || "";
-  const [catId, setCatId] = useState(urlCatId.map(i=>+i));
-  const [brandId, setBrandId] = useState(urlBrandId.map(i=>+i));
+  const [catId, setCatId] = useState(urlCatId.map((i) => +i));
+  const [brandId, setBrandId] = useState(urlBrandId.map((i) => +i));
   const [queryStr, setQuery] = useState(urlQuery);
   const [searchData, setSearchData] = useState([]);
-  const [filterCount, setFilterCount] = useState(0);
+  const [filterCount] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [page, setPage] = useState(+searchParams.get("page") || 1);
@@ -42,29 +40,30 @@ export default function Search() {
     minutes: 0,
     seconds: 0,
   });
-    const calculateTimeLeft = (saleEndTime) => {
- 
-      const end=new Date(saleEndTime).getTime()
-      const now = new Date().getTime();
-      const difference = end - now;
-      if (difference > 0) {
-        const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((difference % (1000 * 60)) / 1000);
-        setTimeLeft({ hours, minutes, seconds });
-      } else {
-        // Sale has ended
-        setTimeLeft({ hours: 0, minutes: 0, seconds: 0 });
-      }
-    };
+  const calculateTimeLeft = (saleEndTime) => {
+    const end = new Date(saleEndTime).getTime();
+    const now = new Date().getTime();
+    const difference = end - now;
+    if (difference > 0) {
+      const hours = Math.floor(
+        (difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+      );
+      const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+      setTimeLeft({ hours, minutes, seconds });
+    } else {
+      // Sale has ended
+      setTimeLeft({ hours: 0, minutes: 0, seconds: 0 });
+    }
+  };
 
-    useEffect(() => {
-      window.scroll({
-        top: 0,
-        left: 0,
-        behavior: 'smooth'
-      })
-    } , [page]);
+  useEffect(() => {
+    window.scroll({
+      top: 0,
+      left: 0,
+      behavior: "smooth",
+    });
+  }, [page]);
   useEffect(() => {
     getCategories().then((res) => {
       setCategories(res?.categories);
@@ -76,12 +75,12 @@ export default function Search() {
   }, [page]);
 
   useEffect(() => {
-    setCatId([...urlCatId].map(i=>+i));
-    setBrandId([...urlBrandId].map(i=>+i));
-    endDate&&calculateTimeLeft(endDate)
-  }, []);
+    setCatId([...urlCatId].map((i) => +i));
+    setBrandId([...urlBrandId].map((i) => +i));
+    endDate && calculateTimeLeft(endDate);
+  }, [endDate]);
 
-  const loadProducts = () => {
+  const loadProducts = useCallback(() => {
     setIsLoading(true);
     const categoryStr = catId.length ? catId.join(",") : "";
     const brandStr = brandId.length ? brandId.join(",") : "";
@@ -110,12 +109,11 @@ export default function Search() {
       .catch(() => {
         setIsLoading(false);
       });
-  };
+  }, [catId, brandId, queryStr, page]);
 
   const handleCategoryChange = (categoryId) => {
-
     const newCatId = catId.includes(categoryId)
-      ? catId.filter((id) => id != categoryId)
+      ? catId.filter((id) => id !== categoryId)
       : [...catId, categoryId];
     let uniqueNewCatId = [...new Set(newCatId)];
     setCatId(uniqueNewCatId);
@@ -130,7 +128,7 @@ export default function Search() {
     const newBrandId = brandId.includes(id)
       ? brandId.filter((brand) => brand !== id)
       : [...brandId, id];
-      let uniqueNewBrandId = [...new Set(newBrandId.map(i=>+i))];
+    let uniqueNewBrandId = [...new Set(newBrandId.map((i) => +i))];
     setBrandId(uniqueNewBrandId);
     setSearchParams((prev) => {
       prev.set("brandId", uniqueNewBrandId.join(","));
@@ -149,11 +147,12 @@ export default function Search() {
     debouncedHandleInputChange();
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedHandleInputChange = useCallback(
     debounce(() => {
       loadProducts(page);
     }, 300),
-    [catId, brandId, queryStr, page]
+    [catId, brandId, page] // Removed queryStr to prevent dependency conflict
   );
 
   const handlePageChange = (event, value) => {
@@ -161,6 +160,8 @@ export default function Search() {
   };
 
   useEffect(() => {
+    console.log(page, "currentPage");
+
     loadProducts();
   }, [catId, brandId, queryStr, page]);
   return (
@@ -169,13 +170,17 @@ export default function Search() {
       style={{ paddingBottom: "50px" }}
     >
       <div className={styles.header}>find the best clothes</div>
-     {urlSale? <div className={styles["countdown-container"]}>
-        <div className={styles["countdown-title"]}>Daily sale</div>
-        <CountdownTimer  hours={timeLeft.hours} 
-      minutes={timeLeft.minutes} 
-      seconds={timeLeft.seconds} 
-      type="a" />
-      </div>:null}
+      {urlSale ? (
+        <div className={styles["countdown-container"]}>
+          <div className={styles["countdown-title"]}>Daily sale</div>
+          <CountdownTimer
+            hours={timeLeft.hours}
+            minutes={timeLeft.minutes}
+            seconds={timeLeft.seconds}
+            type="a"
+          />
+        </div>
+      ) : null}
       <div className={styles.options}>
         <img
           style={{ cursor: "pointer" }}
@@ -200,7 +205,7 @@ export default function Search() {
                 onClick={() => handleCategoryChange(category.id)}
               >
                 <Checkbox
-                   checked={catId.some((id) => +id == category.id)}
+                  checked={catId.some((id) => +id == category.id)}
                   sx={{
                     padding: 0,
                     "&.Mui-checked": { color: "var(--brown)" },
@@ -221,8 +226,7 @@ export default function Search() {
                     onClick={() => handleBrandChange(brand.id)}
                   >
                     <Checkbox
-                     checked={brandId.some((id) => +id == brand.id)}
-                   
+                      checked={brandId.some((id) => +id == brand.id)}
                       sx={{
                         padding: 0,
                         "&.Mui-checked": { color: "var(--brown)" },
@@ -383,7 +387,7 @@ export default function Search() {
                     onClick={() => handleBrandChange(brand.id)}
                   >
                     <Checkbox
-                     checked={brandId.some((id) => +id == brand.id)}
+                      checked={brandId.some((id) => +id == brand.id)}
                       sx={{
                         padding: 0,
                         "&.Mui-checked": { color: "var(--brown)" },

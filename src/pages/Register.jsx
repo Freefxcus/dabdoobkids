@@ -4,7 +4,7 @@ import Form from "../components/Form";
 import { Helmet } from "react-helmet";
 
 export default function Register() {
-  const [largeImage, setLargeImage] = useState();
+
 
   return (
     <div
