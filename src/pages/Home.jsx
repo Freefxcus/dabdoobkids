@@ -21,6 +21,7 @@ import { baseUrl } from "../utils/baseUrl.js";
 const backendUrl = baseUrl.production;
 
 // Lazy load components
+// testtting
 const BrandsSwiper = lazy(() => import("../components/Home/BrandsSwiper.jsx"));
 const DailySaleComponent = lazy(() =>
   import("../components/Home/DailySaleComponent.jsx")
