@@ -83,5 +83,5 @@ jobs:
             echo "Fetching latest code..."
             git pull origin ${{ github.ref_name }} || { echo "Error: git pull failed. Stopping deployment!"; exit 1; }
             npm install --legacy-peer-deps || echo "Error: npm install failed, skipping..."
-            npm run build || echo "Error: Build failed, skipping..."
+            npm run build || { echo "Error: Build failed, skipping..."; exit 1; }
             sudo systemctl restart nginx || echo "Error: Nginx restart failed, skipping..."
