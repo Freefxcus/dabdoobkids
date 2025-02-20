@@ -1,6 +1,5 @@
 import React from "react";
 import { Box } from "@mui/material";
-import logo from "../images/logo.svg";
 export default function News() {
   return (
     <Box

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import styles from "../../styles/pages/Profile.module.css";
-import OrderCard from "../OrderCard";
 import OrderOverview from "./orderOverView";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Box, Pagination } from "@mui/material";
@@ -65,24 +64,24 @@ export default function OrderList() {
   return (
     <Box
       sx={{
-      //  maxWidth:{xs:"max(85vw,78%)",sm:"auto"},
-    flexGrow:1,
+        //  maxWidth:{xs:"max(85vw,78%)",sm:"auto"},
+        flexGrow: 1,
         display: "flex",
         flexDirection: "column",
         gap: "1rem",
       }}
     >
       <Box
-        sx={{    
+        sx={{
           bgcolor: "#fff",
-          flex:1,
+          flex: 1,
           borderRadius: "1rem",
           p: 1.25,
           pb: 2.5,
           display: "flex",
           flexDirection: "column",
           gap: "0.4rem",
-          position:"relative"
+          position: "relative",
         }}
       >
         <Box
@@ -96,13 +95,13 @@ export default function OrderList() {
         >
           Order List
         </Box>
-        <Box 
+        <Box
           sx={{
             p: "0.62rem",
-          // flex:1,
+            // flex:1,
             flexDirection: "row",
             // maxWidth:"100%",
-            width:{xs:"calc(100vw - 4.5rem)",sm:"auto"},
+            width: { xs: "calc(100vw - 4.5rem)", sm: "auto" },
             display: "flex",
             gap: "0.62rem",
             fontSize: "15px",
@@ -113,7 +112,9 @@ export default function OrderList() {
           component={"div"}
         >
           {FilterOrder.map((FilterAction) => (
-            <Box  component={"div"} className={styles.sidebar_item}
+            <Box
+              component={"div"}
+              className={styles.sidebar_item}
               sx={{
                 borderBottom:
                   FilterAction.id === Filters?.id
@@ -124,7 +125,7 @@ export default function OrderList() {
                 color:
                   FilterAction.id === Filters?.id
                     ? "#333"
-                    : FilterAction.id === "1"&& !Filters?.id
+                    : FilterAction.id === "1" && !Filters?.id
                     ? "#333"
                     : "#b1b1b1",
               }}
@@ -137,7 +138,7 @@ export default function OrderList() {
         </Box>
       </Box>
 
-      <Box sx={{ flex:1 }}>
+      <Box sx={{ flex: 1 }}>
         {orders === null && <Loader open={true} />}
         {orders?.length === 0 && (
           <Box
@@ -146,7 +147,9 @@ export default function OrderList() {
               flexDirection: "column",
               alignItems: "center",
               justifyContent: "center",
-              p: 12,bgcolor: "#fff", borderRadius: "1rem",
+              p: 12,
+              bgcolor: "#fff",
+              borderRadius: "1rem",
               gap: "2rem",
             }}
           >
@@ -185,12 +188,13 @@ export default function OrderList() {
             style={{
               display: "flex",
               flexDirection: "column",
-              flex:1,
+              flex: 1,
               gap: "1.5rem",
             }}
           >
             {orders?.map((order) => (
-              <div key={order.id}
+              <div
+                key={order.id}
                 style={{
                   boxShadow: "rgba(0, 0, 0, 0.05) 0px 1px 2px 0px",
                   backgroundColor: "#fff",
@@ -225,11 +229,11 @@ export default function OrderList() {
                   </div>
                 </div>
                 {order?.items?.map((item) => (
-                  <Box  sx={{flex:1,maxWidth:{xs:"80vw",sm:"auto"}}}>
+                  <Box sx={{ flex: 1, maxWidth: { xs: "80vw", sm: "auto" } }}>
                     <OrderOverview item={item} />
                     <div
                       style={{
-                        flex:1,
+                        flex: 1,
                         borderBottom: "1px solid #EDEDED",
                         marginTop: "5px",
                         marginBottom: "5px",

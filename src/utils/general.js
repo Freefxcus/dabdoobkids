@@ -3,10 +3,6 @@ import { toast } from "react-toastify";
 import { baseUrl } from "./baseUrl";
 
 export const isValidUser = async () => {
-  const pathname = window.location.pathname;
-  const pathSegments = pathname.split("/").filter((segment) => segment !== "");
-  const firstEndpoint = pathSegments[0];
-
   const backendUrl = baseUrl.production;
 
   if (

@@ -19,8 +19,6 @@ export default function WishlistProductDetails({ id }) {
   const [
     addToWishList,
     {
-      isLoading: wishListAddLoad,
-      isSuccess: isSuccessAddWishList,
       isError: isErrorAddWishList,
       error: addWishListError, // Capture the error object
     },
@@ -29,8 +27,6 @@ export default function WishlistProductDetails({ id }) {
   const [
     deleteWishList,
     {
-      isLoading: wishListDeleteLoad,
-      isSuccess: isSuccessDeleteWishList,
       isError: isErrorDeleteWishList,
       error: deleteWishListError, // Capture the error object
     },

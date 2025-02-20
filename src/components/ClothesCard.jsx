@@ -20,7 +20,7 @@ export default function ClothesCard({ item }) {
   const wishListItems = wishListData?.data?.[0]?.items || [];
 
   const wished = wishListItems.some(
-    (product) => product?.product?.id == item?.id
+    (product) => product?.product?.id === item?.id
   );
 
   const [

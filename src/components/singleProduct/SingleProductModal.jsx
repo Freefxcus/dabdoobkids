@@ -3,7 +3,7 @@ import Counter from "./counter";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useAddToCartMutation } from "../../Redux/cartApi";
-import { calcDiscount, notifyError, notifySuccess } from "../../utils/general";
+import { calcDiscount, notifySuccess } from "../../utils/general";
 import { TickCircle } from "iconsax-react";
 
 export default function SingleProductModal({

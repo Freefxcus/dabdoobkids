@@ -1,16 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { cartActions } from "../../Redux/store";
-import { addToCart, getCart } from "../../utils/apiCalls";
+import React from "react";
 import { toast } from "react-toastify";
 import HandleMessageIsAuth from "../../utils/message";
 
-export default function Counter({
-  count,
-  CartAddLoad,
-  setCount,
-  handleUpdateQuantity,
-}) {
+export default function Counter({ count, CartAddLoad, setCount }) {
   const increment = () => {
     setCount((prev) => prev + 1);
   };

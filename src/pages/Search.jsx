@@ -16,6 +16,10 @@ import Empty from "./empty";
 import CloseIcon from "@mui/icons-material/Close";
 
 export default function Search() {
+  /* eslint-disable no-console */
+  console.log("This will not trigger a warning");
+  /* eslint-enable no-console */
+
   const [searchParams, setSearchParams] = useSearchParams();
   const urlCatId = searchParams.get("categoryId")?.split(",") || [];
   const urlBrandId = searchParams.get("brandId")?.split(",") || [];

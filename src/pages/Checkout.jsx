@@ -1,12 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
-import {
-  getAddress,
-  getCart,
-  orderCheckout,
-  orderSummary,
-} from "../utils/apiCalls";
+import { getAddress, getCart, orderSummary } from "../utils/apiCalls";
 import ConfirmPayment from "../components/checkout/ConfirmPayment";
 import BillingDetails from "../components/checkout/BillingDetails";
 import { Box } from "@mui/material";
@@ -15,9 +10,7 @@ export default function Checkout() {
   console.log("Checkout component rendered");
 
   const [searchParams, setSearchParams] = useSearchParams();
-  const [payemntMethod, setPaymentMethod] = useState(
-    searchParams.get("paymentMethod") || "cash"
-  );
+  const [payemntMethod] = useState(searchParams.get("paymentMethod") || "cash");
   const [promoCode, setPromoCode] = useState(
     searchParams.get("promocode") || ""
   );
