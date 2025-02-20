@@ -82,6 +82,9 @@ jobs:
             cd ${{ env.DEPLOY_PATH }} || echo "Error: Deployment path not found, skipping..."
             echo "Fetching latest code..."
             git pull origin ${{ github.ref_name }} || { echo "Error: git pull failed. Stopping deployment!"; exit 1; }
+            git checkout --theirs .
+            git add .
+            git commit -m "Resolved conflicts by keeping incoming changes"
             npm install --legacy-peer-deps || echo "Error: npm install failed, skipping..."
             npm run build || echo "Error: Build failed, skipping..."
             sudo systemctl restart nginx || echo "Error: Nginx restart failed, skipping..."
