@@ -9,10 +9,13 @@ import { calcDiscount } from "../utils/general";
 import { Box } from "@mui/material";
 export default function Cart() {
   console.log("View Cart component rendered");
-  //cart2
 
   const navigate = useNavigate();
+<<<<<<< HEAD
   ////commmmit
+=======
+  const [promocode, setPromocode] = useState("");
+>>>>>>> d1589dedd (Saving local changes before pulling latest updates)
 
   const [open, setOpen] = useState(false);
 

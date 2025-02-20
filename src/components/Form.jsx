@@ -425,7 +425,8 @@ export default function Form({ type, toggleDrawer }) {
                 navigate("/login");
               }}
             >
-              Sign-in here
+		
+              Sign-in here..
             </div>
           </div>
         </>

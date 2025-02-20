@@ -29,7 +29,7 @@ export default function Summary() {
           Summary Orderr
         </div>
         <div className={styles.order_summary}>
-          <OrderCard />
+          <OrderCard /> //"correct"
           <OrderCard />
         </div>
         <div className={styles.title_main}>Shipping Details</div>
