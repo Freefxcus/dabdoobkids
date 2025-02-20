@@ -11,11 +11,8 @@ export default function Cart() {
   console.log("View Cart component rendered");
 
   const navigate = useNavigate();
-<<<<<<< HEAD
-  ////commmmit
-=======
+
   const [promocode, setPromocode] = useState("");
->>>>>>> d1589dedd (Saving local changes before pulling latest updates)
 
   const [open, setOpen] = useState(false);
 
