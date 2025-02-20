@@ -1,8 +1,8 @@
-import { Box, CardMedia, Stack } from "@mui/material";
+import { CardMedia, Stack } from "@mui/material";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 export default function PostPayment() {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const paymentMethod = searchParams.get("success");
   const navigate = useNavigate();
   console.log(paymentMethod, "paymentMethod213123");

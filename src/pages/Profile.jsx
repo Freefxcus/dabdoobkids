@@ -1,37 +1,26 @@
 import { useState, useEffect } from "react";
 import styles from "../styles/pages/Profile.module.css";
-import promo from "../images/promo.png";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import trash from "../images/trash.png";
 import PromoCard from "../components/PromoCard";
 import { useDispatch, useSelector } from "react-redux";
 import instance from "../utils/interceptor.js";
 import Popup from "../components/Popup";
 import { userInfoActions } from "../Redux/store";
 import { notifyError, notifySuccess } from "../utils/general";
-import {
-  authorize,
-  getAddress,
-  deleteAddress,
-
-  getPromoCode,
-} from "../utils/apiCalls.js";
+import { authorize, getAddress, deleteAddress } from "../utils/apiCalls.js";
 import Loader from "../components/Loader.jsx";
 import Accordion from "@mui/material/Accordion";
-import AccordionActions from "@mui/material/AccordionActions";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Button from "@mui/material/Button";
-import OrderCard from "../components/OrderCard.jsx";
 import Box from "@mui/material/Box";
 import AddressModal from "../components/checkout/AddressModal.jsx";
-import UpdateProfileUpdate from "../components/profile/UpdateProfile.jsx";
 import UpdateProfileModal from "../components/profile/UpdateProfile.jsx";
 import OrderList from "../components/orders/OrderList.jsx";
 import { LogoutCurve } from "iconsax-react";
@@ -43,8 +32,6 @@ export default function Profile() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { step } = useParams();
-  const [PromoCodes, setPromoCodes] = useState(null);
-  const [helpOption, setHelpOption] = useState("1");
   const [currentId, setCurrentId] = useState("");
   const [alertType, setAlertType] = useState("");
   const [address, setAddress] = useState({});
@@ -190,7 +177,6 @@ export default function Profile() {
         <div className={`${styles.bg} padding-container`}>
           <div className={styles.row}>
             <div className={styles.header}>Profile</div>
-
           </div>
           <div className={styles.container}>
             <div className={styles.sidebar}>
@@ -279,7 +265,10 @@ export default function Profile() {
                       </div>
                       <div>
                         <div className={styles.title}>Phone Number</div>
-                        <div className={styles.body} style={{textAlign : "center"}}>
+                        <div
+                          className={styles.body}
+                          style={{ textAlign: "center" }}
+                        >
                           {userInfo?.phone || "N/A"}
                         </div>
                       </div>
@@ -363,9 +352,7 @@ export default function Profile() {
                   </div>
                 </>
               )}
-              {sidebarItem === "2" && (
-               <WalletComponents />
-              )}
+              {sidebarItem === "2" && <WalletComponents />}
               {sidebarItem === "3" && <OrderList />}
               {sidebarItem === "4" && (
                 <div className={styles.text_container}>
@@ -545,7 +532,8 @@ Please Note That The Duration Is In Accordance To The Relevant Applicable Laws I
                         border: "1px solid #ddd",
                         borderRadius: "1rem",
                         marginBottom: "10px",
-                        boxShadow: "0px 2px 10px rgba(0, 0, 0, 0.1)", padding: '10px 16px'
+                        boxShadow: "0px 2px 10px rgba(0, 0, 0, 0.1)",
+                        padding: "10px 16px",
                       }}
                     >
                       <Accordion>
@@ -553,11 +541,10 @@ Please Note That The Duration Is In Accordance To The Relevant Applicable Laws I
                           expandIcon={<ExpandMoreIcon />}
                           aria-controls={`panel${index}-content`}
                           id={`panel${index}-header`}
-                          
                         >
                           <Typography>{faq.question}</Typography>
                         </AccordionSummary>
-                        <AccordionDetails >
+                        <AccordionDetails>
                           <Typography>{faq.answer}</Typography>
                         </AccordionDetails>
                       </Accordion>

@@ -1,5 +1,4 @@
 import { jwtDecode } from "jwt-decode";
-import React from "react";
 import { toast } from "react-toastify";
 
 const isTokenExpired = (token) => {
@@ -22,10 +21,8 @@ const HandleMessageIsAuth = (Fn) => {
 
   if (!isAuthenticated) {
     return toast.error("Please login first");
-    
   }
- return  Fn && Fn();
- 
+  return Fn && Fn();
 };
 
 export default HandleMessageIsAuth;

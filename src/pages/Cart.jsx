@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import styles from "../styles/pages/Cart.module.css";
 import OrderCard from "../components/OrderCard";
 import Popup from "../components/Popup";
@@ -12,13 +12,10 @@ export default function Cart() {
   //cart2
 
   const navigate = useNavigate();
-  const [promocode, setPromocode] = useState("");
   ////commmmit
 
   const [open, setOpen] = useState(false);
 
-  const [address, setAddress] = useState({});
-  const [paymentOption, setPaymentOption] = useState("Credit Card"); // "Cash on Delivery"
   const { data: cartData } = useGetAllCartsQuery();
   const cartItems = cartData?.data || [];
 
@@ -33,7 +30,7 @@ export default function Cart() {
         );
       }, 0) || 0
     );
-  }, [cartItems]);
+  }, [cartItems]); // Removed isLoading
 
   const generateDiscountMesage = (totalPrice) => {
     if (totalPrice < 3500) {
@@ -209,7 +206,7 @@ export default function Cart() {
             navigate("/checkout");
           }}
         >
-          Checkout**
+          Checkout
         </Box>
       </div>
     </div>

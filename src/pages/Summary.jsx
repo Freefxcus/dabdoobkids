@@ -8,7 +8,6 @@ import OrderCard from "../components/OrderCard";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import Popup from "../components/Popup";
 
 export default function Summary() {
   console.log("Summary component rendered");
@@ -42,6 +41,7 @@ export default function Summary() {
                 <div>{address.address}</div>
                 <img
                   src={edit}
+                  alt="img1"
                   width="20px"
                   style={{ cursor: "pointer" }}
                   onClick={() => {
@@ -59,6 +59,7 @@ export default function Summary() {
                 <img
                   src={add}
                   width="40px"
+                  alt="img2"
                   style={{ cursor: "pointer" }}
                   onClick={() => {
                     setOpen(true);
@@ -89,7 +90,7 @@ export default function Summary() {
                 onClick={() => setPaymentOption("Credit Card")}
               >
                 <div className={styles.radio_option_section}>
-                  <img src="credit-card.png" width="30px" />
+                  <img src="credit-card.png" width="30px" alt="img3" />
                   <div className={styles.description}>Credit Card</div>
                 </div>
                 <div className={styles.radio_option_section}>
@@ -116,7 +117,7 @@ export default function Summary() {
                 onClick={() => setPaymentOption("Cash on Delivery")}
               >
                 <div className={styles.radio_option_section}>
-                  <img src="credit-card.png" width="30px" />
+                  <img src="credit-card.png" width="30px" alt="img4" />
                   <div className={styles.description}>Cash on Delivery</div>
                 </div>
                 <div className={styles.radio_option_section}>
@@ -143,7 +144,7 @@ export default function Summary() {
                 onClick={() => setPaymentOption("Wallet")}
               >
                 <div className={styles.radio_option_section}>
-                  <img src="./e-wallet.png" width="30px" />
+                  <img src="./e-wallet.png" width="30px" alt="img5" />
                   <div className={styles.description}>Cash on Delivery</div>
                 </div>
                 <div className={styles.radio_option_section}>
@@ -177,7 +178,7 @@ export default function Summary() {
             }}
           >
             <div className={styles.promo_input_container}>
-              <img src={promo} width="20px" />
+              <img src={promo} width="20px" alt="img6" />
               <input
                 type="text"
                 className={styles.promo_input}
@@ -189,6 +190,7 @@ export default function Summary() {
               <img
                 src={x}
                 width="20px"
+                alt="img8"
                 style={{
                   cursor: "pointer",
                   visibility: promocode ? "initial" : "hidden",

@@ -1,14 +1,9 @@
 import { baseUrl } from "./baseUrl";
-import { store } from "../Redux/store";
 import instance from "../utils/interceptor.js";
 import { notifySuccess, notifyError, navigate } from "./general.js";
 
 // client_id: redux("userInfo").id,
 // ----------------------------------------------------------------
-const redux = (slice) => {
-  // to get updated slice
-  return store.getState()[slice].value;
-};
 // ----------------------------------------------------------------
 const backendUrl = baseUrl.production;
 console.log(backendUrl);
