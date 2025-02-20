@@ -280,7 +280,7 @@ export default function Form({ type, toggleDrawer }) {
         <>
           <div className={styles.title}>Create an Account</div>
           <div className={`${styles.sub_title} ${styles.bottom_margin}`}>
-            Register for faster checkout, track your order's status, and more,,,
+            Register for faster checkout, track your order's status, and more .
           </div>
           {/* first name */}
           <div className={styles.label}>
