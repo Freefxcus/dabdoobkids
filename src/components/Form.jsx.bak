@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from "react";
-import PasswordRequirements from "./PasswordRequirements";
+import PasswordRequirements from "./PasswordRequirements.jsx";
 import styles from "../styles/components/Form.module.css";
 import google from "../images/google.png";
 import { registerSchema } from "../utils/schemas/registerSchema.js";
 import { loginSchema } from "../utils/schemas/loginSchema.js";
 import { useFormik } from "formik";
-import Loader from "./Loader";
+import Loader from "./Loader.jsx";
 import "react-toastify/dist/ReactToastify.css";
 import instance from "../utils/interceptor.js";
 import { useNavigate } from "react-router-dom";
 import { notifySuccess, notifyError } from "../utils/general.js";
 import closed from "../images/closed.png";
 import open from "../images/open.png";
-import { baseUrl } from "../utils/baseUrl";
+import { baseUrl } from "../utils/baseUrl.js";
 
 const backendUrl = baseUrl.production;
 
@@ -280,7 +280,7 @@ export default function Form({ type, toggleDrawer }) {
         <>
           <div className={styles.title}>Create an Account</div>
           <div className={`${styles.sub_title} ${styles.bottom_margin}`}>
-            Register for faster checkout, track your order's status, and more,,,
+            Register for faster checkout, track your order's status, and more
           </div>
           {/* first name */}
           <div className={styles.label}>
@@ -373,9 +373,8 @@ export default function Form({ type, toggleDrawer }) {
               alt="show/hide password"
             />
           </div>
-
+          
           {/* PASSWORD VALIDATION RULES */}
-          <PasswordRequirements password={password} />
           <ul className={styles.validationList}>
             {validationRules.map((rule, index) => (
               <li
