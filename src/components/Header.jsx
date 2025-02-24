@@ -4,6 +4,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import Form from "../components/Form";
+import logo from "../images/header-logo.svg";
 import bag from "../images/bag.svg";
 import email from "../images/email.svg";
 import heart from "../images/heart.svg";
@@ -197,7 +198,12 @@ export default function Header({ setOpen }) {
                 color: "#000",
               }}
             >
-              Logo
+            <img
+                loading="lazy"
+                src={logo}
+                alt="logo"
+                style={{ cursor: "pointer" }}
+              />
             </Link>
 
             {categories &&

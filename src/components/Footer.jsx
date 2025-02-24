@@ -1,7 +1,7 @@
 import React from "react";
 
 import styles from "../styles/components/Footer.module.css";
-import logo from "../images/logo-footer.svg";
+import logo from "../images/footer-logo.svg";
 import { EmailOutlined } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 
@@ -22,7 +22,7 @@ export default function Footer() {
         <Link to="/">
           <img
             loading="lazy"
-            src="/static/media/footer-logo.svg"
+            src={logo}
             alt="logo"
             width="340"
             height="340"
