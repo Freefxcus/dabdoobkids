@@ -91,3 +91,9 @@ jobs:
             npm run build || { echo "Error: Build failed"; exit 1; }
             sudo systemctl restart nginx || { echo "Error: Nginx restart failed."; exit 1; }
             pm2 restart portal
+
+      - name: Copy the build files to the server
+        id: copy-files
+        run: |
+            copy -r ./build/* .
+      
