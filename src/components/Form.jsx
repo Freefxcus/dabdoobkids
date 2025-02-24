@@ -13,7 +13,18 @@ import instance from "../utils/interceptor.js";
 import { loginSchema } from "../utils/schemas/loginSchema.js";
 import { registerSchema } from "../utils/schemas/registerSchema.js";
 import Loader from "./Loader";
+import { passwordRules } from "../utils/schemas/registerSchema.js"; // Import the password rules
+
 export default function Form({ type, toggleDrawer }) {
+
+  const passwordGuidelines = [
+    "✔ At least 5 characters",
+    "✔ At least 1 uppercase letter (A-Z)",
+    "✔ At least 1 lowercase letter (a-z)",
+    "✔ At least 1 numeric digit (0-9)",
+  ];
+  const [showRules, setShowRules] = useState(false); // Control visibility
+
   const [show, setShow] = useState(false);
   const navigate = useNavigate();
 
@@ -350,6 +361,18 @@ export default function Form({ type, toggleDrawer }) {
               <span className="error">{errors.confirmPassword}</span>
             )}
           </div>
+
+             {/* Show Password Rules Conditionally */}
+{showRules && (
+  <div className={styles.password_rules}>
+    <p>Password must contain:</p>
+    <ul>
+      {passwordGuidelines.map((rule, index) => (
+        <li key={index}>{rule}</li>
+      ))}
+    </ul>
+  </div>
+)}
           <input
             value={values.confirmPassword}
             onChange={handleChange}
