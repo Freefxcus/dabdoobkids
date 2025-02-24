@@ -22,7 +22,7 @@ export default function Footer() {
         <Link to="/">
           <img
             loading="lazy"
-            src="/static/media/logoChristmas.e00062288f09f8f6a7433edf0d218dbd.svg"
+            src="/static/media/footer-logo.svg"
             alt="logo"
             width="340"
             height="340"
@@ -34,7 +34,7 @@ export default function Footer() {
         <div className={styles.section}>
           <div className={styles.header}>Help</div>
           <Link to="/returns-refunds" className={styles.link}>
-            Exchanges & Returnsssssssss
+            Exchanges & Returns
           </Link>
           <Link to="/payment-information" className={styles.link}>
             Payment Information
