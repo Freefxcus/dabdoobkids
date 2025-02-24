@@ -13,9 +13,11 @@ import instance from "../utils/interceptor.js";
 import { loginSchema } from "../utils/schemas/loginSchema.js";
 import { registerSchema } from "../utils/schemas/registerSchema.js";
 import Loader from "./Loader";
-import { passwordRules } from "../utils/schemas/registerSchema.js"; // Import the password rules
-
 export default function Form({ type, toggleDrawer }) {
+  const [show, setShow] = useState(true);
+  const navigate = useNavigate();
+
+  const dispatch = useDispatch();
 
   const passwordGuidelines = [
     "✔ At least 5 characters",
@@ -23,12 +25,7 @@ export default function Form({ type, toggleDrawer }) {
     "✔ At least 1 lowercase letter (a-z)",
     "✔ At least 1 numeric digit (0-9)",
   ];
-  const [showRules, setShowRules] = useState(false); // Control visibility
-
-  const [show, setShow] = useState(false);
-  const navigate = useNavigate();
-
-  const dispatch = useDispatch();
+  const [showRules, setShowRules] = useState(false); 
 
   const onSubmit = async (values, actions) => {
     const endpoint = type === "register" ? "/auth/register" : "/auth/login";
@@ -361,18 +358,6 @@ export default function Form({ type, toggleDrawer }) {
               <span className="error">{errors.confirmPassword}</span>
             )}
           </div>
-
-             {/* Show Password Rules Conditionally */}
-{showRules && (
-  <div className={styles.password_rules}>
-    <p>Password must contain:</p>
-    <ul>
-      {passwordGuidelines.map((rule, index) => (
-        <li key={index}>{rule}</li>
-      ))}
-    </ul>
-  </div>
-)}
           <input
             value={values.confirmPassword}
             onChange={handleChange}
@@ -386,7 +371,16 @@ export default function Form({ type, toggleDrawer }) {
             }
             placeholder="Repeat your password"
           ></input>
-
+{showRules && (
+  <div className={styles.password_rules}>
+    <p>Password must contain:</p>
+    <ul>
+      {passwordGuidelines.map((rule, index) => (
+        <li key={index}>{rule}</li>
+      ))}
+    </ul>
+  </div>
+)}
           <button className={styles.brown_button} type="submit">
             Register
           </button>
