@@ -23,7 +23,7 @@ const PrivacyPolicy = () => {
       </Typography>
 
       <Typography paragraph>
-        E-commerce is strongly committed to respecting the privacy of all
+        Dabdoob kids is strongly committed to respecting the privacy of all
         persons using our websites and mobile applications ("The Web
         Sites/Apps") and the protection of any personally identifiable
         information which we may collect on our Websites/Apps and/or use as part
@@ -43,7 +43,7 @@ const PrivacyPolicy = () => {
       </Typography>
 
       <Typography paragraph>
-        E-commerce reserves the right to collect such personally identifiable
+        Dabdoob kids reserves the right to collect such personally identifiable
         information as name, address, telephone number, e-mail address, etc., as
         well as demographic, transactional, and profile data such as IP address,
         internet domain or browser, referrer or user agent information or other
@@ -63,13 +63,13 @@ const PrivacyPolicy = () => {
       <Typography paragraph>
         If you do not agree with any of the terms and conditions set forth in
         the Privacy Policy, or have any questions, please contact us directly at
-        Webmaster@E-commerce.com, and we will be pleased to assist you with your
+        Webmaster@Dabdoob kids.com, and we will be pleased to assist you with your
         concerns.
       </Typography>
 
       <Typography paragraph>
         By accessing or using the Web Sites/Apps and/or communicating with us
-        through the Other Channels, you grant E-commerce a non-exclusive,
+        through the Other Channels, you grant Dabdoob kids a non-exclusive,
         worldwide, royalty-free perpetual license to use your personal
         information for the purposes set forth herein.
       </Typography>
@@ -95,7 +95,7 @@ const PrivacyPolicy = () => {
           Concessions and cosmetics partners for product delivery and services
         </li>
         <li>Purchasers and advisors in case of business sale</li>
-        <li>Third-party databases to which E-commerce subscribes</li>
+        <li>Third-party databases to which Dabdoob kids subscribes</li>
         <li>Government bodies if required by law</li>
         <li>Agencies for site traffic and sales statistics</li>
       </ul>
@@ -168,7 +168,7 @@ const PrivacyPolicy = () => {
         access, destruction, use, modification, or disclosure.
       </Typography>
 
-      <Typography paragraph>Thank you for choosing E-commerce.</Typography>
+      <Typography paragraph>Thank you for choosing Dabdoob kids.</Typography>
     </Box>
   );
 };

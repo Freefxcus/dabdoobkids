@@ -8,11 +8,11 @@ export default function Register() {
       className={`${styles.container} section-top-padding section-bottom-padding`}
     >
       <Helmet>
-        <title>{"E-commerce | register page"}</title>
+        <title>{"Dabdoob kids | register page"}</title>
         <meta
           name="description"
           content={
-            "Join the E-commerce Fun!\n Sign up for your child's free account and unlock a world of exciting activities, games, and learning adventures designed especially for kids"
+            "Join the Dabdoob kids Fun!\n Sign up for your child's free account and unlock a world of exciting activities, games, and learning adventures designed especially for kids"
           }
         />
       </Helmet>

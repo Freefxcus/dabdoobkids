@@ -24,7 +24,7 @@ export default function About() {
         • Our Identity
       </Box>
       <Box sx={{ fontSize: "0.8", lineHeight: "1.5", pb: "2.5rem" }}>
-        E-commerce Group Is One Of Most Unique Groups In Country That
+        Dabdoob kids Group Is One Of Most Unique Groups In Country That
         Specializes In All The Baby Needs Since Day 1. We Offer A Special
         Service Which We Can Bring You The Highest Quality International Brands
         For All Your Baby Needs. Each With Its Own Unique Identity, All Our
@@ -37,7 +37,7 @@ export default function About() {
         Our Customers. We All Share A Values-driven Way Of Working, Based On A
         Fundamental Respect For The Individual. Our Shared Values Help Create An
         Open, Dynamic And Down-toearth Company Culture Where Anything Is
-        Possible The E-commerce Group Is One Of The Most Unique Groups In
+        Possible The Dabdoob kids Group Is One Of The Most Unique Groups In
         Country That Specializes In All The Needs Of Both The Baby Needs Since
         Day One. We Offer A Special Service That We Can Offer You The Highest
         Quality International Brands For All Your Child's Needs.
@@ -71,7 +71,7 @@ export default function About() {
         Ourselves Every Day To Improving Our Offer, Through Our Careful Studies
         And The Best Choices For You And Your Children. Our Goal Is To Take Care
         Of Your Family By Providing For Each Of Your Families. With The Hope Of
-        Letting You Into Our E-commerce Family
+        Letting You Into Our Dabdoob kids Family
       </Box>
     </Box>
   );
