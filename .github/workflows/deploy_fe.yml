@@ -5,6 +5,7 @@ on:
     branches:
       - develop  # Staging environment
       - main     # Production environment
+      - newdev   # check the old code
 
 jobs:
   build:
@@ -29,11 +30,11 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          npm install --legacy-peer-deps || echo "Error: npm install failed, skipping..."
+          npm install --legacy-peer-deps || { echo "Error: npm install failed, skipping...";exit 1; }
       
       - name: Build React App
         run: |
-          npm run build || echo "Error: Build failed, skipping..."
+          npm run build || { echo "Error: Build failed, skipping..." ; exit 1; }
 
   test:
     needs: build
@@ -52,7 +53,7 @@ jobs:
 
       - name: Run Tests
         run: |
-          npm test || echo "Error: Tests failed, skipping..."
+          npm test || { echo "Error: Tests failed, skipping..." exit 1; }
 
   deploy:
     needs: test
@@ -64,7 +65,7 @@ jobs:
       - name: Determine Deployment Environment
         id: set-env
         run: |
-          if [[ "${{ github.ref }}" == "refs/heads/develop" ]]; then
+          if [[ "${{ github.ref }}" == "refs/heads/newdev" ]]; then
             echo "DEPLOY_PATH=/var/www/staging/portal" >> $GITHUB_ENV
           else
             echo "DEPLOY_PATH=/var/www/production/portal" >> $GITHUB_ENV
