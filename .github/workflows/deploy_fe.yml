@@ -64,10 +64,15 @@ jobs:
       - name: Determine Deployment Environment
         id: set-env
         run: |
-          if [[ "${{ github.ref }}" == "refs/heads/develop" ]]; then
+          if [[ "${{ github.ref }}" == "refs/heads/newdev" ]]; then
             echo "DEPLOY_PATH=/var/www/staging/portal" >> $GITHUB_ENV
-          else
+          elif [[ "${{ github.ref }}" == "refs/heads/develop" ]]; then
+            echo "DEPLOY_PATH=/var/www/develop/portal" >> $GITHUB_ENV
+          elif [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
             echo "DEPLOY_PATH=/var/www/production/portal" >> $GITHUB_ENV
+          else
+            echo "This branch is not allowed to run deployments."
+            exit 1
           fi
 
       - name: Deploy to VPS using SSH
