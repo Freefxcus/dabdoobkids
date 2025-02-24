@@ -20,7 +20,7 @@ export default function Footer() {
           }}
         >
         <img
-          loading={lazy}
+          loading="lazy"
           src={logo}
           className={styles.clickable}
           alt="logo"
