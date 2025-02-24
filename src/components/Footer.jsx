@@ -25,7 +25,7 @@ export default function Footer() {
         <div className={styles.section}>
           <div className={styles.header}>Help</div>
           <Link to="/returns-refunds" className={styles.link}>
-            Exchanges & Returns
+            Exchanges & Returnsssssssss
           </Link>
           <Link to="/payment-information" className={styles.link}>
             Payment Information
