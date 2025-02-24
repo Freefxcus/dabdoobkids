@@ -16,6 +16,10 @@ import styles from "../styles/pages/Home.module.css";
 import { authorize, getProducts, getWishlistItems } from "../utils/apiCalls.js";
 import { notifyError } from "../utils/general.js";
 import instance from "../utils/interceptor.js";
+import offer1 from "../images/offer-1.svg";
+import offer2 from "../images/offer-2.svg";
+import offer3 from "../images/offer-3.svg";
+import offer4 from "../images/offer-4.svg";
 
 // Lazy load components
 const DailySaleComponent = lazy(() =>
@@ -178,25 +182,25 @@ export default function Home() {
             {[
               {
                 id: "1",
-                img: "/offer-1.svg",
+                img: offer1,
                 title: "Best Quality Guarantee",
                 body: "Product that arrived at your door already passed our Quality Control procedure.",
               },
               {
                 id: "2",
-                img: "/offer-2.svg",
+                img: offer2,
                 title: "Easy Payment Choice",
                 body: "Various payment choice will give an ease every time you purchase our product.",
               },
               {
                 id: "3",
-                img: "/offer-3.svg",
+                img: offer3,
                 title: "On-Time Delivery",
                 body: "We will make sure that all product that you purchased will arrived at your address safely.",
               },
               {
                 id: "4",
-                img: "/offer-4.svg",
+                img: offer4,
                 title: "Best Price",
                 body: "We are offering the best prices of the most authentic UK brands to your door step without taxes or extra fees.",
               },
