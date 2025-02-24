@@ -1,7 +1,7 @@
 import React from "react";
 
 import styles from "../styles/components/Footer.module.css";
-
+import logo from "../images/logo-footer.svg";
 import { EmailOutlined } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 
@@ -19,7 +19,14 @@ export default function Footer() {
             fontWeight: "bold",
           }}
         >
-          Logo
+        <img
+          loading={lazy}
+          src={logo}
+          className={styles.clickable}
+          alt="logo"
+          style={{ marginLeft: "10px", cursor: "pointer" }}
+          onClick={() => navigate("/")}
+        />
         </div>
 
         <div className={styles.section}>
