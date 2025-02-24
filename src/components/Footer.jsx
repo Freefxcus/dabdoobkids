@@ -19,14 +19,16 @@ export default function Footer() {
             fontWeight: "bold",
           }}
         >
-        <img
-          loading="lazy"
-          src={logo}
-          className={styles.clickable}
-          alt="logo"
-          style={{ marginLeft: "10px", cursor: "pointer" }}
-          onClick={() => navigate("/")}
-        />
+        <Link to="/">
+          <img
+            loading="lazy"
+            src="/static/media/logoChristmas.e00062288f09f8f6a7433edf0d218dbd.svg"
+            alt="logo"
+            width="340"
+            height="340"
+            style={{ cursor: "pointer" }}
+          />
+        </Link>
         </div>
 
         <div className={styles.section}>
