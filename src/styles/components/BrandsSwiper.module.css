@@ -1,0 +1,39 @@
+.embla {
+  overflow: hidden;
+  white-space: nowrap;
+  padding: 12px 0;
+  background-color: #00000072;
+  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 80%);
+  margin-top: 120px;
+  margin-bottom: 80px;
+}
+
+@media (min-width: 640px) {
+  .embla {
+    padding: 100px 0;
+  }
+}
+
+.emblaContainer {
+  display: flex;
+}
+
+.emblaSlide {
+  flex: 0 0 200px;
+}
+
+.imageLink {
+  display: block;
+  width: 100px;
+}
+
+@media (min-width: 640px) {
+  .imageLink {
+    width: 150px;
+  }
+}
+
+.brandImage {
+  width: 100%;
+  height: auto;
+}

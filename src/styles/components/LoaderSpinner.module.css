@@ -1,0 +1,30 @@
+.spinner {
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto;
+
+  margin-block: 100px;
+}
+
+.small {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #d1d9e1;
+  border-top: 4px solid #a0a8b0;
+}
+
+.large {
+  width: 80px;
+  height: 80px;
+  border: 8px solid #d1d9e1; /* dreamy-cloud color */
+  border-top: 8px solid #a0a8b0; /* #a0a8b0 color */
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

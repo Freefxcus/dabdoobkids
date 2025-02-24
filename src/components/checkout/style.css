@@ -1,0 +1,32 @@
+.btn{
+    border-radius: 8px;
+box-shadow: 0 2 5px rgba(0, 0, 0, 0.8);
+}
+.promo-code{
+    background-color: var(--dreamy-cloud);
+    border: none;
+    padding: 12px 24px;cursor: pointer;
+    color: #101623;
+}.promo-code:disabled{
+    /* background-color: var(-); */
+    box-shadow: 0 2 5px rgba(0, 0, 0, 0.5);
+}
+.input-code{
+    border: 2px solid var(--dreamy-cloud) ;
+    padding: 12px 12px ;
+    
+}
+.input-code-container{
+    flex: 1;
+    position: relative;
+    display:grid;
+}
+.btn-clear{
+    background-color:none;
+    border: none;
+    position: absolute;
+    right:5px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}

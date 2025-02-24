@@ -1,0 +1,22 @@
+.timerContainer {
+  display: flex;
+  align-items: center;
+  margin-top: 0.25rem;
+  font-weight: 600;
+  font-size: 1.5rem;
+  color: #a0522d;
+}
+
+.timeBox {
+  border-radius: 10px;
+  border: 1px solid #f4f4f4;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.separator {
+  margin: 0 0.5rem;
+}

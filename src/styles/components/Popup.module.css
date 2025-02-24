@@ -1,0 +1,220 @@
+.form_container {
+  background-color: var(--white);
+  /* padding: 20px; */
+  border-radius: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 10px;
+  max-width: 500px;
+  margin: auto;
+  width: 90%;
+  height: 90%;
+  max-height: 400px;
+}
+.card_container {
+  background-color: var(--white);
+  /* padding: 20px; */
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  max-width: 400px;
+}
+.item {
+  width: 100%;
+  position: relative;
+  box-sizing: border-box;
+}
+.semi_item {
+  width: 48%;
+}
+.bottom_margin {
+  margin-bottom: 10px;
+}
+.title {
+  color: var(--errie-black);
+  font-size: 20px;
+  font-weight: 600;
+}
+.sub_title {
+  color: var(--rhine-castle);
+  font-size: 14px;
+  font-weight: 400;
+}
+.label {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  /* display: flex; */
+  /* flex-wrap: wrap; */
+}
+.error {
+  color: var(--error);
+}
+.input {
+  padding: 11px 14px 11px 14px;
+  border: 1px solid var(--dreamy-cloud);
+  border-radius: 8px;
+}
+.input::placeholder {
+  color: var(--placeholder-text);
+}
+.checkbox {
+  cursor: pointer;
+  width: 15px;
+}
+.brown_button {
+  cursor: pointer;
+  color: var(--white);
+  background-color: var(--brown);
+  padding: 13px;
+  border-radius: 10px;
+  border: none;
+  max-height: 3rem;
+}
+.grey_button {
+  cursor: pointer;
+  color: var(--black);
+  background-color: var(--dr-white);
+  padding: 13px;
+  border-radius: 10px;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+.footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+.footer_main {
+  color: var(--rhine-castle);
+}
+.footer_sub {
+  font-weight: bold;
+  color: var(--brown);
+  cursor: pointer;
+}
+.remember_me_line {
+  display: flex;
+  gap: 10px;
+}
+.remember_me_label {
+  color: var(--rhine-castle);
+}
+.remember_me_link {
+  margin-left: auto;
+  cursor: pointer;
+  color: var(--black);
+}
+.card_img {
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+.card_title {
+  font-weight: 600;
+  color: var(--errie-black);
+  font-size: 20px;
+  text-align: center;
+}
+.card_description {
+  color: var(--placeholder-text);
+  font-size: 14px;
+  text-align: center;
+}
+.btn_container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+.btn_a {
+  border-radius: 10px;
+  color: var(--white);
+  background-color: var(--error);
+  border: 1px solid var(--error);
+  text-align: center;
+  padding: 13px;
+  width: 45%;
+  cursor: pointer;
+}
+.btn_b {
+  border-radius: 10px;
+  background-color: var(--white);
+  border: 1px solid var(--errie-black);
+  text-align: center;
+  padding: 10px 13px;
+  width: 45%;
+  cursor: pointer;
+}
+.terms_container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 500px;
+  min-width: 250px;
+  overflow: auto;
+  max-height: 70vh;
+}
+.terms_title {
+  text-align: initial;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--errie-black);
+}
+.terms_content {
+  text-align: initial;
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--errie-black);
+  list-style-position: inside;
+}
+.error {
+  color: var(--error);
+}
+.row{
+  display: flex; 
+  width: 100%;
+  /* flex-wrap: wrap; */
+  gap: 10px;
+  align-items: center;
+  flex-direction: row;
+}
+/* Media query for screens smaller than 600px (e.g., smartphones) */
+@media (max-width: 600px) {
+  .form_container {
+    max-height: 600px;
+    width: 250px;
+  }
+  .card_container {
+    width: 250px;
+  }
+  .semi_item {
+    width: 100%;
+  }
+  .row{flex-direction: column;}
+}
+
+/* Media query for screens between 601px and 900px (e.g., tablets) */
+@media (min-width: 601px) and (max-width: 900px) {
+  .semi_item {
+    width: 100%;
+  }
+  .row{flex-direction: column;}
+  .form_container {
+    max-height: 600px;}
+}
+
+/* Media query for screens between 901px and 1200px (e.g., larger tablets and small desktops) */
+@media (min-width: 901px) and (max-width: 1200px) {
+}
+
+/* Media query for screens larger than 1200px (e.g., large desktops) */
+@media (min-width: 1201px) {
+}

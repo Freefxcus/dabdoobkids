@@ -1,0 +1,84 @@
+.container {
+  background-color: var(--dr-white);
+  /* width: 400px; */
+  width: 90%;
+  height: 180px;
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  gap: 10px;
+}
+.text-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+}
+.title {
+  font-size: 32px;
+  font-weight: 600;
+}
+.subtitle {
+  font-size: 16px;
+  font-weight: 600;
+}
+.image {
+  height: 100%;
+}
+
+/* Media query for screens smaller than 600px (e.g., smartphones) */
+@media (max-width: 600px) {
+  .container {
+    background-color: var(--dr-white);
+    /* width: 125px; */
+    width: 90%;
+    height: 130px;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-radius: 8px;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .text-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+  }
+  .title {
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .subtitle {
+    font-size: 8px;
+    font-weight: 600;
+  }
+  .image {
+    height: 55%;
+  }
+}
+
+/* Media query for screens between 601px and 900px (e.g., tablets) */
+@media (min-width: 601px) and (max-width: 900px) {
+  .title {
+    font-size: 18px;
+    font-weight: 600;
+  }
+}
+
+/* Media query for screens between 901px and 1200px (e.g., larger tablets and small desktops) */
+@media (min-width: 901px) and (max-width: 1200px) {
+  .title {
+    font-size: 22px;
+    font-weight: 600;
+  }
+}
+
+/* Media query for screens larger than 1200px (e.g., large desktops) */
+@media (min-width: 1201px) {
+}

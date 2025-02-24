@@ -1,0 +1,222 @@
+.bg {
+  background-color: var(--dr-white);
+}
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+.row_wrap {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+.row_reverse {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 20px;
+}
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-top: 30px;
+  padding-bottom: 30px;
+  gap: 30px;
+}
+.header {
+  color: var(--errie-black);
+  font-size: 36px;
+  font-weight: 600;
+  /* margin-bottom: 10px; */
+}
+.sub_header {
+  color: var(--errie-black);
+  font-size: 20px;
+  font-weight: 600;
+  /* margin-bottom: 10px; */
+}
+.delete_account {
+  color: var(--error);
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-radius: 10px;
+  /* background-color: var(--white); */
+  gap: 5px;
+}
+.sidebar {
+  padding: 20px;
+  border-radius: 10px;
+  background-color: var(--white);
+  min-width: 160px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.sidebar_item {
+  color: var(--rhine-castle);
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.sidebar_item_active {
+  color: var(--errie-black);
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.section {
+  max-width: 500px;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: var(--white);
+  gap: 20px;
+}
+.brown_btn {
+  cursor: pointer;
+  padding: 6px 12px 6px 12px;
+  text-align: center;
+  color: var(--white);
+  background-color: var(--brown);
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 8px;
+  border: none;
+}
+.edit_link {
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--brown);
+}
+.delete_link {
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--error);
+}
+.title {
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--heavy-blue-grey);
+  margin-bottom: 5px;
+}
+.body {
+  color: var(--errie-black);
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+.v_line {
+  border: 1px solid var(--pale-grey);
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.text_container {
+  /* max-width: 1150px; */
+  width:95%;
+  background-color: #fff;
+  padding:30px 30px 50px;
+  border-radius: 1rem;
+  line-height: 1.5;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.cards_container {
+  max-width: 1150px;
+  line-height: 1.5;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+.left_title {
+  color: #5f5f5f;
+}
+.main_title {
+  font-size: 17px;
+  font-weight: bold;
+}
+.my_table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.my_table th {
+  text-align: left;
+  padding: 8px;
+  border: none;
+  border-bottom: 1px solid #ededed;
+  color: #5f5f5f;
+  font-size: 18px;
+  font-weight: 500;
+}
+.my_table td {
+  text-align: left;
+  padding: 8px;
+  border: none;
+  border-bottom: 1px solid #ededed;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.my_table th {
+  white-space: nowrap;
+}
+
+.my_table td {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+@media (max-width: 600px) {
+  .text_container {
+    /* max-width: 1150px; */
+    width:90%;}
+  .container {
+    flex-wrap: wrap;
+  }
+  .sidebar {
+    width: 100%;
+    flex-direction: row;
+    gap: 10px;
+    font-size: 15px;
+    white-space: nowrap;
+    overflow: auto;
+  }
+  .sidebar_item {
+    border: 1px solid var(--white);
+    padding-bottom: 5px;
+  }
+  .sidebar_item_active {
+    border-bottom: 1px solid var(--rhine-castle);
+    padding-bottom: 5px;
+  }
+  .cards_container {
+    justify-content: center;
+  }
+}
+
+/* Media query for screens between 601px and 900px (e.g., tablets) */
+@media (min-width: 601px) and (max-width: 900px) {
+}
+
+/* Media query for screens between 901px and 1200px (e.g., larger tablets and small desktops) */
+@media (min-width: 901px) and (max-width: 1200px) {
+}
+
+/* Media query for screens larger than 1200px (e.g., large desktops) */
+@media (min-width: 1201px) {
+}
