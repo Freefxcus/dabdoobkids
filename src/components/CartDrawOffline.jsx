@@ -6,7 +6,7 @@ import { Box, Drawer } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { cartActions } from "../Redux/store";
 import SideCartCardOffline from "./cart/SideCartCardOffline";
-import Form from "./Form";
+import Form from "./Form.jsx.back";
 
 import { newCalcDiscount } from "../utils/general.js";
 
