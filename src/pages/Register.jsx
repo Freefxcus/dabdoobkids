@@ -1,6 +1,6 @@
-import styles from "../styles/pages/Register.module.css";
-import Form from "../components/Form";
 import { Helmet } from "react-helmet";
+import Form from "../components/Form";
+import styles from "../styles/pages/Register.module.css";
 
 export default function Register() {
   return (
@@ -8,11 +8,11 @@ export default function Register() {
       className={`${styles.container} section-top-padding section-bottom-padding`}
     >
       <Helmet>
-        <title>{"Dabdoob Kidz | register page"}</title>
+        <title>{"E-commerce | register page"}</title>
         <meta
           name="description"
           content={
-            "Join the Dabdoob Kidz Fun!\n Sign up for your child's free account and unlock a world of exciting activities, games, and learning adventures designed especially for kids"
+            "Join the E-commerce Fun!\n Sign up for your child's free account and unlock a world of exciting activities, games, and learning adventures designed especially for kids"
           }
         />
       </Helmet>

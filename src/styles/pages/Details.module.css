@@ -10,7 +10,6 @@
 }
 
 .images-section {
-
   display: flex;
   width: 100%;
   flex-wrap: wrap;
@@ -18,7 +17,7 @@
 }
 
 .large-image {
-aspect-ratio: 0.8 !important;
+  aspect-ratio: 0.8 !important;
   width: calc(100% - 130px);
   /* height: 650px; */
   border-radius: 9px;
@@ -34,7 +33,6 @@ aspect-ratio: 0.8 !important;
 }
 
 .small-image {
-
   width: 100px;
   aspect-ratio: 0.8;
 
@@ -50,7 +48,7 @@ aspect-ratio: 0.8 !important;
   flex-direction: column;
   max-width: 500px;
   gap: 10px;
-  background-color: #FAFAFA;
+  background-color: #fafafa;
   border-radius: 14px;
   padding: 24px;
 }
@@ -86,7 +84,7 @@ aspect-ratio: 0.8 !important;
 .select,
 .buttonVariant {
   background-color: #fff;
-  box-shadow: 0 5px 20px rgba(255, 255, 255, 0.10);
+  box-shadow: 0 5px 20px rgba(255, 255, 255, 0.1);
 }
 
 .select:focus *,
@@ -109,7 +107,7 @@ aspect-ratio: 0.8 !important;
   flex-shrink: 0;
   border-radius: 10px;
   cursor: pointer;
-  border: none
+  border: none;
 }
 
 .cart-button:hover {
@@ -117,7 +115,6 @@ aspect-ratio: 0.8 !important;
 }
 
 .cart-button:disabled {
-
   background-color: #9f9f9f99;
   cursor: default;
 }
@@ -148,10 +145,9 @@ aspect-ratio: 0.8 !important;
     /* height: 400px; */
   }
   .small-image {
-
-    height:  130px;
+    height: 130px;
     aspect-ratio: 0.8;
-  }  
+  }
   .small-images-container {
     display: flex;
     flex-wrap: wrap;
@@ -198,12 +194,12 @@ aspect-ratio: 0.8 !important;
     min-width: 75px;
   }
   .btns-action {
-   
-    padding: 0.7rem 0.9rem;}
-    .row{
-      padding: 0;
-      gap: 12px;
-    }
+    padding: 0.7rem 0.9rem;
+  }
+  .row {
+    padding: 0;
+    gap: 12px;
+  }
   .images-section {
     flex: auto;
   }
@@ -226,10 +222,9 @@ aspect-ratio: 0.8 !important;
     gap: 10px;
   }
   .small-image {
-
-    height:  130px;
+    height: 130px;
     aspect-ratio: 0.8;
-  } 
+  }
   .images-section {
     display: flex;
     flex-wrap: wrap;
@@ -249,15 +244,28 @@ aspect-ratio: 0.8 !important;
 }
 
 /* Media query for screens larger than 1200px (e.g., large desktops) */
-@media (min-width: 1201px) {}
+@media (min-width: 1201px) {
+}
 @media (max-width: 350px) {
   .btn-count {
     min-width: 60px;
   }
   .btns-action {
-   
-    padding: 0.5rem 0.6rem;}
-    .row{
-      gap: 10px;
-    }
+    padding: 0.5rem 0.6rem;
+  }
+  .row {
+    gap: 10px;
+  }
+}
+
+.sizeGuide {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  & button {
+    color: #000;
+    display: block;
+    text-decoration: underline;
+  }
 }

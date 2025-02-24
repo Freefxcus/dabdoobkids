@@ -1,17 +1,15 @@
-import { useState } from "react";
-import styles from "../styles/pages/Summary.module.css";
-import promo from "../images/promo.png";
-import x from "../images/x.png";
-import add from "../images/add.png";
-import edit from "../images/edit.png";
-import OrderCard from "../components/OrderCard";
+import FormControlLabel from "@mui/material/FormControlLabel";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-
+import { useState } from "react";
+import OrderCard from "../components/OrderCard";
+import Popup from "../components/Popup";
+import add from "../images/add.png";
+import edit from "../images/edit.png";
+import promo from "../images/promo.png";
+import x from "../images/x.png";
+import styles from "../styles/pages/Summary.module.css";
 export default function Summary() {
-  console.log("Summary component rendered");
-
   const [promocode, setPromocode] = useState("");
   const [open, setOpen] = useState(false);
   const [address, setAddress] = useState({});
@@ -19,17 +17,18 @@ export default function Summary() {
 
   return (
     <div className={`${styles.container} padding-container`}>
-      open={open}
-      setOpen={setOpen}
-      type="create_address" option="no_api" setAddress={setAddress}
-      address={address}
+      <Popup
+        open={open}
+        setOpen={setOpen}
+        type="create_address"
+        option="no_api"
+        setAddress={setAddress}
+        address={address}
       />
       <div className={styles.column}>
-        <div className={styles.title_main} style={{ color: "red" }}>
-          Summary Orderr
-        </div>
+        <div className={styles.title_main}>Summary Order</div>
         <div className={styles.order_summary}>
-          <OrderCard /> //"correct"
+          <OrderCard />
           <OrderCard />
         </div>
         <div className={styles.title_main}>Shipping Details</div>
@@ -41,7 +40,6 @@ export default function Summary() {
                 <div>{address.address}</div>
                 <img
                   src={edit}
-                  alt="img1"
                   width="20px"
                   style={{ cursor: "pointer" }}
                   onClick={() => {
@@ -59,7 +57,6 @@ export default function Summary() {
                 <img
                   src={add}
                   width="40px"
-                  alt="img2"
                   style={{ cursor: "pointer" }}
                   onClick={() => {
                     setOpen(true);
@@ -90,7 +87,7 @@ export default function Summary() {
                 onClick={() => setPaymentOption("Credit Card")}
               >
                 <div className={styles.radio_option_section}>
-                  <img src="credit-card.png" width="30px" alt="img3" />
+                  <img src="credit-card.png" width="30px" />
                   <div className={styles.description}>Credit Card</div>
                 </div>
                 <div className={styles.radio_option_section}>
@@ -117,7 +114,7 @@ export default function Summary() {
                 onClick={() => setPaymentOption("Cash on Delivery")}
               >
                 <div className={styles.radio_option_section}>
-                  <img src="credit-card.png" width="30px" alt="img4" />
+                  <img src="credit-card.png" width="30px" />
                   <div className={styles.description}>Cash on Delivery</div>
                 </div>
                 <div className={styles.radio_option_section}>
@@ -144,7 +141,7 @@ export default function Summary() {
                 onClick={() => setPaymentOption("Wallet")}
               >
                 <div className={styles.radio_option_section}>
-                  <img src="./e-wallet.png" width="30px" alt="img5" />
+                  <img src="./e-wallet.png" width="30px" />
                   <div className={styles.description}>Cash on Delivery</div>
                 </div>
                 <div className={styles.radio_option_section}>
@@ -178,7 +175,7 @@ export default function Summary() {
             }}
           >
             <div className={styles.promo_input_container}>
-              <img src={promo} width="20px" alt="img6" />
+              <img src={promo} width="20px" />
               <input
                 type="text"
                 className={styles.promo_input}
@@ -190,7 +187,6 @@ export default function Summary() {
               <img
                 src={x}
                 width="20px"
-                alt="img8"
                 style={{
                   cursor: "pointer",
                   visibility: promocode ? "initial" : "hidden",
@@ -204,12 +200,11 @@ export default function Summary() {
           </div>
         </div>
         <div className={styles.row}>
-          <div className={styles.title_sub}>otal Shopping</div>
+          <div className={styles.title_sub}>Total Shopping</div>
           <div className={styles.value}>EGP {`3.040.00`}</div>
         </div>
 
         <div className={styles.row}>
-          <h1>hi shipping</h1>
           <div className={styles.title_sub}>Shipping</div>
           <div className={styles.value}>EGP {`10.00`}</div>
         </div>
@@ -218,10 +213,9 @@ export default function Summary() {
           <div className={styles.value}>EGP {`10.00`}</div>
         </div>
         <div className={styles.row} style={{ color: "var(--brown)" }}>
-          <div
-            className={styles.title_sub}
-            style={{ color: "var(--brown)" }}
-          ></div>
+          <div className={styles.title_sub} style={{ color: "var(--brown)" }}>
+            Discount
+          </div>
           <div className={styles.value}>-EGP {`50.00`}</div>
         </div>
         <div className={styles.row}>
@@ -234,7 +228,7 @@ export default function Summary() {
           // disabled={!address.address || !promocode}
           disabled={!address.address}
         >
-          Continue to paymentppp
+          Continue to payment
         </button>
       </div>
     </div>

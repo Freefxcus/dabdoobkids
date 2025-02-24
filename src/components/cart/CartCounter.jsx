@@ -1,6 +1,11 @@
 import HandleMessageIsAuth from "../../utils/message";
 
-export default function CartCounter({ increment, decrement, count,CartAddLoad }) {
+export default function CartCounter({
+  increment,
+  decrement,
+  count,
+  CartAddLoad,
+}) {
   return (
     <div
       style={{
@@ -12,18 +17,16 @@ export default function CartCounter({ increment, decrement, count,CartAddLoad })
     >
       <button
         style={{ background: "white", border: "none", fontSize: "22px" }}
-        disabled={CartAddLoad||count <= 1}
-        onClick={()=>HandleMessageIsAuth( decrement)}
-    
+        disabled={CartAddLoad || count <= 1}
+        onClick={decrement}
       >
         -
       </button>
       <span style={{ fontSize: "22px" }}>{count}</span>
       <button
-      disabled={CartAddLoad}
+        disabled={CartAddLoad}
         style={{ background: "white", border: "none", fontSize: "22px" }}
-        onClick={()=>HandleMessageIsAuth( increment)}
-       
+        onClick={increment}
       >
         +
       </button>

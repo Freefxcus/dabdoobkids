@@ -1,11 +1,16 @@
 import { CardMedia, Stack } from "@mui/material";
+import { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 export default function PostPayment() {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const paymentMethod = searchParams.get("success");
   const navigate = useNavigate();
-  console.log(paymentMethod, "paymentMethod213123");
+
+  useEffect(() => {
+    if (paymentMethod === "true") localStorage.removeItem("paymentURL");
+  }, [paymentMethod]);
+
   return (
     <Stack
       gap={"12px"}

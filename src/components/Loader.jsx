@@ -1,9 +1,7 @@
-import * as React from "react";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import Modal from "@mui/material/Modal";
 import CircularProgress from "@mui/material/CircularProgress";
+import Modal from "@mui/material/Modal";
+import * as React from "react";
 
 const style = {
   position: "absolute",
@@ -14,7 +12,6 @@ const style = {
   boxShadow: "none", // Remove the box shadow
   backgroundColor: "transparent", // Set the background color to transparent
   outline: "none",
-  border: "none",
 };
 
 export default function Loader({ open }) {

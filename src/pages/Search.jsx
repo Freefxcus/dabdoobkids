@@ -1,419 +1,196 @@
-import { useState, useEffect, useCallback } from "react";
+// import FilterList from "@/app/_components/search/FilterList";
+
 import styles from "../styles/pages/Search.module.css";
-import ClothesCard from "../components/ClothesCard";
-import Checkbox from "@mui/material/Checkbox";
-import lense from "../images/lense.svg";
-import filter from "../images/filter.png";
-import Drawer from "@mui/material/Drawer";
-import CountdownTimer from "../components/CountdownTimer";
-import Pagination from "@mui/material/Pagination";
-import { getBrands, getCategories, getProducts } from "../utils/apiCalls";
-import Box from "@mui/material/Box";
-import LinearProgress from "@mui/material/LinearProgress";
-import { debounce } from "lodash";
+
+import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import Empty from "./empty";
-import CloseIcon from "@mui/icons-material/Close";
+import ClothesCard from "../components/ClothesCard";
+import CountdownTimer from "../components/CountdownTimer";
+import LoaderSpinner from "../components/LoaderSpinner";
+import LayoutFilterSort from "../components/search/LayoutFilterSort";
+import LayoutPagination from "../components/search/LayoutPagination";
+import { getProducts } from "../utils/apiCalls";
 
-export default function Search() {
-  /* eslint-disable no-console */
-  console.log("This will not trigger a warning");
-  /* eslint-enable no-console */
+export const revalidate = 3600;
 
+const sortFields = [
+  { key: "sort", value: "default", name: "Default", id: 0 },
+  { key: "sort", value: "price_desc", name: "Price High To Low", id: 1 },
+  { key: "sort", value: "price_asc", name: "Price Low To High", id: 2 },
+  { key: "sort", value: "newest", name: "New Arrivals", id: 3 },
+  { key: "sort", value: "category_group", name: "Most Relevant", id: 4 },
+];
+
+const sizeFields = [
+  { key: "sizes", value: "Up to 3Mths", name: "Up to 3Mths", id: 0 },
+  { key: "sizes", value: "3-6 Mths", name: "3-6 Mths", id: 1 },
+  { key: "sizes", value: "9-12 Mths", name: "9-12 Mths", id: 2 },
+  { key: "sizes", value: "12-18 Mths", name: "12-18 Mths", id: 3 },
+  { key: "sizes", value: "1.5-2 Yrs", name: "1.5-2 Yrs", id: 4 },
+  { key: "sizes", value: "2-3 Yrs", name: "2-3 Yrs", id: 5 },
+  { key: "sizes", value: "3-4 Yrs", name: "3-4 Yrs", id: 6 },
+  { key: "sizes", value: "4-5 Yrs", name: "4-5 Yrs", id: 7 },
+  { key: "sizes", value: "5-6 Yrs", name: "5-6 Yrs", id: 8 },
+  { key: "sizes", value: "6-7 Yrs", name: "6-7 Yrs", id: 9 },
+  { key: "sizes", value: "7-8 Yrs", name: "7-8 Yrs", id: 10 },
+];
+
+function Search() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const urlCatId = searchParams.get("categoryId")?.split(",") || [];
-  const urlBrandId = searchParams.get("brandId")?.split(",") || [];
-  const urlQuery = searchParams.get("query") || "";
-  const urlSale = searchParams.get("sale") || "";
-  const endDate = searchParams.get("endDate") || "";
-  const [catId, setCatId] = useState(urlCatId.map((i) => +i));
-  const [brandId, setBrandId] = useState(urlBrandId.map((i) => +i));
-  const [queryStr, setQuery] = useState(urlQuery);
-  const [searchData, setSearchData] = useState([]);
-  const [filterCount] = useState(0);
-  const [totalPages, setTotalPages] = useState(1);
+  const [searchData, setSearchData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-  const [page, setPage] = useState(+searchParams.get("page") || 1);
-  const [state, setState] = useState(false);
 
-  const [categories, setCategories] = useState([]);
-  const [brands, setBrands] = useState([]);
+  const {
+    metadata: { totalPages = 1 } = {},
+    products = [],
+    sale: { end: flashSaleEnd = "", percentage } = {},
+  } = searchData || {};
 
-  const [timeLeft, setTimeLeft] = useState({
-    hours: 0,
-    minutes: 0,
-    seconds: 0,
-  });
-  const calculateTimeLeft = (saleEndTime) => {
-    const end = new Date(saleEndTime).getTime();
-    const now = new Date().getTime();
-    const difference = end - now;
-    if (difference > 0) {
-      const hours = Math.floor(
-        (difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-      );
-      const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((difference % (1000 * 60)) / 1000);
-      setTimeLeft({ hours, minutes, seconds });
-    } else {
-      // Sale has ended
-      setTimeLeft({ hours: 0, minutes: 0, seconds: 0 });
-    }
-  };
+  const page = +searchParams.get("page") || 1;
+  const sort = searchParams.get("sort") || "";
+  const sale = !!searchParams.get("sale") || false;
 
+  const params = {};
+
+  const getQueries = searchParams.forEach(
+    (value, key) => (params[key] = value)
+  );
+
+  // Filter Products
   useEffect(() => {
-    window.scroll({
-      top: 0,
-      left: 0,
-      behavior: "smooth",
-    });
-  }, [page]);
-  useEffect(() => {
-    getCategories().then((res) => {
-      setCategories(res?.categories);
-    });
-    getBrands().then((res) => {
-      setBrands(res?.brands);
-    });
-    // loadProducts(page); // Load products based on the current page state
-  }, [page]);
-
-  useEffect(() => {
-    setCatId([...urlCatId].map((i) => +i));
-    setBrandId([...urlBrandId].map((i) => +i));
-    endDate && calculateTimeLeft(endDate);
-  }, [endDate]);
-
-  const loadProducts = useCallback(() => {
     setIsLoading(true);
-    const categoryStr = catId.length ? catId.join(",") : "";
-    const brandStr = brandId.length ? brandId.join(",") : "";
-
-    const queryParams = {
-      page: page.toString(),
-      category: categoryStr,
-      brand: brandStr,
-      query: queryStr || "",
-      sale: urlSale || "",
-    };
-
     getProducts(
       page,
-      false,
-      categoryStr,
-      brandStr,
-      queryParams.query,
-      queryParams.sale
+      20,
+      params.category || "",
+      params.subcategory || "",
+      params.brand || "",
+      params.query || "",
+      sale
     )
-      .then((res) => {
-        setSearchData(res);
-        setTotalPages(res?.metadata?.totalPages || 1);
-        setIsLoading(false);
-      })
-      .catch(() => {
-        setIsLoading(false);
-      });
-  }, [catId, brandId, queryStr, page]);
+      .then((res) => setSearchData(res))
+      .finally(() => setIsLoading(false));
+  }, [
+    page,
+    params.category,
+    params.brand,
+    params.query,
+    sale,
+    params.subcategory,
+  ]);
 
-  const handleCategoryChange = (categoryId) => {
-    const newCatId = catId.includes(categoryId)
-      ? catId.filter((id) => id !== categoryId)
-      : [...catId, categoryId];
-    let uniqueNewCatId = [...new Set(newCatId)];
-    setCatId(uniqueNewCatId);
-    setSearchParams((prev) => {
-      prev.set("categoryId", uniqueNewCatId.join(","));
-      prev.delete("page");
-      return prev;
-    });
-  };
-
-  const handleBrandChange = (id) => {
-    const newBrandId = brandId.includes(id)
-      ? brandId.filter((brand) => brand !== id)
-      : [...brandId, id];
-    let uniqueNewBrandId = [...new Set(newBrandId.map((i) => +i))];
-    setBrandId(uniqueNewBrandId);
-    setSearchParams((prev) => {
-      prev.set("brandId", uniqueNewBrandId.join(","));
-      prev.delete("page");
-      return prev;
-    });
-  };
-
-  const handleSearch = (event) => {
-    setQuery(event.target.value);
-    setSearchParams((prev) => {
-      prev.set("query", event.target.value);
-      prev.delete("page");
-      return prev;
-    });
-    debouncedHandleInputChange();
-  };
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const debouncedHandleInputChange = useCallback(
-    debounce(() => {
-      loadProducts(page);
-    }, 300),
-    [catId, brandId, page] // Removed queryStr to prevent dependency conflict
-  );
-
-  const handlePageChange = (event, value) => {
-    setPage(value); // Call the product loading function with the new page
-  };
-
+  // Scroll To Top If Brand In SearchParams
   useEffect(() => {
-    console.log(page, "currentPage");
+    if (params.brand)
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: "smooth",
+      });
+  }, [params.brand]);
 
-    loadProducts();
-  }, [catId, brandId, queryStr, page]);
+  const pricesRange =
+    searchParams
+      .get("prices")
+      ?.split("&")
+      ?.map((el) => el.slice(el.indexOf("=") + 1)) || "";
+
+  // const getFilterList = Object.entries(searchParams)
+  //   .flatMap(([key, value]) => {
+  //     const queries = [];
+
+  //     if (key === "categories")
+  //       for (const element of categories) {
+  //         if (value.includes(",")) {
+  //           value.split(",").forEach((category) => {
+  //             if (category.includes(element._id))
+  //               queries.push({ query: key, id: category, value: element.name });
+  //           });
+  //         } else if (element._id === value)
+  //           queries.push({ query: key, id: value, value: element.name });
+  //       }
+
+  //     if (key === "brands")
+  //       for (const element of brands) {
+  //         if (value.includes(",")) {
+  //           value.split(",").forEach((brand) => {
+  //             if (brand.includes(element._id))
+  //               queries.push({ query: key, id: brand, value: element.name });
+  //           });
+  //         } else if (element._id === value)
+  //           queries.push({ query: key, id: value, value: element.name });
+  //       }
+
+  //     if (key === "sort") {
+  //       for (const element of sortFields)
+  //         if (element.value === value)
+  //           queries.push({ query: key, id: element.id, value: element.name });
+  //     }
+
+  //     return queries;
+  //   })
+  //   .filter(Boolean);
+
+  // Sorting products based on the selected sort option
+  let currentProducts = structuredClone(products);
+
+  if (pricesRange.length) {
+    currentProducts = currentProducts.filter(
+      (item) => +item.price >= +pricesRange[0] && +item.price <= +pricesRange[1]
+    );
+  }
+
+  if (sort) {
+    if (sort === "price_desc") {
+      currentProducts.sort((a, b) => b.price - a.price);
+    } else if (sort === "price_asc") {
+      currentProducts.sort((a, b) => a.price - b.price);
+    }
+    // else if (sort === "newest") {
+    //   currentProducts.sort(
+    //     (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+    //   );
+    // }
+  }
+
   return (
-    <div
-      className={`${styles.container} margin-container`}
-      style={{ paddingBottom: "50px" }}
-    >
-      <div className={styles.header}>find the best clothes</div>
-      {urlSale ? (
-        <div className={styles["countdown-container"]}>
-          <div className={styles["countdown-title"]}>Daily sale</div>
-          <CountdownTimer
-            hours={timeLeft.hours}
-            minutes={timeLeft.minutes}
-            seconds={timeLeft.seconds}
-            type="a"
-          />
-        </div>
-      ) : null}
-      <div className={styles.options}>
-        <img
-          style={{ cursor: "pointer" }}
-          src={filter}
-          width="25px"
-          onClick={() => {
-            setState((prev) => !prev);
-          }}
+    <section className={styles.section}>
+      <h1>Find The Best Clothes</h1>
+
+      <div className={styles.layoutFilterSort}>
+        <LayoutFilterSort
+          // filterList={getFilterList}
+          sortFields={sortFields}
+          sizeFields={sizeFields}
         />
-        <div className={styles.options_title}>Title</div>
-        <div className={styles.notification}>{filterCount}</div>
-      </div>
 
-      <div className={styles.body_container}>
-        <div className={styles.categories_section}>
-          <div className={styles.category}>
-            <div className={styles.category_title}>Categories</div>
-            {categories?.map((category) => (
-              <div
-                className={styles.checkbox_container}
-                key={category.id}
-                onClick={() => handleCategoryChange(category.id)}
-              >
-                <Checkbox
-                  checked={catId.some((id) => +id == category.id)}
-                  sx={{
-                    padding: 0,
-                    "&.Mui-checked": { color: "var(--brown)" },
-                  }}
-                />
-                <div className={styles.checkbox_label}>{category.name}</div>
+        {/* <FilterList list={getFilterList} /> */}
+
+        {isLoading ? (
+          <LoaderSpinner />
+        ) : (
+          <>
+            {flashSaleEnd && (
+              <div className={styles.flashSale}>
+                <CountdownTimer targetDate={flashSaleEnd} />
+                {/* <Star type="b" value={20} /> */}
               </div>
-            ))}
-          </div>
-          <div className={styles.category}>
-            {brands?.length ? (
-              <>
-                <div className={styles.category_title}>Brands</div>
-                {brands.map((brand) => (
-                  <div
-                    className={styles.checkbox_container}
-                    key={brand.id}
-                    onClick={() => handleBrandChange(brand.id)}
-                  >
-                    <Checkbox
-                      checked={brandId.some((id) => +id == brand.id)}
-                      sx={{
-                        padding: 0,
-                        "&.Mui-checked": { color: "var(--brown)" },
-                      }}
-                    />
-                    <div className={styles.checkbox_label}>{brand.name}</div>
-                  </div>
-                ))}
-              </>
-            ) : null}
-          </div>
-
-          <div
-            className={styles.clear}
-            onClick={() => {
-              setCatId([]);
-              setBrandId([]);
-            }}
-          >
-            Clear All
-          </div>
-        </div>
-
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            mx: "auto",
-          }}
-        >
-          <div className={styles.center}>
-            <div className={styles.search_container}>
-              <input
-                defaultValue={queryStr}
-                className={styles.search_input}
-                placeholder="Search product"
-                onChange={handleSearch}
-              />
-              <img src={lense} />
-            </div>
-          </div>
-          <div className={styles.cards_section}>
-            {!searchData?.products?.length && !isLoading && (
-              <Box sx={{ mx: "auto" }}>
-                <Empty
-                  title="No Result Found"
-                  message="The item you are looking for is not in our store."
-                />
-              </Box>
             )}
 
-            <>
-              {isLoading && (
-                <>
-                  <Box
-                    sx={{
-                      width: "100%",
-                      display: "flex",
-                      alignItems: "center",
-                    }}
-                  >
-                    <LinearProgress />
-                  </Box>
-                  <div style={{ height: "500px" }} />
-                </>
-              )}
-              <Box
-                sx={{
-                  display: { xs: "grid" },
-                  gridTemplateColumns: {
-                    xs: "repeat(2,1fr)",
-                    sm: "repeat(3,1fr)",
-                    md: "repeat(3,1fr)",
-                    xl: "repeat(4,1fr)",
-                  },
-                  gap: { lg: "20px", md: "10px", xs: "10px" },
-                }}
-                className={styles.cards_section}
-              >
-                {searchData?.products?.length > 0 &&
-                  !isLoading &&
-                  searchData?.products?.map((item) => (
-                    <ClothesCard key={item.id} item={item} />
-                  ))}
-              </Box>
-            </>
-          </div>
-          <Box sx={{ width: "100%", mx: "auto", marginTop: "24px" }}>
-            <Pagination
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                ".Mui-selected": {
-                  color: "var(--brown)", // Brown color for selected page
-                  border: "1px solid rgba(173, 107, 70, 0.5)", // Brownish border
-                  backgroundColor: "rgba(173, 107, 70, 0.12)", // Light brownish background
-                },
-                ".MuiPaginationItem-root": {
-                  color: "var(--brown)", // Brown color for non-selected pagination items
-                  "&:hover": {
-                    backgroundColor: "rgba(173, 107, 70, 0.12)", // Hover background color
-                  },
-                },
-              }}
-              variant="outlined"
-              count={totalPages}
-              page={page}
-              onChange={handlePageChange}
-            />
-          </Box>
-        </Box>
+            <div className={styles.productsContainer}>
+              {currentProducts?.map((item) => (
+                <div key={item.id}>
+                  <ClothesCard item={item} />
+                </div>
+              ))}
+            </div>
+
+            <LayoutPagination totalPages={totalPages} page={page} />
+          </>
+        )}
       </div>
-
-      {/* drawer */}
-
-      <Drawer
-        anchor="right"
-        open={state}
-        onClose={() => {
-          setState((prev) => !prev);
-        }}
-      >
-        <CloseIcon
-          onClick={() => {
-            setState((prev) => !prev);
-          }}
-        />
-        <div className={styles.categories_section_mobile}>
-          <div className={styles.category}>
-            <div className={styles.category_title}>Categories</div>
-            {categories?.map((category) => (
-              <div
-                className={styles.checkbox_container}
-                key={category.id}
-                onClick={() => handleCategoryChange(category.id)}
-              >
-                <Checkbox
-                  checked={catId.some((id) => +id == category.id)}
-                  sx={{
-                    padding: 0,
-                    "&.Mui-checked": { color: "var(--brown)" },
-                  }}
-                />
-                <div className={styles.checkbox_label}>{category.name}</div>
-              </div>
-            ))}
-          </div>
-          <div className={styles.category}>
-            {brands?.length ? (
-              <>
-                <div className={styles.category_title}>Brands</div>
-                {brands?.map((brand) => (
-                  <div
-                    className={styles.checkbox_container}
-                    key={brand.id}
-                    onClick={() => handleBrandChange(brand.id)}
-                  >
-                    <Checkbox
-                      checked={brandId.some((id) => +id == brand.id)}
-                      sx={{
-                        padding: 0,
-                        "&.Mui-checked": { color: "var(--brown)" },
-                      }}
-                    />
-                    <div className={styles.checkbox_label}>{brand.name}</div>
-                  </div>
-                ))}
-              </>
-            ) : null}
-          </div>
-          <div
-            className={styles.clear}
-            onClick={() => {
-              setCatId([]);
-              setBrandId([]);
-            }}
-          >
-            Clear All
-          </div>
-        </div>
-      </Drawer>
-    </div>
+    </section>
   );
 }
+
+export default Search;

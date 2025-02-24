@@ -3,7 +3,7 @@ import Counter from "./counter";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useAddToCartMutation } from "../../Redux/cartApi";
-import { calcDiscount, notifySuccess } from "../../utils/general";
+import { calcDiscount, notifyError, notifySuccess } from "../../utils/general";
 import { TickCircle } from "iconsax-react";
 
 export default function SingleProductModal({
@@ -64,7 +64,7 @@ export default function SingleProductModal({
         <Box sx={style}>
           <Box
             sx={{
-              width: "clamp(15rem, 80vw, 30rem)",
+              width:  "clamp(15rem, 80vw, 30rem)",
               display: "flex",
               flexDirection: "column",
               justifyContent: "space-between",

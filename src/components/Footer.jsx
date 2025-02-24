@@ -1,26 +1,27 @@
-import React, { useState, useEffect, useRef } from "react";
+import React from "react";
 
 import styles from "../styles/components/Footer.module.css";
-import logo from "../images/logo.svg";
-import brownEmail from "../images/brown-email.svg";
-import { Link, useNavigate } from "react-router-dom";
+
+import { EmailOutlined } from "@mui/icons-material";
+import { Link } from "react-router-dom";
 
 export default function Footer() {
-  const [emailValue, setEmailInputValue] = useState("");
-  const navigate = useNavigate();
-
   return (
     <>
       {/* footer 1 */}
       <div
         className={`${styles["primary-footer-container"]} padding-container`}
       >
-        <img
-          loading="lazy"
-          src="/images/Footer Logo.png"
+        <div
           className={styles.logo}
-          alt="logo"
-        />
+          style={{
+            fontSize: "3rem",
+            fontWeight: "bold",
+          }}
+        >
+          Logo
+        </div>
+
         <div className={styles.section}>
           <div className={styles.header}>Help</div>
           <Link to="/returns-refunds" className={styles.link}>
@@ -49,25 +50,13 @@ export default function Footer() {
         </div>
         <div className={styles.section}>
           <div className={styles.header}>Find Us</div>
-          <a
-            href="https://www.instagram.com/dabdoobkidz?igsh=MTJlMXN0ZWI4MmFxeQ=="
-            target="_blank"
-            className={styles.link}
-          >
+          <a href="##" target="_blank" className={styles.link} rel="noreferrer">
             Instagram
           </a>
-          <a
-            href="https://www.facebook.com/profile.php?id=61555247997096&mibextid=JRoKGi"
-            target="_blank"
-            className={styles.link}
-          >
+          <a href="##" target="_blank" className={styles.link} rel="noreferrer">
             Facebook
           </a>
-          <a
-            href="https://www.tiktok.com/en/"
-            target="_blank"
-            className={styles.link}
-          >
+          <a href="##" target="_blank" className={styles.link} rel="noreferrer">
             Tiktok
           </a>
         </div>
@@ -84,14 +73,8 @@ export default function Footer() {
             arrivals
           </div>
           <div className={styles["email-container"]}>
-            <input
-              className={styles["email-input"]}
-              placeholder="You Email"
-              onChange={(e) => {
-                setEmailInputValue(e.target.value);
-              }}
-            />
-            <img src={brownEmail} alt="email" />
+            <input className={styles["email-input"]} placeholder="You Email" />
+            <EmailOutlined />
           </div>
         </div>
       </div>
@@ -99,7 +82,7 @@ export default function Footer() {
       <div
         className={`${styles["secondary-footer-container"]} padding-container`}
       >
-        Copyright © 2020 - 2021 First Boulevard. All rights reserved.
+        Copyright © 2024- 2027
       </div>
     </>
   );

@@ -1,34 +1,30 @@
-/* adjust container padding */
-.container {
-  min-height: 60vh;
-  padding: 20px 16px 50px;
-}
 .title {
   text-align: center;
-  color: var(--errie-black);
-  font-size: 32px;
+  color: (--errie-black);
+  font-size: 48px;
   font-weight: 500;
-  margin-bottom: 20px;
+}
+.cards_container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 50px;
+  margin-bottom: 50px;
 }
 
-@media (min-width: 600px) {
-  .container {
-    padding: 30px 24px 75px;
-  }
-
-  .title {
-    font-size: 40px;
-    margin-bottom: 30px;
-  }
+@media (max-width: 600px) {
 }
 
-@media (min-width: 960px) {
-  .container {
-    padding: 50px 32px 100px;
-  }
+/* Media query for screens between 601px and 900px (e.g., tablets) */
+@media (min-width: 601px) and (max-width: 900px) {
+}
 
-  .title {
-    font-size: 48px;
-    margin-bottom: 40px;
-  }
+/* Media query for screens between 901px and 1200px (e.g., larger tablets and small desktops) */
+@media (min-width: 901px) and (max-width: 1200px) {
+}
+
+/* Media query for screens larger than 1200px (e.g., large desktops) */
+@media (min-width: 1201px) {
 }

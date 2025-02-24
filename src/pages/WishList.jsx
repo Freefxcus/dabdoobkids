@@ -1,6 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getWishlistItems } from "../utils/apiCalls";
+import Productcard from "../components/ProductCard";
 import { Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { set } from "lodash";
 import Loader from "../components/Loader";
 import { useGetAllWishListQuery } from "../Redux/wishlistApi";
 import ClothesCard from "../components/ClothesCard";
@@ -10,7 +13,7 @@ export default function WishList() {
   const { data: wishListData, isLoading } = useGetAllWishListQuery();
   const wishListItems = wishListData?.data?.[0]?.items || [];
 
-  const [setChanged] = useState(false);
+  const [changed, setChanged] = useState(false);
 
   if (isLoading) {
     return <Loader open={true} />;
@@ -68,7 +71,7 @@ export default function WishList() {
             },
             justifyItems: "center",
             paddingY: 5,
-            gap: { xs: 1, sm: 2, lg: 3 },
+            gap:{xs:1,sm:2,lg:3}
           }}
         >
           {wishListItems?.map((item) => (

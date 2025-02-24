@@ -1,10 +1,10 @@
 import * as React from "react";
 
-import animationData from "../images/Teddy Bear.json"
+import animationData from "../images/Teddy Bear.json";
 import Lottie from "lottie-web";
 const style = {
-width:500
-,height:500
+  width: 500,
+  height: 500,
 };
 
 export default function LoadingAnimation() {
@@ -18,18 +18,15 @@ export default function LoadingAnimation() {
       });
     }
   }, [animationData]);
-  
-    const defaultOptions = {
-        loop: true,
-        autoplay: true,
-        animationData: animationData,
-        rendererSettings: {
-          preserveAspectRatio: "xMidYMid slice"
-        }
-      };
-    
-    return (
-      <div ref={containerRef} style={style}>
-      </div>
-    );
+
+  const defaultOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: animationData,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice",
+    },
+  };
+
+  return <div ref={containerRef} style={style}></div>;
 }

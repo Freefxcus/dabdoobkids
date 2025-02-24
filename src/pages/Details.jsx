@@ -1,44 +1,47 @@
-import { useState, useEffect, useCallback, useMemo } from "react";
-import styles from "../styles/pages/Details.module.css";
 import Box from "@mui/material/Box";
+import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import delivery from "../images/delivery.png";
-import cartImg from "../images/cart1.png";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useParams } from "react-router-dom";
-import { getProductById, getRelatedProducts } from "../utils/apiCalls";
-import Loader from "../components/Loader";
-import { useDispatch } from "react-redux";
-import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
-import "swiper/css/pagination";
 import "swiper/css/navigation";
+import "swiper/css/pagination";
 import { Autoplay, Pagination } from "swiper/modules";
-import { toast } from "react-toastify";
+import { Swiper, SwiperSlide } from "swiper/react";
+import Loader from "../components/Loader";
 import SingleProductModal from "../components/singleProduct/SingleProductModal.jsx";
+import delivery from "../images/delivery.png";
+import styles from "../styles/pages/Details.module.css";
+import { getProductById } from "../utils/apiCalls";
 
-import SwiperComponent from "../components/Swiper.jsx";
-import { CircularProgress, Stack, Typography } from "@mui/material";
-import Empty from "./empty.jsx";
-import HandleMessageIsAuth from "../utils/message/index.js";
+import { CircularProgress, Modal, Stack, Typography } from "@mui/material";
+import { format } from "date-fns";
+import { Add, Minus, ShoppingCart } from "iconsax-react";
+import LayoutRelatedProducts from "../components/cart/LayoutRelatedProducts.jsx";
+import ExpandableText from "../components/ExpandableText.jsx";
+import ModalSize from "../components/productDetail/ModalSize.jsx";
 import WishlistProductDetails from "../components/singleProduct/WishlistProductDetails.jsx";
 import {
   useAddToCartMutation,
   useGetAllCartsQuery,
 } from "../Redux/cartApi.jsx";
+import { cartActions, isUserAuth } from "../Redux/store.js";
 import { calcDiscount, notifyError, notifySuccess } from "../utils/general.js";
-import { Add, AddCircle, Minus, ShoppingCart } from "iconsax-react";
-import Police from "../components/singleProduct/Police.jsx";
-import { format } from "date-fns";
+import HandleMessageIsAuth from "../utils/message/index.js";
+import Empty from "./empty.jsx";
 export default function Details() {
-  console.log("details component rendered");
+  const isAuth = useSelector(isUserAuth);
+
+  const [openModalSize, setOpenModalSize] = useState(false);
+
   const currentDate = new Date();
   const startDate = new Date(currentDate);
-  startDate.setDate(currentDate.getDate() + 10);
+  startDate.setDate(currentDate.getDate() + 14);
   const endDate = new Date(currentDate);
-  endDate.setDate(currentDate.getDate() + 14);
+  endDate.setDate(currentDate.getDate() + 20);
 
   const formattedStartDate = format(startDate, "dd MMMM");
   const formattedEndDate = format(endDate, "dd MMMM");
@@ -78,12 +81,18 @@ export default function Details() {
 
   const [largeImage, setLargeImage] = useState("");
 
-  const [counter, setCounter] = useState(1);
+  const cartOffline = useSelector((state) => state.cart.products);
+
+  const isRecentProductOffline = cartOffline.find(
+    (product) => product.id === productDetails.id
+  );
+
+  const [counter, setCounter] = useState(() =>
+    !isAuth && isRecentProductOffline ? isRecentProductOffline.count : 1
+  );
   const [variant, setVariant] = useState({});
   const [open, setOpen] = useState(false);
-  const [relatedProducts, setRelatedProducts] = useState([]);
-  const [reload, setReload] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const { data: cartData } = useGetAllCartsQuery();
   const cartItems = cartData?.data || [];
   const [
@@ -96,30 +105,29 @@ export default function Details() {
       error: addCartError, // Capture the error object
     },
   ] = useAddToCartMutation();
+
   const handleAddToCart = async (item) => {
+    if (productDetails.status !== "in-stock" || !productDetails.stock) {
+      notifyError("Out of stock");
+      return;
+    } else if (counter > productDetails.stock) {
+      notifyError("Please Change Count");
+      return;
+    }
+
     try {
       const response = await addToCart(item).unwrap(); // Unwrap to handle promise rejection
 
-      if (response?.status === "success") {
-        const message = `Added ${productDetails?.name} to cart!`;
-        notifySuccess(message);
-      }
-      if (response?.status !== "success") {
-        const errorMessage =
-          addCartError?.data?.message || "Failed to add to cart";
-        notifyError(errorMessage);
-      }
+      if (response?.status === "success")
+        notifySuccess("1 Item Added To Your cart!");
+      if (response?.status !== "success") notifyError("Failed to add to cart");
     } catch (error) {
-      if (isErrorAddCart) {
-        const errorMessage =
-          addCartError?.data?.message || "Failed to add to cart";
-        notifyError(errorMessage);
-      }
+      if (isErrorAddCart) notifyError("Failed to add to cart");
     }
   };
+
   const handleChange = ({ key, value }) => {
     setVariant((prev) => ({ ...prev, [key]: value }));
-    console.log(key, value, "variantvariantvariantvariant", variant);
   };
 
   const handleImageChange = (e) => {
@@ -137,20 +145,27 @@ export default function Details() {
     }
   };
   useEffect(() => {
+    setLoading(true);
     getProductById(id).then((res) => {
       setProductDetails(res);
       setLargeImage(res?.images[0]);
+      setLoading(false);
     });
+  }, [id]);
 
-    getRelatedProducts(id)
-      .then((res) => {
-        setRelatedProducts(res);
-        setLoading(false);
-      })
-      .catch((err) => {
-        setLoading(false);
-      });
-  }, [reload]);
+  // Update Product Count If Found In Cart
+  useEffect(() => {
+    if (cartItems.length && productDetails) {
+      const productFind = cartItems.find(
+        (item) => item.product.id === productDetails.id
+      );
+
+      if (productFind) {
+        setCounter(productFind.count);
+        // setReload(true);
+      }
+    }
+  }, [cartItems, loading]);
 
   const newVariants = useMemo(
     () => transformVariants(productDetails?.variants) || [],
@@ -160,12 +175,10 @@ export default function Details() {
   const selectedVariantObject =
     productDetails?.variants &&
     productDetails?.variants?.find((variantItem) =>
-      variantItem.options.every(
+      variantItem.options.some(
         (option) => variant[option?.option?.name] === option?.value?.value
       )
     );
-
-  console.log("selectedVariantObject", selectedVariantObject);
 
   useEffect(() => {
     if (newVariants?.length) {
@@ -187,6 +200,42 @@ export default function Details() {
 
   // Example usage
   const finalPrice = calcDiscount(selectedVariantObject, productDetails);
+
+  // New Code
+
+  const dispatch = useDispatch();
+
+  const addToCartOffline = () => {
+    if (
+      productDetails.status !== "in-stock" ||
+      !productDetails.stock ||
+      counter > selectedVariantObject?.stock
+    ) {
+      notifyError("Out of stock");
+      return;
+    } else if (counter > productDetails.stock) {
+      notifyError("Please Change Count");
+      return;
+    }
+
+    const product = {
+      id: productDetails.id,
+      name: productDetails.name,
+      description: productDetails.description,
+      category: productDetails.category,
+      stock: productDetails.stock,
+      images: productDetails.images,
+      price: productDetails.price,
+      count: counter,
+      variant: selectedVariantObject?.id,
+      variantInformation: selectedVariantObject,
+      brand: productDetails.brand,
+      sale: productDetails?.sale || {},
+    };
+
+    dispatch(cartActions.addProduct(product));
+    notifySuccess("1 Item Added To Your cart!");
+  };
 
   return (
     <>
@@ -295,6 +344,27 @@ export default function Details() {
                     EGP {finalPrice.price}{" "}
                   </s>
                 </>
+              ) : productDetails?.sale ? (
+                <>
+                  <span>
+                    EGP{" "}
+                    {productDetails.sale.discountType === "percentage"
+                      ? productDetails.price -
+                        (productDetails?.price *
+                          productDetails.sale.discountAmount) /
+                          100
+                      : finalPrice.price - +productDetails.sale.discountAmount}
+                  </span>{" "}
+                  <s
+                    style={{
+                      fontSize: "1.25rem",
+                      fontWeight: "500",
+                      color: "var(--grey-text)",
+                    }}
+                  >
+                    EGP {finalPrice.price}{" "}
+                  </s>
+                </>
               ) : (
                 <span>EGP {finalPrice.price}</span>
               )}
@@ -308,6 +378,18 @@ export default function Details() {
             >
               Tax included shipping calculated at checkout
             </div>
+            <div className={styles.sizeGuide}>
+              Size
+              <button onClick={() => setOpenModalSize(true)}>Size guide</button>
+            </div>
+
+            <Modal open={openModalSize} onClose={() => setOpenModalSize(false)}>
+              <ModalSize
+                brand={productDetails.brand.name}
+                close={() => setOpenModalSize(false)}
+              />
+            </Modal>
+
             <div className={styles["line"]}></div>
             <Box
               sx={{
@@ -435,7 +517,7 @@ export default function Details() {
                   </span>
                 )
               ) : (
-                <span style={{ color: "red" }}> out of stock </span>
+                <span style={{ color: "#000" }}> out of stock </span>
               )}
             </div>
 
@@ -480,67 +562,87 @@ export default function Details() {
                   color="#1B1B1B"
                 />
               </Box>
-              <button
-                className={styles["cart-button"]}
-                style={{
-                  opacity: counter < 1 ? ".3" : "1",
-                  pointerEvents: counter < 1 ? "none" : "initial",
-                }}
-                disabled={
-                  CartAddLoad ||
-                  selectedVariantObject?.stock == 0 ||
-                  !selectedVariantObject ||
-                  productDetails?.variants?.length < 1 ||
-                  counter < 1 ||
-                  counter > selectedVariantObject?.stock
-                }
-                onClick={(e) => {
-                  e.stopPropagation();
-                  if (counter > selectedVariantObject?.stock) {
-                    toast.error("Out of stock");
-                    return;
+              {isAuth ? (
+                <button
+                  className={styles["cart-button"]}
+                  style={{
+                    opacity: counter < 1 ? ".3" : "1",
+                    pointerEvents: counter < 1 ? "none" : "initial",
+                  }}
+                  disabled={
+                    CartAddLoad ||
+                    selectedVariantObject?.stock == 0 ||
+                    !selectedVariantObject ||
+                    productDetails?.variants?.length < 1 ||
+                    counter < 1 ||
+                    counter > selectedVariantObject?.stock
                   }
-                  let itemForCart = cartItems?.find(
-                    (cartItem) =>
-                      cartItem?.product.id == +id &&
-                      cartItem?.variant?.id == selectedVariantObject?.id
-                  );
-                  let newCount = itemForCart
-                    ? Math.trunc(counter - itemForCart.count)
-                    : counter;
-                  if (newCount === 0) return toast.error("please change count");
-                  HandleMessageIsAuth(() => {
-                    handleAddToCart([
-                      {
-                        product: +id,
-                        count: newCount,
-                        variant: selectedVariantObject?.id,
-                      },
-                    ]);
-                    setOpen(true);
-                  });
-                }}
-              >
-                <ShoppingCart size="24" color="#FFF" />
-                {CartAddLoad ? (
-                  <Stack
-                    direction="row"
-                    justifyContent={"center"}
-                    gap={2}
-                    alignItems={"center"}
-                  >
-                    {" "}
-                    <CircularProgress
-                      color="inherit"
-                      size="1rem"
-                      sx={{ width: "12px" }}
-                    />{" "}
-                    Loading
-                  </Stack>
-                ) : (
-                  <span>Add to cart</span>
-                )}
-              </button>
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (counter > selectedVariantObject?.stock) {
+                      notifyError("Out of stock");
+                      return;
+                    }
+                    let itemForCart = cartItems?.find(
+                      (cartItem) =>
+                        cartItem?.product.id == +id &&
+                        cartItem?.variant?.id == selectedVariantObject?.id
+                    );
+                    let newCount = itemForCart
+                      ? Math.trunc(counter - itemForCart.count)
+                      : counter;
+                    if (newCount === 0 && counter <= +productDetails.stock)
+                      newCount += 1;
+                    HandleMessageIsAuth(() => {
+                      handleAddToCart([
+                        {
+                          product: +id,
+                          count: newCount,
+                          variant: selectedVariantObject?.id,
+                        },
+                      ]);
+                      setOpen(true);
+                    });
+                  }}
+                >
+                  <ShoppingCart size="24" color="#FFF" />
+                  {CartAddLoad ? (
+                    <Stack
+                      direction="row"
+                      justifyContent={"center"}
+                      gap={2}
+                      alignItems={"center"}
+                    >
+                      {" "}
+                      <CircularProgress
+                        color="inherit"
+                        size="1rem"
+                        sx={{ width: "12px" }}
+                      />{" "}
+                      Loading
+                    </Stack>
+                  ) : (
+                    <span>Add to cart</span>
+                  )}
+                </button>
+              ) : (
+                <button
+                  className={styles["cart-button"]}
+                  disabled={
+                    CartAddLoad ||
+                    productDetails?.stock == 0 ||
+                    selectedVariantObject?.stock == 0 ||
+                    !selectedVariantObject ||
+                    counter < 1 ||
+                    counter > productDetails?.stock
+                  }
+                  onClick={addToCartOffline}
+                >
+                  <ShoppingCart size="24" color="#FFF" />
+                  Add To Cart
+                </button>
+              )}
+
               <SingleProductModal
                 open={open}
                 handleClose={setOpen}
@@ -559,15 +661,7 @@ export default function Details() {
             >
               Description
             </div>
-            <div
-              style={{
-                fontSize: "14px",
-                fontWeight: "500",
-                color: "var(--placeholder-text)",
-              }}
-            >
-              {productDetails.description}
-            </div>
+            <ExpandableText text={productDetails.description} />
             <div
               style={{
                 display: "flex",
@@ -588,7 +682,7 @@ export default function Details() {
           </div>
         </div>
       )}
-      <Police />
+      {/* <Police /> */}
       <Box
         sx={{
           mx: { xs: "20px", md: "40px", lg: "150px" },
@@ -606,7 +700,11 @@ export default function Details() {
         >
           You may also like
         </Typography>
-        <SwiperComponent setReload={setReload} items={relatedProducts} />
+
+        <LayoutRelatedProducts
+          categoryId={productDetails?.category?.id}
+          productId={productDetails.id}
+        />
       </Box>
     </>
   );

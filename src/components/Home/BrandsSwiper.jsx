@@ -1,36 +1,14 @@
-import React, { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import instance from "../../utils/interceptor";
-import "./style.css";
-import { baseUrl } from "../../utils/baseUrl";
-const backendUrl = baseUrl.production;
-export default function BrandsSwiper() {
-  console.log("brandSwiper 2 component rendered");
-  const [brands, setBrands] = useState([]);
-  const [loading, setLoading] = useState(true); // To handle the loading state
-  const [error, setError] = useState(null);
+import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
+import AutoScroll from "embla-carousel-auto-scroll";
+import useEmblaCarousel from "embla-carousel-react";
+import styles from "../../styles/components/BrandsSwiper.module.css";
+import { Link } from "react-router-dom";
+
+const BrandsSwiper = ({ brands }) => {
   const [limit, setLimit] = useState(
     () => Math.ceil(window.innerWidth / 300) || 1
   );
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const fetchBanners = async () => {
-      try {
-        const response = await instance.get(`${backendUrl}/brands`, {
-          params: { items: 50 },
-        });
-        setBrands(response?.data?.data?.brands || []);
-      } catch (err) {
-        console.error("Failed to fetch banners:", err);
-        setError(err); // Notify the error if needed
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchBanners();
-  }, []);
 
   // Update the limit on window resize
   useEffect(() => {
@@ -42,87 +20,46 @@ export default function BrandsSwiper() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  if (loading) {
-    return <div>Loading...</div>; // Show a loading indicator
-  }
-
-  if (error) {
-    return <div>Error loading banners</div>; // Show an error message
-  }
-
   const repeatCount = Math.ceil(limit / (brands?.length || 1));
 
-  // Create a new array with the repeated brandshome
+  // Create a new array with the repeated brands
   const newBrands = [...Array((repeatCount || 1) + 3)].flatMap(() => brands);
 
-  return (
-    <article class="wrapper">
-      <div class="marquee">
-        <div class="marquee__group">
-          {brands?.length
-            ? newBrands.map(({ images, name, id }, index) => (
-                <img
-                  key={index}
-                  src={images[0]}
-                  alt={name}
-                  style={{
-                    cursor: "pointer",
-                    objectFit: "contain",
-                    objectPosition: "center",
-                  }}
-                  onClick={() => {
-                    navigate(`search/?brandId=${id}`);
-                  }}
-                />
-              ))
-            : null}
-        </div>
-      </div>
-    </article>
-  );
-}
+  const [emblaRef] = useEmblaCarousel({ loop: true }, [
+    AutoScroll({ stopOnInteraction: false, stopOnMouseEnter: true }),
+  ]);
 
-{
-  /* <Swiper
-className="mySwiper"
-slidesPerView={limit}
-speed={10000}
-autoplay={{ <marquee ref={marqueeRef} direction="left">
-    
-    </marquee>
-  delay: 0,
-  disableOnInteraction: false,
-}}
-modules={[Autoplay, Pagination, Navigation]}
-// pagination={{ clickable: true }}
-loop={true}
->
-<div className="swiper-container" style={{ width: "100%" }}>
-  {brands?.length
-    ? newBrands.map(({ images, name, id }, index) => (
-        <SwiperSlide
-          key={index}
-          style={{
-            width: "fit-content !important",
-          }}
-        >
-          <div style={{ width: "250px", height: "150px" }}>
-            <img
-              src={images[0]}
-              alt={name}
-              style={{
-                cursor: "pointer",
-                objectFit: "contain",
-                objectPosition: "center",
-              }}
-              onClick={() => {
-                navigate(`search/?brandId=${id}`);
-              }}
-            />
-          </div>
-        </SwiperSlide>
-      ))
-    : null}
-</div>
-</Swiper> */
-}
+  return (
+    <section className={`${styles.embla} embla`} ref={emblaRef}>
+      <div className={`${styles.emblaContainer} embla__container`}>
+        {brands?.length
+          ? newBrands.map(({ images, name, id }) => (
+              <div className={`${styles.emblaSlide} embla__slide`} key={id}>
+                <Link to={`/search/?brand=${id}`} className={styles.imageLink}>
+                  <img
+                    src={images[0]}
+                    alt={name}
+                    width={150}
+                    height={150}
+                    className={styles.brandImage}
+                  />
+                </Link>
+              </div>
+            ))
+          : null}
+      </div>
+    </section>
+  );
+};
+
+BrandsSwiper.propTypes = {
+  brands: PropTypes.arrayOf(
+    PropTypes.shape({
+      image: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      id: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+};
+
+export default BrandsSwiper;

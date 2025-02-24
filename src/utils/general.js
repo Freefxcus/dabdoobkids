@@ -1,9 +1,13 @@
 import instance from "../utils/interceptor.js";
 import { toast } from "react-toastify";
-import { baseUrl } from "./baseUrl";
+
+import CheckIcon from "../images/CheckCircle.svg";
+import WarningIcon from "../images/WarningCircle.svg";
 
 export const isValidUser = async () => {
-  const backendUrl = baseUrl.production;
+  const pathname = window.location.pathname;
+  const pathSegments = pathname.split("/").filter((segment) => segment !== "");
+  const firstEndpoint = pathSegments[0];
 
   if (
     // ["profile"].includes(firstEndpoint) &&
@@ -13,7 +17,7 @@ export const isValidUser = async () => {
     return true;
   } else {
     await instance
-      .post(`${backendUrl}/auth/refresh`, {
+      .post("/auth/refresh", {
         refreshToken: localStorage.getItem("access_token"),
       })
       .then((response) => {
@@ -28,23 +32,27 @@ export const isValidUser = async () => {
 
 export const notifySuccess = (msg) => {
   toast.success(msg, {
-    position: "top-center",
+    position: "bottom-left",
     autoClose: 1000, // Auto close the notification after 3000 milliseconds (3 seconds)
-    hideProgressBar: false,
+    hideProgressBar: true,
     closeOnClick: true,
     pauseOnHover: true,
     draggable: true,
+    icon: <img src={CheckIcon} alt="CheckIcon" width={24} height={24} />,
+    style: { background: "#F7FDF3" },
   });
 };
 
 export const notifyError = (msg) => {
   toast.error(msg, {
-    position: "top-center",
+    position: "bottom-left",
     autoClose: 1000,
-    hideProgressBar: false,
+    hideProgressBar: true,
     closeOnClick: true,
     pauseOnHover: true,
     draggable: true,
+    icon: <img src={WarningIcon} alt="WarningIcon" width={24} height={24} />,
+    style: { background: "#FFF3F2" },
   });
 };
 
@@ -90,4 +98,29 @@ export const calcDiscount = (selectedVariantObject, productDetails) => {
   } else {
     return { priceAfter: null, discount: false, price: price }; // Return original price if no valid discount type is provided
   }
+};
+
+export const newCalcDiscount = (item = {}) => {
+  const { count, product } = item || {};
+
+  const { price, discount = 0, discountType = "", sale = {} } = product;
+
+  const saleStatus = !!Object.keys(sale).length;
+
+  const finalPrice = saleStatus
+    ? sale.discountType === "percentage"
+      ? +price - (+price * +sale?.discountAmount) / 100
+      : +price - +sale.discountAmount
+    : discountType?.toLowerCase?.() !== "amount"
+    ? +price - (price * +discount) / 100
+    : +price - +discount;
+
+  const discountStatus = +discount || sale?.discountAmount || false;
+
+  return {
+    totalPrice: count * finalPrice,
+    priceAfter: finalPrice,
+    price: +price,
+    discountStatus,
+  };
 };

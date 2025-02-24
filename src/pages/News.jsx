@@ -13,7 +13,7 @@ export default function News() {
       }}
     >
       {/* <Box component="img" src={logo} sx={{ maxWidth: "100px" }} /> */}
-      <Box sx={{ fontWeight: "bold", fontSize: "30px" }}>Dabdoobkidz News</Box>
+      <Box sx={{ fontWeight: "bold", fontSize: "30px" }}>E-commerce News</Box>
       <Box sx={{ maxWidth: "800px", fontSize: "20px", lineHeight: "2" }}>
         Contrary to popular belief, Lorem Ipsum is not simply random text. It
         has roots in a piece of classical Latin literature from 45 BC, making it

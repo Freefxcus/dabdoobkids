@@ -6,44 +6,43 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import ClothesCard from "./ClothesCard";
 import { useNavigate } from "react-router-dom";
 
-export default function SwiperComponent({items , setReload}) {
-    console.log(items, "itemsrelatedddd123123");
-    const navigate = useNavigate();
+export default function SwiperComponent({ items }) {
+  console.log(items, "itemsrelatedddd123123");
+  const navigate = useNavigate();
   return (
     <Swiper
-    className="mySwiper"
-    grabCursor={true}
-    autoplay={{
-      delay: 2000,
-      disableOnInteraction: false,
-    }}
-    navigation={false}
-    modules={[Navigation]}
-    breakpoints={{
-      // when window width is >= 320px
-      320: {
-        slidesPerView: 2,
-        spaceBetween: 10,
-      },
-      // when window width is >= 480px
-      480: {
-        slidesPerView: 2,
-        spaceBetween: 20,
-      },
-      // when window width is >= 768px
-      768: {
-        slidesPerView: 3,
-        spaceBetween: 20,
-      },
-      // when window width is >= 1024px
-      1024: {
-        slidesPerView: 4,
-        spaceBetween: 30,
-      },
-  
-    }}
-  >
-    {items?.data?.data?.products.map((item) => (
+      className="mySwiper"
+      grabCursor={true}
+      autoplay={{
+        delay: 2000,
+        disableOnInteraction: false,
+      }}
+      navigation={false}
+      modules={[Navigation]}
+      breakpoints={{
+        // when window width is >= 320px
+        320: {
+          slidesPerView: 2,
+          spaceBetween: 10,
+        },
+        // when window width is >= 480px
+        480: {
+          slidesPerView: 2,
+          spaceBetween: 20,
+        },
+        // when window width is >= 768px
+        768: {
+          slidesPerView: 3,
+          spaceBetween: 20,
+        },
+        // when window width is >= 1024px
+        1024: {
+          slidesPerView: 4,
+          spaceBetween: 30,
+        },
+      }}
+    >
+      {items?.products?.map((item) => (
         <SwiperSlide
           style={{
             display: "flex",
@@ -52,12 +51,11 @@ export default function SwiperComponent({items , setReload}) {
           }}
           onClick={() => {
             navigate(`/details/${item.id}`);
-            setReload(prev => !prev);
           }}
         >
           <ClothesCard item={item} />
         </SwiperSlide>
       ))}
-  </Swiper>
-  )
+    </Swiper>
+  );
 }

@@ -1,8 +1,6 @@
 import React from "react";
 import { Box } from "@mui/material";
 export default function About() {
-  console.log("About component rendered");
-
   return (
     <Box
       className="padding-container"
@@ -26,7 +24,7 @@ export default function About() {
         • Our Identity
       </Box>
       <Box sx={{ fontSize: "0.8", lineHeight: "1.5", pb: "2.5rem" }}>
-        Dabdoob Kids Group Is One Of Most Unique Groups In Egypt That
+        E-commerce Group Is One Of Most Unique Groups In Country That
         Specializes In All The Baby Needs Since Day 1. We Offer A Special
         Service Which We Can Bring You The Highest Quality International Brands
         For All Your Baby Needs. Each With Its Own Unique Identity, All Our
@@ -34,14 +32,14 @@ export default function About() {
         Of Comfort And The Drive To Dress Our Precious Kids In A Sustainable
         Way. The Commitment Of Our Employees Is Key To Our Success. We Are
         Dedicated To Creating A Better Accessibility To The Most Popular Brands
-        And Deliver It To You In Egypt With The Best Pricing Possible. We Are
+        And Deliver It To You In Country With The Best Pricing Possible. We Are
         Dedicated To Always Create The Best Offering And The Best Experience For
         Our Customers. We All Share A Values-driven Way Of Working, Based On A
         Fundamental Respect For The Individual. Our Shared Values Help Create An
         Open, Dynamic And Down-toearth Company Culture Where Anything Is
-        Possible The Dabdoob Kidz Group Is One Of The Most Unique Groups In
-        Egypt That Specializes In All The Needs Of Both The Baby Needs Since Day
-        One. We Offer A Special Service That We Can Offer You The Highest
+        Possible The E-commerce Group Is One Of The Most Unique Groups In
+        Country That Specializes In All The Needs Of Both The Baby Needs Since
+        Day One. We Offer A Special Service That We Can Offer You The Highest
         Quality International Brands For All Your Child's Needs.
       </Box>
       <Box sx={{ fontSize: "1.5rem", color: "var(--brown)" }} component={"h3"}>
@@ -50,7 +48,7 @@ export default function About() {
       <Box sx={{ fontSize: "0.8", lineHeight: "1.5", pb: "2.5rem" }}>
         3 Friends 1 Ambition Endless Spirit Of Adventure Back In 2023 When The
         Economical Crisis Hit And It Became Almost Impossible To Provide Mothers
-        And Fathers In Egypt Who Care About Their Baby's Skin And Body With
+        And Fathers In Country Who Care About Their Baby's Skin And Body With
         These Organic Soft Materials From The Most Unique UK Brands, It Came To
         Us That We Can Do So Because Babies Need The Best Care They Can Get And
         Their Skins To Touch The Softest Fabric, And Their Movement In Their
@@ -68,12 +66,12 @@ export default function About() {
         • Our Goal
       </Box>
       <Box sx={{ fontSize: "0.8", lineHeight: "1.5", pb: "2.5rem" }}>
-        We Want To Become The First Group In Egypt Dedicated To The Care And
+        We Want To Become The First Group In Country Dedicated To The Care And
         Health Of Mothers And Their Children. Our Priority Is To Dedicate
         Ourselves Every Day To Improving Our Offer, Through Our Careful Studies
         And The Best Choices For You And Your Children. Our Goal Is To Take Care
         Of Your Family By Providing For Each Of Your Families. With The Hope Of
-        Letting You Into Our Dabdoob Kidz Family
+        Letting You Into Our E-commerce Family
       </Box>
     </Box>
   );

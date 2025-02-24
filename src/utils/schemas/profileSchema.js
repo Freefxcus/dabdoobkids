@@ -23,4 +23,3 @@ export const profileSchemaInitialValues = {
   email: "",
   phone: "",
 };
-

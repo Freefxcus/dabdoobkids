@@ -1,26 +1,22 @@
-import React, { useEffect, useState, memo } from "react";
-import styles from "../../styles/pages/Home.module.css";
-import { Swiper, SwiperSlide } from "swiper/react";
+import React, { memo, useEffect, useState } from "react";
 import "swiper/css";
-import "swiper/css/pagination";
 import "swiper/css/navigation";
+import "swiper/css/pagination";
 import { Autoplay, Pagination } from "swiper/modules";
+import { Swiper, SwiperSlide } from "swiper/react";
 import banner1 from "../../images/banner1.png";
 import banner2 from "../../images/banner2.png";
+import styles from "../../styles/pages/Home.module.css";
 
 import { Box, Typography } from "@mui/material";
 import { getBanners } from "../../utils/apiCalls";
-import { useNavigate, Link } from "react-router-dom";
-import LoadingAnimation from "../LoadingAnimation";
+import Loader from "../Loader";
 
 const BannerSwiper = () => {
-  console.log("brandSwipper1 component rendered");
   const bannerImages = [banner1, banner2];
   const [banners, setBanners] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchBanners = async () => {
@@ -49,7 +45,7 @@ const BannerSwiper = () => {
           alignItems: "center",
         }}
       >
-        <LoadingAnimation />
+        <Loader open={true} />
       </div>
     );
   }
@@ -76,8 +72,6 @@ const BannerSwiper = () => {
           ? banners.categories.map((item, index) => (
               <SwiperSlide key={index}>
                 <Box
-                  component={Link}
-                  to={item?.url}
                   className={styles.bannerBox}
                   style={{ backgroundImage: `url(${item?.image})` }}
                 ></Box>
@@ -90,9 +84,6 @@ const BannerSwiper = () => {
                   style={{ backgroundImage: `url(${img})` }}
                 >
                   <Box>
-                    <Typography variant="h1" className={styles.bannerTitle}>
-                      Dabdoob KIDZ
-                    </Typography>
                     <Typography className={styles.bannerSubtitle}>
                       Make yourself look different without old-fashioned clothes
                       and impress others

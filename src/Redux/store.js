@@ -72,54 +72,91 @@ const wishlistSlice = createSlice({
 //& cart
 const cartSlice = createSlice({
   name: "cart",
-  initialState: { value: [] },
+  initialState: { products: [] },
   reducers: {
-    set(state, action) {
-      state.value = action.payload;
-    },
-    add(state, action) {
-      const index = state.value.findIndex(
-        (cartItem) => cartItem.product === action.payload.product
+    addProduct(state, action) {
+      const product = state.products?.find(
+        (item) =>
+          item.id === action.payload.id &&
+          item.variant === action.payload.variant
       );
 
-      if (index !== -1) {
-        // If the object with the id is present, update its count
-        const updatedCart = state.value;
-        updatedCart[index].count = action.payload.count;
-        state.value = updatedCart;
-      } else {
-        // If the object with the id is not present, add a new object
-        state.value = [...state.value, action.payload];
-        // state.value.push(action.payload);
+      if (!product) state.products.push(action.payload);
+      else {
+        if (
+          product.variant === action.payload.variant &&
+          product.id === action.payload.id
+        ) {
+          state.products = state.products.map((item) =>
+            item.id === action.payload.id &&
+            item.variant === action.payload.variant
+              ? { ...item, count: product.count + action.payload.count }
+              : item
+          );
+        } else state.products.push(action.payload);
       }
     },
-    remove(state, action) {
-      const cart = state.value.filter((item) => item.id !== action.payload);
-      state.value = cart;
+
+    updateCount(state, action) {
+      state.products = state.products.map((item) =>
+        item.id === action.payload.id
+          ? { ...item, count: action.payload.count }
+          : item
+      );
     },
+
+    remove(state, action) {
+      state.products = state.products.filter(
+        (item) => item.id !== action.payload
+      );
+    },
+
     clearCart(state) {
-      state.value = [];
+      state.products = [];
+    },
+    setProducts(state, action) {
+      state.products = action.payload;
     },
   },
 });
 
+const authSlice = createSlice({
+  name: "userAuthentication",
+  initialState: {
+    isAuth: false,
+    token: null,
+  },
+  reducers: {
+    login(state, action) {
+      state.isAuth = true;
+      state.token = action.payload;
+    },
+    logout(state) {
+      state.isAuth = false;
+      state.token = null;
+    },
+  },
+});
+
+export const isUserAuth = (state) => state.authUser.isAuth;
 //* store configuration --------------------------------------------------------------------------------
 const persistConfig = {
   key: "root",
   storage,
-  blacklist: ['cartItems', 'Wishlist',"addresses"],
+  blacklist: ["cartItems", "Wishlist", "addresses"],
 };
-
 
 const rootReducer = combineReducers({
   [wishlistApi.reducerPath]: wishlistApi.reducer,
-  [cartApi.reducerPath]: cartApi.reducer, [AddressApi.reducerPath]: AddressApi.reducer,
+  [cartApi.reducerPath]: cartApi.reducer,
+  [AddressApi.reducerPath]: AddressApi.reducer,
   sidebar: sidebarSlice.reducer,
   popup: popupSlice.reducer,
   userInfo: userInfoSlice.reducer,
   data: dataSlice.reducer,
   wishlist: wishlistSlice.reducer,
   cart: cartSlice.reducer,
+  authUser: authSlice.reducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -129,7 +166,11 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false,
-    }).concat(cartApi.middleware, wishlistApi.middleware , AddressApi.middleware), // Add RTK-Query middleware here
+    }).concat(
+      cartApi.middleware,
+      wishlistApi.middleware,
+      AddressApi.middleware
+    ), // Add RTK-Query middleware here
 });
 export const persistor = persistStore(store);
 
@@ -140,5 +181,6 @@ export const userInfoActions = userInfoSlice.actions;
 export const dataActions = dataSlice.actions;
 export const wishlistActions = wishlistSlice.actions;
 export const cartActions = cartSlice.actions;
+export const userAuthAction = authSlice.actions;
 
 // export default store;

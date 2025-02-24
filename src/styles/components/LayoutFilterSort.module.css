@@ -1,0 +1,59 @@
+.container {
+  padding-top: 68px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.filterButtonContainer {
+  width: 100%;
+  max-width: 350px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.filterButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.filterText {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.clearButton {
+  font-size: 14px;
+  font-weight: 500;
+  color: red;
+}
+
+.searchContainer {
+  position: relative;
+  width: 100%;
+  max-width: 610px;
+  display: flex;
+  align-items: center;
+  border-bottom: 2px solid #bbbbbb;
+  padding-bottom: 12px;
+}
+
+.searchInput {
+  font-size: 20px;
+  font-weight: 500;
+  flex-grow: 1;
+  border: none;
+  outline: none;
+  padding-right: 32px; /* space for the search icon */
+}
+
+.searchInput::placeholder {
+  color: #bbbbbb;
+  font-size: larger;
+}
+
+.searchIcon {
+  position: absolute;
+  right: 0;
+}

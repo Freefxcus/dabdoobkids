@@ -1,12 +1,10 @@
 import { Box, Modal } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { addToCart, getCart, removeFromCart } from "../../utils/apiCalls";
-import { useDispatch, useSelector } from "react-redux";
-import { cartActions } from "../../Redux/store";
-import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import HandleMessageIsAuth from "../../utils/message";
 import { useDeleteFromCartMutation } from "../../Redux/cartApi";
 import { notifyError, notifySuccess } from "../../utils/general";
+import { cartActions } from "../../Redux/store";
 
 export default function DeleteModal({
   open,
@@ -15,8 +13,10 @@ export default function DeleteModal({
   id,
   variantId,
 }) {
-  const navigate = useNavigate();
+  const isAuth = localStorage.getItem("access_token");
+
   const dispatch = useDispatch();
+
   const [
     deleteFromCart,
     {
@@ -63,7 +63,11 @@ export default function DeleteModal({
               cursor: "pointer",
               flex: "1",
             }}
-            onClick={() => HandleMessageIsAuth(handleDeleteFromCart)}
+            onClick={() =>
+              isAuth
+                ? HandleMessageIsAuth(handleDeleteFromCart)
+                : dispatch(cartActions.remove(id))
+            }
           >
             Remove
           </button>

@@ -7,7 +7,6 @@ import { getProducts } from "../../utils/apiCalls";
 import { useNavigate } from "react-router-dom";
 
 export default function NewArrival({ categories }) {
-  console.log("newArrival component rendered");
   let selectedCate = categories?.filter(
     (item, index) => item?.productsCount > 0
   );
@@ -35,7 +34,7 @@ export default function NewArrival({ categories }) {
         }}
       >
         <div className={styles.title} style={{ marginBottom: "0" }}>
-          New arrivals
+          Our Collection
         </div>
         <div
           onClick={() => navigate("/search")}
@@ -47,13 +46,7 @@ export default function NewArrival({ categories }) {
             whiteSpace: "nowrap",
           }}
         >
-          All
-          {/* {" " +
-          currentCat.name
-            ?.split(" ")[0]
-            .split(" ")
-            .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-            .join(" ")} */}
+          All Products
         </div>
       </div>
       <div className={styles["categories-container"]}>

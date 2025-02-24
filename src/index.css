@@ -7,14 +7,14 @@
   --black: #000000;
   --errie-black: #1b1b1b;
   --rhine-castle: #5f5f5f;
-  --brown: #ad6b46;
-  --off-white: #fff9f0;
+  --brown: #000;
+  --off-white: #8080800a;
   --light-grey: #f7f7f7;
   --pale-grey: #ededed;
   --dark-grey: #767676;
   --darkest-grey: #494949;
   --grey-text: #1b1b1bb2;
-  --orange: #f9cc61;
+  --orange: #ccc;
   --line: #a4a4a4;
   --dark-charcoal: #323232;
   --unicorn-silver: #e8e8e8;
@@ -43,15 +43,21 @@
   height: 100%;
 }
 
+button {
+  background-color: transparent;
+  cursor: pointer;
+  border: none;
+}
+
 /* Default styles for all screen sizes */
 .margin-container {
   margin: 0 60px;
 }
 .padding-container {
   padding: 0 60px;
-
-}.container{
-    margin-left: auto;
+}
+.container {
+  margin-left: auto;
   margin-right: auto;
 }
 .section-bottom-margin {
@@ -74,8 +80,8 @@
   .padding-container {
     padding: 0 15px;
   }
-  .container{
-    max-width:  95%;
+  .container {
+    max-width: 95%;
   }
   .hidden-on-small-screen {
     display: none;
@@ -101,14 +107,15 @@
   }
   .padding-container {
     padding: 0 30px;
-  } .container{
+  }
+  .container {
     max-width: 640px;
   }
   .hidden-on-large-screen {
     display: none;
   }
-  .show-on-small-screen{
-    display: block!important;
+  .show-on-small-screen {
+    display: block !important;
   }
   .section-bottom-margin {
     margin-bottom: 30px;
@@ -130,8 +137,9 @@
     margin: 0 45px;
   }
   .padding-container {
-    padding: 0 45px;} 
-    .container{
+    padding: 0 45px;
+  }
+  .container {
     max-width: 768px;
   }
   .hidden-on-large-screen {
@@ -158,8 +166,9 @@
   }
   .padding-container {
     padding: 0 100px;
-  } .container{ max-width: 1024px;
-    
+  }
+  .container {
+    max-width: 1024px;
   }
   .hidden-on-large-screen {
     display: none;
@@ -387,11 +396,11 @@ button:disabled {
   }
 }
 
-
-@media (min-width: 1536px) and (max-width: 1919px)  {
+@media (min-width: 1536px) and (max-width: 1919px) {
   .padding-container {
     padding: 0 150px;
-  } .container{
+  }
+  .container {
     max-width: 1536px;
   }
 }

@@ -1,19 +1,17 @@
-import { useEffect, useState } from "react";
+import CloseIcon from "@mui/icons-material/Close";
+import { Box, CircularProgress, Stack } from "@mui/material";
+import { useEffect, useMemo, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { useDeleteAllCartMutation } from "../../Redux/cartApi";
 import {
   checkPromoCode,
-  emptyCart,
+  getUserPaymentLink,
   getWallet,
   orderCheckout,
-  ordersCallback,
 } from "../../utils/apiCalls";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { set } from "lodash";
-import { Box, CircularProgress, Stack, Switch } from "@mui/material";
-import { toast } from "react-toastify";
-import { useDeleteAllCartMutation } from "../../Redux/cartApi";
 import "./style.css";
-import CloseIcon from "@mui/icons-material/Close";
-import { Wallet3 } from "iconsax-react";
+import { newCalcDiscount, notifySuccess } from "../../utils/general";
+import ModalPaymentLink from "./ModalPaymentLink";
 export default function ConfirmPayment({
   orderSummary,
   address,
@@ -23,6 +21,7 @@ export default function ConfirmPayment({
   isUseWallet,
   setIsUseWallet,
   DataSubmit,
+  cartItems = [],
 }) {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -34,6 +33,37 @@ export default function ConfirmPayment({
   const [loading, setLoading] = useState(false);
   const [deleteAllCart] = useDeleteAllCartMutation();
   const [wallet, setWallet] = useState();
+
+  const [open, setOpen] = useState(false);
+  const handleOpenModal = () => setOpen(true);
+  const handleCloseModal = () => setOpen(false);
+
+  const price = useMemo(() => {
+    const totalPriceProduct = cartItems.reduce(
+      (acc, curr) => acc + newCalcDiscount(curr).totalPrice,
+      0
+    );
+
+    const discount =
+      promoSuccess?.type === "percentage"
+        ? (totalPriceProduct * promoSuccess?.amount) / 100
+        : promoSuccess?.amount || 0;
+
+    const totalPrice =
+      discount && discount > promoSuccess?.maxAmount
+        ? totalPriceProduct - promoSuccess?.maxAmount
+        : totalPriceProduct - discount;
+
+    const shipping =
+      totalPrice > 3500 ? 0 : orderSummary?.data?.data?.shipping || 0;
+
+    return {
+      totalPrice: totalPrice - shipping,
+      shipping,
+      discount,
+      totalPriceProduct,
+    };
+  }, [cartItems, promoSuccess, orderSummary]);
 
   useEffect(() => {
     getWallet().then((res) => {
@@ -68,20 +98,51 @@ export default function ConfirmPayment({
     setPromoCodeMain("");
     setPromoSuccess("");
   };
-  const handlePayment = async () => {
-    setLoading(true);
-    const checkout = await orderCheckout(DataSubmit);
 
-    if (checkout?.data?.data?.url) {
-      toast.success("Redirecting to Payment Gateway");
-      setPaymentMethod(checkout?.data?.data?.url);
-    } else if (checkout?.data?.status === "success") {
-      toast.success("Order Placed Successfully");
-      deleteAllCart().then(() => {
-        navigate("/");
-      });
+  const handlePayment = async () => {
+    const paymentURLStorage =
+      JSON.parse(localStorage.getItem("paymentURL")) || "";
+    if (paymentMethod === "Credit Card") {
+      if (paymentURLStorage) {
+        setPaymentMethod(paymentURLStorage);
+        handleOpenModal();
+        return;
+      }
+
+      setLoading(true);
+      const checkout = await getUserPaymentLink(price.totalPrice);
+      if (checkout.link) {
+        notifySuccess("Redirecting to Payment Gateway");
+        setPaymentMethod(checkout);
+        localStorage.setItem("paymentURL", JSON.stringify(checkout));
+        handleOpenModal();
+      }
+      setLoading(false);
+    } else if (paymentMethod === "Cash on Delivery") {
+      setLoading(true);
+
+      const checkout = await orderCheckout(DataSubmit);
+
+      if (checkout?.data?.status === "success") {
+        notifySuccess("Order Placed Successfully");
+        deleteAllCart().then(() => {
+          navigate("/");
+        });
+      }
+      setLoading(false);
     }
-    setLoading(false);
+
+    // if (checkout?.data?.data?.url) {
+    //   notifySuccess("Redirecting to Payment Gateway");
+    //   setPaymentMethod(checkout?.data?.data?.url);
+    //   localStorage.setItem("paymentURL", checkout?.data?.data?.url);
+    // }
+    // else if (checkout?.data?.status === "success") {
+    //   notifySuccess("Order Placed Successfully");
+    //   deleteAllCart().then(() => {
+    //     navigate("/");
+    //   });
+    // }
   };
 
   return (
@@ -102,7 +163,7 @@ export default function ConfirmPayment({
         }}
       >
         <h2>Price Summary</h2>
-        <Box
+        {/* <Box
           sx={{
             backgroundColor: "#fff",
             padding: "0.751rem",
@@ -138,7 +199,8 @@ export default function ConfirmPayment({
           </div>
           <Switch
             // checked={isUseWallet}
-            checked={wallet?.balance === 0 ? false : isUseWallet}
+            checked={wallet?.balance === 0?false:isUseWallet}
+
             disabled={wallet?.balance === 0}
             onChange={() => {
               setIsUseWallet((prev) => !prev);
@@ -149,7 +211,7 @@ export default function ConfirmPayment({
             }}
             inputProps={{ "aria-label": "controlled" }}
           />
-        </Box>
+        </Box> */}
 
         <div style={{ display: "flex", flexDirection: "column", gap: "18px" }}>
           <h3>Promo Code</h3>
@@ -191,7 +253,7 @@ export default function ConfirmPayment({
                 fontSize: "16px",
               }}
             >
-              SubTotal
+              Total Shopping
             </h2>
             <h2
               style={{
@@ -200,7 +262,7 @@ export default function ConfirmPayment({
                 fontSize: "16px",
               }}
             >
-              {orderSummary?.data?.data?.total}EGP
+              {price.totalPriceProduct}EGP
             </h2>
           </div>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -220,7 +282,8 @@ export default function ConfirmPayment({
                 fontSize: "16px",
               }}
             >
-              {orderSummary?.data?.data?.shipping}EGP
+              {price.shipping}
+              EGP
             </h2>
           </div>
           {/* <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -247,7 +310,7 @@ export default function ConfirmPayment({
             style={{
               display: "flex",
               justifyContent: "space-between",
-              color: " #AD6B46",
+              color: "#444",
             }}
           >
             <h2
@@ -266,7 +329,7 @@ export default function ConfirmPayment({
                 fontSize: "16px",
               }}
             >
-              {orderSummary?.data?.data?.discount}EGP
+              {price.discount}EGP
             </h2>
           </div>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -276,7 +339,7 @@ export default function ConfirmPayment({
                 fontSize: "16px",
               }}
             >
-              Total Shipping
+              SubTotal
             </h2>
             <h2
               style={{
@@ -285,10 +348,10 @@ export default function ConfirmPayment({
                 fontSize: "16px",
               }}
             >
-              {orderSummary?.data?.data?.subtotal}EGP
+              {price.totalPrice}EGP
             </h2>
           </div>
-          <div style={{ textAlign: "center", color: "red" }}>
+          <div style={{ textAlign: "center", color: "#888" }}>
             {!address?.items?.[0]?.id || !addressActive
               ? "please enter address "
               : null}
@@ -334,7 +397,20 @@ export default function ConfirmPayment({
           </button>
         </div>
 
-        {paymentLink && (
+        <ModalPaymentLink
+          closeModal={handleCloseModal}
+          open={open}
+          paymentLink={paymentLink}
+          addressInfo={
+            address?.items?.find((item) => item.id === addressActive) || {}
+          }
+          paymentAmount={price.totalPrice}
+          orderSummary={cartItems}
+          paymentMethod={paymentMethod}
+          price={price}
+        />
+
+        {/* {paymentLink && (
           <iframe
             src={paymentLink}
             title="Paymob"
@@ -346,7 +422,7 @@ export default function ConfirmPayment({
               inset: "0",
             }}
           />
-        )}
+        )} */}
       </Box>
     </Box>
   );

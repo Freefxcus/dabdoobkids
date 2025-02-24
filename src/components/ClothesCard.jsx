@@ -14,13 +14,12 @@ import {
   useGetAllWishListQuery,
 } from "../Redux/wishlistApi.jsx";
 export default function ClothesCard({ item }) {
-  console.log("clothesCard rendered");
   const navigate = useNavigate();
   const { data: wishListData } = useGetAllWishListQuery();
   const wishListItems = wishListData?.data?.[0]?.items || [];
 
   const wished = wishListItems.some(
-    (product) => product?.product?.id === item?.id
+    (product) => product?.product?.id == item?.id
   );
 
   const [
@@ -86,8 +85,8 @@ export default function ClothesCard({ item }) {
         <CardMedia
           sx={{
             width: "100%",
-            aspectRatio: { xs: 0.65, sm: 0.77 },
-            objectFit: "cover",
+            // aspectRatio: { xs: 0.45, sm: 0.77 },
+            // objectFit: "cover",
           }}
           component={"img"}
           alt={item?.name}

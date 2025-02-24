@@ -1,6 +1,5 @@
 import React from "react";
 import { Box } from "@mui/material";
-
 export default function ReturnsRefunds() {
   return (
     <Box
@@ -42,11 +41,11 @@ export default function ReturnsRefunds() {
             px: "2rem",
             display: "flex",
             flexDirection: "column",
-            gap: "10px", "& p":{color:"#1b1b1b", fontSize: "1rem",},
+            gap: "10px",
+            "& p": { color: "#1b1b1b", fontSize: "1rem" },
           }}
           type="1"
           component={"ol"}
-         
         >
           <li>Contact Us Via Email Address Or Any Social Media Account.</li>
           <li>
@@ -91,9 +90,8 @@ export default function ReturnsRefunds() {
             display: "flex",
             flexDirection: "column",
             gap: "10px",
-            "& p":{color:"#1b1b1b", fontSize: "1rem",},
+            "& p": { color: "#1b1b1b", fontSize: "1rem" },
           }}
-          
         >
           <p>
             Once You’ve Submitted An Online Return Request, The Process Is
@@ -134,34 +132,31 @@ export default function ReturnsRefunds() {
             display: "flex",
             flexDirection: "column",
             gap: "10px",
-            "& p":{color:"#1b1b1b", fontSize: "1rem",},
+            "& p": { color: "#1b1b1b", fontSize: "1rem" },
           }}
-          
         >
+          <p>An Online Return Can Only Be Requested By A Registered User.</p>
           <p>
-          An Online Return Can Only Be Requested By A Registered User.
-
+            A Registered User Can Only Raise One Return Request At A Time Per
+            Order.
           </p>
           <p>
-          A Registered User Can Only Raise One Return Request At A Time Per Order.
-
+            Guest Users Cannot Place An Online Return Request But Can Always
+            Register Or Create An Account Using The Same Email Address To Do So
           </p>
           <p>
-          Guest Users Cannot Place An Online Return Request But Can Always Register Or 
-          Create An Account Using The Same Email Address To Do So
+            If You Change Your Mind, You Can Cancel Your Online Return Request
+            Before The Carrier Is Out For Collecting.
           </p>
           <p>
-          If You Change Your Mind, You Can Cancel Your Online Return Request Before The 
-Carrier Is Out For Collecting.
+            You’ll Have 48 Hours From The Delivery Date Of Your Order To Return
+            Your Purchased Item(s).If You Purchased The Order Through Our Social
+            Media Platforms Not The Website The Same Rules Applies.
           </p>
           <p>
-          You’ll Have 48 Hours From The Delivery Date Of Your Order To Return Your 
-Purchased Item(s).If You Purchased The Order Through Our Social Media Platforms 
-Not The Website The Same Rules Applies.
-          </p>
-          <p>
-          Please Note That The Duration Is In Accordance To The Relevant Applicable Laws 
-          In Your Country, And In Case Of Offers, Special Conditions Are To Be Applied.
+            Please Note That The Duration Is In Accordance To The Relevant
+            Applicable Laws In Your Country, And In Case Of Offers, Special
+            Conditions Are To Be Applied.
           </p>
         </Box>
       </Box>
@@ -170,8 +165,8 @@ Not The Website The Same Rules Applies.
           sx={{ fontSize: "1.5rem", color: "var(--brown)" }}
           component={"h3"}
         >
-• Cancellation.
-</Box>
+          • Cancellation.
+        </Box>
         <Box
           sx={{
             fontSize: "1rem",
@@ -182,36 +177,32 @@ Not The Website The Same Rules Applies.
             display: "flex",
             flexDirection: "column",
             gap: "10px",
-            "& p":{color:"#1b1b1b", fontSize: "1rem",},
+            "& p": { color: "#1b1b1b", fontSize: "1rem" },
           }}
-          
         >
           <p>
-          If You Wish To Cancel Your Order, You May Do So By Calling Our Customer 
-Services During Working Hours And Within 24h Hour Of Placing It And 1 Hour Of 
-The Final Confirmation.
+            If You Wish To Cancel Your Order, You May Do So By Calling Our
+            Customer Services During Working Hours And Within 24h Hour Of
+            Placing It And 1 Hour Of The Final Confirmation.
+          </p>
+          <p>
+            If You Paid By Credit Card Or Debit Card, Or Transferred A Deposit
+            (Might Be Required) And You Have Cancelled In Accordance With This
+            Clause Then We Will Reverse The Authorisation Or Process A Refund
+            Transaction (As The Case May Be) As Soon As Possible But We Are Not
+            Responsible For How Long This Will Take To Be Reflected On Your
+            Account As This Is Dependent On Bank Processing Procedures.
+          </p>
 
-          </p>
-          <p>
-          If You Paid By Credit Card Or Debit Card, Or Transferred A Deposit (Might Be 
-Required) And You Have Cancelled In Accordance With This Clause Then We Will 
-Reverse The Authorisation Or Process A Refund Transaction (As The Case May Be) 
-As Soon As Possible But We Are Not Responsible For How Long This Will Take To 
-Be Reflected On Your Account As This Is Dependent On Bank Processing 
-Procedures. 
-          </p>
-    
-           <p>
-           Refunds Will Be Done Only Through The Original Mode Of Payment.
-           </p>
-           
-           <Box
-          sx={{ fontSize: "1.5rem", color: "var(--brown)" }}
-          component={"h4"}
-        >
-Thank You For Choosing Us.
-</Box>
-              </Box>
+          <p>Refunds Will Be Done Only Through The Original Mode Of Payment.</p>
+
+          <Box
+            sx={{ fontSize: "1.5rem", color: "var(--brown)" }}
+            component={"h4"}
+          >
+            Thank You For Choosing Us.
+          </Box>
+        </Box>
       </Box>
     </Box>
   );

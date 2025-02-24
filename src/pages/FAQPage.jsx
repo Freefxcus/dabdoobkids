@@ -14,7 +14,7 @@ export const faqs = [
   },
   {
     question:
-      "WHAT TIME DOES THE DABDOOB KIDZ CUSTOMER CARE TEAM OPERATE, AND HOW CAN I GET IN CONTACT?",
+      "WHAT TIME DOES THE E-commerce CUSTOMER CARE TEAM OPERATE, AND HOW CAN I GET IN CONTACT?",
     answer: `We are open Saturday to Thursday 12 p.m. to 21 p.m. & Friday 12 p.m. to 21 p.m. (including public holidays). You can also contact us using our quick form and our team will get back to you as soon as possible.`,
   },
   {

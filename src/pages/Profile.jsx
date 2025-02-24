@@ -1,32 +1,32 @@
-import { useState, useEffect } from "react";
-import styles from "../styles/pages/Profile.module.css";
-import { useNavigate, useParams } from "react-router-dom";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { Typography } from "@mui/material";
+import Accordion from "@mui/material/Accordion";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import PromoCard from "../components/PromoCard";
-import { useDispatch, useSelector } from "react-redux";
-import instance from "../utils/interceptor.js";
-import Popup from "../components/Popup";
-import { userInfoActions } from "../Redux/store";
-import { notifyError, notifySuccess } from "../utils/general";
-import { authorize, getAddress, deleteAddress } from "../utils/apiCalls.js";
-import Loader from "../components/Loader.jsx";
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import Button from "@mui/material/Button";
-import Box from "@mui/material/Box";
-import AddressModal from "../components/checkout/AddressModal.jsx";
-import UpdateProfileModal from "../components/profile/UpdateProfile.jsx";
-import OrderList from "../components/orders/OrderList.jsx";
 import { LogoutCurve } from "iconsax-react";
-import { faqs } from "./FAQPage.jsx";
-import { Typography } from "@mui/material";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import AddressModal from "../components/checkout/AddressModal.jsx";
+import Loader from "../components/Loader.jsx";
+import OrderList from "../components/orders/OrderList.jsx";
+import Popup from "../components/Popup";
+import UpdateProfileModal from "../components/profile/UpdateProfile.jsx";
 import WalletComponents from "../components/profile/WalletComponents.jsx";
+import PromoCard from "../components/PromoCard";
+import { userAuthAction, userInfoActions } from "../Redux/store";
+import styles from "../styles/pages/Profile.module.css";
+import { authorize, deleteAddress, getAddress } from "../utils/apiCalls.js";
+import { notifyError, notifySuccess } from "../utils/general";
+import instance from "../utils/interceptor.js";
+import { faqs } from "./FAQPage.jsx";
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -201,6 +201,7 @@ export default function Profile() {
                   key={index}
                   onClick={() => {
                     if (item?.id === "9") {
+                      dispatch(userAuthAction.logout());
                       localStorage.removeItem("access_token");
                       localStorage.removeItem("refresh_token");
                       navigate("/login");
@@ -447,19 +448,19 @@ Please Note That The Duration Is In Accordance To The Relevant Applicable Laws I
                   <div className={styles.sub_header}>Privacy Policy</div>
 
                   {[
-                    'Dabdoob Kidz Is Strongly Committed To Respecting The Privacy Of All Persons Using Our Websites And Mobile Applications ("The Web Sites/Apps") And The Protection Of Any Personally Identifiable Information Which We May Collect On Our Websites/Apps And/ Or Use As Part Of Our Data Collection Process And/ Or Which You May Choose To Share With Us In Our Stores Or Via Telephone, Email Or Otherwise (“The Other Channels”). Such Personal Information Will Be Collected And/ Or Used In Accordance With The Terms And Conditions Of This Privacy Policy, Which Is Part Of And Incorporated Into The Terms Of Use Of The Web Site.',
+                    'E-commerce Is Strongly Committed To Respecting The Privacy Of All Persons Using Our Websites And Mobile Applications ("The Web Sites/Apps") And The Protection Of Any Personally Identifiable Information Which We May Collect On Our Websites/Apps And/ Or Use As Part Of Our Data Collection Process And/ Or Which You May Choose To Share With Us In Our Stores Or Via Telephone, Email Or Otherwise (“The Other Channels”). Such Personal Information Will Be Collected And/ Or Used In Accordance With The Terms And Conditions Of This Privacy Policy, Which Is Part Of And Incorporated Into The Terms Of Use Of The Web Site.',
                     {
                       text: "Your Express Consent To Collection And Use Of Information.",
                     },
-                    'Dabdoob Kidz Reserves The Right To Collect Such Personally Identifiable Information As Name, Address, Telephone Number, E-mail Address, Etc., As Well As Demographic, Transactional And Profile Data Such As IP Address, Internet Domain Or Browser, Referrer Or User Agent Information Or Other Relevant Information That We Use As Part Of Our Data Collection Process On The Web Sites/Apps Or Via The Other Channels, Such As The Use Of Cookies Or Certain Other Information You May Provide To Us, Etc. ("Personal Information") As Set Forth In This Privacy Policy. We Hold All Such Personal Information On Secure Servers And Treat It As Fully Confidential.',
-                    "By Choosing To Access Our Web Sites/Apps And/Or Communicating With Us Through The Other Channels, You Are Indicating Your Express Consent And Agreement To The Collection, Transfer, Processing, Use And Storage In Accordance With This Privacy Policy Of Any Personal Information Which May Be Obtained From You As A Result. If You Do Not Agree With Any Of The Terms And Conditions Set Forth In The Privacy Policy, Or Have Any Questions, Please Contact Us Directly At Webmaster@dabdoobkidz.Com, And We Will Be Pleased To Assist You With Your Concerns. By Accessing Or Using The Web Sites/Apps And/Or Communicating With Us Through The Other Channels, You Grant Dabdoob Kidz A Non-exclusive, Worldwide, Royalty-free Perpetual License To Use Your Personal Information For The Purposes Set Forth Herein.",
+                    'E-commerce Reserves The Right To Collect Such Personally Identifiable Information As Name, Address, Telephone Number, E-mail Address, Etc., As Well As Demographic, Transactional And Profile Data Such As IP Address, Internet Domain Or Browser, Referrer Or User Agent Information Or Other Relevant Information That We Use As Part Of Our Data Collection Process On The Web Sites/Apps Or Via The Other Channels, Such As The Use Of Cookies Or Certain Other Information You May Provide To Us, Etc. ("Personal Information") As Set Forth In This Privacy Policy. We Hold All Such Personal Information On Secure Servers And Treat It As Fully Confidential.',
+                    "By Choosing To Access Our Web Sites/Apps And/Or Communicating With Us Through The Other Channels, You Are Indicating Your Express Consent And Agreement To The Collection, Transfer, Processing, Use And Storage In Accordance With This Privacy Policy Of Any Personal Information Which May Be Obtained From You As A Result. If You Do Not Agree With Any Of The Terms And Conditions Set Forth In The Privacy Policy, Or Have Any Questions, Please Contact Us Directly At Webmaster@E-commerce.Com, And We Will Be Pleased To Assist You With Your Concerns. By Accessing Or Using The Web Sites/Apps And/Or Communicating With Us Through The Other Channels, You Grant E-commerce A Non-exclusive, Worldwide, Royalty-free Perpetual License To Use Your Personal Information For The Purposes Set Forth Herein.",
                     "We Will Not Sell Your Personal Information To Third Parties. We May, However, Share Selected Customer Information With The Following Third Parties:",
                     `- Our Group Companies;
 - Our Franchisors;
 - Companies Such As Payment Service Providers, Warehousing Service Providers And Delivery Companies For The Purposes Of Processing Your Payment And Managing Your Order, Including Delivery And Returns;
 - Concessions And Cosmetics Partners Who Are Responsible For Delivering Their Products Directly To You Or Providing Services, Such As Makeovers, In Our Stores;
 - Purchasers And Their Advisors Following A Sale Of All Or Part Of Our Business, So That They Can Continue To Provide Services To You;
-- Third Party Databases To Which Dabdoob Kidz And/Or One Of Our Brands Subscribes;
+- Third Party Databases To Which E-commerce And/Or One Of Our Brands Subscribes;
 - Government Bodies Or Other Authorities If Necessary To Comply With Regulations Or Law Or To Assist With Law Enforcement, Or To Protect Our Property And Other Rights;
 - Agencies Who Help Us Collate Statistics About Site Traffic, Sales, Demographics And Other Commercial Information To Enable Us To Tailor The Services We Provide To You And Other Customers.`,
                     "We Will Retain Your Personal Information For As Long As It Is Legally Required, And To Support The Business Purposes For Which It Was Obtained - We Will Then Dispose Of It Promptly And Securely.",
@@ -494,7 +495,7 @@ Please Note That The Duration Is In Accordance To The Relevant Applicable Laws I
                     {
                       text: "THird Parties Are Not Able To Identify Customers Using Cookies.",
                     },
-                    "We Also Reserve The Right To Use An Outside Advertising Company To Display Ads On Our Web Sites. These Ads May Also Contain Cookies. While We May Use Cookies In Other Parts Of Our Web Sites, Cookies Received With Banner Ads Or From Other Third-party Sources May Be Collected By Any Such Third-party Companies, And We Do Not Have Direct Access To Or Control Over Such Processes. No Cookies Used By Dabdoob Kidz Are Stored Permanently On Your Device. All Cookies Are Automatically Removed From Your Device Either When You Close Your Browser Or Your Session Times Out.",
+                    "We Also Reserve The Right To Use An Outside Advertising Company To Display Ads On Our Web Sites. These Ads May Also Contain Cookies. While We May Use Cookies In Other Parts Of Our Web Sites, Cookies Received With Banner Ads Or From Other Third-party Sources May Be Collected By Any Such Third-party Companies, And We Do Not Have Direct Access To Or Control Over Such Processes. No Cookies Used By E-commerce Are Stored Permanently On Your Device. All Cookies Are Automatically Removed From Your Device Either When You Close Your Browser Or Your Session Times Out.",
                     "By Using Our Websites, You Agree To The Placing Of Cookies On Your Device. However, If You Do Not Want To Receive A Cookie From Our Website, You May Set Your Browser To Refuse Cookies Or To Notify You When You Receive A Cookie (To Find Out How To Do This, Please Consult Your Browser’s Help Section). If Cookies Aren’t Enabled On Your Device, It May Limit Your Enjoyment Of The Web Site.",
                     {
                       text: "Protection Of Personal Information Against Third-party Access Or Use.",
@@ -552,6 +553,7 @@ Please Note That The Duration Is In Accordance To The Relevant Applicable Laws I
                   ))}
                 </div>
               )}
+
               {sidebarItem === "8" && (
                 <div className={styles.cards_container}>
                   {["", "", "", "", ""].map((item, index) => (

@@ -15,9 +15,10 @@
   gap: 10px;
 }
 .logo {
-  width: 100%;
-  cursor: pointer;
-  align-self: flex-start;
+  max-height: 150px;
+  display: grid;
+  place-content: center;
+  overflow: hidden;
 }
 .header {
   color: var(--errie-black);

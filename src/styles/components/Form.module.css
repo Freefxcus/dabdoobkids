@@ -92,27 +92,6 @@
     width: 250px;
   }
 }
-.validationList {
-  list-style-type: none;
-  padding: 0;
-  margin: 10px 0;
-  font-size: 14px;
-}
-
-.validationList li {
-  transition: color 0.3s ease-in-out;
-}
-
-.inputWrapper {
-  width: 100%; /* Ensure it takes full width */
-  display: flex;
-  align-items: center;
-  position: relative;
-}
-
-.inputWrapper input {
-  width: 100%; /* Make sure the input inside also takes full width */
-}
 
 /* Media query for screens between 601px and 900px (e.g., tablets) */
 @media (min-width: 601px) and (max-width: 900px) {

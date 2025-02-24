@@ -1,8 +1,8 @@
 .container {
   /* width: 295px; */
-   /* aspect-ratio: 0.62; */
+  /* aspect-ratio: 0.62; */
   max-width: 300px;
-  width: 100%;  
+  width: 100%;
   cursor: pointer;
 }
 .card-top {
@@ -26,7 +26,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  
+
   position: absolute;
   top: 15px;
   right: 15px;
@@ -34,16 +34,16 @@
   background-color: transparent;
   border: none;
 }
-.heart-container img{
-    background-color: none;
+.heart-container img {
+  background-color: none;
   border: none;
 }
-.tags-container{
-   position: absolute;
+.tags-container {
+  position: absolute;
   top: 15px;
   left: 15px;
-  gap:8px;
-  max-width:70% ;
+  gap: 8px;
+  max-width: 70%;
   flex-wrap: wrap;
   display: flex;
   align-items: center;
@@ -55,7 +55,7 @@
   align-items: center;
   gap: 5px;
   background-color: var(--white);
- 
+
   padding: 5px;
 }
 .sold-container {

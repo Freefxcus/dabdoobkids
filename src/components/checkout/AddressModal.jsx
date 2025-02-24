@@ -22,6 +22,7 @@ import {
 import { toast } from "react-toastify";
 import { set } from "lodash";
 import { useEffect, useState } from "react";
+import { notifySuccess } from "../../utils/general.js";
 
 const style = {
   position: "absolute",
@@ -64,14 +65,14 @@ export default function AddressModal({
       console.log(resUpdate, "resUpdate123");
       if (resUpdate.status) {
         setForceReload((prev) => !prev);
-        toast.success("Address updated successfully");
+        notifySuccess("Address updated successfully");
         setOpen(false);
       }
     } else if (type === "add") {
       const resAddress = await AddAddress(parametres);
       if (resAddress.status) {
         setForceReload((prev) => !prev);
-        toast.success("Address added successfully");
+        notifySuccess("Address added successfully");
         setOpen(false);
       }
     }
@@ -89,7 +90,6 @@ export default function AddressModal({
     // postalCode: addressInfo?.postalCode || "",
   };
 
-  
   const {
     values,
     errors,
@@ -108,29 +108,29 @@ export default function AddressModal({
   useEffect(() => {
     getGovernorates().then((res) => {
       setGovernorates(res?.data?.data);
-      setFieldValue('governorate', values.governorate||res?.data?.data?.[0]?.id);
+      setFieldValue(
+        "governorate",
+        values.governorate || res?.data?.data?.[0]?.id
+      );
     });
-   
   }, []);
 
-
-useEffect(() => {
-  // Check if governorate exists and if it does, set the city based on the selected governorate
-  if (values.governorate||addressInfo?.governorate.id ) {
-    getCitites(values.governorate||addressInfo?.governorate.id ).then((res) => {
-      setCities(res?.data?.data);
-    });
-
- 
-  }
-}, [values.governorate, setFieldValue]); 
+  useEffect(() => {
+    // Check if governorate exists and if it does, set the city based on the selected governorate
+    if (values.governorate || addressInfo?.governorate.id) {
+      getCitites(values.governorate || addressInfo?.governorate.id).then(
+        (res) => {
+          setCities(res?.data?.data);
+        }
+      );
+    }
+  }, [values.governorate, setFieldValue]);
 
   useEffect(() => {
-    if(!values.city){
-      setFieldValue('city', addressInfo?.city ||cities?.[0]?.id);
+    if (!values.city) {
+      setFieldValue("city", addressInfo?.city || cities?.[0]?.id);
     }
-  }, [cities])
-  
+  }, [cities]);
 
   return (
     <Modal open={open}>
@@ -171,7 +171,6 @@ useEffect(() => {
               onChange={handleChange}
               id="phone_number"
               country="EGY"
-
               onBlur={handleBlur}
               className={
                 errors.phone_number && touched.phone_number
@@ -321,68 +320,71 @@ useEffect(() => {
           {/* province */}
           {/* governorate select */}
           <div className={styles.semi_item}>
-          <div className={`${styles.label} ${styles.item}`}>
-            <span>Governorate</span>
-            <span className={styles.error}> *</span>
+            <div className={`${styles.label} ${styles.item}`}>
+              <span>Governorate</span>
+              <span className={styles.error}> *</span>
 
-            {errors.governorate && touched.governorate && (
-              <span className="error">{errors.governorate}</span>
-            )}
-          </div>
-          <select
-            value={values.governorate || governorates?.[0]?.id}
-            onChange={handleChange}
-            id="governorate"
-            type="number"
-            required
-            onBlur={handleBlur}
-            className={
-              errors.governrate && touched.governrate
-                ? `${styles.input} ${styles.item} ${styles.bottom_margin} input-error`
-                : `${styles.input} ${styles.item} ${styles.bottom_margin}`
-            }
-            placeholder="Governorate"
-          >
-            {governorates?.map((gov) => (
-              <option key={gov.id} value={gov.id}>
-                {gov.name.en}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {/* city select */}
-        <div className={styles.semi_item}>
-          <div className={`${styles.label} ${styles.item}`}>
-            <span>City</span>
-            <span className={styles.error}> *</span>
-
-            {errors.city && touched.city && (
-              <span className="error">{errors.city}</span>
-            )}
-          </div>
-          {cities.length?<select
-            value={values.city}
-            onChange={handleChange}
-            id="city"
-            type="number"
-            onBlur={handleBlur}
-            required
-            className={
-              errors.city && touched.city
-                ? `${styles.input} ${styles.item} ${styles.bottom_margin} input-error`
-                : `${styles.input} ${styles.item} ${styles.bottom_margin}`
-            }
-            placeholder="City"
-          >
-            {cities?.map((city) => (
-                <option key={city.id} value={city.id}>
-                  {city.name.en}
+              {errors.governorate && touched.governorate && (
+                <span className="error">{errors.governorate}</span>
+              )}
+            </div>
+            <select
+              value={values.governorate || governorates?.[0]?.id}
+              onChange={handleChange}
+              id="governorate"
+              type="number"
+              required
+              onBlur={handleBlur}
+              className={
+                errors.governrate && touched.governrate
+                  ? `${styles.input} ${styles.item} ${styles.bottom_margin} input-error`
+                  : `${styles.input} ${styles.item} ${styles.bottom_margin}`
+              }
+              placeholder="Governorate"
+            >
+              {governorates?.map((gov) => (
+                <option key={gov.id} value={gov.id}>
+                  {gov.name.en}
                 </option>
               ))}
-          </select>:
-          <span className="error">Please select Governorate first</span>}
-        </div>
+            </select>
+          </div>
+
+          {/* city select */}
+          <div className={styles.semi_item}>
+            <div className={`${styles.label} ${styles.item}`}>
+              <span>City</span>
+              <span className={styles.error}> *</span>
+
+              {errors.city && touched.city && (
+                <span className="error">{errors.city}</span>
+              )}
+            </div>
+            {cities.length ? (
+              <select
+                value={values.city}
+                onChange={handleChange}
+                id="city"
+                type="number"
+                onBlur={handleBlur}
+                required
+                className={
+                  errors.city && touched.city
+                    ? `${styles.input} ${styles.item} ${styles.bottom_margin} input-error`
+                    : `${styles.input} ${styles.item} ${styles.bottom_margin}`
+                }
+                placeholder="City"
+              >
+                {cities?.map((city) => (
+                  <option key={city.id} value={city.id}>
+                    {city.name.en}
+                  </option>
+                ))}
+              </select>
+            ) : (
+              <span className="error">Please select Governorate first</span>
+            )}
+          </div>
           {/* district */}
           {/* <div className={styles.semi_item}>
             <div className={`${styles.label} ${styles.item}`}>

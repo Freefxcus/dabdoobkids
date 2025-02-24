@@ -1,28 +1,69 @@
+import * as yup from "yup";
 import { useFormik } from "formik";
 import {
   resetPasswordSchema,
   resetPasswordSchemaInitialValues,
 } from "../utils/schemas/resetPasswordSchema";
-import { Box, CardMedia } from "@mui/material";
-import { resetPassword } from "../utils/apiCalls";
-import { Helmet } from "react-helmet";
+import {
+  Box,
+  Button,
+  CardMedia,
+  FormHelperText,
+  Input,
+  Typography,
+} from "@mui/material";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { resetUserEmail, resetUserPassword } from "../utils/apiCalls";
+import { notifySuccess } from "../utils/general";
+
+const loginSchema = yup.object().shape({
+  newPassword: yup.string().required("Required"),
+});
+
 export default function ForgetPassword() {
+  const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const token = searchParams.get("token");
+
   const onSubmit = (values) => {
-    resetPassword(values).then((res) => {
-      console.log(res, "resetapiresponse");
-    });
+    token
+      ? resetUserPassword(values, token)
+          .then((res) => {
+            notifySuccess(res.message);
+          })
+          .catch((err) => console.log(err))
+          .finally(() => {
+            navigate("/login", { replace: true });
+            resetForm();
+            setSubmitting(false);
+          })
+      : resetUserEmail(values).finally(() => {
+          resetForm();
+          setSubmitting(false);
+        });
   };
+
   const {
     values,
-    // show error if you entered the input then go out [1) don't show error on first input enter 2) don't show error for other untouched inputs]
+    errors,
+    touched, // show error if you entered the input then go out [1) don't show error on first input enter 2) don't show error for other untouched inputs]
+    isSubmitting,
+    setSubmitting,
     handleBlur,
     handleChange,
     handleSubmit,
+    resetForm,
   } = useFormik({
-    initialValues: resetPasswordSchemaInitialValues,
-    validationSchema: resetPasswordSchema,
+    initialValues: token
+      ? {
+          newPassword: "",
+        }
+      : resetPasswordSchemaInitialValues,
+    validationSchema: token ? loginSchema : resetPasswordSchema,
     onSubmit,
   });
+
   return (
     <Box
       sx={{
@@ -33,70 +74,117 @@ export default function ForgetPassword() {
         display: "flex",
         flexDirection: "column",
         mb: "35px",
+        p: 3,
       }}
     >
-      <Helmet>
-        <title>{"Dabdoob Kidz | Forget Password page"}</title>
-        <meta
-          name="description"
-          content={
-            "No worries! We can help you get back into your account. Enter the email address associated with your account and we'll send you instructions to reset your password"
-          }
-        />
-      </Helmet>
       <CardMedia
         sx={{ width: { xs: "300px", md: "100%" }, mx: "auto" }}
-        component={"img"}
+        component="img"
         src="/allert.svg"
       />
 
-      <Box
-        sx={{
-          textAlign: "center",
-          lineHeight: "1.5",
-        }}
-      >
-        <h2>Reset Password</h2>
-        <p>
-          Enter your registered email address, we will send instructions to help
-          reset the password
-        </p>
+      <Box sx={{ textAlign: "center", lineHeight: 1.5, mt: 2 }}>
+        {token ? (
+          <Typography variant="h5" component="h2">
+            Enter your new password
+          </Typography>
+        ) : (
+          <>
+            <Typography variant="h5" component="h2">
+              Reset Password
+            </Typography>
+            <Typography variant="body1">
+              Enter your registered email address, we will send instructions to
+              help reset the password.
+            </Typography>
+          </>
+        )}
       </Box>
+
       <form
-        style={{ display: "flex", flexDirection: "column", gap: "4px" }}
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "16px",
+          marginTop: "16px",
+        }}
         onSubmit={handleSubmit}
       >
-        <h5>Email</h5>
-        <input
-          id="email"
-          className="input-field"
-          style={{
-            height: "40px",
-            border: "1px solid #E5E7EB",
-            padding: "0px 8px",
-          }}
-          type="email"
-          placeholder="Email address"
-          value={values.email}
-          onBlur={handleBlur}
-          onChange={handleChange}
-        />
-        <button
-          type="submit"
-          style={{
-            marginTop: "12px",
-            backgroundColor: "var(--brown)",
-            color: "white",
-            border: "none",
-            padding: "12px 48px",
-            fontWeight: "400",
-            fontSize: "18px",
-            borderRadius: "10px",
-            cursor: "pointer",
-          }}
-        >
-          Send Instruction
-        </button>
+        {token ? (
+          // Password reset
+          <>
+            <Box>
+              <Input
+                id="newPassword"
+                placeholder="New password"
+                type="password"
+                value={values.newPassword}
+                onBlur={handleBlur}
+                onChange={handleChange}
+                fullWidth
+                sx={{
+                  border: "1px solid #E5E7EB",
+                  borderRadius: "4px",
+                  padding: "8px",
+                  height: "40px",
+                }}
+                disableUnderline
+              />
+              {errors.newPassword && touched.newPassword && (
+                <FormHelperText error>{errors.newPassword}</FormHelperText>
+              )}
+            </Box>
+            <Button
+              disabled={isSubmitting}
+              type="submit"
+              variant="contained"
+              sx={{
+                mt: 2,
+                backgroundColor: "var(--brown)",
+                "&:hover": { backgroundColor: "darken(var(--brown), 10%)" },
+              }}
+            >
+              Confirm Password
+            </Button>
+          </>
+        ) : (
+          // Email confirmation
+          <>
+            <Box>
+              <Input
+                id="email"
+                placeholder="Email address"
+                type="email"
+                value={values.email}
+                onBlur={handleBlur}
+                onChange={handleChange}
+                fullWidth
+                sx={{
+                  border: "1px solid #E5E7EB",
+                  borderRadius: "4px",
+                  padding: "8px",
+                  height: "40px",
+                }}
+                disableUnderline
+              />
+              {errors.email && touched.email && (
+                <FormHelperText error>{errors.email}</FormHelperText>
+              )}
+            </Box>
+            <Button
+              disabled={isSubmitting}
+              type="submit"
+              variant="contained"
+              sx={{
+                mt: 2,
+                backgroundColor: "var(--brown)",
+                "&:hover": { backgroundColor: "var(--brown)" },
+              }}
+            >
+              Send Instruction
+            </Button>
+          </>
+        )}
       </form>
     </Box>
   );

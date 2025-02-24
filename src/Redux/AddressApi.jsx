@@ -1,12 +1,9 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { baseUrl } from "../utils/baseUrl";
-
-const backendUrl = baseUrl.production;
 
 const AddressApi = createApi({
   reducerPath: "addresses",
   baseQuery: fetchBaseQuery({
-    baseUrl: `${process.env.REACT_APP_BASE_URL}`,
+    baseUrl:`${process.env.REACT_APP_BASE_URL}` ,
     prepareHeaders: (headers) => {
       const token = localStorage.getItem("access_token");
       if (token) {
@@ -16,8 +13,8 @@ const AddressApi = createApi({
     },
   }),
   endpoints: (builder) => ({
-    getAddress: builder.query({
-      query: () => `${backendUrl}/addresses`,
+     getAddress: builder.query({
+      query: () => "/addresses",
       providesTags: ["addresses"],
     }),
     addAddress: builder.mutation({
@@ -29,28 +26,25 @@ const AddressApi = createApi({
           method: "POST",
           body: { ...body, governorate, city },
         };
-      },
-      invalidatesTags: ["addresses"],
+      },    invalidatesTags: ["addresses"],
     }),
-
+   
     updateAddress: builder.mutation({
       query: ({ id, body }) => {
         const governorate = +body.governorate;
         const city = +body.city;
         return {
-          url: `${backendUrl}/addresses/${id}`,
+          url: `/addresses/${id}`,
           method: "PUT",
           body: { ...body, governorate, city },
         };
-      },
-      invalidatesTags: ["addresses"],
+      },   invalidatesTags: ["addresses"],
     }),
     deleteAddress: builder.mutation({
       query: (id) => ({
-        url: `${backendUrl}/addresses/${id}`,
+        url: `/addresses/${id}`,
         method: "DELETE",
-      }),
-      invalidatesTags: ["addresses"],
+      }),   invalidatesTags: ["addresses"],
     }),
   }),
 });

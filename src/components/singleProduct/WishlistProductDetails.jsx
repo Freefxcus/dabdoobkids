@@ -10,7 +10,6 @@ import styles from "../../styles/pages/Details.module.css";
 import eHeart from "../../images/empty-heart.svg";
 import fHeart from "../../images/filled-heart.svg";
 export default function WishlistProductDetails({ id }) {
-  console.log("wishListProductDetails rendered");
   const { data: wishListData } = useGetAllWishListQuery();
   const wishListItems = wishListData?.data?.[0]?.items || [];
 
@@ -19,6 +18,8 @@ export default function WishlistProductDetails({ id }) {
   const [
     addToWishList,
     {
+      isLoading: wishListAddLoad,
+      isSuccess: isSuccessAddWishList,
       isError: isErrorAddWishList,
       error: addWishListError, // Capture the error object
     },
@@ -27,6 +28,8 @@ export default function WishlistProductDetails({ id }) {
   const [
     deleteWishList,
     {
+      isLoading: wishListDeleteLoad,
+      isSuccess: isSuccessDeleteWishList,
       isError: isErrorDeleteWishList,
       error: deleteWishListError, // Capture the error object
     },

@@ -1,12 +1,17 @@
 import React from "react";
+import { useDispatch } from "react-redux";
 import styles from "../styles/components/OrderCard.module.css";
-import DeleteModal from "./cart/DeleteModal";
 import CartCounter from "./cart/CartCounter";
-import { useDispatch, useSelector } from "react-redux";
+import DeleteModal from "./cart/DeleteModal";
 
-import { useAddToCartMutation } from "../Redux/cartApi";
-import { calcDiscount, notifyError, notifySuccess } from "../utils/general";
 import { Trash } from "iconsax-react";
+import { useAddToCartMutation } from "../Redux/cartApi";
+import {
+  calcDiscount,
+  newCalcDiscount,
+  notifyError,
+  notifySuccess,
+} from "../utils/general";
 export default function OrderCard({
   editable,
   item,
@@ -57,9 +62,8 @@ export default function OrderCard({
   };
   const finalPrice = calcDiscount(item?.variant, item?.product);
 
-  const totalPrice =
-    item?.count *
-    (finalPrice.discount ? finalPrice.priceAfter : finalPrice.price);
+  const { price, totalPrice, discountStatus, priceAfter } =
+    newCalcDiscount(item);
 
   return (
     <>
@@ -75,7 +79,6 @@ export default function OrderCard({
           <div
             style={{
               display: "flex",
-              flexWrap: "wrap",
               gap: "10px",
             }}
           >
@@ -90,27 +93,36 @@ export default function OrderCard({
                 <div className={styles.title}>{product?.name}</div>
               </div>
               <div className={`${styles.row} ${styles.subtitle}`}>
-                {item?.variant?.options?.length
-                  ? item?.variant?.options?.map((variantItem, index) => (
-                      <div
-                        key={index + variantItem?.id}
-                        className={styles.row}
-                        style={{ gap: "0" }}
-                      >
-                        <span>{variantItem?.option?.name} : </span>
-                        <span
-                          style={{
-                            marginLeft: "6px",
-                            marginRight: "6px",
-                            textTransform: "capitalize",
-                          }}
-                          className={styles.size}
-                        >
-                          {variantItem?.value?.value}
-                        </span>
-                      </div>
-                    ))
-                  : null}
+                {item?.variant?.options.length && (
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                  >
+                    <h2
+                      style={{
+                        fontSize: "18px",
+                        fontWeight: "400",
+                        textTransform: "capitalize",
+                      }}
+                    >
+                      {" Size "}
+                      {item?.variant?.options[0].name} :{" "}
+                    </h2>
+                    <span
+                      style={{
+                        marginLeft: "6px",
+                        marginRight: "6px",
+                        textTransform: "capitalize",
+                      }}
+                      className={styles.size}
+                    >
+                      {item?.variant?.options[0].value?.value}
+                    </span>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -134,13 +146,11 @@ export default function OrderCard({
           </div>
           {/* <div className={styles.number} style={{ marginLeft: "auto" }}> */}
           <div className={styles.column}>
-            <span>price</span>
+            <span style={{ textAlign: "center" }}>price</span>
             <div style={{ alignSelf: "center" }}>
-              <div>
-                {" "}
-                {finalPrice?.discount ? (
+              <div style={{ display: "flex", gap: "4px" }}>
+                {discountStatus ? (
                   <>
-                    {" "}
                     <s
                       style={{
                         fontSize: "1rem",
@@ -148,8 +158,8 @@ export default function OrderCard({
                         color: "var(--grey-text)",
                       }}
                     >
-                      EGP {finalPrice?.price}{" "}
-                    </s>{" "}
+                      EGP {price}
+                    </s>
                     <span
                       style={{
                         fontSize: "1.1rem",
@@ -157,11 +167,11 @@ export default function OrderCard({
                         color: "#1B1B1B",
                       }}
                     >
-                      EGP {finalPrice?.priceAfter}
+                      EGP {priceAfter}
                     </span>
                   </>
                 ) : (
-                  <span>EGP {finalPrice?.price}</span>
+                  <span>EGP {price}</span>
                 )}
               </div>
             </div>
@@ -204,26 +214,36 @@ export default function OrderCard({
               </div>
               <div className={styles.frameParent}>
                 <div className={styles.frameGroup}>
-                  {item?.variant?.options?.length
-                    ? item?.variant?.options?.map((variantItem, index) => (
-                        <div
-                          key={index + variantItem?.id}
-                          className={styles.row}
-                          style={{ gap: "0" }}
-                        >
-                          <span
-                            style={{
-                              marginLeft: "6px",
-                              marginRight: "6px",
-                              textTransform: "capitalize",
-                            }}
-                            className={styles.size}
-                          >
-                            {variantItem?.value?.value}
-                          </span>
-                        </div>
-                      ))
-                    : null}
+                  {item?.variant?.options.length && (
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        alignItems: "center",
+                      }}
+                    >
+                      <h2
+                        style={{
+                          fontSize: "18px",
+                          fontWeight: "400",
+                          textTransform: "capitalize",
+                        }}
+                      >
+                        {" Size "}
+                        {item?.variant?.options[0].name} :{" "}
+                      </h2>
+                      <span
+                        style={{
+                          marginLeft: "6px",
+                          marginRight: "6px",
+                          textTransform: "capitalize",
+                        }}
+                        className={styles.size}
+                      >
+                        {item?.variant?.options[0].value?.value}
+                      </span>
+                    </div>
+                  )}
                 </div>
                 <div className={styles.frameGroup}>
                   <Trash
@@ -249,7 +269,7 @@ export default function OrderCard({
             <div className={styles.div}>
               <div>
                 {" "}
-                {finalPrice?.discount ? (
+                {discountStatus ? (
                   <>
                     {" "}
                     <s
@@ -259,7 +279,7 @@ export default function OrderCard({
                         color: "var(--grey-text)",
                       }}
                     >
-                      EGP {finalPrice?.price}{" "}
+                      EGP {price}{" "}
                     </s>{" "}
                     <span
                       style={{
@@ -268,11 +288,11 @@ export default function OrderCard({
                         color: "#1B1B1B",
                       }}
                     >
-                      EGP {finalPrice?.priceAfter}
+                      EGP {priceAfter}
                     </span>
                   </>
                 ) : (
-                  <span>EGP {finalPrice?.price}</span>
+                  <span>EGP {price}</span>
                 )}
               </div>
             </div>

@@ -9,7 +9,7 @@ const WalletComponents = () => {
   const [walletHistory, setWalletHistory] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
-  const options = { day: '2-digit', month: 'short', year: 'numeric' };
+  const options = { day: "2-digit", month: "short", year: "numeric" };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -45,7 +45,8 @@ const WalletComponents = () => {
             borderRadius: "8px",
           }}
         >
-          <Box component={"div"}
+          <Box
+            component={"div"}
             sx={{
               display: "flex",
               justifyContent: "space-between",
@@ -64,7 +65,7 @@ const WalletComponents = () => {
               </Box>
               <Box
                 sx={{
-                  color: "#AD6B46",
+                  color: "#000",
                   fontSize: "36px",
                   fontWeight: "700",
                 }}
@@ -74,7 +75,13 @@ const WalletComponents = () => {
             </Box>
           </Box>
 
-          <Stack  sx={{ position: "relative", flex:1,maxWidth:{xs:"80vw",sm:"60vw"}}}>
+          <Stack
+            sx={{
+              position: "relative",
+              flex: 1,
+              maxWidth: { xs: "80vw", sm: "60vw" },
+            }}
+          >
             {walletHistory?.items?.length > 0 ? (
               <Stack sx={{ overflowX: "auto", maxWidth: "100%" }}>
                 <table className={styles.my_table}>
@@ -89,11 +96,18 @@ const WalletComponents = () => {
                   <tbody>
                     {walletHistory?.items?.map((item, index) => (
                       <tr key={index}>
-                        <td>{new Date(item?.createdAt)?.toLocaleDateString('en-GB', options)}</td>
+                        <td>
+                          {new Date(item?.createdAt)?.toLocaleDateString(
+                            "en-GB",
+                            options
+                          )}
+                        </td>
                         <td>Process credits against {item?.order}.</td>
                         <td
                           style={{
-                            color: item?.credits?.startsWith("-")  ? "#F04438" : "#32D583",
+                            color: item?.credits?.startsWith("-")
+                              ? "#F04438"
+                              : "#32D583",
                           }}
                         >
                           {item?.credits} EGP

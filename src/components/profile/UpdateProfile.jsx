@@ -1,6 +1,10 @@
 import { useFormik } from "formik";
 import styles from "../../styles/components/Popup.module.css";
-import { profileSchema } from "../../utils/schemas/profileSchema.js";
+import {
+  profileSchema,
+  profileSchemaInitialValues,
+} from "../../utils/schemas/profileSchema.js";
+import PhoneInput from "react-phone-number-input";
 import { Box, Modal } from "@mui/material";
 import { updateProfile } from "../../utils/apiCalls.js";
 import { toast } from "react-toastify";
@@ -134,22 +138,24 @@ export default function UpdateProfileModal({
               onBlur={handleBlur}
             /> */}
             <div className={styles.item}>
-              <input
-                value={values.phone}
-                onChange={handleChange}
-                id="phone"
-                type="phone"
-                style={{ width: "100%", boxSizing: "border-box" }}
-                country="EGY"
-                placeholder="Enter phone number"
-                onBlur={handleBlur}
-                className={
-                  errors.phone && touched.phone
-                    ? `phone-input-error`
-                    : `phone-input`
-                }
-              />
-            </div>
+            <input
+              value={values.phone}
+            
+              onChange={handleChange}
+              id="phone"
+              type="phone"
+              style={{width:"100%",boxSizing:"border-box"}}
+              country="EGY"
+ placeholder="Enter phone number"
+              onBlur={handleBlur}
+              className={
+                
+                errors.phone && touched.phone
+                  ? `phone-input-error`
+                  : `phone-input`}
+             
+            />
+          </div>
           </div>
           {/* email*/}
           <div className={styles.item}>

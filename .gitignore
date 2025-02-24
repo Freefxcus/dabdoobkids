@@ -24,6 +24,3 @@ yarn-error.log*
 
 # Env file
 .env
-*.zip
-node_modules
-node_modules

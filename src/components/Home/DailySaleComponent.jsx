@@ -9,55 +9,28 @@ import { useNavigate } from "react-router-dom";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
-
-import { baseUrl } from "../../utils/baseUrl";
-const backendUrl = baseUrl.production;
 export default function DailySaleComponent() {
-  console.log("dailySale component rendered");
   const [products, setProducts] = useState([]);
   const [endDate, setEndDate] = useState([]);
   const [percentage, setPercentage] = useState(0);
-  const [timeLeft, setTimeLeft] = useState({
-    hours: 0,
-    minutes: 0,
-    seconds: 0,
-  });
   const [loading, setLoading] = useState(true); // Loading state
   const [error, setError] = useState(null); // Error state
   const navigate = useNavigate();
   useEffect(() => {
-    const calculateTimeLeft = (saleEndTime) => {
-      const end = new Date(saleEndTime).getTime();
-      const now = new Date().getTime();
-      const difference = end - now;
-      if (difference > 0) {
-        const hours = Math.floor(
-          (difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-        );
-        const minutes = Math.floor(
-          (difference % (1000 * 60 * 60)) / (1000 * 60)
-        );
-        const seconds = Math.floor((difference % (1000 * 60)) / 1000);
-        setTimeLeft({ hours, minutes, seconds });
-      } else {
-        // Sale has ended
-        setTimeLeft({ hours: 0, minutes: 0, seconds: 0 });
-      }
-    };
-
     const fetchDailySaleProducts = async () => {
       try {
-        const response = await instance.get(`${backendUrl}/products/sale`);
-        const productsData = response?.data?.data?.products;
+        const response = await instance.get("/products/sale");
+        const productsData = response?.data?.data.products;
+        console.log("productsDataaaaaaa", productsData);
         const saleEndTime = response?.data?.data?.sale?.end;
         setPercentage(response?.data?.data?.sale?.percentage);
         console.log("saleEndTime", percentage);
 
         if (productsData) {
           setProducts(productsData);
-          calculateTimeLeft(saleEndTime);
           setEndDate(saleEndTime);
         }
+        
       } catch (err) {
         console.error("Failed to fetch daily sale products:", err);
         setError(err);
@@ -89,18 +62,14 @@ export default function DailySaleComponent() {
           alignItems: "center",
           gap: "10px",
           marginBottom: "20px",
+          flexWrap: "wrap",
         }}
       >
         <div>
           <div className={styles.title} style={{ marginBottom: "5px" }}>
-            Daily Sale
+            Brown Friday
           </div>
-          <CountdownTimer
-            hours={timeLeft.hours}
-            minutes={timeLeft.minutes}
-            seconds={timeLeft.seconds}
-            type="b"
-          />
+          <CountdownTimer targetDate={endDate} />
         </div>
         <Star type="b" value={percentage} />
         <div
@@ -114,7 +83,7 @@ export default function DailySaleComponent() {
             whiteSpace: "nowrap",
           }}
         >
-          All Collections
+          View All
         </div>
       </div>
       <div>

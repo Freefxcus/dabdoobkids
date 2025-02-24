@@ -1,18 +1,17 @@
 import React from "react";
 import styles from "../styles/components/Category.module.css";
-import bodySuit from "../images/body-suit.png";
 import { useNavigate } from "react-router-dom";
 import { Box, CardMedia } from "@mui/material";
 export default function Category({ item }) {
-  console.log(item);
   const navigate = useNavigate();
 
   return (
     <div
-      style={{ maxWidth: "100%" }}
+      style={{ maxWidth: "100%", cursor: "pointer" }}
+      role="button"
       onClick={() => {
         // navigate(`search/${item.id}`);
-        navigate(`/search/?categoryId=${item.id}`);
+        navigate(`/search/?category=${item.id}`);
       }}
     >
       <Box

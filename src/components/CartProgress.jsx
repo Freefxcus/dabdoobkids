@@ -1,6 +1,6 @@
 import { Box, Stack } from "@mui/material";
 
-export default function CartProgress({ value, percentage = "100%" }) {
+export default function CartProgress({ value = 0, percentage = "100%" }) {
   return (
     <Stack direction={"row"} gap={"24px"}>
       <span>{value}</span>
@@ -14,27 +14,26 @@ export default function CartProgress({ value, percentage = "100%" }) {
       >
         <Box sx={{ display: "flex", alignItems: "center", width: "100%" }}>
           <Box sx={{ position: "relative", width: `${percentage}%` }}>
-            <img
-              src="/bar.png"
+            <div
               style={{
                 width: "100%",
-                objectFit: "cover",
                 height: "20px",
                 borderRadius: "50px",
+                backgroundColor: "#000",
               }}
-              alt="bar"
-            />
-            <img
+            ></div>
+            <div
               style={{
-                height: "35px",
-                width: "35px",
+                height: "20px",
+                width: "20px",
                 position: "absolute",
-                top: "-12px",
-                right: "-8px",
+                top: "50%",
+                right: "-10px",
+                transform: "translate(-50%, -50%)",
+                backgroundColor: "white",
+                borderRadius: "50%",
               }}
-              src="/dabdoobbar.svg"
-              alt="dabdoob"
-            />
+            ></div>
           </Box>
         </Box>
       </Box>

@@ -4,28 +4,21 @@ import React from "react";
 
 export default function Dropdown({
   title,
-  items,
-  dropDown,
   id,
   setDropDown,
-  setDropDownType,
+  setActiveSubCategory,
 }) {
-
   return (
     <div
       className={`${styles.dropdown} hidden-on-small-screen`}
-      onMouseEnter={() => {
-        setDropDown(true);
-        setDropDownType(id);
-      }}
-      onMouseLeave={() => {
-        setDropDown(false);
+      onClick={() => {
+        setDropDown((prev) => !prev);
+        setActiveSubCategory(id);
       }}
     >
       <div className={styles["dropdown-btn"]}>
         {title}
         <ArrowDown2
-          onClick={() => {}}
           size="15"
           // color="grey"
           variant="Outline"

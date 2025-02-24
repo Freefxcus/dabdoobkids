@@ -1,9 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-import { baseUrl } from "../utils/baseUrl";
-
-const backendUrl = baseUrl.production;
-
 const cartApi = createApi({
   reducerPath: "cartItems",
   baseQuery: fetchBaseQuery({
@@ -22,27 +18,27 @@ const cartApi = createApi({
   }),
   endpoints: (builder) => ({
     getAllCarts: builder.query({
-      query: () => `${backendUrl}/cart`,
+      query: () => `/cart`,
       providesTags: ["cartItems"],
     }),
 
     deleteFromCart: builder.mutation({
       query: (id) => ({
-        url: `${backendUrl}/cart/${id}`,
+        url: `/cart/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: ["cartItems"],
     }),
     deleteAllCart: builder.mutation({
       query: () => ({
-        url: `${backendUrl}/cart/`,
+        url: `/cart/`,
         method: "DELETE",
       }),
       invalidatesTags: ["cartItems"],
     }),
     updateQuantity: builder.mutation({
       query: (payload) => ({
-        url: `${backendUrl}/cart/${payload.id}`,
+        url: `/cart/${payload.id}`,
         method: "PUT",
         body: {
           count: payload.count,
@@ -52,7 +48,7 @@ const cartApi = createApi({
     }),
     addToCart: builder.mutation({
       query: (payload) => ({
-        url: `${backendUrl}/cart/`,
+        url: `/cart/`,
         body: { items: payload },
         method: "POST",
       }),

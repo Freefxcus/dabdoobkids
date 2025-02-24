@@ -1,16 +1,24 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
-import { getAddress, getCart, orderSummary } from "../utils/apiCalls";
-import ConfirmPayment from "../components/checkout/ConfirmPayment";
-import BillingDetails from "../components/checkout/BillingDetails";
 import { Box } from "@mui/material";
+import { useDispatch } from "react-redux";
+import BillingDetails from "../components/checkout/BillingDetails";
+import ConfirmPayment from "../components/checkout/ConfirmPayment";
 import SummaryOrderProductCard from "../components/checkout/SummaryOrderProductCard";
+import { userInfoActions } from "../Redux/store";
+import {
+  authorize,
+  getAddress,
+  getCart,
+  orderSummary,
+} from "../utils/apiCalls";
+import instance from "../utils/interceptor";
 export default function Checkout() {
-  console.log("Checkout component rendered");
-
   const [searchParams, setSearchParams] = useSearchParams();
-  const [payemntMethod] = useState(searchParams.get("paymentMethod") || "cash");
+  const [payemntMethod, setPaymentMethod] = useState(
+    searchParams.get("paymentMethod") || "cash"
+  );
   const [promoCode, setPromoCode] = useState(
     searchParams.get("promocode") || ""
   );
@@ -45,6 +53,21 @@ export default function Checkout() {
     fetchCart();
     fetchAddress();
   }, [ForceReload]);
+
+  //* profile
+  const dispatch = useDispatch();
+  useEffect(() => {
+    instance
+      .get("/profile", {
+        // params: { page: 1 },
+      })
+      .then((response) => {
+        dispatch(userInfoActions.update(response.data?.data));
+      })
+      .catch((err) => {
+        if (err === "Unauthorized") authorize(setForceReload);
+      });
+  }, []);
 
   useEffect(() => {
     if (!searchParams.get("paymentMethod")) {
@@ -119,7 +142,6 @@ export default function Checkout() {
             borderRadius: "12px",
           }}
         >
-          {" "}
           {cart?.map((item) => (
             <SummaryOrderProductCard item={item} key={item.id} />
           ))}
@@ -144,6 +166,7 @@ export default function Checkout() {
         isUseWallet={isUseWallet}
         DataSubmit={DataSubmit}
         setIsUseWallet={setIsUseWallet}
+        cartItems={cart}
       />
     </div>
   );

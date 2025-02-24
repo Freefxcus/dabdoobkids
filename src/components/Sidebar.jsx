@@ -1,24 +1,31 @@
-import React, { useEffect, useRef, useState } from "react";
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import dabdoob from "../images/dabdoob.svg";
-import premium from "../images/premium.png";
+import Accordion from "@mui/material/Accordion";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import React, { useEffect, useRef, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import styles from "../styles/components/Sidebar.module.css";
 import {
   getCategories,
   getSubCategories,
   getUserPlan,
 } from "../utils/apiCalls";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+
+import LoaderSpinner from "./LoaderSpinner";
+import { userAuthAction } from "../Redux/store";
+import { useDispatch } from "react-redux";
+
 export default function Sidebar({ setOpen, open }) {
   const navigate = useNavigate();
   const location = useLocation();
   const [isUser, setIsUser] = useState(false);
   const [categories, setCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
+  const [activeSubCategory, setActiveSubCategory] = useState(0);
+  const [isLoadingSubCategory, setIsLoadingSubCategory] = useState(false);
+
+  const dispatch = useDispatch();
+
   const [isSubscription, setIsSubscription] = useState(false);
   const isFirstRender = useRef(true);
 
@@ -57,14 +64,22 @@ export default function Sidebar({ setOpen, open }) {
       return () => document.removeEventListener("click", handleCloseOutside);
     }
   }, [open]);
+
   useEffect(() => {
     getCategories().then((res) => {
       setCategories(res);
     });
-    getSubCategories().then((res) => {
-      setSubCategories(res);
-    });
   }, []);
+
+  useEffect(() => {
+    if (activeSubCategory) setIsLoadingSubCategory(true);
+    getSubCategories(activeSubCategory && `category=${activeSubCategory}`).then(
+      (res) => {
+        setSubCategories(res.data.data.categories);
+        setIsLoadingSubCategory(false);
+      }
+    );
+  }, [activeSubCategory]);
 
   useEffect(() => {
     if (localStorage.getItem("access_token")) {
@@ -80,37 +95,50 @@ export default function Sidebar({ setOpen, open }) {
     }
   }, [localStorage.getItem("access_token")]);
 
-  const formattedSybCategoriesLinks =
-    subCategories?.data?.data?.categories?.map((subCategory) => {
-      return {
-        title: subCategory?.name,
-        link: `/search?categoryId=${subCategory?.id}`,
-        parentId: subCategory?.category?.id,
-      };
-    }) || [];
-
-  const subCategoryLinks = [...formattedSybCategoriesLinks];
-  useEffect(() => {
-    if (localStorage.getItem("access_token")) {
-      setIsUser(true);
-    }
-  }, [localStorage.getItem("access_token")]);
-
   return (
     <div className={`${styles.sidebar} padding-container`} id="sidebar-content">
       {categories
-        ? categories?.categories?.slice(0,5)?.map((category) => (
+        ? categories?.categories?.slice(0, 5)?.map((category) => (
             <Accordion>
               <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
                 aria-controls="panel1a-content"
                 id="panel1a-header"
-                // style={{ minHeight: 0 }}
+                onClick={() => setActiveSubCategory(category.id)}
               >
-                <h1>{category.name}</h1>
+                <h5>{category.name}</h5>
               </AccordionSummary>
               <AccordionDetails className={styles.content}>
-                <div
+                {isLoadingSubCategory ? (
+                  <LoaderSpinner small={true} />
+                ) : (
+                  <>
+                    {/* <div style={{ fontWeight: "bold" }}>
+                      {subCategories?.[0]?.category?.name}
+                    </div> */}
+
+                    <Link
+                      to={`/search?category=${subCategories?.[0]?.category?.id}`}
+                      className={styles.link}
+                    >
+                      Shop All
+                    </Link>
+
+                    {activeSubCategory && subCategories.length
+                      ? subCategories.map((item) => (
+                          <Link
+                            to={`/search?subcategory=${item.id}`}
+                            key={item.id}
+                            className={styles.link}
+                            onClick={() => setOpen(false)}
+                          >
+                            {item.name}
+                          </Link>
+                        ))
+                      : null}
+                  </>
+                )}
+                {/* <div
                   className={styles["dropdown-section"]}
                   style={{ flex: "1" }}
                 >
@@ -123,6 +151,7 @@ export default function Sidebar({ setOpen, open }) {
                       Shop All
                     </Link>
                   </div>
+
                   {subCategoryLinks
                     .filter(
                       (sub) =>
@@ -139,7 +168,7 @@ export default function Sidebar({ setOpen, open }) {
                         </Link>
                       </div>
                     ))}
-                </div>
+                </div> */}
               </AccordionDetails>
             </Accordion>
           ))
@@ -185,8 +214,11 @@ export default function Sidebar({ setOpen, open }) {
         <button
           className={styles.button}
           onClick={() => {
+            dispatch(userAuthAction.logout());
             localStorage.removeItem("access_token");
-            setOpen(false);
+            localStorage.removeItem("refresh_token");
+            navigate("/login");
+            return;
           }}
         >
           Logout

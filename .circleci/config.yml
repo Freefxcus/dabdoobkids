@@ -1,0 +1,51 @@
+version: 2.1
+jobs:
+  build:
+    machine: true
+    resource_class: azha/dev
+    working_directory: ./dabdoobkidz/production/dabdoobkids
+    steps:
+      - run:
+          working_directory: ~/
+          name: Source configuration
+          command: source .bashrc
+      - checkout
+      - run:
+          name: Install Dependencies
+          command: |
+            pwd
+            bash deploy.sh npm i # source nvm and install
+      - run:
+          name: Build Application
+          command: |
+            bash deploy.sh npm run build # build project
+
+  deploy:
+    machine: true
+    resource_class: azha/dev
+    working_directory: ./dabdoobkidz/production/dabdoobkids
+    steps:
+      - run:
+          name: Restart PM2
+          command: |
+            bash deploy.sh bash pm2.sh restart dabdoobkidz-portal --update-env # source nvm
+      - run:
+          name: Save PM2 Process
+          command: |
+            bash deploy.sh bash pm2.sh save # source nvm
+workflows:
+  version: 2
+  build_and_deploy:
+    jobs:
+      - build:
+          filters:
+                branches:
+                  only: 
+                    - main
+      - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only: 
+                - main

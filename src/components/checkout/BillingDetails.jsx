@@ -237,7 +237,8 @@ export default function BillingDetails({
                 transitionDuration: "0.5s",
               }}
             >
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
+              {/* Wallet */}
+              {/* <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <div
                   style={{ display: "flex", gap: "12px", alignItems: "center" }}
                 >
@@ -286,8 +287,9 @@ export default function BillingDetails({
                     placeholder="Enter phone number"
                   />
                 </div>
-              ) : null}
+              ) : null} */}
             </div>
+
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <div
                 style={{ display: "flex", gap: "12px", alignItems: "center" }}
