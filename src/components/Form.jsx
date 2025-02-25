@@ -350,7 +350,16 @@ export default function Form({ type, toggleDrawer }) {
             <span>Password</span>
             <span className={styles.error}> *</span>
           </div>
-          <div className={styles.inputWrapper}>
+          <div style={{
+    display: "flex",
+    alignItems: "center",
+    width: "100%",
+    maxWidth: "400px",
+    border: "1px solid #ccc",
+    borderRadius: "8px",
+    padding: "5px",
+    background: "#fff",
+  }}>
             <input
               type={show ? "text" : "password"}
               id="password"
@@ -362,6 +371,13 @@ export default function Form({ type, toggleDrawer }) {
               }}
               onBlur={formik.handleBlur}
               className={styles.input}
+              style={{
+                width: "80%",
+                border: "none",
+                outline: "none",
+                fontSize: "16px",
+                padding: "8px",
+              }}
               placeholder="Enter your password"
             />
             <img
@@ -369,11 +385,11 @@ export default function Form({ type, toggleDrawer }) {
               onClick={() => setShow((prev) => !prev)}
               width="20px"
               height="20px"
-              style={{ cursor: "pointer" }}
+              style={{ marginLeft: "10px", cursor: "pointer" }}
               alt="show/hide password"
             />
           </div>
-
+          <div>
           {/* PASSWORD VALIDATION RULES */}
           <ul className={styles.validationList}>
             {validationRules.map((rule, index) => (
@@ -387,7 +403,7 @@ export default function Form({ type, toggleDrawer }) {
               </li>
             ))}
           </ul>
-
+          </div>
           {/* repeat password */}
           <div className={styles.label}>
             <span>Repeat password</span>

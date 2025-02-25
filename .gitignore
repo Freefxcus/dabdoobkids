@@ -24,3 +24,6 @@ yarn-error.log*
 
 # Env file
 .env
+
+#old backup
+/static.old
