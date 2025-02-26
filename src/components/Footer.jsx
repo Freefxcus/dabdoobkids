@@ -69,13 +69,8 @@ export default function Footer() {
             Tiktok
           </a>
         </div>
-        <div
-          className={styles.section}
-          style={{
-            maxWidth: "350px",
-            // marginLeft: "300px",
-            justifyContent: "flex-start",
-          }}
+        <div className={styles.section}
+          
         >
           <div className={styles.header}>
             Sign up to our newsletter and keep up to date with the latest
