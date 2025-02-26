@@ -24,8 +24,8 @@ export default function Footer() {
             loading="lazy"
             src={logo}
             alt="logo"
-            width="340"
-            height="340"
+            width="240"
+            height="240"
             style={{ cursor: "pointer" }}
           />
         </Link>
@@ -71,7 +71,7 @@ export default function Footer() {
         </div>
         <div className={`${styles.section} ${styles["email-section"]}`}>
             <div className={styles.header}>
-              Sign up to our newsletter and keep up to date with the latest arrivals
+              Sign up to our newsletter and keep up <div className={styles.header}>to date with the latest arrivals</div>
             </div>
             <div className={styles["email-container"]}>
               <input className={styles["email-input"]} placeholder="Your Email" />
