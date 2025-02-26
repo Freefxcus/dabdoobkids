@@ -1,7 +1,7 @@
 module.exports = {
     apps: [
         {
-            name: "portal",            // Name of the app in PM2
+            name: "staging-portal",            // Name of the app in PM2
             script: "serve",                  // Using 'serve' to serve the built Vite static files
             instances: 1,                 // Number of instances (use 'max' for all CPU cores)
             autorestart: true,            // Auto-restart the app if it crashes
@@ -12,7 +12,7 @@ module.exports = {
             env: {                        // Default environment settings
                 NODE_ENV: "production",
                 PM2_SERVE_PATH: '.',
-                PM2_SERVE_PORT: 3002,
+                PM2_SERVE_PORT: 3050,
                 PM2_SERVE_SPA: 'true',
                 PM2_SERVE_HOMEPAGE: '/index.html'
             }
