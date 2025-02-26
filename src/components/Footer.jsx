@@ -69,17 +69,14 @@ export default function Footer() {
             Tiktok
           </a>
         </div>
-        <div className={styles.section}
-          
-        >
-          <div className={styles.header}>
-            Sign up to our newsletter and keep up to date with the latest
-            arrivals
-          </div>
-          <div className={styles["email-container"]}>
-            <input className={styles["email-input"]} placeholder="You Email" />
-            <EmailOutlined />
-          </div>
+        <div className={`${styles.section} ${styles["email-section"]}`}>
+            <div className={styles.header}>
+              Sign up to our newsletter and keep up to date with the latest arrivals
+            </div>
+            <div className={styles["email-container"]}>
+              <input className={styles["email-input"]} placeholder="Your Email" />
+              <EmailOutlined />
+            </div>
         </div>
       </div>
       {/* footer 2 */}
