@@ -248,12 +248,11 @@ export default function ConfirmPayment({
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <h2
               style={{
-                color: "var(rhine-castle)",
                 fontWeight: "500",
                 fontSize: "16px",
               }}
             >
-              Total Shopping
+              SubTotal
             </h2>
             <h2
               style={{
@@ -262,7 +261,7 @@ export default function ConfirmPayment({
                 fontSize: "16px",
               }}
             >
-              {price.totalPriceProduct}EGP
+              {price.totalPrice}EGP
             </h2>
           </div>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -335,11 +334,12 @@ export default function ConfirmPayment({
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <h2
               style={{
+                color: "var(rhine-castle)",
                 fontWeight: "500",
                 fontSize: "16px",
               }}
             >
-              SubTotal
+              Total Shopping
             </h2>
             <h2
               style={{
@@ -348,9 +348,10 @@ export default function ConfirmPayment({
                 fontSize: "16px",
               }}
             >
-              {price.totalPrice}EGP
+              {price.totalPriceProduct}EGP
             </h2>
           </div>
+
           <div style={{ textAlign: "center", color: "#888" }}>
             {!address?.items?.[0]?.id || !addressActive
               ? "please enter address "
