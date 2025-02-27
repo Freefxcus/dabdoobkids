@@ -96,10 +96,14 @@ jobs:
             sudo systemctl restart nginx || { echo "Error: Nginx restart failed."; exit 1; }
 
             echo "Restarting PM2 service..."
-            if [[ "${{ github.ref }}" == "refs/heads/develop" ]]; then              
+            if [[ "${{ github.ref }}" == "refs/heads/develop" ]]; then   
+              echo "copying staging files"           
               cp -r ${{ env.DEPLOY_PATH }}/build/* cd ${{ env.DEPLOY_PATH }}/.
               pm2 restart staging-portal
             else 
+              echo "copying production files"           
+              cp -r ${{ env.DEPLOY_PATH }}/build/* cd ${{ env.DEPLOY_PATH }}/.
               pm2 restart portal
+            fi
 
       
