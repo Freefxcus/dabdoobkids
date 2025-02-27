@@ -87,12 +87,14 @@
   color: var(--black);
 }
 .password_rules {
-  font-size: 14px;
+  font-size: 12px;
   color: #555;
   background: #f9f9f9;
-  padding: 10px;
+  padding: 8px 12px;
   border-radius: 5px;
   margin-top: 5px;
+  margin-left: 20px;
+
 }
 
 .password_rules ul {
@@ -103,6 +105,8 @@
 .password_rules li {
   color: #6b6b6b;
   font-size: 13px;
+  margin-bottom: 4px; /* Reduce vertical spacing */
+  line-height: 1.4; /* Adjust line height for readability */
 }
 
 /* Media query for screens smaller than 600px (e.g., smartphones) */

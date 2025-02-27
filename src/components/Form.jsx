@@ -390,19 +390,6 @@ export default function Form({ type, toggleDrawer }) {
             />
           </div>
           <div>
-          {/* PASSWORD VALIDATION RULES */}
-          <ul className={styles.validationList}>
-            {validationRules.map((rule, index) => (
-              <li
-                key={index}
-                style={{
-                  color: rule.regex.test(password) ? "green" : "brown",
-                }}
-              >
-                {rule.text}
-              </li>
-            ))}
-          </ul>
           </div>
           {/* repeat password */}
           <div className={styles.label}>
@@ -425,7 +412,21 @@ export default function Form({ type, toggleDrawer }) {
             }
             placeholder="Repeat your password"
           ></input>
-
+          {/* PASSWORD VALIDATION RULES */}
+          <div className={styles.validationList}>
+          <ul className={styles.validationList}>
+            {validationRules.map((rule, index) => (
+              <li
+                key={index}
+                style={{
+                  color: rule.regex.test(password) ? "green" : "brown",
+                }}
+              >
+                {rule.text}
+              </li>
+            ))}
+          </ul>
+          </div>
           <button className={styles.brown_button} type="submit">
             Register
           </button>
