@@ -361,25 +361,18 @@ export default function Form({ type, toggleDrawer }) {
     background: "#fff",
   }}>
             <input
-              type={show ? "text" : "password"}
-              id="password"
-              name="password"
-              value={formik.values.password}
-              onChange={(e) => {
-                setPassword(e.target.value);
-                formik.handleChange(e);
-              }}
-              onBlur={formik.handleBlur}
-              className={styles.input}
-              style={{
-                width: "80%",
-                border: "none",
-                outline: "none",
-                fontSize: "16px",
-                padding: "8px",
-              }}
-              placeholder="Enter your password"
-            />
+            value={values.password}
+            onChange={handleChange}
+            id="password"
+            type="password"
+            onBlur={handleBlur}
+            className={
+              errors.password && touched.password
+                ? `${styles.input} ${styles.bottom_margin} input-error`
+                : `${styles.input} ${styles.bottom_margin}`
+            }
+            placeholder="Your last password"
+          ></input>
             <img
               src={show ? open : closed}
               onClick={() => setShow((prev) => !prev)}
@@ -388,8 +381,6 @@ export default function Form({ type, toggleDrawer }) {
               style={{ marginLeft: "10px", cursor: "pointer" }}
               alt="show/hide password"
             />
-          </div>
-          <div>
           </div>
           {/* repeat password */}
           <div className={styles.label}>
@@ -413,8 +404,8 @@ export default function Form({ type, toggleDrawer }) {
             placeholder="Repeat your password"
           ></input>
           {/* PASSWORD VALIDATION RULES */}
-          <div className={styles.validationList}>
-          <ul className={styles.validationList}>
+          <div className={styles.passwordRules}>
+          <ul className={styles.passwordRules}>
             {validationRules.map((rule, index) => (
               <li
                 key={index}

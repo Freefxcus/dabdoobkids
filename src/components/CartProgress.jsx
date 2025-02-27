@@ -1,5 +1,7 @@
 import { Box, Stack } from "@mui/material";
 
+import DabdoobbarImage from "../images/logoVector.svg";
+
 export default function CartProgress({ value = 0, percentage = "100%" }) {
   return (
     <Stack direction={"row"} gap={"24px"}>
@@ -14,26 +16,27 @@ export default function CartProgress({ value = 0, percentage = "100%" }) {
       >
         <Box sx={{ display: "flex", alignItems: "center", width: "100%" }}>
           <Box sx={{ position: "relative", width: `${percentage}%` }}>
-            <div
+            <img
+              src="/bar.png"
               style={{
                 width: "100%",
+                objectFit: "cover",
                 height: "20px",
                 borderRadius: "50px",
-                backgroundColor: "#000",
               }}
-            ></div>
-            <div
+              alt="bar"
+            />
+            <img
               style={{
-                height: "20px",
-                width: "20px",
+                height: "35px",
+                width: "35px",
                 position: "absolute",
-                top: "50%",
-                right: "-10px",
-                transform: "translate(-50%, -50%)",
-                backgroundColor: "white",
-                borderRadius: "50%",
+                top: "-12px",
+                right: "-8px",
               }}
-            ></div>
+              src={DabdoobbarImage}
+              alt="dabdoob"
+            />
           </Box>
         </Box>
       </Box>
