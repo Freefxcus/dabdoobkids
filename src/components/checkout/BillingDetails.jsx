@@ -2,6 +2,11 @@ import AddIcon from "@mui/icons-material/Add";
 import AddressModal from "./AddressModal";
 import { useEffect, useState } from "react";
 import styles from "../../styles/components/Popup.module.css";
+import visa from "../../images/visa.svg";
+import masterCard from "../../images/master_card.svg";
+import meeza from "../../images/meeza.svg";
+import applePay from "../../images/apple_pay.svg";
+import valu from "../../images/valu.svg";
 
 import {
   Box,
@@ -228,6 +233,32 @@ export default function BillingDetails({
                 }}
               />
             </div>
+<div     style={{
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      width: "100%", 
+      maxWidth: "250px", // Adjust as needed
+    }}><img
+      src={visa}
+      style={{ height: "28px", width: "44px" }}
+      alt="Visa Icon"
+    />
+    <img
+      src={masterCard}
+      style={{ height: "28px", width: "44px" }}
+      alt="MasterCard Icon"
+    />
+    <img
+      src={meeza}
+      style={{ height: "28px", width: "44px" }}
+      alt="Meeza Icon"
+    />
+    <img
+      src={applePay}
+      style={{ height: "28px", width: "44px" }}
+      alt="Apple Pay Icon"
+    /></div>
             <div
               style={{
                 display: "flex",
@@ -247,7 +278,7 @@ export default function BillingDetails({
                     style={{ height: "28px", width: "28px" }}
                     alt="Wallet Icon"
                   />
-                  Wallet
+                  E-Wallet
                 </div>
 
                 <Radio
@@ -289,7 +320,33 @@ export default function BillingDetails({
                 </div>
               ) : null} 
             </div>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <div
+                style={{ display: "flex", gap: "12px", alignItems: "center" }}
+              >
+                <img
+                  src={valu}
+                  style={{ height: "48px", width: "48px" }}
+                  alt="Valu Icon"
+                />
+                Valu
+              </div>
 
+              <Radio
+                onClick={() => {
+                  setSearchParams((prev) => {
+                    prev.set("paymentMethod", "Valu");
+                    return prev;
+                  });
+                }}
+                sx={{
+                  "&.Mui-checked": {
+                    color: "var(--brown)",
+                  },
+                }}
+                {...controlProps("Valu")}
+              />
+            </div>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <div
                 style={{ display: "flex", gap: "12px", alignItems: "center" }}
@@ -299,7 +356,7 @@ export default function BillingDetails({
                   style={{ height: "28px", width: "28px" }}
                   alt="cash Icon"
                 />
-                Cash
+                Cash on delivery
               </div>
 
               <Radio
