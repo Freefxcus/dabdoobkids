@@ -320,6 +320,8 @@ export default function BillingDetails({
                 </div>
               ) : null} 
             </div>
+            
+            {/*
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <div
                 style={{ display: "flex", gap: "12px", alignItems: "center" }}
@@ -347,6 +349,7 @@ export default function BillingDetails({
                 {...controlProps("Valu")}
               />
             </div>
+            */}
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <div
                 style={{ display: "flex", gap: "12px", alignItems: "center" }}

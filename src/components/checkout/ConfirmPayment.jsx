@@ -246,26 +246,26 @@ export default function ConfirmPayment({
             </button>
           </div>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <h3
+            <h2
               style={{
                 fontWeight: "500",
                 fontSize: "16px",
               }}
             >
               SubTotal
-            </h3>
-            <h3
+            </h2>
+            <h2
               style={{
                 color: "var(rhine-castle)",
                 fontWeight: "500",
                 fontSize: "16px",
               }}
             >
-              {price.totalPrice}EGP
-            </h3>
+              {price.totalPrice} EGP
+            </h2>
           </div>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <h3
+            <h2
               style={{
                 color: "var(rhine-castle)",
                 fontWeight: "500",
@@ -273,17 +273,16 @@ export default function ConfirmPayment({
               }}
             >
               Shipping
-            </h3>
-            <h3
+            </h2>
+            <h2
               style={{
                 color: "var(rhine-castle)",
                 fontWeight: "500",
                 fontSize: "16px",
               }}
             >
-              {price.shipping}
-              EGP
-            </h3>
+              {price.shipping} EGP
+            </h2>
           </div>
           {/* <div style={{ display: "flex", justifyContent: "space-between" }}>
           <h2
@@ -312,7 +311,7 @@ export default function ConfirmPayment({
               color: "#444",
             }}
           >
-            <h3
+            <h2
               style={{
                 color: "var(rhine-castle)",
                 fontWeight: "500",
@@ -320,16 +319,16 @@ export default function ConfirmPayment({
               }}
             >
               Discount
-            </h3>
-            <h3
+            </h2>
+            <h2
               style={{
                 color: "var(rhine-castle)",
                 fontWeight: "500",
                 fontSize: "16px",
               }}
             >
-              {price.discount}EGP
-            </h3>
+              {price.discount} EGP
+            </h2>
           </div>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <h2
@@ -348,7 +347,7 @@ export default function ConfirmPayment({
                 fontSize: "16px",
               }}
             >
-              {price.totalPriceProduct}EGP
+              {price.totalPriceProduct} EGP
             </h2>
           </div>
 
