@@ -1,22 +1,28 @@
-import React, { memo, useEffect, useState } from "react";
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
-import { Autoplay, Pagination } from "swiper/modules";
+import React, { useEffect, useState, memo } from "react";
+import styles from "../../styles/pages/Home.module.css";
 import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
+							   
+import { Autoplay, Pagination } from "swiper/modules";
+												   
 import banner1 from "../../images/banner1.png";
 import banner2 from "../../images/banner2.png";
-import styles from "../../styles/pages/Home.module.css";
+														
 
 import { Box, Typography } from "@mui/material";
 import { getBanners } from "../../utils/apiCalls";
-import Loader from "../Loader";
+import { useNavigate, Link } from "react-router-dom";
+import LoadingAnimation from "../LoadingAnimation";
 
 const BannerSwiper = () => {
   const bannerImages = [banner1, banner2];
   const [banners, setBanners] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchBanners = async () => {
@@ -39,13 +45,13 @@ const BannerSwiper = () => {
     return (
       <div
         className={`${styles["banner-container"]} section-bottom-margin`}
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
+				
+						  
+        style={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+							   
+		  
       >
-        <Loader open={true} />
+        <LoadingAnimation />
       </div>
     );
   }
@@ -55,10 +61,10 @@ const BannerSwiper = () => {
   }
 
   return (
-    <div
-      className={`${styles["banner-container"]} section-bottom-margin`}
-      style={{ position: "relative" }}
-    >
+		
+    <div className={`${styles["banner-container"]} section-bottom-margin`} style={{ position: "relative" }}>
+									  
+	 
       <Swiper
         className="mySwiper"
         grabCursor={true}
@@ -72,6 +78,8 @@ const BannerSwiper = () => {
           ? banners.categories.map((item, index) => (
               <SwiperSlide key={index}>
                 <Box
+                  component={Link}
+                  to={item?.url}
                   className={styles.bannerBox}
                   style={{ backgroundImage: `url(${item?.image})` }}
                 ></Box>
@@ -84,9 +92,12 @@ const BannerSwiper = () => {
                   style={{ backgroundImage: `url(${img})` }}
                 >
                   <Box>
+                    <Typography variant="h1" className={styles.bannerTitle}>
+                      Dabdoob KIDZ
+                    </Typography>
                     <Typography className={styles.bannerSubtitle}>
-                      Make yourself look different without old-fashioned clothes
-                      and impress others
+                      Make yourself look different without old-fashioned clothes and impress others
+										
                     </Typography>
                   </Box>
                 </Box>
