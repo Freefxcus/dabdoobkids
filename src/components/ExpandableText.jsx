@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import styles from "../styles/components/ExpandableText.module.css";
+import { colors } from "@mui/material";
 
 const ExpandableText = ({ text }) => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -33,6 +34,7 @@ const ExpandableText = ({ text }) => {
         <button
           onClick={() => setIsExpanded(!isExpanded)}
           className={styles.button}
+          style={{ color: "var(--brown)" }}
         >
           {isExpanded ? "See less" : "See more"}
         </button>
