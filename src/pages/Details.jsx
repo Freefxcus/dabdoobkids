@@ -471,12 +471,12 @@ export default function Details() {
           )
         );
 
-        //const isSoldOut = matchingVariant ? matchingVariant.stock === 0 : false;
+        const isSoldOut = matchingVariant ? matchingVariant.stock === 0 : false;
         
-        console.log(`${variantValue}`);
+        console.log(`is Sold out: ${isSoldOut}`);
         //const isSoldSizeOut = variantValue === "Up to 1Mth";
-        console.log(`Checking variantValue: "${variantValue}"`);
-        const isSoldOut = variantValue.trim() === "Up to 1Mth";
+        //console.log(`Checking variantValue: "${variantValue}"`);
+        //const isSoldOut = variantValue.trim() === "Up to 1Mth";
         return (
           <MenuItem key={index} value={variantValue} disabled={isSoldOut}>
             {variantValue} {isSoldOut && (
