@@ -51,7 +51,7 @@ export default function OrderCardOffline({ item }) {
               gap: "10px",
             }}
           >
-            <img src={item?.images?.[0]} alt="product" className={styles.img} />
+            <img loading="lazy" src={item?.images?.[0]} alt="product" className={styles.img} />
             <div className={styles.column}>
               <div className={styles.column}>
                 {/* <div className={styles.category}>{product?.brand?.name}</div> */}
@@ -93,6 +93,7 @@ export default function OrderCardOffline({ item }) {
           </div>
           <div style={{ display: "flex", gap: "10px" }}>
             <img
+              loading="lazy"
               onClick={() => {
                 setOpenDelete(true);
               }}
@@ -156,6 +157,7 @@ export default function OrderCardOffline({ item }) {
         <div className={styles.content}>
           <div className={styles.product2}>
             <img
+              loading="lazy"
               className={styles.photoIcon}
               src={item?.images?.[0]}
               alt="product"

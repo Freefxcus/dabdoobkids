@@ -184,6 +184,7 @@ export default function Search() {
       ) : null}
       <div className={styles.options}>
         <img
+          loading="lazy"
           style={{ cursor: "pointer" }}
           src={filter}
           width="25px"

@@ -39,6 +39,7 @@ export default function Summary() {
               <div className={styles.address_container}>
                 <div>{address.address}</div>
                 <img
+                  loading="lazy"
                   src={edit}
                   width="20px"
                   style={{ cursor: "pointer" }}

@@ -594,7 +594,7 @@ defaultCountry="EG"
         )}
         {type === "reset_password" && (
           <Box sx={style} className={styles.card_container}>
-            <img src={reset} width="50%" className={styles.card_img} alt="reset" />
+            <img loading="lazy" src={reset} width="50%" className={styles.card_img} alt="reset" />
             <div className={styles.card_title}>Reset Password</div>
             <div className={styles.card_description}>
               Enter your registered email address, we will send instructions to

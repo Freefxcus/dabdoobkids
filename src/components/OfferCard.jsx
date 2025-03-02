@@ -11,6 +11,7 @@ export default function OfferCard({ item }) {
           loading="lazy"
           src={item.img}
           alt="offer"
+          loading="lazy"
         />
       </div>
       <div className={styles.title}>{item.title}</div>

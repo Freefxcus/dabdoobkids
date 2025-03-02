@@ -79,6 +79,7 @@ export default function Productcard({ item, setChanged }) {
       <div className={styles["card-top"]}>
         {/* <img src={lady} width="100%" height="380px" /> */}
         <img
+          loading="lazy"
           src={
             item.images?.[0] || "https://i.postimg.cc/HnNLbVGh/placeholder.png"
           }
@@ -97,7 +98,7 @@ export default function Productcard({ item, setChanged }) {
         {item?.extraInfo?.new && (
           <div className={styles["hot-container"]}>
             <div>New</div>
-            <img src={hot} width="14px" alt="second heart" />
+            <img loading="lazy" src={hot} width="14px" alt="second heart" />
           </div>
         )}
         {item?.extraInfo?.sold && (

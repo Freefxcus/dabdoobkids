@@ -103,13 +103,13 @@ export default function ClothesCard({ item }) {
             HandleMessageIsAuth(handleTargetWishlist);
           }}
         >
-          <img src={wished ? fHeart : eHeart} width="25px" alt="heart" />
+          <img src={wished ? fHeart : eHeart} width="25px" alt="heart" loading="lazy" />
         </button>
         <div className={styles["tags-container"]}>
           {item?.extraInfo?.new && (
             <div className={styles["hot-container"]}>
               <div>New</div>
-              <img src={hot} width="14px" alt="second heart" />
+              <img src={hot} width="14px" alt="second heart" loading="lazy" />
             </div>
           )}
           {item?.status !== "in-stock" && (

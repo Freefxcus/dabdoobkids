@@ -37,6 +37,7 @@ const BrandsSwiper = ({ brands }) => {
               <div className={`${styles.emblaSlide} embla__slide`} key={id}>
                 <Link to={`/search/?brand=${id}`} className={styles.imageLink}>
                   <img
+                    loading="lazy"
                     src={images[0]}
                     alt={name}
                     width={150}

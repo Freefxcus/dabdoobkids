@@ -29,12 +29,13 @@ export default function OrderCard() {
   };
   return (
     <div className={styles.container}>
-      <img src={promocard} className={styles.img} />
+      <img loading="lazy" src={promocard} className={styles.img} />
       {/* <div className={styles.img_text}>30% off for Men's Clothing</div> */}
       <div>30% off for Men's Clothing</div>
       <div className={styles.row}>
         <div className={styles.code}>mens30</div>
         <img
+          loading="lazy"
           src={copyIcon}
           width="20px"
           style={{ cursor: "pointer" }}

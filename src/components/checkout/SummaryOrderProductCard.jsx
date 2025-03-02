@@ -28,6 +28,7 @@ export default function SummaryOrderProductCard({ item }) {
       }}
     >
       <img
+        loading="lazy"
         style={{ height: "150px", width: "116px", objectFit: "cover" }}
         src={item?.product?.images[0]}
         alt="Checkout"

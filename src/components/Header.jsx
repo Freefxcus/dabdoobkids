@@ -246,6 +246,7 @@ export default function Header({ setOpen }) {
               onClick={() => {
                 setSearchInput(true);
               }}
+              loading="lazy"
             />
 
             <input
@@ -281,6 +282,7 @@ export default function Header({ setOpen }) {
                       navigate("/wishlist");
                     }}
                     alt="brownheart"
+                    loading="lazy"
                   />
                   <div className={`${styles.clickable} ${styles.badge}`}>
                     {wishListItems?.length || 0}
@@ -296,6 +298,7 @@ export default function Header({ setOpen }) {
                     toggleDrawer();
                   }}
                   alt="heart"
+                  loading="lazy"
                 />
               )}
             </div>

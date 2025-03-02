@@ -86,6 +86,7 @@ export default function OrderCard({
               src={product?.images?.[0]}
               alt="product"
               className={styles.img}
+              loading="lazy"
             />
             <div className={styles.column}>
               <div className={styles.column}>
@@ -131,6 +132,7 @@ export default function OrderCard({
               onClick={() => {
                 setOpenDelete(true);
               }}
+              loading="lazy"
               src="./remove.svg"
               alt="remove"
               style={{ cursor: "pointer" }}
@@ -203,9 +205,11 @@ export default function OrderCard({
         <div className={styles.content}>
           <div className={styles.product2}>
             <img
+              loading="lazy"
               className={styles.photoIcon}
               src={product?.images?.[0]}
               alt="product"
+              
             />
             <div className={styles.productContent}>
               <div className={styles.productName}>

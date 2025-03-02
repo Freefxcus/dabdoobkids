@@ -25,6 +25,7 @@ export default function CartProgress({ value = 0, percentage = "100%" }) {
                 borderRadius: "50px",
               }}
               alt="bar"
+              loading="lazy"
             />
             <img
               style={{
@@ -36,6 +37,7 @@ export default function CartProgress({ value = 0, percentage = "100%" }) {
               }}
               src={DabdoobbarImage}
               alt="dabdoob"
+              loading="lazy"
             />
           </Box>
         </Box>

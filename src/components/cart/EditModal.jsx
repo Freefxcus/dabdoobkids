@@ -47,6 +47,7 @@ export default function EditModal({ open, setOpen, product, setCartChanged }) {
           </div>
           <div style={{ display: "flex", gap: "12px" }}>
             <img
+              loading="lazy"
               src={product?.product?.images[0]}
               style={{ width: "116px", height: "150px" }}
               alt="productImage"

@@ -198,6 +198,7 @@ export default function Form({ type, toggleDrawer }) {
               height="20px"
               style={{ cursor: "pointer" }}
               alt="show/hide password"
+              loading="lazy"
             />
           </div>
 
@@ -228,7 +229,7 @@ export default function Form({ type, toggleDrawer }) {
 
           <button className={styles.brown_button}>Login</button>
           <button className={styles.grey_button} onClick={handleGoogleAuth}>
-            <img src={google} width="25px" alt="google" /> <div>Google</div>
+            <img loading="lazy" src={google} width="25px" alt="google" /> <div>Google</div>
           </button>
           <div className={styles.footer}>
             <div className={styles.footer_main}>Don't have account yet?</div>
@@ -368,7 +369,7 @@ export default function Form({ type, toggleDrawer }) {
             Register
           </button>
           <button className={styles.grey_button} onClick={handleGoogleAuth}>
-            <img src={google} width="25px" alt="google" /> <div>Google</div>
+            <img loading="lazy" src={google} width="25px" alt="google" /> <div>Google</div>
           </button>
           <div className={styles.footer}>
             <div className={styles.footer_main}>Already have an account?</div>
