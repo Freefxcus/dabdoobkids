@@ -1,34 +1,28 @@
-import React from "react";
+import React, { useState } from "react";
 
 import styles from "../styles/components/Footer.module.css";
 import logo from "../images/footer-logo.svg";
-import { EmailOutlined } from "@mui/icons-material";
+
 import { Link } from "react-router-dom";
+import brownEmail from "../images/brown-email.svg";
 
 export default function Footer() {
+  const [emailValue, setEmailInputValue] = useState("");
+
   return (
     <>
       {/* footer 1 */}
       <div
         className={`${styles["primary-footer-container"]} padding-container`}
       >
-        <div
-          className={styles.logo}
-          style={{
-            fontSize: "3rem",
-            fontWeight: "bold",
-          }}
-        >
-        <Link to="/">
+        <div className={styles.logo}>
           <img
             loading="lazy"
             src={logo}
             alt="logo"
-            width="240"
-            height="240"
-            style={{ cursor: "pointer" }}
+            width={340}
+            height={340}
           />
-        </Link>
         </div>
 
         <div className={styles.section}>
@@ -59,24 +53,53 @@ export default function Footer() {
         </div>
         <div className={styles.section}>
           <div className={styles.header}>Find Us</div>
-          <a href="##" target="_blank" className={styles.link} rel="noreferrer">
+          <a
+            href="https://www.instagram.com/dabdoobkidz?igsh=MTJlMXN0ZWI4MmFxeQ=="
+            target="_blank"
+            className={styles.link}
+            rel="noreferrer"
+          >
             Instagram
           </a>
-          <a href="##" target="_blank" className={styles.link} rel="noreferrer">
+          <a
+            href="https://www.facebook.com/profile.php?id=61555247997096&mibextid=JRoKGi"
+            target="_blank"
+            className={styles.link}
+            rel="noreferrer"
+          >
             Facebook
           </a>
-          <a href="##" target="_blank" className={styles.link} rel="noreferrer">
+          <a
+            href="https://www.tiktok.com/@dabdoobkidz?lang=en"
+            target="_blank"
+            className={styles.link}
+            rel="noreferrer"
+          >
             Tiktok
           </a>
         </div>
-        <div className={`${styles.section} ${styles["email-section"]}`}>
-            <div className={styles.header}>
-              Sign up to our newsletter and keep up <div className={styles.header}>to date with the latest arrivals</div>
-            </div>
-            <div className={styles["email-container"]}>
-              <input className={styles["email-input"]} placeholder="Your Email" />
-              <EmailOutlined />
-            </div>
+        <div
+          className={styles.section}
+          style={{
+            maxWidth: "350px",
+            // marginLeft: "300px",
+            justifyContent: "flex-start",
+          }}
+        >
+          <div className={styles.header}>
+            Sign up to our newsletter and keep up to date with the latest
+            arrivals
+          </div>
+          <div className={styles["email-container"]}>
+            <input
+              className={styles["email-input"]}
+              placeholder="You Email"
+              onChange={(e) => {
+                setEmailInputValue(e.target.value);
+              }}
+            />
+            <img src={brownEmail} alt="email" />
+          </div>
         </div>
       </div>
       {/* footer 2 */}
