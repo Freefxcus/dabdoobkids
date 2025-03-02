@@ -21,7 +21,7 @@ const PasswordRequirements = ({ password }) => {
 
   const RequirementItem = ({ achieved, text }) => {
     return (
-      <div className="flex items-center gap-2 mb-1" style={{ marginBottom: "10px", paddingLeft: "10px" }}>
+      <div className="flex items-center gap-2 mb-1" style={{ marginBottom: "10px", paddingLeft: "5px" }}>
         <span
           style={{
             display: "flex",
