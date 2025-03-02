@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { cartActions } from "../Redux/store";
 import SideCartCardOffline from "./cart/SideCartCardOffline";
 import Form from "./Form.jsx";
+import CartProgress from "./CartProgress";
 
 import { newCalcDiscount } from "../utils/general.js";
 
@@ -27,8 +28,10 @@ export default function Cart({ toggleDrawer }) {
       acc + newCalcDiscount({ count: curr.count, product: curr }).totalPrice,
     0
   );
+  const percentage = (totalPrice / 3500) * 100;
 
   return (
+    
     <div className={styles["container-cart"]}>
       <div
         style={{
@@ -49,6 +52,9 @@ export default function Cart({ toggleDrawer }) {
       </div>
 
       <Box sx={{ mb: "24px" }}>{/* <CartProgress value={totalPrice} /> */}</Box>
+            <Box sx={{ mb: "24px" }}>
+              <CartProgress percentage={percentage} value={totalPrice} />
+            </Box>
       {cartItems == undefined ||
         (!cartItems && (
           <div
