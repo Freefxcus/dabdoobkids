@@ -471,7 +471,7 @@ export default function Details() {
           )
         );
 
-        const isSoldOut = matchingVariant ? matchingVariant.stock > 10 : false;
+        const isSoldOut = matchingVariant ? matchingVariant.stock === 0 : false;
         
         console.log(`is Sold out: ${isSoldOut}`);
         //const isSoldSizeOut = variantValue === "Up to 1Mth";
