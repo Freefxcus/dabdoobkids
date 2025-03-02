@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import PasswordRequirements from "./PasswordRequirements";
 import styles from "../styles/components/Form.module.css";
 import google from "../images/google.png";
 import { registerSchema } from "../utils/schemas/registerSchema.js";
@@ -13,23 +12,12 @@ import { notifySuccess, notifyError } from "../utils/general.js";
 import closed from "../images/closed.png";
 import open from "../images/open.png";
 import { baseUrl } from "../utils/baseUrl";
+import PasswordRequirements from "./PasswordRequirements.jsx"
 
 const backendUrl = baseUrl.production;
 
 export default function Form({ type, toggleDrawer }) {
   const [show, setShow] = useState(false);
-  const [password, setPassword] = useState("");
-
-  const validationRules = [
-    { regex: /.{8,}/, text: "At least 8 characters" },
-    { regex: /[a-z]/, text: "Include at least one lowercase letter" },
-    { regex: /[A-Z]/, text: "Include at least one uppercase letter" },
-    { regex: /\d/, text: "Include at least one number" },
-    {
-      regex: /[@$!%*?&]/,
-      text: "Include at least one special character (@, $, etc.)",
-    },
-  ];
   const navigate = useNavigate();
 
   const onSubmit = async (values, actions) => {
@@ -123,23 +111,6 @@ export default function Form({ type, toggleDrawer }) {
       item.type = show ? "text" : "password";
     });
   }, [show]);
-
-  const formik = useFormik({
-    initialValues:
-      type === "register"
-        ? {
-            firstName: "",
-            lastName: "",
-            email: "",
-            password: "",
-            confirmPassword: "",
-          }
-        : { email: "", password: "" },
-    validationSchema: type === "register" ? registerSchema : loginSchema,
-    onSubmit: (values) => {
-      console.log(values);
-    },
-  });
   return (
     <form className={styles.container} onSubmit={handleSubmit}>
       {type === "login" && (
@@ -254,6 +225,7 @@ export default function Form({ type, toggleDrawer }) {
               Forgot password
             </div>
           </div>
+
           <button className={styles.brown_button}>Login</button>
           <button className={styles.grey_button} onClick={handleGoogleAuth}>
             <img src={google} width="25px" alt="google" /> <div>Google</div>
@@ -345,22 +317,15 @@ export default function Form({ type, toggleDrawer }) {
             }
             placeholder="Your last email"
           ></input>
-          {/* PASSWORD FIELD */}
+          {/* password */}
           <div className={styles.label}>
             <span>Password</span>
             <span className={styles.error}> *</span>
+            {errors.password && touched.password && (
+              <span className="error">{errors.password}</span>
+            )}
           </div>
-          <div style={{
-    display: "flex",
-    alignItems: "center",
-    width: "100%",
-    maxWidth: "400px",
-    border: "1px solid #ccc",
-    borderRadius: "8px",
-    padding: "5px",
-    background: "#fff",
-  }}>
-            <input
+          <input
             value={values.password}
             onChange={handleChange}
             id="password"
@@ -373,14 +338,8 @@ export default function Form({ type, toggleDrawer }) {
             }
             placeholder="Your last password"
           ></input>
-            <img
-              src={show ? open : closed}
-              onClick={() => setShow((prev) => !prev)}
-              width="20px"
-              height="20px"
-              style={{ marginLeft: "10px", cursor: "pointer" }}
-              alt="show/hide password"
-            />
+          <div class={styles.PasswordRequirements}>
+            <PasswordRequirements password={values.password} />
           </div>
           {/* repeat password */}
           <div className={styles.label}>
@@ -403,21 +362,8 @@ export default function Form({ type, toggleDrawer }) {
             }
             placeholder="Repeat your password"
           ></input>
-          {/* PASSWORD VALIDATION RULES */}
-          <div className={styles.passwordRules}>
-          <ul className={styles.passwordRules}>
-            {validationRules.map((rule, index) => (
-              <li
-                key={index}
-                style={{
-                  color: rule.regex.test(password) ? "green" : "brown",
-                }}
-              >
-                {rule.text}
-              </li>
-            ))}
-          </ul>
-          </div>
+          
+          
           <button className={styles.brown_button} type="submit">
             Register
           </button>
@@ -442,5 +388,3 @@ export default function Form({ type, toggleDrawer }) {
     </form>
   );
 }
-
-

@@ -64,15 +64,10 @@ jobs:
       - name: Determine Deployment Environment
         id: set-env
         run: |
-          if [[ "${{ github.ref }}" == "refs/heads/newdev" ]]; then
-            echo "DEPLOY_PATH=/var/www/develop/portal" >> $GITHUB_ENV
-          elif [[ "${{ github.ref }}" == "refs/heads/develop" ]]; then
+          if [[ "${{ github.ref }}" == "refs/heads/develop" ]]; then
             echo "DEPLOY_PATH=/var/www/staging/portal" >> $GITHUB_ENV
-          elif [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
-            echo "DEPLOY_PATH=/var/www/production/portal" >> $GITHUB_ENV
           else
-            echo "This branch is not allowed to run deployments."
-            exit 1
+            echo "DEPLOY_PATH=/var/www/production/portal" >> $GITHUB_ENV
           fi
 
       - name: Deploy to VPS using SSH
@@ -85,25 +80,9 @@ jobs:
             eval "$(ssh-agent -s)"
             ssh-add ~/.ssh/github_key  # Ensure the correct key is used
             cd ${{ env.DEPLOY_PATH }} || { echo "Error: Deployment path not found"; exit 1; }
-            echo "Resetting Git to prevent conflicts..."
-            git reset --hard HEAD
-            git clean -fd
             echo "Fetching latest code..."
             git pull origin ${{ github.ref_name }} || { echo "Error: git pull failed. Stopping deployment!"; exit 1; }
-            echo "Installing dependencies..."
             npm install --legacy-peer-deps || { echo "Error: npm install failed"; exit 1; }
             npm run build || { echo "Error: Build failed"; exit 1; }
             sudo systemctl restart nginx || { echo "Error: Nginx restart failed."; exit 1; }
-
-            echo "Restarting PM2 service..."
-            if [[ "${{ github.ref }}" == "refs/heads/develop" ]]; then   
-              echo "copying staging files"           
-              cp -r ${{ env.DEPLOY_PATH }}/build/* ${{ env.DEPLOY_PATH }}/.
-              pm2 restart staging-portal
-            else 
-              echo "copying production files"           
-              cp -r ${{ env.DEPLOY_PATH }}/build/* ${{ env.DEPLOY_PATH }}/.
-              pm2 restart portal
-            fi
-
-      
+            pm2 restart portal

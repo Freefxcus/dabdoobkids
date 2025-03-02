@@ -108,7 +108,13 @@
   margin-bottom: 4px; /* Reduce vertical spacing */
   line-height: 1.4; /* Adjust line height for readability */
 }
-
+.password-requirements {
+  position: absolute;
+  right: 10px; /* Adjust to move further right */
+  font-size: 12px; /* Reduce font size */
+  list-style-type: none; /* Hide bullets */
+  padding-left: 0; /* Remove default padding */
+}
 /* Media query for screens smaller than 600px (e.g., smartphones) */
 @media (max-width: 600px) {
   .container {

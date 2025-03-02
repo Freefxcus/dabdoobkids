@@ -19,16 +19,20 @@ const PasswordRequirements = ({ password }) => {
     });
   }, [password]);
 
-  const RequirementItem = ({ achieved, text }) => (
-    <div className="flex items-center gap-2 mb-1">
-      <div
-        className={`w-1.5 h-1.5 rounded-full ${
-          achieved ? "bg-green-600" : "bg-amber-700"
-        }`}
-      />
-      <span className="text-sm text-amber-700">{text}</span>
-    </div>
-  );
+  const RequirementItem = ({ achieved, text }) => {
+    return (
+      <div className="flex items-center gap-2 mb-1" style={{ marginBottom: "10px" , paddingLeft:"20px"}}>
+        <span
+          style={{
+            color: achieved ? "var(--green)" : "var(--brown)",
+            transition: "color 0.3s ease-in-out",
+          }}
+        >
+          {text}
+        </span>
+      </div>
+    );
+  };
 
   return (
     <div className="mt-1 mb-4">
@@ -37,16 +41,20 @@ const PasswordRequirements = ({ password }) => {
         text="At least 8 characters long"
       />
       <RequirementItem
-        achieved={requirements.lowercase && requirements.uppercase}
-        text="Mix of uppercase and lowercase letters"
+        achieved={requirements.lowercase}
+        text="Include at least one lowercase letter"
       />
       <RequirementItem
+        achieved={requirements.uppercase}
+        text="Include at least one uppercase letter"
+      />      
+      <RequirementItem
         achieved={requirements.number}
-        text="At least one number"
+        text="Include at least one number"
       />
       <RequirementItem
         achieved={requirements.special}
-        text="At least one special character (@, #, $, etc.)"
+        text="Include at least one special character (@, #, $, etc.)"
       />
     </div>
   );
