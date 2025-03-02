@@ -21,21 +21,45 @@ const PasswordRequirements = ({ password }) => {
 
   const RequirementItem = ({ achieved, text }) => {
     return (
-      <div className="flex items-center gap-2 mb-1" style={{ marginBottom: "10px" , paddingLeft:"20px"}}>
+      <div className="flex items-center gap-2 mb-1" style={{ marginBottom: "10px", paddingLeft: "10px" }}>
         <span
           style={{
-            color: achieved ? "var(--green)" : "var(--brown)",
-            transition: "color 0.3s ease-in-out",
+            display: "flex",
+            alignItems: "center",
+            gap: "10px", // Space between square and text
+            fontSize: "16px", // Adjust text size
           }}
         >
-          {text}
+          {/* Square Indicator */}
+          <span
+            style={{
+              width: "12px", // Adjust size
+              height: "12px", // Adjust size
+              backgroundColor: achieved ? "var(--green)" : "var(--brown)", // Match text color
+              display: "inline-block",
+              borderRadius: "2px", // Slight rounding for better look
+              transition: "background-color 0.3s ease-in-out",
+              flexShrink: 0, // Prevents shrinking
+            }}
+          ></span>
+  
+          {/* Text */}
+          <span
+            style={{
+              color: achieved ? "var(--green)" : "var(--brown)",
+              transition: "color 0.3s ease-in-out",
+            }}
+          >
+            {text}
+          </span>
         </span>
       </div>
     );
   };
+  
 
   return (
-    <div className="mt-1 mb-4">
+    <div className="">
       <RequirementItem
         achieved={requirements.length}
         text="At least 8 characters long"
