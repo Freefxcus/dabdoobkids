@@ -20,8 +20,8 @@ export default function Footer() {
             loading="lazy"
             src={logo}
             alt="logo"
-            width={340}
-            height={340}
+            width={240}
+            height={240}
           />
         </div>
 
