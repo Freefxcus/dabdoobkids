@@ -84,13 +84,7 @@ jobs:
             ssh-add ~/.ssh/github_key  # Ensure the correct key is used
             cd ${{ env.DEPLOY_PATH }} || { echo "Error: Deployment path not found"; exit 1; }
             
-            echo "### Checking Git Repo ####"
-            if [ ! -d "$DEPLOY_PATH/.git" ]; then
-              echo "Initializing Git repository in $DEPLOY_PATH..."
-              git init || { echo "Error: Git init failed"; exit 1; }
-              git remote add origin https://github.com/Freefxcus/dabdoobkids.git || { echo "Error: Git remote add failed"; exit 1; }
-            fi            
-            git fetch origin || { echo "Error: Git fetch failed"; exit 1; }
+           
 
             echo "Fetching latest code..."
             git reset --hard HEAD
