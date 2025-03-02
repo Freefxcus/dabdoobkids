@@ -259,7 +259,8 @@ export default function BillingDetails({
       style={{ height: "28px", width: "44px" }}
       alt="Apple Pay Icon"
     /></div>
-            <div
+    {/*
+    <div
               style={{
                 display: "flex",
                 flexDirection: "column",
@@ -267,8 +268,10 @@ export default function BillingDetails({
                 transition: "all",
                 transitionDuration: "0.5s",
               }}
-            >
+            >*/}
+
               {/* Wallet */}
+            {/*
               <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <div
                   style={{ display: "flex", gap: "12px", alignItems: "center" }}
@@ -320,7 +323,7 @@ export default function BillingDetails({
                 </div>
               ) : null} 
             </div>
-            
+            */}
             {/*
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <div

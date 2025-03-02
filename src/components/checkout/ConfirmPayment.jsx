@@ -356,6 +356,7 @@ export default function ConfirmPayment({
               ? "please enter address "
               : null}
           </div>
+          {/*
           <button
             onClick={handlePayment}
             style={{
@@ -395,6 +396,7 @@ export default function ConfirmPayment({
               "Continue to Payment"
             )}
           </button>
+          */}
         </div>
 
         <ModalPaymentLink
