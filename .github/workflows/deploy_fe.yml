@@ -69,7 +69,10 @@ jobs:
           else
             echo "DEPLOY_PATH=/var/www/production/portal" >> $GITHUB_ENV
           fi
-
+      - name: Debug Deployment Path
+        run: |
+          echo "Deployment Path: /var/www/production/portal"
+          ls -la /var/www/production/portal || echo "Directory does not exist or is inaccessible"
       - name: Deploy to VPS using SSH
         uses: appleboy/ssh-action@master
         with:
