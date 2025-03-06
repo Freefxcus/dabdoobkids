@@ -302,7 +302,7 @@ export default function Details() {
                   <Box
                     component={"div"}
                     sx={{
-                      backgroundImage: `url(${img})`,
+                      backgroundImage: `url(${img}`,
                       backgroundSize: "cover",
                       backgroundPosition: "center",
                       backgroundRepeat: "no-repeat",

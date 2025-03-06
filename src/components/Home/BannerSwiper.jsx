@@ -1,9 +1,10 @@
-import React, { useEffect, useState, memo } from "react";
+import React, { useEffect, useState, memo , useRef} from "react";
 import styles from "../../styles/pages/Home.module.css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
+
 							   
 import { Autoplay, Pagination } from "swiper/modules";
 												   
@@ -15,6 +16,37 @@ import { Box, Typography } from "@mui/material";
 import { getBanners } from "../../utils/apiCalls";
 import { useNavigate, Link } from "react-router-dom";
 import LoadingAnimation from "../LoadingAnimation";
+
+const LazyBackground = ({ imageUrl, className, children }) => {
+  const [loaded, setLoaded] = useState(false);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setLoaded(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (ref.current) observer.observe(ref.current);
+
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div
+      ref={ref}
+      className={className}
+      style={{ backgroundImage: loaded ? `url(${imageUrl})` : "none" }}
+    >
+      {children}
+    </div>
+  );
+};
 
 const BannerSwiper = () => {
   const bannerImages = [banner1, banner2];
@@ -82,6 +114,7 @@ const BannerSwiper = () => {
                   to={item?.url}
                   className={styles.bannerBox}
                   style={{ backgroundImage: `url(${item?.image})` }}
+                 
                 ></Box>
               </SwiperSlide>
             ))
@@ -91,6 +124,7 @@ const BannerSwiper = () => {
                   className={styles.bannerBox}
                   style={{ backgroundImage: `url(${img})` }}
                 >
+                
                   <Box>
                     <Typography variant="h1" className={styles.bannerTitle}>
                       Dabdoob KIDZ
