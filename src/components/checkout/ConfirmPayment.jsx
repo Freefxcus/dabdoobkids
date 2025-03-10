@@ -2,6 +2,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { Box, CircularProgress, Stack } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+									   
 import { useDeleteAllCartMutation } from "../../Redux/cartApi";
 import {
   checkPromoCode,
@@ -108,6 +109,7 @@ export default function ConfirmPayment({
         handleOpenModal();
         return;
       }
+	 
 
       setLoading(true);
       const checkout = await getUserPaymentLink(price.totalPrice);
@@ -123,6 +125,8 @@ export default function ConfirmPayment({
 
       const checkout = await orderCheckout(DataSubmit);
 
+												  
+																	
       if (checkout?.data?.status === "success") {
         notifySuccess("Order Placed Successfully");
         deleteAllCart().then(() => {
@@ -248,6 +252,7 @@ export default function ConfirmPayment({
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <h2
               style={{
+										   
                 fontWeight: "500",
                 fontSize: "16px",
               }}
@@ -356,7 +361,7 @@ export default function ConfirmPayment({
               ? "please enter address "
               : null}
           </div>
-          {/*
+          {
           <button
             onClick={handlePayment}
             style={{
@@ -396,7 +401,7 @@ export default function ConfirmPayment({
               "Continue to Payment"
             )}
           </button>
-          */}
+          }
         </div>
 
         <ModalPaymentLink
