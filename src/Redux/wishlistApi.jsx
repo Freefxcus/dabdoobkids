@@ -18,25 +18,24 @@ export const wishlistApi = createApi({
   endpoints: (builder) => ({
     //  SavedProductS ENDPOINTS =>
     // Old code
-    /*getAllWishList: builder.query({
+    getAllWishList: builder.query({
       query: () => `/wishlists`,
       providesTags: ["Wishlist"],
-    }),*/
+    }),
     // New code Abdel
     //  Wishlist ENDPOINTS =>
-    getAllWishList: builder.query({
+    /*getAllWishList: builder.query({
       query: () => {
         const token = localStorage.getItem("access_token");
           if (!token) {
-            console.error("getAllWishList Query Blocked: No token found!");
+            console.warning("getAllWishList Query Blocked: No token found!");
             return ""; 
-          }
-            
+          }            
         return `/wishlists`;
       },
       providesTags: ["Wishlist"],
-    }),
-    /*
+    }),*/
+    
     addToWishList: builder.mutation({
       query: (productId) => ({
         url: `/wishlists/`,
@@ -47,30 +46,6 @@ export const wishlistApi = createApi({
       }),
       invalidatesTags: ["Wishlist"],
     }),
-    */
-    addToWishList: builder.mutation({
-      query: (productId) => {
-        const token = localStorage.getItem("access_token");
-    
-        if (!token) {
-          console.error("addToWishList Blocked: No token found! Skipping request.");
-          return null; // Prevents the request from being sent
-        }
-    
-        return {
-          url: `/wishlists/`,
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`, // Ensure token is included
-          },
-          body: {
-            product: productId,
-          },
-        };
-      },
-      invalidatesTags: ["Wishlist"],
-    }),
-    
     deleteWishList: builder.mutation({
       query: (productId) => ({
         url: `/wishlists`,
