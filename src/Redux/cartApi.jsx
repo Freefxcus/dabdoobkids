@@ -18,7 +18,12 @@ const cartApi = createApi({
   }),
   endpoints: (builder) => ({
     getAllCarts: builder.query({
-      query: () => `/cart`,
+      //query: () => `/cart`,
+      query: () => {
+        const token = localStorage.getItem("access_token") ; //|| localStorage.getItem("guest_token");
+        if (!token) return null; // Avoid unauthorized requests
+        return `/cart`;
+      },
       providesTags: ["cartItems"],
     }),
 
