@@ -35,11 +35,14 @@ export default function SingleProductModal({
       },
     ];
     try {
+      if (!addToCart) {
+        console.error("Error: addToCart function is not available.");
+        return;
+      }  
       if(localStorage.getItem("access_token"))
       {
         const response = await addToCart(item).unwrap();
-      }
-      
+      }      
       const message = `Updated Item to cart!`;
       notifySuccess(message);
     } catch (error) {
