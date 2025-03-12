@@ -42,6 +42,8 @@ const LazyBackground = ({ imageUrl, className, children }) => {
       ref={ref}
       className={className}
       style={{ backgroundImage: loaded ? `url(${imageUrl})` : "none" }}
+      aria-label={"category"} 
+      role="img"
     >
       {children}
     </div>
