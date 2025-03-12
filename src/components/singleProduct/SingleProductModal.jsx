@@ -35,7 +35,11 @@ export default function SingleProductModal({
       },
     ];
     try {
-      const response = await addToCart(item).unwrap();
+      if(localStorage.getItem("access_token"))
+      {
+        const response = await addToCart(item).unwrap();
+      }
+      
       const message = `Updated Item to cart!`;
       notifySuccess(message);
     } catch (error) {
