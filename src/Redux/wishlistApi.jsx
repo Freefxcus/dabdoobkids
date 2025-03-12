@@ -18,13 +18,13 @@ export const wishlistApi = createApi({
   endpoints: (builder) => ({
     //  SavedProductS ENDPOINTS =>
     // Old code
-    getAllWishList: builder.query({
+    /*getAllWishList: builder.query({
       query: () => `/wishlists`,
       providesTags: ["Wishlist"],
-    }),
+    }),*/
     // New code Abdel
     //  Wishlist ENDPOINTS =>
-    /*getAllWishList: builder.query({
+    getAllWishList: builder.query({
       query: () => {
         const token = localStorage.getItem("access_token");
           if (!token) {
@@ -34,7 +34,7 @@ export const wishlistApi = createApi({
         return `/wishlists`;
       },
       providesTags: ["Wishlist"],
-    }),*/
+    }),
     
     addToWishList: builder.mutation({
       query: (productId) => ({
