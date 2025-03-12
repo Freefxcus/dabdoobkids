@@ -36,6 +36,7 @@ export const wishlistApi = createApi({
       },
       providesTags: ["Wishlist"],
     }),
+    /*
     addToWishList: builder.mutation({
       query: (productId) => ({
         url: `/wishlists/`,
@@ -46,6 +47,30 @@ export const wishlistApi = createApi({
       }),
       invalidatesTags: ["Wishlist"],
     }),
+    */
+    addToWishList: builder.mutation({
+      query: (productId) => {
+        const token = localStorage.getItem("access_token");
+    
+        if (!token) {
+          console.error("addToWishList Blocked: No token found! Skipping request.");
+          return null; // Prevents the request from being sent
+        }
+    
+        return {
+          url: `/wishlists/`,
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`, // Ensure token is included
+          },
+          body: {
+            product: productId,
+          },
+        };
+      },
+      invalidatesTags: ["Wishlist"],
+    }),
+    
     deleteWishList: builder.mutation({
       query: (productId) => ({
         url: `/wishlists`,
