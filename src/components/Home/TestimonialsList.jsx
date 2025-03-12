@@ -118,6 +118,7 @@ export default function TestimonialsList() {
           src={
             item?.image|| "https://i.postimg.cc/HnNLbVGh/placeholder.png"
           }
+          alt={item?.name || "Testimonials"}
         />
         </SwiperSlide>
     ))}
