@@ -42,7 +42,7 @@ const LazyBackground = ({ imageUrl, className, children }) => {
       ref={ref}
       className={className}
       style={{ backgroundImage: loaded ? `url(${imageUrl})` : "none" }}
-      aria-label={"category"} 
+      aria-label="Shop Now!"
       role="img"
     >
       {children}
@@ -116,6 +116,7 @@ const BannerSwiper = () => {
                   to={item?.url}
                   className={styles.bannerBox}
                   style={{ backgroundImage: `url(${item?.image})` }}
+                  aria-label="Shop Now!"
                  
                 ></Box>
               </SwiperSlide>
@@ -125,6 +126,7 @@ const BannerSwiper = () => {
                 <Box
                   className={styles.bannerBox}
                   style={{ backgroundImage: `url(${img})` }}
+                  aria-label="Shop Now!"
                 >
                 
                   <Box>
