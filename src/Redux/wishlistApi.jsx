@@ -28,7 +28,6 @@ export const wishlistApi = createApi({
       query: () => {
         const token = localStorage.getItem("access_token");
           if (!token) {
-            console.warning("getAllWishList Query Blocked: No token found!");
             return ""; 
           }            
         return `/wishlists`;
