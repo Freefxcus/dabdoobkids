@@ -6,6 +6,7 @@ import Select from "@mui/material/Select";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
@@ -15,15 +16,14 @@ import Loader from "../components/Loader";
 import SingleProductModal from "../components/singleProduct/SingleProductModal.jsx";
 import delivery from "../images/delivery.png";
 import styles from "../styles/pages/Details.module.css";
-import { getProductById } from "../utils/apiCalls";
+import { getProductById, getProducts } from "../utils/apiCalls";
 
 import { CircularProgress, Modal, Stack, Typography } from "@mui/material";
 import { format } from "date-fns";
 import { Add, Minus, ShoppingCart } from "iconsax-react";
-import LayoutRelatedProducts from "../components/cart/LayoutRelatedProducts.jsx";
 import ExpandableText from "../components/ExpandableText.jsx";
-import ModalSize from "../components/productDetail/ModalSize.jsx";
 import WishlistProductDetails from "../components/singleProduct/WishlistProductDetails.jsx";
+import SwiperComponent from "../components/Swiper.jsx";
 import {
   useAddToCartMutation,
   useGetAllCartsQuery,
@@ -32,6 +32,8 @@ import { cartActions, isUserAuth } from "../Redux/store.js";
 import { calcDiscount, notifyError, notifySuccess } from "../utils/general.js";
 import HandleMessageIsAuth from "../utils/message/index.js";
 import Empty from "./empty.jsx";
+import ModalSize from "../components/productDetail/ModalSize.jsx";
+import LayoutRelatedProducts from "../components/cart/LayoutRelatedProducts.jsx";
 export default function Details() {
   const isAuth = useSelector(isUserAuth);
 
@@ -228,9 +230,6 @@ export default function Details() {
       price: productDetails.price,
       count: counter,
       variant: selectedVariantObject?.id,
-      variantInformation: selectedVariantObject,
-      brand: productDetails.brand,
-      sale: productDetails?.sale || {},
     };
 
     dispatch(cartActions.addProduct(product));
@@ -302,7 +301,7 @@ export default function Details() {
                   <Box
                     component={"div"}
                     sx={{
-                      backgroundImage: `url(${img}`,
+                      backgroundImage: `url(${img})`,
                       backgroundSize: "cover",
                       backgroundPosition: "center",
                       backgroundRepeat: "no-repeat",
@@ -399,7 +398,6 @@ export default function Details() {
                 },
               }}
             >
-              {/*
               {newVariants?.[0] && newVariants?.[0]?.values?.length ? (
                 <FormControl sx={{ width: "100%" }} size="small">
                   <InputLabel id="demo-simple-select-label">
@@ -434,73 +432,6 @@ export default function Details() {
                   </Select>
                 </FormControl>
               ) : null}
-              */}
-{newVariants?.[0] && newVariants?.[0]?.values?.length ? (
-  <FormControl sx={{ width: "100%" }} size="small">
-    <InputLabel id="demo-simple-select-label">
-      Select {newVariants?.[0]?.name}
-    </InputLabel>
-    <Select
-      className={styles["select"]}
-      sx={{
-        width: "100%",
-        ".Mui-focused .MuiSelect-select ": {
-          borderColor: "#ad6b46",
-          color: "#ad6b46",
-        },
-      }}
-      labelId="demo-simple-select-label"
-      id="demo-simple-select"
-      defaultValue={newVariants?.[0]?.values?.[0] || ""}
-      value={variant?.[newVariants?.[0]?.name] || ""}
-      label="Select Size"
-      onChange={(event) =>
-        handleChange({
-          key: newVariants?.[0]?.name,
-          value: event.target.value,
-        })
-      }
-    >
-      {newVariants?.[0]?.values?.map((variantValue, index) => {
-        // Find the matching variant object for the size
-        const matchingVariant = productDetails?.variants?.find((variant) =>
-          variant.options.some(
-            (option) =>
-              newVariants?.[0]?.name === option?.option?.name &&
-              variantValue === option?.value?.value
-          )
-        );
-
-        const isSoldOut = matchingVariant ? matchingVariant.stock === 0 : false;
-        
-        console.log(`is Sold out: ${isSoldOut}`);
-        //const isSoldSizeOut = variantValue === "Up to 1Mth";
-        //console.log(`Checking variantValue: "${variantValue}"`);
-        //const isSoldOut = variantValue.trim() === "Up to 1Mth";
-        return (
-          <MenuItem key={index} value={variantValue} disabled={isSoldOut}>
-            {variantValue} {isSoldOut && (
-                  <span style={{
-                    background: "#f00",  // Light red/pink background   F8A9A0
-                    color: "white",
-                    padding: "4px 10px",
-                    borderRadius: "6px", // Rounded edges
-                    fontSize: "12px",
-                    fontWeight: "normal",
-                    textAlign: "center",
-                    marginLeft: "auto", // Pushes to the right
-                    opacity: 1,
-                    pointerEvents: "none",
-                  }}>
-                    Sold out
-                  </span>
-            )}
-          </MenuItem>
-        );
-      })}
-    </Select>
-  </FormControl>
-) : null}              
             </Box>
             {newVariants?.length > 1
               ? newVariants
@@ -578,14 +509,14 @@ export default function Details() {
 
             <div className={styles["row"]}>
               {selectedVariantObject ? (
-                selectedVariantObject.stock > 5000 ? null : (
+                selectedVariantObject.stock > 10 ? null : (
                   <span style={{ color: "orange" }}>
                     {" "}
                     {/* Only {selectedVariantObject.stock} left in stock{" "} */}
                   </span>
                 )
               ) : (
-                <span style={{ color: "#000" }}> out of stock </span>
+                <span style={{ color: "red" }}> out of stock </span>
               )}
             </div>
 
@@ -769,10 +700,7 @@ export default function Details() {
           You may also like
         </Typography>
 
-        <LayoutRelatedProducts
-          categoryId={productDetails?.category?.id}
-          productId={productDetails.id}
-        />
+        <LayoutRelatedProducts categoryId={productDetails?.category?.id} />
       </Box>
     </>
   );
