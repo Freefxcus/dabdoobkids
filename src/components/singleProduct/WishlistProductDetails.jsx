@@ -11,7 +11,10 @@ import eHeart from "../../images/empty-heart.svg";
 import fHeart from "../../images/filled-heart.svg";
 export default function WishlistProductDetails({ id }) {
   const { data: wishListData } = useGetAllWishListQuery();
-  const wishListItems = wishListData?.data?.[0]?.items || [];
+  const wishListItems = Array.isArray(wishListData?.data?.[0]?.items)
+  ? wishListData.data[0].items
+  : [];
+  //const wishListItems = wishListData?.data?.[0]?.items || [];
 
   const wished = wishListItems.some((product) => product?.product?.id == id);
 

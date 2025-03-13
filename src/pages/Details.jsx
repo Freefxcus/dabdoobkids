@@ -96,7 +96,8 @@ export default function Details() {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const { data: cartData } = useGetAllCartsQuery();
-  const cartItems = cartData?.data || [];
+  //const cartItems = cartData?.data || [];
+  const cartItems = Array.isArray(cartData?.data) ? cartData.data : [];
   const [
     addToCart,
     {
@@ -149,17 +150,18 @@ export default function Details() {
   useEffect(() => {
     setLoading(true);
     getProductById(id).then((res) => {
+      console.log("API Response for getProductById:", res); 
       setProductDetails(res);
       setLargeImage(res?.images[0]);
       setLoading(false);
+    }).catch(error => {
+      console.error("Error fetching product details:", error);
     });
   }, [id]);
 
   // Update Product Count If Found In Cart
   useEffect(() => {
     if (cartItems.length && productDetails) {
-      console.log("cartItems: ",cartItems.length);
-      console.log("ProductDetails: ",productDetails);
       const productFind = cartItems.find(
         (item) => item.product.id === productDetails.id
       );
