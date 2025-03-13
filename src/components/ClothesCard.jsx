@@ -83,27 +83,32 @@ export default function ClothesCard({ item }) {
     >
       <div className={styles["card-top"]}>
         <CardMedia
+          alt={item?.name}
+          src={ item?.images?.[0] || "https://i.postimg.cc/HnNLbVGh/placeholder.png" }
+          width="200" // Explicit width
+          height="250" // Explicit height
+          loading="lazy"
           sx={{
             width: "100%",
+            height: "auto",
+            aspectRatio: "4/5",
+            objectFit: "cover"
             // aspectRatio: { xs: 0.45, sm: 0.77 },
             // objectFit: "cover",
           }}
           component={"img"}
-          alt={item?.name}
-          src={
-            item?.images?.[0] || "https://i.postimg.cc/HnNLbVGh/placeholder.png"
-          }
         />
         <button
           type="button"
           disabled={wishListAddLoad || wishListDeleteLoad}
+          style={{ minWidth: "30px", minHeight: "30px" }}
           className={styles["heart-container"]}
           onClick={(e) => {
             e.stopPropagation();
             HandleMessageIsAuth(handleTargetWishlist);
           }}
         >
-          <img src={wished ? fHeart : eHeart} width="25px" alt="heart" loading="lazy" />
+          <img src={wished ? fHeart : eHeart} width="25px" height="25"  alt="heart" loading="lazy" />
         </button>
         <div className={styles["tags-container"]}>
           {item?.extraInfo?.new && (
@@ -125,6 +130,7 @@ export default function ClothesCard({ item }) {
             fontWeight: "500",
             fontSize: "0.875rem",
             color: "rgba(27, 27, 27, 0.70)",
+            minHeight: "20px",
           }}
         >
           {item?.brand?.name}
