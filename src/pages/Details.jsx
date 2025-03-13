@@ -158,10 +158,6 @@ export default function Details() {
   // Update Product Count If Found In Cart
   useEffect(() => {
     if (cartItems.length && productDetails) {
-      console.log("G value before .find():", G);
-      if (!Array.isArray(G)) {
-        console.error("❌ G is not an array. Received:", typeof G, G);
-      }
       const productFind = cartItems.find(
         (item) => item.product.id === productDetails.id
       );
