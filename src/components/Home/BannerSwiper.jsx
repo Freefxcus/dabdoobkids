@@ -125,10 +125,32 @@ const BannerSwiper = () => {
               <SwiperSlide key={index}>
                 <Box
                   className={styles.bannerBox}
-                  style={{ backgroundImage: `url(${img})` }}
+                  //style={{ backgroundImage: `url(${img})` }}
+                  style={{
+                    backgroundImage: `url(${img})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                    display: "block",
+                    width: "100%",
+                    height: "400px",
+                  }}
                   aria-label="Shop Now!"
                 >
-                
+                <img
+                    src={img}
+                    srcSet={`
+                      ${img.replace(".webp", "-400px.webp")} 400w,
+                      ${img.replace(".webp", "-800px.webp")} 800w,
+                      ${img.replace(".webp", "-1200px.webp")} 1200w
+                    `}
+                    sizes="(max-width: 600px) 400px, (max-width: 1200px) 800px, 1200px"
+                    alt="Shop Now"
+                    loading={index === 0 ? "eager" : "lazy"} // Load first image immediately
+                    decoding="async"
+                    width="1200"
+                    height="400"
+                    style={{ display: "none" }} // Hide img but allow browser to preload it
+                  />
                   <Box>
                     <Typography variant="h1" className={styles.bannerTitle}>
                       Dabdoob KIDZ
