@@ -27,9 +27,7 @@ export const wishlistApi = createApi({
     getAllWishList: builder.query({
       query: () => {
         const token = localStorage.getItem("access_token");
-          if (!token) {
-            return ""; 
-          }            
+        if (!token) return { data: [] };          
         return `/wishlists`;
       },
       providesTags: ["Wishlist"],

@@ -21,7 +21,7 @@ const cartApi = createApi({
       //query: () => `/cart`,
       query: () => {
         const token = localStorage.getItem("access_token") ; //|| localStorage.getItem("guest_token");
-        if (!token) return ""; // Avoid unauthorized requests
+        if (!token) return { data: [] };
         return `/cart`;
       },
       providesTags: ["cartItems"],
