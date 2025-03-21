@@ -1,0 +1,43 @@
+.announcement-bar {
+  position: absolute; /* Keeps it on top but not pushing other elements */
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  text-align: center;
+  padding: 8px 0;
+  z-index: 999; /* Ensure it stays above the header */
+}
+.announcement-text p {
+  color: var(--white) !important;
+}
+.banner-text-enter {
+  opacity: 0;
+  transform: translateY(50%);
+}
+
+.banner-text-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 1s ease-in-out, transform 1s ease-in-out;
+}
+
+.banner-text-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.banner-text-exit-active {
+  opacity: 0;
+  transform: translateY(-50%);
+  transition: opacity 1s ease-in-out, transform 1s ease-in-out;
+}
+.announcement-bar p {
+  color: var(--white) !important;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+}
+.announcement-bar p {
+  color: var(--white, #FFFFFF) !important;
+}

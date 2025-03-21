@@ -25,6 +25,8 @@ import Dropdown from "./Dropdown";
 import LoaderSpinner from "./LoaderSpinner";
 import { Menu } from "@mui/icons-material";
 import { Box } from "@mui/material";
+import AnnouncementBanner from "./AnnouncementBanner";
+
 export default function Header({ setOpen }) {
   const debouncedHandleInputChange = useCallback(
     debounce((value) => {
@@ -128,6 +130,7 @@ export default function Header({ setOpen }) {
   return (
     <>
       {/* 1st bar */}
+      
       <div
         className="padding-container"
         style={{
@@ -137,6 +140,7 @@ export default function Header({ setOpen }) {
           paddingBottom: "8px",
         }}
       >
+        
         <div
           style={{
             display: "flex",
@@ -145,7 +149,9 @@ export default function Header({ setOpen }) {
             height: "100%",
           }}
         >
+          <AnnouncementBanner /> 
           <div className={styles["sub-container"]}>
+              
             <div
               style={{
                 display: "flex",
