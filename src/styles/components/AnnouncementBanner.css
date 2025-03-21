@@ -1,43 +1,32 @@
-.announcement-bar {
-  position: absolute; /* Keeps it on top but not pushing other elements */
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100%;
-  text-align: center;
-  padding: 8px 0;
-  z-index: 999; /* Ensure it stays above the header */
-}
-.announcement-text p {
-  color: var(--white) !important;
-}
-.banner-text-enter {
-  opacity: 0;
-  transform: translateY(50%);
-}
-
-.banner-text-enter-active {
-  opacity: 1;
-  transform: translateY(0);
-  transition: opacity 1s ease-in-out, transform 1s ease-in-out;
-}
-
-.banner-text-exit {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.banner-text-exit-active {
-  opacity: 0;
-  transform: translateY(-50%);
-  transition: opacity 1s ease-in-out, transform 1s ease-in-out;
-}
-.announcement-bar p {
-  color: var(--white) !important;
+/* 🖥 For Desktop: Banner & Contact on Same Line */
+.announcement-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--brown);
+  padding: 8px 20px;
+  color: var(--white);
   font-size: 14px;
   font-weight: bold;
+}
+
+/* Style for Announcement Text */
+.announcement-text {
+  flex: 1; /* Allows text to adjust based on available space */
   text-align: center;
 }
-.announcement-bar p {
-  color: var(--white, #FFFFFF) !important;
+
+/* Style for Contact Info */
+.contact-info {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .announcement-banner {
+    position: relative; /* Moves it inside the flow */
+    top: auto;
+    margin-top: 5px; /* Add spacing */
+  }
 }
