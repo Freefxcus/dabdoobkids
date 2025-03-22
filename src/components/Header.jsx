@@ -129,9 +129,8 @@ export default function Header({ setOpen }) {
 
   return (
     <>
-      
+
       {/* 1st bar */}
-      
       <div
         className="padding-container"
         style={{
@@ -141,7 +140,6 @@ export default function Header({ setOpen }) {
           paddingBottom: "8px",
         }}
       >
-        {/* <AnnouncementBanner /> */}
         <div
           style={{
             display: "flex",
@@ -150,9 +148,8 @@ export default function Header({ setOpen }) {
             height: "100%",
           }}
         >
-          
-          <div className={styles["sub-container"]}>
-              
+        <div className="promo-banner-wrapper">
+        <div className={styles["sub-container"]}>            
             <div
               style={{
                 display: "flex",
@@ -178,7 +175,11 @@ export default function Header({ setOpen }) {
           </div>
         </div>
       </div>
-      
+              
+      </div>
+      {/* Promos banner*/}  
+      <AnnouncementBanner />
+      {/* end promos banner*/}
       {/* 2st bar */}
       <div
         className="padding-container"

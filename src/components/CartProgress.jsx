@@ -1,6 +1,6 @@
 import { Box, Stack } from "@mui/material";
 
-import DabdoobbarImage from "../images/logoVector.svg";
+import DabdoobbarImage from "../images/logoVector.webp";
 
 export default function CartProgress({ value = 0, percentage = "100%" }) {
   return (
