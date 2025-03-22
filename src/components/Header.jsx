@@ -11,7 +11,7 @@ import burger from "../images/burger.png";
 import email from "../images/email.svg";
 import heart from "../images/heart.svg";
 import lense from "../images/lense.svg";
-import logoChristmas from "../images/logoChristmas.svg";
+import logoChristmas from "../images/header-logo.webp";
 import phone from "../images/phone.svg";
 import user from "../images/user.svg";
 import { useGetAllCartsQuery } from "../Redux/cartApi";
