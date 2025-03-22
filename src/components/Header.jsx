@@ -2,13 +2,16 @@ import Drawer from "@mui/material/Drawer";
 import { debounce } from "lodash";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
-import Form from "./Form.jsx";
-import logo from "../images/header-logo.svg";
-import bag from "../images/brown-bag.svg";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import Form from "../components/Form";
+import bag from "../images/bag.svg";
+import brownBag from "../images/brown-bag.svg";
+import brownHeart from "../images/brown-heart.svg";
+import burger from "../images/burger.png";
 import email from "../images/email.svg";
-import heart from "../images/brown-heart.svg";
+import heart from "../images/heart.svg";
 import lense from "../images/lense.svg";
+import logoChristmas from "../images/logoChristmas.svg";
 import phone from "../images/phone.svg";
 import user from "../images/user.svg";
 import { useGetAllCartsQuery } from "../Redux/cartApi";
@@ -23,10 +26,6 @@ import Cart from "./Cart";
 import CartDrawOffline from "./CartDrawOffline";
 import Dropdown from "./Dropdown";
 import LoaderSpinner from "./LoaderSpinner";
-import { Menu } from "@mui/icons-material";
-import { Box } from "@mui/material";
-import AnnouncementBanner from "./AnnouncementBanner";
-
 export default function Header({ setOpen }) {
   const debouncedHandleInputChange = useCallback(
     debounce((value) => {
@@ -36,6 +35,13 @@ export default function Header({ setOpen }) {
     }, 2000),
     []
   );
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, [pathname]);
 
   const [dropDown, setDropDown] = useState(false);
   const [isUser, setIsUser] = useState(false);
@@ -56,10 +62,6 @@ export default function Header({ setOpen }) {
   const wishListItems = wishListData?.data?.[0]?.items || [];
 
   const cartOffline = useSelector((state) => state.cart.products) || [];
-
-  const numCart = isUser
-    ? cartItems.reduce((acc, curr) => acc + curr?.count, 0)
-    : cartOffline.reduce((acc, curr) => acc + curr?.count, 0);
 
   useEffect(() => {
     getUserPlan().then((res) => {
@@ -129,7 +131,6 @@ export default function Header({ setOpen }) {
 
   return (
     <>
-
       {/* 1st bar */}
       <div
         className="padding-container"
@@ -148,8 +149,7 @@ export default function Header({ setOpen }) {
             height: "100%",
           }}
         >
-        <div className="promo-banner-wrapper">
-        <div className={styles["sub-container"]}>            
+          <div className={styles["sub-container"]}>
             <div
               style={{
                 display: "flex",
@@ -175,11 +175,6 @@ export default function Header({ setOpen }) {
           </div>
         </div>
       </div>
-              
-      </div>
-      {/* Promos banner*/}  
-      <AnnouncementBanner />
-      {/* end promos banner*/}
       {/* 2st bar */}
       <div
         className="padding-container"
@@ -197,21 +192,17 @@ export default function Header({ setOpen }) {
             <Link
               to="/"
               style={{
-                // height: "38px",
+                height: "38px",
                 overflow: "hidden",
                 display: "grid",
                 placeContent: "center",
-                textDecoration: "none",
-                fontSize: 22,
-                fontWeight: "bold",
-                color: "#000",
               }}
             >
-            <img
-                loading="lazy"
-                src={logo}
-                alt="logo"
-                style={{ cursor: "pointer" }}
+              <img
+                src={logoChristmas}
+                className=""
+                style={{ width: "100px" }}
+                alt="logo "
               />
             </Link>
 
@@ -255,7 +246,6 @@ export default function Header({ setOpen }) {
               onClick={() => {
                 setSearchInput(true);
               }}
-              loading="lazy"
             />
 
             <input
@@ -283,7 +273,7 @@ export default function Header({ setOpen }) {
               {isUser ? (
                 <>
                   <img
-                    src={heart}
+                    src={brownHeart}
                     className={styles.clickable}
                     style={{ marginLeft: "10px", marginRight: "10px" }}
                     width="25px"
@@ -291,7 +281,6 @@ export default function Header({ setOpen }) {
                       navigate("/wishlist");
                     }}
                     alt="brownheart"
-                    loading="lazy"
                   />
                   <div className={`${styles.clickable} ${styles.badge}`}>
                     {wishListItems?.length || 0}
@@ -307,7 +296,6 @@ export default function Header({ setOpen }) {
                     toggleDrawer();
                   }}
                   alt="heart"
-                  loading="lazy"
                 />
               )}
             </div>
@@ -321,7 +309,7 @@ export default function Header({ setOpen }) {
               {isUser ? (
                 <>
                   <img
-                    src={bag}
+                    src={brownBag}
                     className={styles.clickable}
                     style={{ marginLeft: "10px", marginRight: "10px" }}
                     width="25px"
@@ -332,7 +320,7 @@ export default function Header({ setOpen }) {
                     alt="brownbag"
                   />
                   <div className={`${styles.clickable} ${styles.badge}`}>
-                    {numCart}
+                    {cartItems?.length || 0}
                   </div>
                 </>
               ) : (
@@ -347,11 +335,11 @@ export default function Header({ setOpen }) {
                     }}
                     alt="bag"
                   />
-                  {numCart ? (
+                  {cartOffline.length > 0 && (
                     <div className={`${styles.clickable} ${styles.badge}`}>
-                      {numCart}
+                      {cartOffline.length || 0}
                     </div>
-                  ) : null}
+                  )}
                 </>
               )}
             </div>
@@ -378,16 +366,16 @@ export default function Header({ setOpen }) {
                 Sign in
               </Link>
             )}
-            <div
+            <img
               id="action-component"
-              style={{ marginLeft: "10px", width: "30px" }}
+              src={burger}
               className={`${styles.clickable} hidden-on-large-screen show-on-small-screen`}
+              style={{ marginLeft: "10px", width: "30px" }}
               onClick={() => {
                 setOpen((prev) => !prev);
               }}
-            >
-              <Menu />
-            </div>
+              alt="burger"
+            />
           </div>
         </div>
       </div>
@@ -428,6 +416,32 @@ export default function Header({ setOpen }) {
               </>
             )}
           </div>
+          {/* <div className={styles.line}></div>
+          <div
+            className={styles["dropdown-section"]}
+            style={{ justifyContent: "center", alignItems: "center" }}
+          >
+            <div className={styles.card}>
+              <div className={styles["card-image"]}>
+                <img src={gift} />
+                <img src={baby1} />
+              </div>
+              <div className={styles["card-text"]}>
+                Baby & Kids, Moms, accessories & more
+              </div>
+            </div>
+          </div>
+          <div className={styles.line}></div>
+          <div className={styles["dropdown-section"]}>
+            <div className={styles.card}>
+              <img src={baby2} style={{ borderRadius: "8px" }} />
+              <div style={{ fontSize: "24px" }}>Dabdoob Kidz</div>
+              <div style={{ fontSize: "18px", color: "var(--dark-grey)" }}>
+                How to give your child the best sleep possible with our sleep
+                system
+              </div>
+            </div>
+          </div> */}
         </div>
       </div>
       {/* drawer */}
