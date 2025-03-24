@@ -3,15 +3,11 @@ import { CSSTransition } from "react-transition-group";
 import "../styles/components/AnnouncementBanner.css";
 
 const announcements = [
-  "شحن مجاني فوق ال ٣٥٠٠ جنيه",
-  "الأسعار شاملة كل حاجة الجمارك والشحن الدولي",
-  "الدفع عند الاستلام وبتشوف الاوردر قبل ماتدفع (تطبق سياسة الشحن)",
-  "Order takes 10 to 14 days",
-  "Free shipping over 3500 LE",
-  "Prices include Tax and customs",
-  "لاي استفسارات اخري يمكنكم ارسال رسالة علي الانستجرام Kidzdabdoob",
-  "يمكنكم الشراء من قسم الفوري اضغط هنا",
-  "آخر يوم لطلب اوردر العيد يوم ٧ رمضان إن شاء الله",
+  "الاسعار شامله الجمارك والشحن الدولي",
+"ولا يوجد أي مصاريف اضافيه عند ال checkout",
+"شحن مجاني لأي اوردر اكتر من 3500 جنيه",
+"5% Off the first order use code: Off5",
+"No extra fees or taxes will be applied",
 ];
 
 const AnnouncementBanner = () => {

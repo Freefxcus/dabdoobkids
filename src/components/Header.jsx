@@ -174,6 +174,8 @@ export default function Header({ setOpen }) {
         </div>
       </div>
       {/* 2st bar */}
+      {/* Promotions bar*/}
+      <AnnouncementBanner />
       <div
         className="padding-container"
         style={{ backgroundColor: "var(--off-white)" }}

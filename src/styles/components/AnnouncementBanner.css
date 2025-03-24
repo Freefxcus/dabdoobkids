@@ -1,5 +1,5 @@
 .announcement-bar {
-  color: var(--white) !important;
+  color: #121212 !important;
   background-color: #F6BA05;
   font-size: 14px;
   font-weight: bold;
@@ -14,7 +14,7 @@
 
 .announcement-bar p {
   margin: 0;
-  color: var(--white) !important; /* 🔒 force white text */
+  color: #121212 !important;  /* 🔒 force white text */
   text-align: center;
   white-space: nowrap;
 }
