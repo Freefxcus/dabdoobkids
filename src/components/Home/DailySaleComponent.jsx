@@ -67,7 +67,7 @@ export default function DailySaleComponent() {
       >
         <div>
           <div className={styles.title} style={{ marginBottom: "5px" }}>
-            Brown Friday
+            Daily Sale
           </div>
           <CountdownTimer targetDate={endDate} />
         </div>
