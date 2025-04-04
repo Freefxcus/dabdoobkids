@@ -58,10 +58,12 @@ export default function Header({ setOpen }) {
 
   const cartOffline = useSelector((state) => state.cart.products) || [];
 
-  const numCart = isUser
+  /*const numCart = isUser
     ? cartItems.reduce((acc, curr) => acc + curr?.count, 0)
-    : cartOffline.reduce((acc, curr) => acc + curr?.count, 0);
-
+    : cartOffline.reduce((acc, curr) => acc + curr?.count, 0);*/
+  const numCart = isUser
+    ? cartItems.reduce((acc, curr) => acc + (curr?.count || 0), 0)
+    : cartOffline.reduce((acc, curr) => acc + (curr?.count || 0), 0);
   useEffect(() => {
     getUserPlan().then((res) => {
       if (res?.data?.data?.plan?.id) {
