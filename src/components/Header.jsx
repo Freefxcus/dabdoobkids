@@ -51,7 +51,8 @@ export default function Header({ setOpen }) {
   const navigate = useNavigate();
   const [animation, setAnimation] = useState(false);
   const { data: cartData } = useGetAllCartsQuery();
-  const cartItems = cartData?.data || [];
+  //const cartItems = cartData?.data || [];
+  const cartItems = Array.isArray(cartData?.data) ? cartData.data : [];
   const { data: wishListData } = useGetAllWishListQuery();
   const wishListItems = wishListData?.data?.[0]?.items || [];
 
