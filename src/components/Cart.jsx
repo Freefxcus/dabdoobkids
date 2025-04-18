@@ -18,7 +18,8 @@ export default function Cart({ toggleDrawer }) {
   const [promocode, setPromocode] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("Credit Card");
   const { data: cartData, isLoading } = useGetAllCartsQuery();
-  const cartItems = cartData?.data || [];
+  //const cartItems = cartData?.data || [];
+  const cartItems = Array.isArray(cartData?.data) ? cartData.data : [];
 
   const [deleteAllCart] = useDeleteAllCartMutation();
 

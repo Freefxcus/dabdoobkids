@@ -4,9 +4,9 @@ const cartApi = createApi({
   reducerPath: "cartItems",
   baseQuery: fetchBaseQuery({
     baseUrl: `${process.env.REACT_APP_BASE_URL}`,
-    prepareHeaders: (headers) => {
+    /*prepareHeaders: (headers) => {
       // Do something before request is sent
-      if (localStorage.getItem("access_token")) {
+      if (localStorage.getItem("access_token" )) {
         headers.set(
           "Authorization",
           `Bearer ${localStorage.getItem("access_token")}`
@@ -15,15 +15,26 @@ const cartApi = createApi({
 
       return headers;
     },
-  }),
+  }),*/
+  prepareHeaders: (headers) => {
+    const token = localStorage.getItem("access_token") || localStorage.getItem("guest_token");
+    if (token) {
+      headers.set("Authorization", `Bearer ${token}`);
+    }
+    return headers;
+  },
   endpoints: (builder) => ({
-    getAllCarts: builder.query({
+    /*getAllCarts: builder.query({
       //query: () => `/cart`,
       query: () => {
         const token = localStorage.getItem("access_token") ; //|| localStorage.getItem("guest_token");
         if (!token) return { data: [] };
         return `/cart`;
       },
+      providesTags: ["cartItems"],
+    }),*/
+    getAllCarts: builder.query({
+      query: () => `/cart`,
       providesTags: ["cartItems"],
     }),
 
