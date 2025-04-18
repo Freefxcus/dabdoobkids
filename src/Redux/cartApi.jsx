@@ -5,14 +5,10 @@ const cartApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: `${process.env.REACT_APP_BASE_URL}`,
     prepareHeaders: (headers) => {
-      // Do something before request is sent
-      if (localStorage.getItem("access_token")) {
-        headers.set(
-          "Authorization",
-          `Bearer ${localStorage.getItem("access_token")}`
-        );
+      const token = localStorage.getItem("access_token") || localStorage.getItem("guest_token");
+      if (token) {
+        headers.set("Authorization", `Bearer ${token}`);
       }
-
       return headers;
     },
   }),
@@ -27,7 +23,15 @@ const cartApi = createApi({
       providesTags: ["cartItems"],
     }),*/
     getAllCarts: builder.query({
-      query: () => `/cart`,
+      queryFn: async (_arg, _queryApi, _extraOptions, fetchWithBQ) => {
+        const token = localStorage.getItem("access_token") || localStorage.getItem("guest_token");
+        if (!token) {
+          return { data: [] }; // don't call the server without token
+        }
+    
+        const result = await fetchWithBQ("/cart");
+        return result;
+      },
       providesTags: ["cartItems"],
     }),
 
