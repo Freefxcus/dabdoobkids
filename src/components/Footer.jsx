@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 
 import styles from "../styles/components/Footer.module.css";
-import logo from "../images/footer-logo.svg";
+//import logo from "../images/footer-logo.svg";
+import logo from "../images/logo_insta.png";
 
 import { Link } from "react-router-dom";
 import brownEmail from "../images/brown-email.svg";
@@ -20,8 +21,9 @@ export default function Footer() {
             loading="lazy"
             src={logo}
             alt="logo"
-            width={240}
-            height={240}
+            width="240px"
+            height="80px"
+            maxWidth="100%"
           />
         </div>
 
