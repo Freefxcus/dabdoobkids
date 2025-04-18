@@ -1,8 +1,8 @@
 import LinearProgress from "@mui/material/LinearProgress";
-import { useMemo, useState } from "react";
+import { useMemo, useState , useEffect} from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "../styles/components/Cart.module.css";
-
+import { useSelector } from "react-redux";
 import { Box } from "@mui/material";
 import {
   useDeleteAllCartMutation,
