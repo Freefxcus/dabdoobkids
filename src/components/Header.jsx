@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import Form from "./Form.jsx";
 //import logo from "../images/header-logo.svg";
-import logo from "../images/logo_insta.png";
+import logo from "../images/logo_insta.svg";
 import bag from "../images/brown-bag.svg";
 import email from "../images/email.svg";
 import heart from "../images/brown-heart.svg";
@@ -211,9 +211,8 @@ export default function Header({ setOpen }) {
                 src={logo}
                 alt="logo"
                 style={{ cursor: "pointer" }}
+                height="36px"
                 width="118px"
-                height="40px"
-                maxWidth="100%"
               />
             </Link>
 

@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/static/css/main.4ba5498d.css",
-    "main.js": "/static/js/main.e492113b.js",
-    "static/css/526.6496e2d9.chunk.css": "/static/css/526.6496e2d9.chunk.css",
-    "static/js/526.2d4669cd.chunk.js": "/static/js/526.2d4669cd.chunk.js",
+    "main.css": "/static/css/main.ca994bde.css",
+    "main.js": "/static/js/main.1ff17efa.js",
+    "static/css/526.e73943f0.chunk.css": "/static/css/526.e73943f0.chunk.css",
+    "static/js/526.149f8443.chunk.js": "/static/js/526.149f8443.chunk.js",
     "static/js/55.16f3535c.chunk.js": "/static/js/55.16f3535c.chunk.js",
     "static/media/banner1.png": "/static/media/banner1.54598fbea7f969ac3a82.png",
     "static/media/logoVector.svg": "/static/media/logoVector.ed63308c6edf5603634e41701bd4e256.svg",
     "static/media/banner2.png": "/static/media/banner2.3417d81a157645b0e07e.png",
+    "static/media/logo_insta.svg": "/static/media/logo_insta.be28f780fc66790eb8a37a8cb82f3e78.svg",
     "static/media/lady.png": "/static/media/lady.7b6aaade9ccba6fc4cc1.png",
     "static/media/promocard.png": "/static/media/promocard.103ce833e508cdbf18f6.png",
-    "static/media/logo_insta.png": "/static/media/logo_insta.346895e7c759fc7366dd.png",
     "static/media/meeza.svg": "/static/media/meeza.e173300990b962f7eaaf89dff82aec3c.svg",
     "static/media/valu.svg": "/static/media/valu.803bfad568879e393bb4855b48c678d9.svg",
     "static/media/apple_pay.svg": "/static/media/apple_pay.de78af202cfdfc2c145a3d6d5ac6aca5.svg",
@@ -49,14 +49,14 @@
     "static/media/brown-heart.svg": "/static/media/brown-heart.66f9ac28bdb1a7addaf5352dde7579c0.svg",
     "static/media/check.svg": "/static/media/check.7e66d3035b74402a606a5ff31e4b2297.svg",
     "static/media/lense.svg": "/static/media/lense.ad9f732e8af2f54b1c013baf6912280d.svg",
-    "main.4ba5498d.css.map": "/static/css/main.4ba5498d.css.map",
-    "main.e492113b.js.map": "/static/js/main.e492113b.js.map",
-    "526.6496e2d9.chunk.css.map": "/static/css/526.6496e2d9.chunk.css.map",
-    "526.2d4669cd.chunk.js.map": "/static/js/526.2d4669cd.chunk.js.map",
+    "main.ca994bde.css.map": "/static/css/main.ca994bde.css.map",
+    "main.1ff17efa.js.map": "/static/js/main.1ff17efa.js.map",
+    "526.e73943f0.chunk.css.map": "/static/css/526.e73943f0.chunk.css.map",
+    "526.149f8443.chunk.js.map": "/static/js/526.149f8443.chunk.js.map",
     "55.16f3535c.chunk.js.map": "/static/js/55.16f3535c.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.4ba5498d.css",
-    "static/js/main.e492113b.js"
+    "static/css/main.ca994bde.css",
+    "static/js/main.1ff17efa.js"
   ]
 }
