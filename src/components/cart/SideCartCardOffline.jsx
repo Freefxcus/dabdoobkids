@@ -103,7 +103,10 @@ export default function SideCartCardOffline({ item }) {
               },
             }}
           >
-            {item?.variantInformation?.options?.[0]?.value?.value}
+            {/*item?.variantInformation?.options?.[0]?.value?.value*/}
+            {item?.variant?.options?.[0]?.value?.value ||
+              item?.variantInformation?.options?.[0]?.value?.value ||
+              "No size"}
           </Box>
 
           <div
