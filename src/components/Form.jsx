@@ -13,12 +13,15 @@ import closed from "../images/closed.png";
 import open from "../images/open.png";
 import { baseUrl } from "../utils/baseUrl";
 import PasswordRequirements from "./PasswordRequirements.jsx"
+import { useDispatch } from "react-redux";
+import { userAuthAction } from "../Redux/store"; // adjust path if needed
 
 const backendUrl = baseUrl.production;
 
 export default function Form({ type, toggleDrawer }) {
   const [show, setShow] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const onSubmit = async (values, actions) => {
     const endpoint =
@@ -49,11 +52,12 @@ export default function Form({ type, toggleDrawer }) {
           navigate("/login");
         }
         if (type === "login") {
-          localStorage.setItem("access_token", response.data.data.accessToken);
-          localStorage.setItem(
-            "refresh_token",
-            response.data.data.refreshToken
-          );
+          const token = response.data.data.accessToken;
+          localStorage.setItem("access_token", token);
+          localStorage.setItem("refresh_token", response.data.data.refreshToken);
+          localStorage.removeItem("guest_token"); // optional cleanup
+
+          dispatch(userAuthAction.login(token)); 
           toggleDrawer && toggleDrawer();
           navigate("/");
         }

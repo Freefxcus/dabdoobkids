@@ -14,14 +14,16 @@ import CartProgress from "./CartProgress";
 
 export default function Cart({ toggleDrawer }) {
   const navigate = useNavigate();
-  const token = localStorage.getItem("access_token");
+  //const token = localStorage.getItem("access_token");
   const [useWallet, setUseWallet] = useState(false);
   const [promocode, setPromocode] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("Credit Card");
-  const { data: cartData, isLoading ,  refetch,} = useGetAllCartsQuery();
+  const token = useSelector((state) => state.authUser.token);
+  const { data: cartData, isLoading, refetch } = useGetAllCartsQuery();
+  
   useEffect(() => {
     if (token) {
-      refetch(); // force it to re-run with the new token
+      refetch(); // re-fetch cart when token is available
     }
   }, [token, refetch]);
   //const cartItems = cartData?.data || [];
