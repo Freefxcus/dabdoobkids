@@ -912,15 +912,15 @@ export async function resetUserEmail(data) {
 }
 
 export async function resetUserPassword(data, token) {
-  const password = await axios.put(
-    `https://dabdoob-api-service.onrender.com/api/users/change-password`,
+  const response = await instance.put(
+    `/users/change-password`,
     data,
     {
       headers: {
-        Authorization: token,
+        Authorization: `Bearer ${token}`, 
       },
     }
   );
 
-  return password.data;
+  return response.data;
 }
