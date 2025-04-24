@@ -95,6 +95,7 @@ function AppContainer() {
             <Route path="/login" element={<Login />} />
             <Route path="/reset-password" element={<ForgetPassword />} />
             <Route path="/forget-password" element={<ForgetPassword />} />
+            <Route path="/reset-password/:token" element={<ForgetPassword />} />
             <Route path="/auth/google" element={<OAuth />} />
             <Route path="/otp" element={<Otp />} />
             <Route path="/search" element={<Search />} />
