@@ -904,7 +904,7 @@ export async function orderMail(data) {
 }*/
 
 export async function resetUserEmail(data) {
-  const reset = await axios.post(
+  const reset = await instance.post(
     `/auth/reset-password`, // use same working local route
     data
   );
