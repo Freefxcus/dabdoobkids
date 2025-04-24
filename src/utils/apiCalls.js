@@ -894,12 +894,20 @@ export async function orderMail(data) {
   return order.data;
 }
 
-export async function resetUserEmail(data) {
+/*export async function resetUserEmail(data) {
   const reset = await axios.post(
     `https://dabdoob-api-service.onrender.com/api/users/reset-password`,
     data
   );
 
+  return reset.data;
+}*/
+
+export async function resetUserEmail(data) {
+  const reset = await axios.post(
+    `/auth/reset-password`, // use same working local route
+    data
+  );
   return reset.data;
 }
 
