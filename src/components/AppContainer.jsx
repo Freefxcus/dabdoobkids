@@ -94,6 +94,7 @@ function AppContainer() {
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
             <Route path="/reset-password" element={<ForgetPassword />} />
+            <Route path="/forget-password" element={<ForgetPassword />} />
             <Route path="/auth/google" element={<OAuth />} />
             <Route path="/otp" element={<Otp />} />
             <Route path="/search" element={<Search />} />
