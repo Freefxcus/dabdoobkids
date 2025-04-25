@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { resetUserEmail, resetUserPassword } from "../utils/apiCalls";
-import { notifySuccess } from "../utils/general";
+import { notifySuccess, notifyError } from "../utils/general";
 
 const loginSchema = yup.object().shape({
   newPassword: yup.string().required("Required"),
