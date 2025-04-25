@@ -38,7 +38,14 @@ export default function ForgetPassword() {
             resetForm();
             setSubmitting(false);
           })
-      : resetUserEmail(values).finally(() => {
+      : resetUserEmail(values)
+      .then((res) => {
+        notifySuccess(res); // This shows the message from the backend
+      })
+      .catch((err) => {
+        notifyError(err?.response?.data?.message || "Something went wrong.");
+      })
+      .finally(() => {
           resetForm();
           setSubmitting(false);
         });
