@@ -911,7 +911,7 @@ export async function resetUserEmail(data) {
   return reset.data;
 }
 
-export async function resetUserPassword(data, token) {
+/*export async function resetUserPassword(data, token) {
   const response = await instance.put(
     `/users/change-password`,
     data,
@@ -920,6 +920,15 @@ export async function resetUserPassword(data, token) {
         Authorization: `Bearer ${token}`, 
       },
     }
+  );
+
+  return response.data;
+}
+  */
+export async function resetUserPassword(data) {
+  const response = await instance.put(
+    `/auth/reset-password`,  // correct route from backend
+    data                     // includes both token and password
   );
 
   return response.data;
