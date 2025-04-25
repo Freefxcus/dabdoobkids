@@ -25,7 +25,7 @@ export default function ForgetPassword() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const token = searchParams.get("token");
-
+/*
   const onSubmit = (values) => {
     token
       ? resetUserPassword({ password: values.newPassword, token })
@@ -49,6 +49,35 @@ export default function ForgetPassword() {
           resetForm();
           setSubmitting(false);
         });
+  };
+  */
+  const onSubmit = (values) => {
+    setSubmitting(true);
+  
+    token
+      ? resetUserPassword({ password: values.newPassword, token })
+          .then((res) => {
+            notifySuccess(res.message);
+          })
+          .catch((err) => {
+            notifyError(err?.response?.data?.message || "Something went wrong.");
+          })
+          .finally(() => {
+            navigate("/login", { replace: true });
+            resetForm();
+            setSubmitting(false);
+          })
+      : resetUserEmail(values)
+          .then((res) => {
+            notifySuccess(res?.data || "If email is registered, an instruction will be sent.");
+          })
+          .catch((err) => {
+            notifyError(err?.response?.data?.message || "Something went wrong.");
+          })
+          .finally(() => {
+            resetForm();
+            setSubmitting(false);
+          });
   };
 
   const {
