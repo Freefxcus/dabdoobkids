@@ -28,7 +28,7 @@ export default function ForgetPassword() {
 
   const onSubmit = (values) => {
     token
-      ? resetUserPassword(values, token)
+      ? resetUserPassword({ password: values.newPassword, token })
           .then((res) => {
             notifySuccess(res.message);
           })
