@@ -104,7 +104,7 @@ const BannerSwiper = () => {
         grabCursor={true}
         pagination={{ clickable: true }}
         speed={2000}
-        loop
+        loop={true}
         autoplay={{ delay: 2000, disableOnInteraction: false }}
         modules={[Autoplay, Pagination]}
       >

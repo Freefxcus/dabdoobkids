@@ -70,6 +70,7 @@ export default function NewArrival({ categories }) {
         <Swiper
           className="mySwiper"
           grabCursor={true}
+          loop={true}
           autoplay={{
             delay: 2000,
             disableOnInteraction: false,
@@ -108,8 +109,9 @@ export default function NewArrival({ categories }) {
           }}
         >
           {/* .filter((item, i) => item?.category?.id === (currentCat?.id||1)) */}
-          {products?.map((item) => (
+          {products?.map((item,i) => (
             <SwiperSlide
+              key={i}
               style={{
                 display: "flex",
                 justifyContent: "center",
