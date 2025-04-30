@@ -33,10 +33,18 @@ function LayoutFilterSort({ filterList = [], sortFields, sizeFields }) {
 
         <div className={styles.searchContainer}>
           <input
-            type="text"
-            placeholder="Search Product"
-            className={styles.searchInput}
-            onChange={(e) => createQueryString("query", e.target.value)}
+          type="text"
+          placeholder="Search Product"
+          className={styles.searchInput}
+          defaultValue={new URLSearchParams(window.location.search).get("query") || ""}
+          onChange={(e) => createQueryString("query", e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault(); 
+              const section = document.getElementById("product-results");
+              if (section) section.scrollIntoView({ behavior: "smooth" }); // ✅ Scroll to results
+            }
+          }}
           />
           <img src={SearchIcon} alt="Search icon" width={24} height={24} />
         </div>
