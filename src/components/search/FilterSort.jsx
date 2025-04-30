@@ -33,7 +33,8 @@ function FilterSort({ closeFilter, sortFields, sizeFields }) {
   };
 
   const sortFieldValue = searchParams.get("sort");
-  const SizeFieldValue = searchParams.get("sizes");
+  //const SizeFieldValue = searchParams.get("sizes");
+  const SizeFieldValues = (searchParams.get("sizes") || "").split(",");
   const pricesFieldValue = searchParams.get("prices");
 
   const [price, setPrice] = useState(
@@ -142,7 +143,7 @@ function FilterSort({ closeFilter, sortFields, sizeFields }) {
                     <button
                       key={field.id}
                       className={`${styles.filterButton} ${
-                        field.value === SizeFieldValue
+                        SizeFieldValues.includes(field.value)
                           ? styles.activeButton
                           : styles.inactiveFilter
                       }`}
@@ -157,6 +158,7 @@ function FilterSort({ closeFilter, sortFields, sizeFields }) {
               </AccordionDetails>
             </Accordion>
           </div>
+
 
           {/* Brand */}
           <div className={styles.accordionContainer}>

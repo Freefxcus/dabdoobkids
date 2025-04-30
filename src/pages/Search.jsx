@@ -50,8 +50,8 @@ function Search() {
   const sort = searchParams.get("sort") || "";
   const sale = !!searchParams.get("sale") || false;
 
-  const params = {};
-
+  //const params = {};
+  const params = Object.fromEntries(searchParams.entries());
   const getQueries = searchParams.forEach(
     (value, key) => (params[key] = value)
   );
@@ -66,6 +66,7 @@ function Search() {
       params.subcategory || "",
       params.brand || "",
       params.query || "",
+      params.sizes || "",
       sale
     )
       .then((res) => setSearchData(res))
@@ -77,6 +78,7 @@ function Search() {
     params.query,
     sale,
     params.subcategory,
+    params.sizes
   ]);
 
   // Scroll To Top If Brand In SearchParams
