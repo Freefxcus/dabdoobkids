@@ -90,7 +90,8 @@ export default function DailySaleComponent() {
         <Swiper
           className="mySwiper"
           grabCursor={true}
-          autoplay={{
+          loop={true}
+          autoplay={{            
             delay: 2000,
             disableOnInteraction: false,
           }}
