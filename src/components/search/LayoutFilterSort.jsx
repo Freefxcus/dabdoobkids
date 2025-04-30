@@ -31,24 +31,25 @@ function LayoutFilterSort({ filterList = [], sortFields, sizeFields }) {
           )}
         </div>
 
-        <div className={styles.searchContainer}>
-          <input
-          type="text"
-          placeholder="Search Product"
-          className={styles.searchInput}
-          defaultValue={new URLSearchParams(window.location.search).get("query") || ""}
-          onChange={(e) => createQueryString("query", e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" || e.keyCode === 13) {
-              e.preventDefault(); 
-              e.stopPropagation();
-              const section = document.getElementById("product-results");
-              if (section) section.scrollIntoView({ behavior: "smooth" }); // ✅ Scroll to results
-            }
+        <form
+          className={styles.searchContainer}
+          onSubmit={(e) => {
+            e.preventDefault();
+            const searchValue = e.target.search.value;
+            createQueryString("query", searchValue);
+            const section = document.getElementById("product-results");
+            if (section) section.scrollIntoView({ behavior: "smooth" });
           }}
+        >
+          <input
+            type="text"
+            name="search" // ✅ must have a name for e.target.search to work
+            placeholder="Search Product"
+            className={styles.searchInput}
+            defaultValue={new URLSearchParams(window.location.search).get("query") || ""}
           />
           <img src={SearchIcon} alt="Search icon" width={24} height={24} />
-        </div>
+        </form>
       </div>
 
       <Drawer open={openFilter} onClose={handleCloseFilter} anchor="right">
