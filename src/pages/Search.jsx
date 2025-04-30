@@ -177,7 +177,7 @@ function Search() {
               </div>
             )}
 
-            <div className={styles.productsContainer}>
+            <div id="product-results"  className={styles.productsContainer}>
               {currentProducts?.map((item) => (
                 <div key={item.id}>
                   <ClothesCard item={item} />
