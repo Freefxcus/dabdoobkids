@@ -39,8 +39,9 @@ function LayoutFilterSort({ filterList = [], sortFields, sizeFields }) {
           defaultValue={new URLSearchParams(window.location.search).get("query") || ""}
           onChange={(e) => createQueryString("query", e.target.value)}
           onKeyDown={(e) => {
-            if (e.key === "Enter") {
+            if (e.key === "Enter" || e.keyCode === 13) {
               e.preventDefault(); 
+              e.stopPropagation();
               const section = document.getElementById("product-results");
               if (section) section.scrollIntoView({ behavior: "smooth" }); // ✅ Scroll to results
             }

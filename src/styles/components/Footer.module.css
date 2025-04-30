@@ -69,6 +69,9 @@
   padding: 14px 0;
 }
 
+input:focus-visible {
+  scroll-margin-top: 100px; /* Prevent jumping to top */
+}
 @media (max-width: 600px) {
   .primary-footer-container {
     flex-direction: column;
