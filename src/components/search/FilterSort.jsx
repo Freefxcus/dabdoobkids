@@ -93,71 +93,71 @@ function FilterSort({ closeFilter, sortFields, sizeFields }) {
         </div>
 
         <div className={styles.filterSection}>
-          {/* Category */}
-          <div className={styles.accordionContainer}>
-            <Accordion>
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel1a-content"
-                id="panel1a-header"
-              >
-                <h5 className={styles.headingSection}>Category</h5>
-              </AccordionSummary>
-              <AccordionDetails>
-                <div className={styles.filterButtons}>
-                  {categories?.map((item) =>
-                    item?.productsCount > 0 ? (
-                      <button
-                        key={item.id}
-                        className={`${styles.filterButton} ${
-                          handleIsKeyValueQuery("category", item.id) &&
-                          styles.activeButton
-                          // : styles.inactiveFilter
-                        }`}
-                        onClick={() =>
-                          selectMoreFilters("category", String(item.id), 1)
-                        }
-                      >
-                        {item.name}
-                      </button>
-                    ) : null
-                  )}
-                </div>
-              </AccordionDetails>
-            </Accordion>
-          </div>
+            {/* Category */}
+            <div className={styles.accordionContainer}>
+              <Accordion>
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="panel1a-content"
+                  id="panel1a-header"
+                >
+                  <h5 className={styles.headingSection}>Category</h5>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <div className={styles.filterButtons}>
+                    {categories?.map((item) =>
+                      item?.productsCount > 0 ? (
+                        <button
+                          key={item.id}
+                          className={`${styles.filterButton} ${
+                            handleIsKeyValueQuery("category", item.id) &&
+                            styles.activeButton
+                            // : styles.inactiveFilter
+                          }`}
+                          onClick={() =>
+                            selectMoreFilters("category", String(item.id), 1)
+                          }
+                        >
+                          {item.name}
+                        </button>
+                      ) : null
+                    )}
+                  </div>
+                </AccordionDetails>
+              </Accordion>
+            </div>
 
-          {/* Size */}
-          <div className={styles.accordionContainer}>
-            <Accordion>
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel1a-content"
-                id="panel1a-header"
-              >
-                <h5 className={styles.headingSection}>Size</h5>
-              </AccordionSummary>
-              <AccordionDetails>
-                <div className={styles.filterButtons}>
-                  {sizeFields.map((field) => (
-                    <button
-                      key={field.id}
-                      className={`${styles.filterButton} ${
-                        SizeFieldValues.includes(field.value)
-                          ? styles.activeButton
-                          : styles.inactiveFilter
-                      }`}
-                      onClick={() => {
-                        selectMoreFilters(field.key, field.value, 1);
-                      }}
-                    >
-                      {field.name}
-                    </button>
-                  ))}
-                </div>
-              </AccordionDetails>
-            </Accordion>
-          </div>
+            {/* Size */}
+            <div className={styles.accordionContainer}>
+              <Accordion>
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="panel1a-content"
+                  id="panel1a-header"
+                >
+                  <h5 className={styles.headingSection}>Size</h5>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <div className={styles.filterButtons}>
+                    {sizeFields.map((field) => (
+                      <button
+                        key={field.id}
+                        className={`${styles.filterButton} ${
+                          SizeFieldValues.includes(field.value)
+                            ? styles.activeButton
+                            : styles.inactiveFilter
+                        }`}
+                        onClick={() => {
+                          selectMoreFilters("sizes", String(field.value), 1);
+                        }}
+                      >
+                        {field.name}
+                      </button>
+                    ))}
+                  </div>
+                </AccordionDetails>
+              </Accordion>
+            </div>
 
 
           {/* Brand */}

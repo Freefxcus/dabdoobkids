@@ -19,6 +19,7 @@ export const getProducts = async (
   subcategory,
   brand,
   query,
+  sizes,
   sale
 ) => {
   let returnedValue;
@@ -30,6 +31,7 @@ export const getProducts = async (
     subcategory,
     brand,
     query,
+    sizes,
     sale,
   };
   Object.keys(params).forEach((key) =>

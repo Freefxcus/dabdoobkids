@@ -66,7 +66,7 @@ function Search() {
       params.subcategory || "",
       params.brand || "",
       params.query || "",
-      params.sizes || "",
+      params.sizes ,
       sale
     )
       .then((res) => setSearchData(res))
@@ -76,9 +76,10 @@ function Search() {
     params.category,
     params.brand,
     params.query,
+    params.sizes,
     sale,
     params.subcategory,
-    params.sizes
+    
   ]);
 
   // Scroll To Top If Brand In SearchParams
