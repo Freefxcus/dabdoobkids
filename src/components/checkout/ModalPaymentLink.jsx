@@ -1,6 +1,5 @@
 import { Backdrop, Fade, Modal } from "@mui/material";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { useDeleteAllCartMutation } from "../../Redux/cartApi";
 import {
   createOrders,
@@ -22,7 +21,6 @@ function ModalPaymentLink({
   price,
 }) {
   const { email } = useSelector((state) => state.userInfo.value) || {};
-  const navigate = useNavigate();
 
   const { link, orderId } = paymentLink;
 
@@ -56,20 +54,6 @@ function ModalPaymentLink({
     },
     shippingFees: +price.shipping,
   };
-  // Poll payment status while the iframe is open
-  useEffect(() => {
-    let interval;
-    if (open && orderId) {
-      interval = setInterval(async () => {
-        const statusPayment = await getUserStatusPayment(orderId);
-        if (statusPayment.isPaid) {
-          clearInterval(interval);
-          closeModal();
-        }
-      }, 3000);
-    }
-    return () => clearInterval(interval);
-  }, [open, orderId, closeModal]);
 
   useEffect(() => {
     if (open === false && orderId) {
@@ -78,7 +62,6 @@ function ModalPaymentLink({
 
         if (!statusPayment.isPaid) {
           notifyError("Payment Failed Or Canceled");
-          navigate("/post-payment?success=false");
           return;
         }
 
@@ -93,8 +76,6 @@ function ModalPaymentLink({
           }).then(() => {
             deleteAllCart();
             orderMail({ email });
-                    }).then(() => {
-            navigate("/post-payment?success=true");
           });
         }
       };
