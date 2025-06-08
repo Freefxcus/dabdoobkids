@@ -1,0 +1,98 @@
+/* CollectionsGrid.module.css */
+
+.gridContainer {
+  display: grid;
+  /* Define 3 columns with equal flexible space */
+  grid-template-columns: repeat(3, 1fr);
+  /* Define 2 rows, height determined by content */
+  grid-template-rows: repeat(2, auto);
+  /* Define named grid areas that match the layout */
+  grid-template-areas:
+    "winter sets summer"
+    "eid bear footwear"; /* Note: placing bear in the middle cell of the second row */
+
+  gap: 10px; /* Spacing between grid items */
+  width: 100%; /* Use full width */
+  max-width: 1200px; /* Optional: Limit max width for large screens */
+  margin: 0 auto; /* Center the grid */
+  padding: 10px; /* Optional: Add some padding around the grid */
+}
+
+/* Assign each item to its specific grid area */
+.item {
+    position: relative;
+    overflow: hidden; /* Ensure rounded corners clip content */
+    border-radius: 15px; /* Apply rounded corners as in the image */
+    display: flex; /* Use flexbox to center content inside item */
+    justify-content: center;
+    align-items: center;
+    cursor: pointer; /* Indicate clickable */
+    /* Optional: Add aspect ratio if items should maintain a specific shape */
+    /* aspect-ratio: 1 / 1; */ /* Example: makes items square */
+}
+
+.item img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Make the image cover the entire item area */
+    transition: transform 0.3s ease; /* Smooth hover effect */
+}
+
+.item:hover img {
+    transform: scale(1.05); /* Slightly zoom image on hover */
+}
+
+
+/* Specific styles for each item's position using grid-area */
+.winter { grid-area: winter; }
+.sets { grid-area: sets; }
+.summer { grid-area: summer; }
+.eid { grid-area: eid; }
+.footwear { grid-area: footwear; }
+.bear {
+    grid-area: bear;
+    border-radius: 50%; /* Make the bear item circular */
+    /* Optional: Ensure bear item is square if using aspect-ratio on .item */
+    /* If aspect-ratio is used on .item, it will already be square */
+    /* If not, you might need max-width/max-height to make it square */
+    /* max-width: 200px; */ /* Adjust as needed */
+    /* max-height: 200px; */ /* Adjust as needed */
+}
+
+
+/* Overlay and text styles */
+.overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0) 50%);
+    color: white;
+    padding: 20px 10px 10px 10px; /* Adjust padding */
+    text-align: center;
+}
+
+.title {
+    font-size: clamp(1rem, 4vw, 2rem); /* Responsive font size */
+    font-weight: bold;
+    /* Optional: Match the font style from the image if you have the font file */
+    /* font-family: 'YourChosenFont', sans-serif; */
+    margin: 0;
+    padding: 0;
+    white-space: nowrap; /* Prevent text wrapping, might cause overflow if too long */
+    overflow: hidden;
+    text-overflow: ellipsis; /* Add ellipsis if text overflows */
+}
+
+/* Style for the bear item which doesn't have text */
+.bear .overlay {
+    display: none; /* Hide overlay and text for the bear item */
+}
+
+/* Optional: Adjust font size or padding for very small screens if clamp isn't enough */
+/* @media (max-width: 400px) {
+    .title {
+        font-size: 0.9rem;
+    }
+} */

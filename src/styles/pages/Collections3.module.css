@@ -1,0 +1,384 @@
+/* General Page Styles */
+.pageContainer {
+    position: relative; /* Base for absolute positioning */
+    /* min-height: 100vh; Removed min-height as the content height will define it, or set a fixed height based on Figma */
+    width: 100%;
+    max-width: 1240px; /* Match Figma width */
+    height: 912px; /* Match Figma height for desktop layout structure */
+    margin: 40px auto; /* Center the container */
+    background-color: #fcf7f2; /* Approximate Figma background */
+    overflow: hidden; /* Hide anything overflowing */
+    font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    box-sizing: border-box;
+}
+
+/* Logo Styles (Keep mostly as is, but maybe position relative to the central circle) */
+.logoOuterContainer {
+    /* Position related to the central circle, or absolute centered */
+    position: absolute;
+    top: 50%; /* Center vertically relative to pageContainer */
+    left: 50%; /* Center horizontally relative to pageContainer */
+    transform: translate(-50%, -50%); /* Adjust for the element's size */
+    z-index: 30; /* Ensure it's on top */
+    pointer-events: none;
+}
+
+.logoInnerContainer {
+    background-color: #ffffff;
+    border-radius: 9999px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15), 0 5px 10px rgba(0, 0, 0, 0.1);
+    width: 10rem; /* Adjust size as needed */
+    height: 10rem; /* Adjust size as needed */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+}
+
+.logoImage {
+    border-radius: 9999px;
+    object-fit: contain;
+    max-width: 100%;
+    max-height: 100%;
+}
+
+/* --- Layout Areas (positioned absolutely) --- */
+
+/* Base styles for absolute layout areas */
+.layoutArea {
+  position: absolute;
+  box-sizing: border-box;
+  overflow: hidden; /* Hide content that goes beyond the shape/bounds */
+  border-radius: 30px; /* Apply corner radius where visible, complex curves need clip-path */
+  /* background-color: rgba(100, 100, 255, 0.1); Optional: debug background */
+}
+
+/* Top Left Area (Sets + Winter?) */
+.areaTopLeft {
+    top: 0;
+    left: 0;
+    width: 60%; /* Estimated width from Figma */
+    height: 600px; /* Estimated height */
+    z-index: 5; /* Lower z-index than central */
+     /* Add curved clip-path here later */
+    background-color: #fff; /* Background color from Figma */
+}
+
+/* Top Right Area (Summer) */
+.areaTopRight {
+    top: 0;
+    right: 0;
+    width: 45%; /* Estimated width */
+    height: 500px; /* Estimated height */
+    z-index: 6; /* Can be slightly higher than top-left if needed for overlap */
+    /* Add curved clip-path here later */
+     /* Simulate background gradient */
+     background: linear-gradient(to bottom, #87CEEB, #ADD8E6);
+}
+
+/* Bottom Left Area (Eid + some overlap) */
+.areaBottomLeft {
+    bottom: 0;
+    left: 0;
+    width: 55%; /* Estimated width */
+    height: 500px; /* Estimated height */
+    z-index: 7; /* Higher z-index */
+    /* Add curved clip-path here later */
+    background-color: #fff; /* Background color from Figma */
+}
+
+/* Bottom Right Area (Footwear) */
+.areaBottomRight {
+    bottom: 0;
+    right: 0;
+    width: 45%; /* Estimated width */
+    height: 550px; /* Estimated height */
+    z-index: 8; /* Higher z-index */
+    /* Add curved clip-path here later */
+     /* Simulate colorful background */
+    background: linear-gradient(to right, #ff9999, #ffcc99, #ffff99, #99ff99, #99ffff);
+}
+
+/* Central Area (Logo/Bear Circle) */
+.areaCentralCircle {
+    position: absolute; /* Needs to be absolute to overlap correctly */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Center it */
+    width: 450px; /* Estimated size */
+    height: 450px; /* Estimated size, make it a circle */
+    border-radius: 50%; /* Make it a circle */
+    background-color: #fcf7f2; /* Matches page container background */
+    z-index: 20; /* Highest z-index below the logo */
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1); /* Add a subtle shadow */
+    display: flex; /* Use flex to center content inside */
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* Hide content overflowing the circle */
+}
+
+
+/* --- Card Styles (Adjust to fit within the absolute areas) --- */
+/* Make cards fill their parent area */
+.card {
+    position: relative; /* Keep relative for text positioning */
+    width: 100%;
+    height: 100%; /* Make card fill its parent area (the absolute layoutArea div) */
+    overflow: hidden;
+    border-radius: 0;
+}
+
+.cardImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Important to make image fill without distortion */
+    display: block; /* Remove potential space below image */
+}
+
+.cardTextContainer {
+    position: absolute;
+    width: 100%; /* Make container full width */
+    padding: 1rem;
+    z-index: 5; /* Ensure text is above image */
+    pointer-events: none; /* Allows clicking through the text overlay to the image/card if needed */
+}
+
+/* Specific Text Positioning (Adjust these to match Figma) */
+.textContainerWinterSummer {
+    bottom: 10%; /* Example: position from bottom */
+    left: 5%;    /* Example: position from left */
+    color: #6b4226;
+    background-color: transparent;
+    text-align: left; /* Align text to the left */
+    width: auto; /* Allow width to be determined by content */
+    padding: 0; /* Adjust padding */
+}
+
+.textContainerSets {
+    /* The "Sets" text is likely inside the Top Left area, not the central circle */
+    position: absolute;
+    top: 100px; /* Position from the top of .areaTopLeft */
+    left: 50%;
+    transform: translateX(-50%);
+    display: block; /* Change from flex */
+    flex-direction: none;
+    align-items: none;
+    justify-content: none;
+    width: auto; /* Allow width to be determined by content */
+    text-align: center; /* Center the text */
+    color: #6b4226; /* Or color from Figma */
+    padding: 0; /* Adjust padding */
+}
+
+.textContainerEid {
+    bottom: 15%; /* Example: position from bottom */
+    left: 5%;    /* Example: position from left */
+    color: #b45309;
+    background-color: transparent;
+    padding: 0; /* Adjust padding */
+    text-align: left;
+    width: auto;
+}
+
+.textContainerFootwear {
+    bottom: 10%; /* Example: position from bottom */
+    left: 50%;
+    transform: translateX(-50%); /* Center horizontally */
+    width: auto;
+    text-align: center; /* Center text */
+    color: #065f46;
+    padding: 0; /* Adjust padding */
+}
+
+/* Text Styles */
+.cardTitle {
+  font-weight: 700;
+  text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.8); /* Adjusted shadow */
+  margin: 0; /* Remove default margin */
+}
+
+.cardSubTitle {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  color: inherit; /* Inherit color from container */
+  text-transform: capitalize;
+  margin: 0; /* Remove default margin */
+}
+
+/* Specific Title Sizes (Adjust to match Figma) */
+.titleWinterSummerEidFootwear {
+    font-size: 2.5rem; /* Example size */
+    line-height: 1.2;
+    color: #6b4226;
+}
+
+.titleSets {
+    font-size: 3.5rem; /* Example size */
+    line-height: 1.2;
+    font-weight: 600;
+    color: #6b4226; /* Or color from Figma */
+    text-shadow: none; /* Remove shadow if text is on a light background */
+}
+
+.titleFootwear {
+    font-size: 2.5rem; /* Example size */
+    line-height: 1.2;
+    font-weight: 600;
+    color: white; /* Text color on colorful background */
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.5); /* Darker shadow for readability */
+}
+
+/* Remove cardCustomClass styles as they are replaced by layoutArea styles */
+.cardWinter, .cardSummer, .cardEid, .cardFootwear, .cardSets {
+    height: 100%; /* Ensure the card fills its parent layoutArea */
+    border-radius: 0; /* Remove if border-radius is on layoutArea */
+}
+
+
+/* --- Responsiveness --- */
+/*
+Handling responsiveness with absolute positioning is complex.
+You will need to redefine the top, left, width, height
+and potentially font sizes and text positions for *each*
+.layoutArea class within @media queries to maintain the
+relative proportions and overlaps across screen sizes.
+This is significantly more work than a grid layout.
+*/
+
+@media (max-width: 1280px) {
+  .pageContainer {
+    height: 800px; /* Adjust height */
+    max-width: 1024px; /* Adjust max-width */
+  }
+  .areaCentralCircle {
+     width: 380px; /* Adjust size */
+     height: 380px;
+  }
+   .titleWinterSummerEidFootwear { font-size: 2rem; }
+   .titleSets { font-size: 3rem; }
+   .titleFootwear { font-size: 2rem; }
+   /* ... adjust all area positions/sizes ... */
+}
+
+@media (max-width: 1024px) {
+  .pageContainer {
+    height: 700px; /* Adjust height */
+    max-width: 768px; /* Adjust max-width */
+  }
+  .areaCentralCircle {
+     width: 320px; /* Adjust size */
+     height: 320px;
+  }
+   .titleWinterSummerEidFootwear { font-size: 1.8rem; }
+   .titleSets { font-size: 2.5rem; }
+   .titleFootwear { font-size: 1.8rem; }
+   /* ... adjust all area positions/sizes ... */
+}
+
+/* Example for smaller screens - likely needs a completely different layout strategy */
+/* Absolute positioning becomes very difficult below a certain width */
+@media (max-width: 768px) {
+    .pageContainer {
+       /* Maybe switch to a different layout like a simple stack or grid? */
+       /* Or drastically adjust absolute positions and sizes */
+        height: auto; /* Allow height to be dynamic */
+        max-width: 600px;
+        display: flex; /* Switch back to flex/block for a simpler mobile layout */
+        flex-direction: column;
+        align-items: center;
+        position: static; /* Remove absolute positioning */
+        padding: 20px;
+    }
+
+    .logoOuterContainer {
+        position: static; /* Remove absolute positioning */
+        transform: none;
+        margin-bottom: 20px;
+        pointer-events: auto;
+    }
+
+    .logoInnerContainer {
+       width: 8rem; height: 8rem;
+    }
+
+    .layoutArea {
+        position: static; /* Remove absolute positioning */
+        width: 100%; /* Full width */
+        height: auto; /* Auto height */
+        margin-bottom: 20px; /* Add space between items */
+        border-radius: 15px; /* Smaller border radius */
+        background-color: #fff; /* Ensure they have a background */
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        z-index: auto; /* Reset z-index */
+    }
+
+    .areaCentralCircle {
+        position: static; /* Remove absolute positioning */
+        transform: none;
+        width: 8rem; height: 8rem;
+        border-radius: 50%;
+        margin-bottom: 20px;
+        z-index: auto;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        background-color: #fcf7f2;
+    }
+
+    .card {
+       height: 250px; /* Give cards a fixed height or let content define */
+       width: 100%;
+       border-radius: 0;
+       box-shadow: none;
+    }
+
+     .cardImage {
+       height: 100%;
+       width: 100%;
+       object-fit: cover;
+     }
+
+    .cardTextContainer {
+        position: absolute; /* Keep text absolute within card */
+        bottom: 10px;
+        left: 10px;
+        width: auto;
+        text-align: left;
+        padding: 0.5rem;
+        background-color: rgba(255,255,255,0.7); /* Add background for readability on smaller screens */
+        border-radius: 5px;
+    }
+     .textContainerSets {
+         position: absolute; /* Keep text absolute within card */
+         top: auto;
+         bottom: 10px;
+         left: 10px;
+         transform: none;
+         width: auto;
+         text-align: left;
+         padding: 0.5rem;
+          background-color: rgba(255,255,255,0.7);
+           border-radius: 5px;
+     }
+     .textContainerFootwear {
+         position: absolute; /* Keep text absolute within card */
+         bottom: 10px;
+         left: 10px;
+         transform: none;
+         width: auto;
+         text-align: left;
+         padding: 0.5rem;
+          background-color: rgba(255,255,255,0.7);
+           border-radius: 5px;
+           color: #333; /* Change text color for readability */
+     }
+      .titleWinterSummerEidFootwear, .titleSets, .titleFootwear {
+        font-size: 1.2rem;
+        line-height: 1.3;
+        text-shadow: none;
+        color: #333; /* Darker text color for readability */
+      }
+      .cardSubTitle {
+          font-size: 0.9rem;
+          color: #555;
+      }
+}

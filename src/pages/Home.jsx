@@ -20,6 +20,7 @@ import offer1 from "../images/offer-1.svg";
 import offer2 from "../images/offer-2.svg";
 import offer3 from "../images/offer-3.svg";
 import offer4 from "../images/offer-4.svg";
+import CollectionPage from "../pages/Collections2.jsx";
 
 // Lazy load components
 const DailySaleComponent = lazy(() =>
@@ -100,6 +101,10 @@ export default function Home() {
   return (
     <>
       <BannerSwiper />
+      {/* <section id="collections">
+        <CollectionPage />
+      </section>
+      */}
       {products?.length < 0 && (
         <>
           <Loader open={true} />

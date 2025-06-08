@@ -4,8 +4,11 @@ import { BrowserRouter } from "react-router-dom";
 import { PersistGate } from "redux-persist/integration/react";
 import { persistor, store } from "./Redux/store";
 import { ToastContainer } from "react-toastify";
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import "react-toastify/dist/ReactToastify.css";
 import AppContainer from "./components/AppContainer";
+
+const queryClient = new QueryClient();
 
 function App() {
   persistor.purge();
@@ -13,7 +16,9 @@ function App() {
     <BrowserRouter>
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-          <AppContainer />
+          <QueryClientProvider client={queryClient}>
+            <AppContainer />
+          </QueryClientProvider>
         </PersistGate>
       </Provider>
       <ToastContainer
