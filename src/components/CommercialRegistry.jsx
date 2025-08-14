@@ -58,7 +58,7 @@ export default function CommercialRegistry({
       aria-label="رقم السجل التجاري"
     >
       {showLabel && (
-        <div style={{ marginBottom: "0.25rem", fontSize: sizes.label, color: "#4b5563" }}>
+        <div style={{ marginBottom: "0.25rem", fontSize: sizes.label, color: "#fff" }}>
           السجلّ التجاري
         </div>
       )}
@@ -86,7 +86,7 @@ export default function CommercialRegistry({
         >
           {formatted}
         </code>
-
+        {/*
         {copyable && (
           <button
             onClick={copy}
@@ -103,7 +103,7 @@ export default function CommercialRegistry({
           >
             {copied ? "✔ تم" : "نسخ"}
           </button>
-        )}
+        )} */}
       </div>
     </div>
   );
