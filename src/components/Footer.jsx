@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import styles from "../styles/components/Footer.module.css";
 //import logo from "../images/footer-logo.svg";
 import logo from "../images/logo_insta.svg";
-import CommercialRegistry from "../components/CommercialRegistry";
 import { Link } from "react-router-dom";
 import brownEmail from "../images/brown-email.svg";
 import CommercialRegistry from "../components/CommercialRegistry";
