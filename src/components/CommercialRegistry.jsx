@@ -1,15 +1,6 @@
 import React, { useMemo, useState } from "react";
 
-type Props = {
-  crNumber: string;          // رقم السجل التجاري (أي صيغة) – هننظّفه لأرقام فقط
-  showLabel?: boolean;       // إظهار عنوان "السجل التجاري"
-  groupSize?: number;        // حجم التجميع (افتراضي 3)
-  copyable?: boolean;        // زر نسخ
-  className?: string;        // ستايلات إضافية
-  size?: "sm" | "md" | "lg"; // حجم
-};
-
-function normalizeDigits(input: string) {
+function normalizeDigits(input) {
   // يحوّل أي أرقام عربية/هندية إلى لاتينية، ويشيل أي رموز غير أرقام
   const arabicIndic = "٠١٢٣٤٥٦٧٨٩";
   const easternArabicIndic = "۰۱۲۳۴۵۶۷۸۹";
@@ -24,9 +15,9 @@ function normalizeDigits(input: string) {
   return out;
 }
 
-function groupDigits(num: string, groupSize: number) {
+function groupDigits(num, groupSize) {
   if (groupSize <= 0) return num;
-  const parts: string[] = [];
+  const parts = [];
   for (let i = 0; i < num.length; i += groupSize) {
     parts.push(num.slice(i, i + groupSize));
   }
@@ -40,7 +31,7 @@ export default function CommercialRegistry({
   copyable = true,
   className = "",
   size = "md",
-}: Props) {
+}) {
   const normalized = useMemo(() => normalizeDigits(crNumber), [crNumber]);
   const formatted = useMemo(() => groupDigits(normalized, groupSize), [normalized, groupSize]);
   const [copied, setCopied] = useState(false);
@@ -73,7 +64,7 @@ export default function CommercialRegistry({
       )}
 
       <div
-        dir="ltr" // نضمن اتجاه الأرقام
+        dir="ltr"
         style={{
           display: "inline-flex",
           alignItems: "center",
