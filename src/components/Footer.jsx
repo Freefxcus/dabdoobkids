@@ -117,7 +117,7 @@ export default function Footer() {
         showLabel
         groupSize={3}             
         copyable
-        size="md"
+        size="sm"
       />
       </div>
     </>
