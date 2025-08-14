@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import styles from "../styles/components/Footer.module.css";
 //import logo from "../images/footer-logo.svg";
 import logo from "../images/logo_insta.svg";
-
+import CommercialRegistry from "./CommercialRegistry"; "../components/CommercialRegistry";
 import { Link } from "react-router-dom";
 import brownEmail from "../images/brown-email.svg";
 
@@ -108,6 +108,17 @@ export default function Footer() {
         className={`${styles["secondary-footer-container"]} padding-container`}
       >
         Copyright © 2024- 2027
+      </div>
+       <div
+        className={`${styles["secondary-footer-container"]} padding-container`}
+      >
+        <CommercialRegistry
+        crNumber="101300700109870" 
+        showLabel
+        groupSize={3}             
+        copyable
+        size="md"
+      />
       </div>
     </>
   );
