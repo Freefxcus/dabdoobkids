@@ -21,6 +21,9 @@ import offer2 from "../images/offer-2.svg";
 import offer3 from "../images/offer-3.svg";
 import offer4 from "../images/offer-4.svg";
 import CollectionPage from "../pages/Collections2.jsx";
+import WhatsAppIcon from "../components/whatsappIcon.jsx";
+import { FloatingWhatsApp } from 'react-floating-whatsapp';
+import logo from '../images/header-logo.svg';
 
 // Lazy load components
 const DailySaleComponent = lazy(() =>
@@ -175,6 +178,15 @@ export default function Home() {
         <DailySaleComponent categories={categories} />
         <TestimonialsList />
       </Suspense>
+      <div className={"padding-container section-bottom-margin"}>
+            <FloatingWhatsApp
+        phoneNumber="201111163654" 
+        accountName="Dabdoob Kidz"
+        avatar="logo.png" 
+        statusMessage="Typically replies within 1 hour"
+        chatMessage="Hello there! 🤝 How can I help you?"
+      />
+      </div>
       <div className={"padding-container section-bottom-margin"}>
         <div>
           <div
