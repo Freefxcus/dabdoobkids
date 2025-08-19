@@ -1,98 +1,192 @@
-/* CollectionsGrid.module.css */
+/* =========================
+   SECTION WRAPPER (centered)
+   ========================= */
+.wrap {
+  --max-w: 1440px;
+  --radius-section: 10px;
+  --radius-card: 10px;
+  --shadow: 0 10px 26px rgba(16, 24, 40, 0.12);
+  --ink: #101828;
+  --muted: #475467;
 
-.gridContainer {
+  /* CTA palette (scoped) */
+  --btn-bg: #A66A52;
+  --btn-bg-hover: #8E5845;
+  --btn-bg-active: #7D4E3E;
+  --btn-text: #ffffff;
+  --btn-ring: rgba(166, 106, 82, 0.35);
+
+  margin: 0 auto;
+  max-width: var(--max-w);
+  padding: 28px var(--pad-x) 48px;
+  border-radius: var(--radius-section);
+  overflow: hidden;
+  background:#fff;
+  box-sizing: border-box;
+  color: var(--ink);
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+}
+
+/* tablet / phone side padding */
+@media (max-width: 1024px) { .wrap { --pad-x: 60px; } }
+@media (max-width: 640px)  { .wrap { --pad-x: 16px; } }
+
+
+/* =========================
+   HERO (image full-bleed)
+   ========================= */
+.heroCard {
+  --panel-w: 38%;
+  --pill-r: 72px;
+  background: #E1D7C8;
+  position: relative;
+  width: 100%;
+  min-height: clamp(320px, 40vw, 560px);
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  background: transparent;
+}
+.heroImage {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center; /* tweak 55–70% if needed */
+  display: block;
+  z-index: 1;
+}
+
+/* text layer on top */
+.heroPanel {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 35%;
+  display: flex;
+  align-items: center;
+  z-index: 3;
+}
+
+/* mobile adjustments: wider pill + reframe image */
+@media (max-width: 820px) {
+  .heroCard::before,
+  .heroPanel { width: 78%; }
+  .heroImage { object-position: center right 12%; }
+  
+}
+@media (max-width: 480px) {
+  .heroCard { min-height: 420px; }
+  .heroCard::before,
+  .heroPanel { width: 88%; }
+  .heroImage { object-position: 45% center; } /* center more on narrow screens */
+}
+/* text */
+.heroText { padding: clamp(20px, 2.8vw, 40px); max-width: 640px; }
+.heroTitle {
+  font-size: clamp(26px, 2.3vw + 8px, 44px);
+  line-height: 1.15;
+  margin: 0 0 8px 0;
+}
+.heroSubtitle {
+  margin: 0 0 16px 0;
+  color: var(--muted);
+  font-size: clamp(13px, 0.9vw + 10px, 15px);
+  line-height: 1.55;
+  max-width: 52ch;
+}
+
+/* CTA BUTTON */
+.ctaBtn {
+  width: 335px;
+  height: 56px;
+  padding: 0 13px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+
+  background: var(--btn-bg);
+  color: var(--btn-text);
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 1;
+  letter-spacing: .2px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(16,24,40,.12);
+  transition: background .18s ease, transform .08s ease, box-shadow .18s ease;
+}
+.ctaBtn:hover { background: var(--btn-bg-hover); box-shadow: 0 8px 22px rgba(16,24,40,.16); }
+.ctaBtn:active { background: var(--btn-bg-active); transform: translateY(1px); box-shadow: 0 4px 12px rgba(16,24,40,.12); }
+.ctaBtn:focus-visible { outline: 0; box-shadow: 0 0 0 4px var(--btn-ring); }
+.ctaBtn[disabled],
+.ctaBtn[aria-disabled="true"] { opacity: .55; cursor: not-allowed; filter: grayscale(.1); }
+
+/* --- Mobile hero clean-up --- */
+@media (max-width: 820px) {
+  .heroCard::before,
+  .heroPanel { width: 78%; }                   /* a bit wider pill */
+  .heroImage { object-position: center right 12%; }
+}
+@media (max-width: 480px) {
+  .heroCard { min-height: 420px; }             /* a touch taller for spacing */
+  .heroCard::before,
+  .heroPanel { width: 88%; }                   /* ensure text sits on pill */
+  .heroText { padding: 16px 18px; }
+  .heroTitle { font-size: 28px; }
+  .heroSubtitle { font-size: 14px; }
+  .ctaBtn { width: 100%; max-width: none; height: 52px; }  /* no overflow */
+  .heroImage { object-position: 45% center; }  /* reframe on narrow screens */
+}
+
+
+/* =========================
+   COLLECTIONS GRID & CARDS
+   ========================= */
+.cardsRail {
+  margin-top: 26px;
   display: grid;
-  /* Define 3 columns with equal flexible space */
-  grid-template-columns: repeat(3, 1fr);
-  /* Define 2 rows, height determined by content */
-  grid-template-rows: repeat(2, auto);
-  /* Define named grid areas that match the layout */
-  grid-template-areas:
-    "winter sets summer"
-    "eid bear footwear"; /* Note: placing bear in the middle cell of the second row */
-
-  gap: 10px; /* Spacing between grid items */
-  width: 100%; /* Use full width */
-  max-width: 1200px; /* Optional: Limit max width for large screens */
-  margin: 0 auto; /* Center the grid */
-  padding: 10px; /* Optional: Add some padding around the grid */
+  gap: 18px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
 }
+@media (max-width: 1200px) { .cardsRail { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 900px)  { .cardsRail { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 520px)  { .cardsRail { grid-template-columns: 1fr; } }
 
-/* Assign each item to its specific grid area */
-.item {
-    position: relative;
-    overflow: hidden; /* Ensure rounded corners clip content */
-    border-radius: 15px; /* Apply rounded corners as in the image */
-    display: flex; /* Use flexbox to center content inside item */
-    justify-content: center;
-    align-items: center;
-    cursor: pointer; /* Indicate clickable */
-    /* Optional: Add aspect ratio if items should maintain a specific shape */
-    /* aspect-ratio: 1 / 1; */ /* Example: makes items square */
+/* Card */
+.card {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  background: #ddd;
 }
-
-.item img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* Make the image cover the entire item area */
-    transition: transform 0.3s ease; /* Smooth hover effect */
+.cardImg {
+  position: absolute; inset: 0;
+  background-size: cover;
+  background-position: center;
+  transform: scale(1);
+  transition: transform .35s ease;
 }
-
-.item:hover img {
-    transform: scale(1.05); /* Slightly zoom image on hover */
+.card:hover .cardImg { transform: scale(1.04); }
+.cardOverlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(0,0,0,0.00) 20%,
+    rgba(0,0,0,0.35) 68%,
+    rgba(0,0,0,0.55) 100%
+  );
 }
-
-
-/* Specific styles for each item's position using grid-area */
-.winter { grid-area: winter; }
-.sets { grid-area: sets; }
-.summer { grid-area: summer; }
-.eid { grid-area: eid; }
-.footwear { grid-area: footwear; }
-.bear {
-    grid-area: bear;
-    border-radius: 50%; /* Make the bear item circular */
-    /* Optional: Ensure bear item is square if using aspect-ratio on .item */
-    /* If aspect-ratio is used on .item, it will already be square */
-    /* If not, you might need max-width/max-height to make it square */
-    /* max-width: 200px; */ /* Adjust as needed */
-    /* max-height: 200px; */ /* Adjust as needed */
+.cardText {
+  position: absolute; left: 16px; right: 16px; bottom: 14px;
+  color: #fff;
+  font-size: 24px;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.35);
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
 }
-
-
-/* Overlay and text styles */
-.overlay {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0) 50%);
-    color: white;
-    padding: 20px 10px 10px 10px; /* Adjust padding */
-    text-align: center;
-}
-
-.title {
-    font-size: clamp(1rem, 4vw, 2rem); /* Responsive font size */
-    font-weight: bold;
-    /* Optional: Match the font style from the image if you have the font file */
-    /* font-family: 'YourChosenFont', sans-serif; */
-    margin: 0;
-    padding: 0;
-    white-space: nowrap; /* Prevent text wrapping, might cause overflow if too long */
-    overflow: hidden;
-    text-overflow: ellipsis; /* Add ellipsis if text overflows */
-}
-
-/* Style for the bear item which doesn't have text */
-.bear .overlay {
-    display: none; /* Hide overlay and text for the bear item */
-}
-
-/* Optional: Adjust font size or padding for very small screens if clamp isn't enough */
-/* @media (max-width: 400px) {
-    .title {
-        font-size: 0.9rem;
-    }
-} */
+.cardTitleTop    { font-family: Ribeye;  font-size: 14px; letter-spacing: 0.4px; }
+.cardTitleBottom { font-family: Ribeye; font-size: 24px;  opacity: 0.95; letter-spacing: 0.3px; }

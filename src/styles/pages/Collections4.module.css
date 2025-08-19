@@ -1,0 +1,147 @@
+/* General Section Styling */
+.sectionWrapper {
+  background-color: #f9fafb; /* bg-gray-50 */
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem; /* p-4 */
+  font-family: sans-serif;
+}
+
+.container {
+  width: 100%;
+  max-width: 80rem; /* max-w-6xl */
+  margin: 0 auto;
+}
+
+.sectionTitle {
+  font-size: 2.25rem; /* text-3xl */
+  line-height: 2.5rem;
+  font-weight: 700;
+  text-align: center;
+  color: #1f2937; /* text-gray-800 */
+  margin-bottom: 2rem; /* mb-8 */
+}
+
+/* Grid Container */
+.gridContainerWrapper {
+  position: relative;
+}
+
+.gridContainer {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 1rem; /* gap-4 */
+  width: 100%;
+  aspect-ratio: 4 / 2.5;
+}
+
+/* Grid item positioning */
+.gridCard1 { grid-column: span 3; grid-row: span 1; }
+.gridCard2 { grid-column: span 3; grid-row: span 1; }
+.gridCard3 { grid-column: span 2; grid-row: span 1; }
+.gridCard4 { grid-column: span 2; grid-row: span 1; }
+.gridCard5 { grid-column: span 2; grid-row: span 1; }
+
+
+/* Collection Card Styling */
+.card {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 1rem; /* rounded-2xl */
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1); /* shadow-lg */
+}
+
+.cardImage {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 500ms ease-in-out;
+}
+
+.card:hover .cardImage {
+  transform: scale(1.1);
+}
+
+.cardOverlay {
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(to top, rgba(0,0,0,0.6), rgba(0,0,0,0.2), transparent);
+}
+
+.cardTitle {
+  position: absolute;
+  bottom: 1rem; /* bottom-4 */
+  left: 1rem; /* left-4 */
+  color: white;
+  font-weight: 700;
+  font-size: 1.125rem; /* text-lg */
+  line-height: 1.75rem;
+  filter: drop-shadow(0 4px 3px rgb(0 0 0 / 0.07)) drop-shadow(0 2px 2px rgb(0 0 0 / 0.06));
+}
+
+/* Overlapping Logo */
+.logoWrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+}
+
+.logoCircle {
+  width: 7rem; /* w-28 */
+  height: 7rem; /* h-28 */
+  background-color: white;
+  border-radius: 9999px; /* rounded-full */
+  box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25); /* shadow-2xl */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem; /* p-2 */
+}
+
+.logoImage {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* --- Responsive Design --- */
+
+/* Medium screens (tablets) */
+@media (min-width: 768px) {
+  .sectionTitle {
+    font-size: 2.25rem; /* md:text-4xl */
+    line-height: 2.5rem;
+  }
+  .gridContainer {
+     aspect-ratio: 4 / 2;
+  }
+  .cardTitle {
+    font-size: 1.25rem; /* md:text-xl */
+    line-height: 1.75rem;
+  }
+  .logoCircle {
+    width: 9rem; /* sm:w-36 */
+    height: 9rem; /* sm:h-36 */
+  }
+}
+
+/* Large screens (desktops) */
+@media (min-width: 1024px) {
+  .cardTitle {
+    font-size: 1.5rem; /* lg:text-2xl */
+    line-height: 2rem;
+  }
+  .logoCircle {
+    width: 12rem; /* md:w-48 */
+    height: 12rem; /* md:h-48 */
+  }
+}
