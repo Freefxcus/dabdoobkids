@@ -9,6 +9,9 @@
   --ink: #101828;
   --muted: #475467;
 
+  --gap-after: 72px;                     /* adjust to taste: 40–120px */
+  
+
   /* CTA palette (scoped) */
   --btn-bg: #A66A52;
   --btn-bg-hover: #8E5845;
@@ -18,7 +21,7 @@
 
   margin: 0 auto;
   max-width: var(--max-w);
-  padding: 28px var(--pad-x) 48px;
+  padding: 28px 48px;
   border-radius: var(--radius-section);
   overflow: hidden;
   background:#fff;
