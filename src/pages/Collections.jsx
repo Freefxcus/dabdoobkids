@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styles from "../styles/pages/Collection.module.css";
-import { getCollections } from "../../utils/apiCalls"; // same place as your other calls
+import { getCollections } from "../utils/apiCalls";
 
 export default function Collections() {
   const [collections, setCollections] = useState([]);
