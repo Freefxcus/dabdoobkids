@@ -935,3 +935,21 @@ export async function resetUserPassword(data) {
 
   return response.data;
 }
+
+// Collections (website)
+export const getCollections = async () => {
+  let returnedValue;
+
+  await instance
+    .get("/collections", { params: { limit: 5 } }) // 1 hero + 4 cards; adjust if you prefer
+    .then((response) => {
+      // backend returns { status, data: { collections, metadata } }
+      returnedValue = response?.data?.data; // { collections, metadata }
+    })
+    .catch((error) => {
+      console.log(error, "collections");
+      // optionally notifyError(error);
+    });
+
+  return returnedValue; // { collections, metadata }
+};
