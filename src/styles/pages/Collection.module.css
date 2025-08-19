@@ -7,10 +7,7 @@
   --radius-card: 10px;
   --shadow: 0 10px 26px rgba(16, 24, 40, 0.12);
   --ink: #101828;
-  --muted: #475467;
-
-  --gap-after: 72px;                     /* adjust to taste: 40–120px */
-  
+  --muted: #475467;  
 
   /* CTA palette (scoped) */
   --btn-bg: #A66A52;
