@@ -1,19 +1,28 @@
 import React, { useEffect, useState } from 'react';
-const data = await fetchCollections({ limit: 5 }); // 1 hero + 4 cards
-if (mounted) setCards(data);
-} catch (e) {
-if (mounted) setError(e.message || 'Failed to load collections');
-} finally {
-if (mounted) setLoading(false);
-}
-})();
-return () => { mounted = false; };
-}, []);
+import styles from '../styles/pages/Collection.module.css';
+import heroImg from '../images/collections/Collections-hero.png';
+import { fetchCollections } from '../api/collections';
+export default function Collections() {
+  const [cards, setCards] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
-
-const [hero, ...rest] = cards;
-const four = rest.slice(0, 4);
-
+  useEffect(() => {
+  let mounted = true;
+  (async () => {
+  try {
+  const data = await fetchCollections({ limit: 5 }); // 1 hero + 4 cards
+  if (mounted) setCards(data);
+  } catch (e) {
+  if (mounted) setError(e.message || 'Failed to load collections');
+  } finally {
+  if (mounted) setLoading(false);
+  }
+  })();
+  return () => { mounted = false; };
+  }, []);
+  const [hero, ...rest] = cards;
+  const four = rest.slice(0, 4);
 
 return (
 <section className={styles.wrap}>
