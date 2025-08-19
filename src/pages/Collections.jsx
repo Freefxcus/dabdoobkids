@@ -5,7 +5,7 @@ import styles from "../styles/pages/Collection.module.css";
 import heroImg from "../images/collections/Collections-hero.png";
 
 // ---- API client (minimal, uses env for base + token) ----
-const API_BASE = import.meta.env.VITE_API_BASE_URL; // e.g. https://api.dabdoobkidz.com
+const API_BASE = import.meta.env.REACT_APP_BASE_URL; // e.g. https://api.dabdoobkidz.com
 const TEMP_TOKEN = import.meta.env.VITE_TEMP_AUTH_TOKEN; // matches JWTAnonymousGuard
 
 async function fetchCollections({ limit = 5 } = {}) {
