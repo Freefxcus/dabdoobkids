@@ -87,6 +87,7 @@
   font-size: clamp(26px, 2.3vw + 8px, 44px);
   line-height: 1.15;
   margin: 0 0 8px 0;
+  font-family: 'Ribeye';
 }
 .heroSubtitle {
   margin: 0 0 16px 0;
@@ -94,6 +95,7 @@
   font-size: clamp(13px, 0.9vw + 10px, 15px);
   line-height: 1.55;
   max-width: 52ch;
+  font-family: 'Ribeye';
 }
 
 /* CTA BUTTON */
