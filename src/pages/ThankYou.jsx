@@ -9,43 +9,35 @@ export default function ThankYou() {
   const paymentId = params.get("payment"); // optional
 
   useEffect(() => {
-    // clear local cart, coupons, etc.
     try {
       localStorage.removeItem("cart");
       localStorage.removeItem("coupon");
     } catch {}
-    // optionally refetch order details if you want to show them here
-    // fetch(`/api/orders/${orderId}`)
   }, [orderId]);
 
   return (
-    <div className="container mx-auto max-w-2xl py-16 text-center">
-      <h1 className="text-3xl font-semibold mb-2">Thank you! 🎉</h1>
-      <p className="text-gray-600 mb-6">
-        Your order{orderId ? ` #${orderId}` : ""} has been received.
-      </p>
+    <main className="min-h-[70vh] flex items-center justify-center px-6">
+      <div className="max-w-3xl text-center">
+        <h1 className="font-plus text-[48px] leading-[130%] font-semibold">
+          Thank you for your order!
+        </h1>
 
-      {/* optional tiny summary / instructions */}
-      {paymentId && (
-        <p className="text-sm text-gray-500 mb-4">
-          Payment ref: <span className="font-mono">{paymentId}</span>
+        <p className="font-plus text-[28px] leading-[130%] text-gray-700 mt-4">
+          Your purchase is confirmed! Get ready for an amazing experience with
+          Dabdoob Kidz
+          {orderId ? ` (Order #${orderId})` : ""}
+          {paymentId ? ` — Ref: ${paymentId}` : ""}
         </p>
-      )}
 
-      <div className="flex items-center justify-center gap-3">
-        <Link
-          to="/orders"
-          className="px-5 py-2 rounded-xl border border-gray-300 hover:bg-gray-50"
-        >
-          View Orders
-        </Link>
-        <Link
-          to="/shop"
-          className="px-5 py-2 rounded-xl bg-black text-white hover:opacity-90"
-        >
-          Return to Shopping
-        </Link>
+        <div className="mt-10 flex justify-center">
+          <Link
+            to="/shop"
+            className="font-plus inline-flex items-center justify-center px-6 py-3 rounded-xl bg-black text-white hover:opacity-90"
+          >
+            Return to Shopping
+          </Link>
+        </div>
       </div>
-    </div>
+    </main>
   );
 }

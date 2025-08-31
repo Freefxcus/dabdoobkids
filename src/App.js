@@ -6,6 +6,7 @@ import { persistor, store } from "./Redux/store";
 import { ToastContainer } from "react-toastify";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import "react-toastify/dist/ReactToastify.css";
+
 import AppContainer from "./components/AppContainer";
 
 const queryClient = new QueryClient();
