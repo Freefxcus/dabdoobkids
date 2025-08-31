@@ -102,6 +102,7 @@ function AppContainer() {
             <Route path="/about" element={<About />} />
             <Route path="/returns-refunds" element={<ReturnsRefunds />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/thank-you" element={<ThankYou />} />
             <Route
               path="/payment-information"
               element={<PaymentInformation />}

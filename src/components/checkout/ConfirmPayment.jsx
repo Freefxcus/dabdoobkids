@@ -130,7 +130,8 @@ export default function ConfirmPayment({
       if (checkout?.data?.status === "success") {
         notifySuccess("Order Placed Successfully");
         deleteAllCart().then(() => {
-          navigate("/");
+          //navigate("/");
+          <ThankYou />;
         });
       }
       setLoading(false);
