@@ -31,7 +31,7 @@ import { useAddToCartMutation } from "../Redux/cartApi";
 import { cartActions, isUserAuth, userAuthAction } from "../Redux/store";
 import Cart from "../pages/Cart";
 import Search from "../pages/Search";
-
+import ThankYou from "../pages/ThankYou";
 function AppContainer() {
   const isAuth = useSelector(isUserAuth);
 
