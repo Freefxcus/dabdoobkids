@@ -131,7 +131,7 @@ export default function ConfirmPayment({
         notifySuccess("Order Placed Successfully");
         deleteAllCart().then(() => {
           //navigate("/");
-          <ThankYou />;
+          navigate(`/thank-you?order=${checkout?.data?.orderId}`);
         });
       }
       setLoading(false);
