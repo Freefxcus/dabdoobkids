@@ -87,3 +87,22 @@
   .subtitle { font-size: 20px; }
   .actions { display: flex; flex-direction: column; gap: 10px; }
 }
+
+.continueBtn {
+  font-family: "Plus Jakarta Sans", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 12px;
+  padding: 14px 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #AD6B46;   /* your color */
+  color: #fff;
+  transition: opacity 0.15s ease, transform 0.05s ease;
+}
+
+.continueBtn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}

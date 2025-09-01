@@ -18,6 +18,7 @@ export default function ThankYou() {
   return (
     <main className={styles.wrap}>
       <section className={styles.card}>
+        <img src="../images/thank-you.png" alt="Thank You" />
         <h1 className={styles.title}>Thank you for your order!</h1>
 
         <p className={styles.subtitle}>
@@ -28,9 +29,9 @@ export default function ThankYou() {
         </p>
 
         <div className={styles.actions}>
-          <Link to="/" className={styles.primaryBtn} style={{ backgroundColor: "#AD6B46" }}>
+            <Link to="/" className={styles.continueBtn}>
             Continue Shopping
-          </Link>
+            </Link>
         </div>
       </section>
     </main>
