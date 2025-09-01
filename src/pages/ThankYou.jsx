@@ -28,10 +28,10 @@ export default function ThankYou() {
         </p>
 
         <div className={styles.actions}>
-          <Link to="/shop" className={styles.primaryBtn}>
+          <Link to="/" className={styles.primaryBtn}>
             Return to Shopping
           </Link>
-          <Link to="/orders" className={styles.secondaryBtn}>
+          <Link to="/profile/3" className={styles.secondaryBtn}>
             View Orders
           </Link>
         </div>
