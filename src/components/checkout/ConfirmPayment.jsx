@@ -10,7 +10,7 @@ import {
   orderCheckout,
 } from "../../utils/apiCalls";
 import "./style.css";
-import { newCalcDiscount, notifyError, notifySuccess } from "../../utils/general";
+import { newCalcDiscount, notifySuccess } from "../../utils/general";
 import ModalPaymentLink from "./ModalPaymentLink";
 export default function ConfirmPayment({
   orderSummary,
@@ -29,8 +29,7 @@ export default function ConfirmPayment({
   const addressId = addressActive || address?.items?.[0]?.id;
   const [promoCode, setPromoCode] = useState(promoCodeMain);
   const [promoSuccess, setPromoSuccess] = useState();
-  //const [paymentLink, setPaymentMethod] = useState("");
-  const [paymentLink, setPaymentLink] = useState(null);
+  const [paymentLink, setPaymentMethod] = useState("");
   const [loading, setLoading] = useState(false);
   const [deleteAllCart] = useDeleteAllCartMutation();
   const [wallet, setWallet] = useState();
@@ -105,24 +104,28 @@ export default function ConfirmPayment({
       JSON.parse(localStorage.getItem("paymentURL")) || "";
     if (paymentMethod === "Credit Card") {
       if (paymentURLStorage) {
-        setPaymentLink(paymentURLStorage);
+        setPaymentMethod(paymentURLStorage);
         handleOpenModal();
         return;
       }
+	 
+
       setLoading(true);
       const checkout = await getUserPaymentLink(price.totalPrice);
-      if (checkout?.link && checkout?.orderId) {
+      if (checkout.link) {
         notifySuccess("Redirecting to Payment Gateway");
-        setPaymentLink(checkout);
-        localStorage.setItem("paymentCheckout", JSON.stringify(checkout));
+        setPaymentMethod(checkout);
+        localStorage.setItem("paymentURL", JSON.stringify(checkout));
         handleOpenModal();
       }
       setLoading(false);
-    } 
-    else if (paymentMethod === "Cash on Delivery") {
+    } else if (paymentMethod === "Cash on Delivery") {
       setLoading(true);
 
       const checkout = await orderCheckout(DataSubmit);
+
+												  
+																	
       if (checkout?.data?.status === "success") {
         notifySuccess("Order Placed Successfully");
         deleteAllCart().then(() => {
@@ -132,22 +135,11 @@ export default function ConfirmPayment({
       }
       setLoading(false);
     }
-    else if (paymentMethod === "E-Wallet") {
-      setLoading(true);
 
-      const checkout = await getUserPaymentLink(price.totalPrice);
-      if (checkout?.link && checkout?.orderId) {
-        notifySuccess("Redirecting to Payment Gateway");
-        setPaymentLink(checkout);
-        localStorage.setItem("paymentCheckout", JSON.stringify(checkout));
-        handleOpenModal();
-      }
-      setLoading(false);
-    }
-    else {
-      notifyError("Please select a payment method");
-      setPaymentLink(null);
-    }
+    // if (checkout?.data?.data?.url) {
+    //   notifySuccess("Redirecting to Payment Gateway");
+    //   setPaymentMethod(checkout?.data?.data?.url);
+    //   localStorage.setItem("paymentURL", checkout?.data?.data?.url);
     // }
     // else if (checkout?.data?.status === "success") {
     //   notifySuccess("Order Placed Successfully");
