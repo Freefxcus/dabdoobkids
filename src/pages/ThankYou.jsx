@@ -28,11 +28,8 @@ export default function ThankYou() {
         </p>
 
         <div className={styles.actions}>
-          <Link to="/" className={styles.primaryBtn}>
-            Return to Shopping
-          </Link>
-          <Link to="/profile/3" className={styles.secondaryBtn}>
-            View Orders
+          <Link to="/" className={styles.primaryBtn} style={{ backgroundColor: "#AD6B46" }}>
+            Continue Shopping
           </Link>
         </div>
       </section>
