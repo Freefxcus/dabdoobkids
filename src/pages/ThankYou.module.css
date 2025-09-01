@@ -1,0 +1,89 @@
+/* Load font here so it's scoped to this page */
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap");
+
+:global(html) {
+  /* smooth font rendering (optional) */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.wrap {
+  /* centers content within viewport, even with header/footer present */
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 16px;
+  background: #fff; /* keep site background */
+}
+
+.card {
+  max-width: 900px;
+  text-align: center;
+  margin: 0 auto;
+}
+
+.title {
+  font-family: "Plus Jakarta Sans", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-weight: 700;
+  font-size: 48px;        /* spec */
+  line-height: 130%;      /* spec */
+  letter-spacing: -0.01em;
+  margin: 0 0 12px 0;
+  color: #1b1b1b;
+}
+
+.subtitle {
+  font-family: "Plus Jakarta Sans", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-weight: 400;
+  font-size: 28px;        /* spec */
+  line-height: 130%;      /* spec */
+  color: #555;
+  margin: 0 auto;
+  max-width: 820px;
+}
+
+.order {
+  font-weight: 600;
+  color: #333;
+}
+
+.actions {
+  margin-top: 36px;
+  display: inline-flex;
+  gap: 12px;
+}
+
+.primaryBtn,
+.secondaryBtn {
+  font-family: "Plus Jakarta Sans", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 12px;
+  padding: 12px 20px;
+  border: 1px solid transparent;
+  transition: transform .04s ease, opacity .15s ease, background-color .15s ease, border-color .15s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.primaryBtn {
+  background: #000;
+  color: #fff;
+}
+.primaryBtn:hover { opacity: .9; transform: translateY(-1px); }
+
+.secondaryBtn {
+  background: #fff;
+  color: #000;
+  border-color: #ddd;
+}
+.secondaryBtn:hover { background: #f7f7f7; transform: translateY(-1px); }
+
+/* Responsive tweaks */
+@media (max-width: 640px) {
+  .title { font-size: 34px; }
+  .subtitle { font-size: 20px; }
+  .actions { display: flex; flex-direction: column; gap: 10px; }
+}
