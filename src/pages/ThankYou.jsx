@@ -1,5 +1,6 @@
 import { useEffect, useMemo } from "react";
 import { useLocation, Link } from "react-router-dom";
+import Img from "../images/thank-you.png";
 import styles from "./ThankYou.module.css";
 
 export default function ThankYou() {
@@ -18,7 +19,7 @@ export default function ThankYou() {
   return (
     <main className={styles.wrap}>
       <section className={styles.card}>
-        <img src="../images/thank-you.png" alt="Thank You" />
+        <img src={Img} alt="Thank You" />
         <h1 className={styles.title}>Thank you for your order!</h1>
 
         <p className={styles.subtitle}>
