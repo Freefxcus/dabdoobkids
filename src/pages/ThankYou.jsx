@@ -25,8 +25,6 @@ export default function ThankYou() {
         <p className={styles.subtitle}>
           Your purchase is confirmed! Get ready for an amazing experience with
           Dabdoob Kidz
-          {orderId ? <span className={styles.order}> (Order #{orderId})</span> : null}
-          {paymentId ? <span className={styles.order}> — Ref: {paymentId}</span> : null}
         </p>
 
         <div className={styles.actions}>

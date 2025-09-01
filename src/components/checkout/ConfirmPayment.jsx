@@ -124,8 +124,6 @@ export default function ConfirmPayment({
 
       const checkout = await orderCheckout(DataSubmit);
 
-												  
-																	
       if (checkout?.data?.status === "success") {
         notifySuccess("Order Placed Successfully");
         deleteAllCart().then(() => {
