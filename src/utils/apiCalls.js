@@ -12,6 +12,17 @@ const redux = (slice) => {
 };
 // ----------------------------------------------------------------
 
+// --- helpers ---
+function unwrap(res) {
+  return res?.data?.data ?? res?.data ?? res; // supports {status,data} or raw
+}
+function is404(err) {
+  const code = err?.response?.status;
+  const msg = String(err?.response?.data?.message || err?.message || "");
+  return code === 404 || /cannot\s+(get|post)/i.test(msg);
+}
+
+
 export const getProducts = async (
   page,
   items = 12,
@@ -978,6 +989,11 @@ export async function createOrders(payload) {
     return data?.data ?? data; 
   } catch (e) {
     const msg = String(e || "");
+
+     if (is404(e)) {
+        const res = await instance.post("/checkout", payload);
+        return unwrap(res);
+      }
     // If the route doesn't exist, try the alternate path
     if (msg.includes("Cannot POST") || msg.includes("NotFound")) {
       const { data } = await api.post("/checkout", payload);
@@ -987,19 +1003,90 @@ export async function createOrders(payload) {
   }
 }
 
-// create Paymob payment
-export async function getUserPaymentLink({ amount, paymentMethod }) {
-  const { data } = await instance.post("/payments/pay", { amount, paymentMethod });
-  // support wrapped or raw
-  return data?.data ?? data; // expect { redirectUrl, merchantOrderId/orderReference? }
-}
+  // create Paymob payment
+  export async function getUserPaymentLink({ amount, paymentMethod }) {
+    // 1) New style we tried first
+    try {
+      const res = await instance.post("/payments/pay", { amount, paymentMethod });
+      const data = unwrap(res);
+      return {
+        redirectUrl: data.redirectUrl || data.link,
+        orderRef:
+          data.merchantOrderId ||
+          data.orderReference ||
+          data.orderRef ||
+          data.order_id ||
+          null,
+        raw: data,
+      };
+    } catch (e) {
+      if (!is404(e)) throw e;
+    }
 
-// (optional) verify if you use it elsewhere
-export async function getUserStatusPayment(ref) {
-  const { data } = await instance.get(`/payments/verify/${ref}`);
-  return data?.data ?? data; // expect { isPaid: true/false, ... }
-}
+    // 2) Singular /payment/pay
+    try {
+      const res = await instance.post("/payment/pay", { amount, paymentMethod });
+      const data = unwrap(res);
+      return {
+        redirectUrl: data.redirectUrl || data.link,
+        orderRef:
+          data.merchantOrderId ||
+          data.orderReference ||
+          data.orderRef ||
+          data.order_id ||
+          null,
+        raw: data,
+      };
+    } catch (e) {
+      if (!is404(e)) throw e;
+    }
 
+    // 3) Legacy GET /payment/:amount (your original project)
+    try {
+      const res = await instance.get(`/payment/${amount}`);
+      const data = unwrap(res);
+      return {
+        redirectUrl: data.redirectUrl || data.link,
+        orderRef:
+          data.merchantOrderId ||
+          data.orderReference ||
+          data.orderRef ||
+          data.order_id ||
+          data.orderId ||
+          null,
+        raw: data,
+      };
+    } catch (e) {
+      throw e; // if this also fails, bubble up
+    }
+  }
+
+  /**
+   * Verify payment. Try plural then singular.
+   * Returns { isPaid, orderId?, orderReference? }
+   */
+  export async function getUserStatusPayment(ref) {
+    try {
+      const res = await instance.get(`/payments/verify/${ref}`);
+      const data = unwrap(res);
+      return {
+        isPaid: !!(data.isPaid ?? data.paid ?? data.success),
+        orderId: data.orderId ?? data.id ?? null,
+        orderReference: data.orderReference ?? data.reference ?? null,
+        raw: data,
+      };
+    } catch (e) {
+      if (!is404(e)) throw e;
+    }
+    const res = await instance.get(`/payment/verify/${ref}`);
+    const data = unwrap(res);
+    return {
+      isPaid: !!(data.isPaid ?? data.paid ?? data.success),
+      orderId: data.orderId ?? data.id ?? null,
+      orderReference: data.orderReference ?? data.reference ?? null,
+      raw: data,
+    };
+  }
 export async function orderMail(payload) {
   const { data } = await api.post("/orders/mail", payload);
   return data;
