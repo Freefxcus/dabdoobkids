@@ -4,7 +4,7 @@ import { useSearchParams } from "react-router-dom";
 import { Box } from "@mui/material";
 import { useDispatch } from "react-redux";
 import BillingDetails from "../components/checkout/BillingDetails";
-import ConfirmPayment from "../components/checkout/ConfirmPayment.jsx.old";
+import ConfirmPayment from "../components/checkout/ConfirmPayment.jsx";
 import SummaryOrderProductCard from "../components/checkout/SummaryOrderProductCard";
 import { userInfoActions } from "../Redux/store";
 import {
