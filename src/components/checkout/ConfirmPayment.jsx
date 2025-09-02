@@ -56,7 +56,7 @@ export default function ConfirmPayment({
   const [promoSuccess, setPromoSuccess] = useState(null);
 
   const [loading, setLoading] = useState(false);
-  const [paymentLink, setPaymentLink] = useState(null); // { link, orderRef? }
+  const [paymentLink, setPaymentLink] = useState(); // { link, orderRef? }
   const [open, setOpen] = useState(false);
   const handleOpenModal = () => setOpen(true);
   const handleCloseModal = async (result) => {
