@@ -824,7 +824,7 @@ export const subscribeToPlan = async (planId) => {
 };
 
 // New
-
+/*
 export async function getSizes(params) {
   const res = await fetch(
     `https://dabdoob-api-service.onrender.com/api/size${
@@ -896,6 +896,8 @@ export async function orderMail(data) {
   return order.data;
 }
 
+*/
+
 /*export async function resetUserEmail(data) {
   const reset = await axios.post(
     `https://dabdoob-api-service.onrender.com/api/users/reset-password`,
@@ -904,6 +906,67 @@ export async function orderMail(data) {
 
   return reset.data;
 }*/
+
+//Paymob
+const BASE =
+  (import.meta && import.meta.env && import.meta.env.VITE_API_BASE_URL) ||
+  process.env.REACT_APP_API_BASE_URL ||
+  "https://api.dabdoobkids.com/api";
+
+// Unified axios instance
+export const api = axios.create({
+  baseURL: BASE.replace(/\/$/, ""),
+});
+
+// Always attach token with Bearer
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem("access_token");
+  if (token) {
+    config.headers = config.headers || {};
+    config.headers.Authorization = token.startsWith("Bearer ")
+      ? token
+      : `Bearer ${token}`;
+  }
+  return config;
+});
+
+// ---- API functions ----
+
+export async function getSizes(params) {
+  const { data } = await api.get(`/size${params ? `?${params}` : ""}`);
+  return data;
+}
+
+// NOTE: Backend should create Paymob order/key and return { redirectUrl }
+// Keep the same function name but now call your NestJS API (not onrender)
+export async function getUserPaymentLink({ orderId, paymentMethod, amount }) {
+  const { data } = await api.post("/payments/pay", {
+    orderId,        // required
+    paymentMethod,  // 'CARD' | 'WALLET' | 'VALU' | 'KIOSK' | 'COD'
+    amount,         // optional; prefer server-calculated
+  });
+  return data; // e.g. { redirectUrl, merchantOrderId, paymobOrderId }
+}
+
+export async function createTransaction(payload) {
+  const { data } = await api.post("/transactions", payload);
+  return data;
+}
+
+export async function getUserStatusPayment(orderId) {
+  const { data } = await api.get(`/payments/verify/${orderId}`);
+  return data; // e.g. { isPaid: true, status: 'PAID', method: 'CARD' }
+}
+
+export async function createOrders(payload) {
+  const { data } = await api.post("/orders", payload);
+  return data;
+}
+
+export async function orderMail(payload) {
+  const { data } = await api.post("/orders/mail", payload);
+  return data;
+}
 
 export async function resetUserEmail(data) {
   const reset = await instance.post(
