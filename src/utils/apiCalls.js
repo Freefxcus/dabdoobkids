@@ -975,7 +975,7 @@ export async function createOrders(payload) {
   // First try /orders/checkout (most likely), then /checkout as a fallback.
   try {
     const { data } = await api.post("/orders/checkout", payload);
-    return data;
+    return data?.data ?? data; 
   } catch (e) {
     const msg = String(e || "");
     // If the route doesn't exist, try the alternate path
