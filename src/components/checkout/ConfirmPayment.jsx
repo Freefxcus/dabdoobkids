@@ -114,71 +114,62 @@ export default function ConfirmPayment({
     setPromoSuccess(null);
   };
 
-  const handlePayment = async () => {
-    localStorage.removeItem("paymentCheckout");
+const handlePayment = async () => {
+  localStorage.removeItem("paymentCheckout");
 
-    if (!addressId) {
-      notifyError("Please select an address before continuing.");
+  if (!addressId) {
+    notifyError("Please select an address before continuing.");
+    return;
+  }
+
+  try {
+    setLoading(true);
+
+    const dtoMethod = mapUiToDtoMethod(paymentMethod); // "Cash on Delivery" | "Credit Card" | "E-Wallet"
+
+    // 1) COD — create order now
+    if (dtoMethod === "Cash on Delivery") {
+      const payload = {
+        ...(DataSubmit || {}),      // already has mapped method & integer address from Checkout.jsx
+        paymentMethod: dtoMethod,   // ensure exact backend string
+        address: Number(addressId), // DTO expects integer
+      };
+
+      const created = await createOrders(payload);
+      const newId =
+        created?.orderId || created?.id || created?.data?.orderId || created?.data?.id;
+
+      notifySuccess("Order placed successfully.");
+      navigate(newId ? `/thank-you?order=${newId}&payment=cod` : `/thank-you?payment=cod`);
       return;
     }
 
-    try {
-      setLoading(true);
-
-      const dtoMethod = mapUiToDtoMethod(paymentMethod); // "Cash on Delivery" | "Credit Card" | "E-Wallet"
-
-      // 1) COD — create order now
-      if (paymentMethod === "COD") {
-        const payload = {
-          ...(DataSubmit || {}),      // already has mapped method & integer address from Checkout.jsx
-          paymentMethod: dtoMethod,   // ensure exact backend string
-          address: addressId,
-        };
-
-        const created = await createOrders(payload);
-        const newId =
-          created?.id || created?.orderId || created?.data?.id || created?.data?.orderId;
-
-        notifySuccess("Order placed successfully.");
-
-        if (newId) navigate(`/thank-you?order=${newId}&payment=cod`);
-        else navigate(`/thank-you?payment=cod`);
-        return;
-      }
-
-      // 2) Online (Credit Card / E-Wallet) — ask backend for Paymob link
-      if (dtoMethod !== "Credit Card" && dtoMethod !== "E-Wallet") {
-        notifyError("Unsupported payment method.");
-        return;
-      }
-
-      const res = await getUserPaymentLink({
-        amount: amountToPay,
-        paymentMethod: mapUiToDtoMethod(paymentMethod), // "Credit Card" | "E-Wallet"
-      });
-
-      if (!res?.redirectUrl) {
-        notifyError("Could not create payment link. Please try again.");
-        return;
-      }
-
-      const payload = { link: res.redirectUrl, orderId: res.orderRef, orderRef: res.orderRef };
-      setPaymentLink(payload);
-      localStorage.setItem("paymentCheckout", JSON.stringify(payload));
-      handleOpenModal();
-
-      // If you prefer redirect instead:
-      // window.location.href = redirectUrl;
-    } catch (e) {
-      const msg =
-        e?.response?.data?.message ||
-        e?.message ||
-        "Payment failed. Please try again.";
-      notifyError(msg);
-    } finally {
-      setLoading(false);
+    // 2) Online (Credit Card / E-Wallet) — ask backend for Paymob link
+    if (dtoMethod !== "Credit Card" && dtoMethod !== "E-Wallet") {
+      notifyError("Unsupported payment method.");
+      return;
     }
-  };
+
+    // ⬅️ Correct API usage: GET /payment/:amount (helper returns { link, orderId })
+    const { link, orderId } = await getUserPaymentLink(Number(amountToPay));
+
+    if (!link) {
+      notifyError("Could not create payment link. Please try again.");
+      return;
+    }
+
+    const payload = { link, orderId };
+    setPaymentLink(payload);
+    localStorage.setItem("paymentCheckout", JSON.stringify(payload));
+    handleOpenModal(); 
+  } catch (e) {
+    const msg = e?.response?.data?.message || e?.message || String(e) || "Payment failed. Please try again.";
+    notifyError(msg);
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <Box sx={{ flex: 2, width: "70%" }}>

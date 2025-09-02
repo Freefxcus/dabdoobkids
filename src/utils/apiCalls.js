@@ -1004,101 +1004,48 @@ export async function createOrders(payload) {
 }
 
   // create Paymob payment
-  export async function getUserPaymentLink({ amount, paymentMethod }) {
-    // 1) New style we tried first
-    try {
-      const res = await instance.post(`/payments/${amount}`, { amount, paymentMethod });
-      const data = unwrap(res);
-      return {
-        redirectUrl: data.redirectUrl || data.link,
-        orderRef:
-          data.merchantOrderId ||
-          data.orderReference ||
-          data.orderRef ||
-          data.order_id ||
-          null,
-        raw: data,
-      };
-    } catch (e) {
-      if (!is404(e)) throw e;
-    }
+  export async function getUserPaymentLink(amount) {
+    const { data } = await instance.get(`/payment/${amount}`);
+    // normalize various possible field names
+    const link =
+      data?.link ||
+      data?.redirectUrl ||
+      data?.redirect_url ||
+      null;
 
-    // 2) Singular /payment/pay
-    try {
-      const res = await instance.post(`/payment/${amount}`, { amount, paymentMethod });
-      const data = unwrap(res);
-      return {
-        redirectUrl: data.redirectUrl || data.link,
-        orderRef:
-          data.merchantOrderId ||
-          data.orderReference ||
-          data.orderRef ||
-          data.order_id ||
-          null,
-        raw: data,
-      };
-    } catch (e) {
-      if (!is404(e)) throw e;
-    }
+    const orderId =
+      data?.orderId ||
+      data?.order_id ||
+      data?.merchantOrderId ||
+      data?.orderRef ||
+      data?.orderReference ||
+      null;
 
-    // 3) Legacy GET /payment/:amount (your original project)
-    try {
-      const res = await instance.get(`/payment/${amount}`);
-      const data = unwrap(res);
-      return {
-        redirectUrl: data.redirectUrl || data.link,
-        orderRef:
-          data.merchantOrderId ||
-          data.orderReference ||
-          data.orderRef ||
-          data.order_id ||
-          data.orderId ||
-          null,
-        raw: data,
-      };
-    } catch (e) {
-      throw e; // if this also fails, bubble up
-    }
+    return { link, orderId, raw: data };
   }
 
   /**
    * Verify payment. Try plural then singular.
    * Returns { isPaid, orderId?, orderReference? }
    */
-  export async function getUserStatusPayment(ref) {
-    try {
-      const res = await instance.get(`/payments/verify/${ref}`);
-      const data = unwrap(res);
-      return {
-        isPaid: !!(data.isPaid ?? data.paid ?? data.success),
-        orderId: data.orderId ?? data.id ?? null,
-        orderReference: data.orderReference ?? data.reference ?? null,
-        raw: data,
-      };
-    } catch (e) {
-      if (!is404(e)) throw e;
+  export async function getUserStatusPayment(orderId) {
+      const { data } = await instance.get(`/payment/verify/${orderId}`);
+      const isPaid = !!(data?.isPaid ?? data?.paid ?? data?.success);
+      return { isPaid, raw: data };
     }
-    const res = await instance.get(`/payment/verify/${ref}`);
-    const data = unwrap(res);
-    return {
-      isPaid: !!(data.isPaid ?? data.paid ?? data.success),
-      orderId: data.orderId ?? data.id ?? null,
-      orderReference: data.orderReference ?? data.reference ?? null,
-      raw: data,
-    };
-  }
-export async function orderMail(payload) {
-  const { data } = await api.post("/orders/mail", payload);
-  return data;
-}
 
-export async function resetUserEmail(data) {
-  const reset = await instance.post(
-    `/auth/reset-password`, // use same working local route
-    data
-  );
-  return reset.data;
-}
+  export async function orderMail(payload) {
+    const { data } = await api.post("/orders/mail", payload);
+    return data;
+  }
+
+  export async function resetUserEmail(data) {
+    const reset = await instance.post(
+      `/auth/reset-password`, // use same working local route
+      data
+    );
+    return reset.data;
+  }
 
 /*export async function resetUserPassword(data, token) {
   const response = await instance.put(

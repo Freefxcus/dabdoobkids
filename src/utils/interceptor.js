@@ -23,12 +23,17 @@ const instance = axios.create({
 instance.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("access_token");
+    const fullUrl =
+      (config.baseURL?.replace(/\/+$/, "") || "") +
+      "/" +
+      String(config.url || "").replace(/^\/+/, "");
     if (token) {
       config.headers = config.headers || {};
       config.headers.Authorization = token.startsWith("Bearer ")
         ? token
         : `Bearer ${token}`;
     }
+    console.log("[HTTP]", (config.method || "GET").toUpperCase(), fullUrl);
     return config;
   },
   (error) => Promise.reject(error)

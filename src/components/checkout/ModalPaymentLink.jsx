@@ -21,8 +21,7 @@ function ModalPaymentLink({
   price,
 }) {
   // ✅ null-safe destructuring
-  const { link, orderId, orderRef } = paymentLink ?? {};
-
+  const { link, orderId } = paymentLink;
   const { email } = useSelector((state) => state.userInfo.value) || {};
 
   const products = (orderSummary || []).map((item) => ({
