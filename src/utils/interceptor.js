@@ -2,32 +2,24 @@
 import axios from "axios";
 
 /**
- * Build a bullet-proof API base:
- * - Prefer env var, fallback to production host
- * - Normalize kidS/kidZ typos to the live host
- * - Remove trailing slashes
- * - Ensure exactly one "/api" suffix
+ * Build the base URL:
+ * - Use env when present (recommended)
+ * - NO automatic "/api" suffix
+ * - Remove any trailing slash
  */
 function computeBaseURL() {
   const raw =
     (import.meta?.env?.VITE_API_BASE_URL ||
-     process.env.REACT_APP_BASE_URL || // keep your existing var
-     "https://api.dabdoobkidz.com").trim();
+      process.env.REACT_APP_BASE_URL ||
+      "https://api.dabdoobkids.com").trim();
 
-  let base = raw
-    .replace("dabdoobkids.com", "dabdoobkidz.com") // normalize domain
-    .replace(/\/+$/, ""); // strip trailing slash
-
-  if (!/\/api$/i.test(base)) base ; // ensure /api suffix
-  return base;
+  return raw.replace(/\/+$/, ""); // strip trailing slashes only
 }
 
 const instance = axios.create({
   baseURL: computeBaseURL(),
-  // withCredentials: true, // uncomment if you start using cookies
 });
 
-// Request interceptor: attach Bearer token if present
 instance.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("access_token");
@@ -39,17 +31,12 @@ instance.interceptors.request.use(
     }
     return config;
   },
-  (error) => {
-    console.error("Request Error Interceptor:", error);
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
-// Response interceptor: return response as-is; for errors, provide a safe message fallback
 instance.interceptors.response.use(
-  (response) => response,
+  (res) => res,
   (error) => {
-    // keep compatibility with places that expect a string (e.g. err === "Unauthorized")
     const msg =
       error?.response?.data?.message ||
       error?.response?.data?.error ||
