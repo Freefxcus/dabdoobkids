@@ -34,8 +34,7 @@ export default function ModalPaymentLink({
   const { email } = useSelector((state) => state.userInfo.value) || {};
 
   // Support either shape: { link } or { redirectUrl }
-  const link = paymentLink?.link || paymentLink?.redirectUrl || "";
-  const orderId = paymentLink?.orderId || null;
+  const { link, orderId, orderRef } = paymentLink;
 
   // Map cart items → products payload
   const products = useMemo(
@@ -75,10 +74,10 @@ export default function ModalPaymentLink({
    *  - If paid → create transaction, create order, clear cart, send mail, notify, and close with ok=true.
    */
   useEffect(() => {
-    if (open === false && orderId) {
+    if (open === false && (orderId || orderRef)) {
       const run = async () => {
         try {
-          const statusPayment = await getUserStatusPayment(orderId); // expects { isPaid: boolean, ... }
+          const statusPayment = await getUserStatusPayment(orderId || orderRef);
 
           if (!statusPayment?.isPaid) {
             notifyError("Payment failed or was canceled.");
@@ -131,7 +130,7 @@ export default function ModalPaymentLink({
       run();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open, orderId]);
+  }, [open, orderId, orderRef]);
 
   return (
     <Modal

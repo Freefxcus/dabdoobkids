@@ -987,6 +987,19 @@ export async function createOrders(payload) {
   }
 }
 
+// create Paymob payment
+export async function getUserPaymentLink({ amount, paymentMethod }) {
+  const { data } = await instance.post("/payments/pay", { amount, paymentMethod });
+  // support wrapped or raw
+  return data?.data ?? data; // expect { redirectUrl, merchantOrderId/orderReference? }
+}
+
+// (optional) verify if you use it elsewhere
+export async function getUserStatusPayment(ref) {
+  const { data } = await instance.get(`/payments/verify/${ref}`);
+  return data?.data ?? data; // expect { isPaid: true/false, ... }
+}
+
 export async function orderMail(payload) {
   const { data } = await api.post("/orders/mail", payload);
   return data;

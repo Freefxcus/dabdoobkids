@@ -1,16 +1,10 @@
-// src/components/checkout/ConfirmPayment.jsx
 import { useMemo, useState } from "react";
 import PropTypes from "prop-types";
 import CloseIcon from "@mui/icons-material/Close";
 import { Box, CircularProgress, Stack } from "@mui/material";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { mapUiToDtoMethod } from "../../utils/paymentMap";  
-import {
-  createOrders,
-  getUserPaymentLink,
-  getUserStatusPayment,
-} from "../../utils/apiCalls";
-
+import { mapUiToDtoMethod } from "../../utils/paymentMap";
+import { createOrders, getUserPaymentLink } from "../../utils/apiCalls";
 import { newCalcDiscount, notifyError, notifySuccess } from "../../utils/general";
 import ModalPaymentLink from "./ModalPaymentLink";
 import "./style.css";
@@ -18,40 +12,28 @@ import "./style.css";
 function Row({ label, value }) {
   return (
     <div style={{ display: "flex", justifyContent: "space-between" }}>
-      <h2 style={{ color: "var(rhine-castle)", fontWeight: 500, fontSize: 16 }}>
-        {label}
-      </h2>
-      <h2 style={{ color: "var(rhine-castle)", fontWeight: 500, fontSize: 16 }}>
-        {value}
-      </h2>
+      <h2 style={{ color: "var(rhine-castle)", fontWeight: 500, fontSize: 16 }}>{label}</h2>
+      <h2 style={{ color: "var(rhine-castle)", fontWeight: 500, fontSize: 16 }}>{value}</h2>
     </div>
   );
 }
-
 Row.propTypes = { label: PropTypes.string, value: PropTypes.any };
 
 const fmt = (n) => `${Number(n || 0).toFixed(0)} EGP`;
 
-/** Read a sensible amount to pay from order summary */
-function extractAmount(orderSummary) {
-  if (!orderSummary) return 0;
-  const candidates = [
-    orderSummary?.paymentAmount,
-    orderSummary?.amountToPay,
-    orderSummary?.totalShopping,
-    orderSummary?.total,
-    orderSummary?.grandTotal,
-    orderSummary?.subTotal,
+// best-effort read from summary
+function extractAmount(summary) {
+  const nums = [
+    summary?.paymentAmount,
+    summary?.amountToPay,
+    summary?.total,
+    summary?.totalShopping,
+    summary?.grandTotal,
+    summary?.subTotal,
   ]
-    .map((x) => Number(x))
-    .filter((x) => !Number.isNaN(x) && x >= 0);
-  return candidates[0] ?? 0;
-}
-
-/** Read order id from summary */
-function extractOrderId(orderSummary) {
-  if (!orderSummary) return null;
-  return orderSummary?.orderId || orderSummary?.id || orderSummary?._id || null;
+    .map(Number)
+    .filter((x) => Number.isFinite(x) && x >= 0);
+  return nums[0] ?? 0;
 }
 
 export default function ConfirmPayment({
@@ -64,7 +46,7 @@ export default function ConfirmPayment({
   setIsUseWallet,
   DataSubmit,
   cartItems = [],
-  paymentMethod,           // 'CARD' | 'WALLET' | 'VALU' | 'KIOSK' | 'COD'
+  paymentMethod,     // 'COD' | 'CARD' | 'WALLET'
   setPaymentMethod,
 }) {
   const navigate = useNavigate();
@@ -73,25 +55,20 @@ export default function ConfirmPayment({
   const [promoCode, setPromoCode] = useState(promoCodeMain || "");
   const [promoSuccess, setPromoSuccess] = useState(null);
 
-  const [paymentLink, setPaymentLink] = useState(null); // for ModalPaymentLink compatibility
+  const [loading, setLoading] = useState(false);
+  const [paymentLink, setPaymentLink] = useState(null); // { link, orderRef? }
   const [open, setOpen] = useState(false);
   const handleOpenModal = () => setOpen(true);
   const handleCloseModal = async (result) => {
     setOpen(false);
     localStorage.removeItem("paymentCheckout");
-    if (result?.ok && result?.orderId) {
+    if (result?.ok && (result?.orderId || result?.orderRef)) {
       notifySuccess("Payment confirmed");
-      try {
-        // if you clear cart via RTK Query mutation, call it here
-        // await deleteAllCart();
-      } catch {}
-      navigate(`/thank-you?order=${result.orderId}&payment=card`);
+      navigate(`/thank-you?payment=card`);
     }
   };
 
-  const [loading, setLoading] = useState(false);
-
-  // ---- totals derived from cart + promo (kept from your logic) ----
+  // totals (kept same behavior)
   const price = useMemo(() => {
     const totalPriceProduct = cartItems.reduce(
       (acc, curr) => acc + newCalcDiscount(curr).totalPrice,
@@ -115,22 +92,17 @@ export default function ConfirmPayment({
       totalPriceProduct,
       discount,
       shipping,
-      totalPrice: afterDiscount, // your UI used totalPrice as "SubTotal"
+      totalPrice: afterDiscount, // used as "SubTotal" label in UI
     };
   }, [cartItems, promoSuccess, orderSummary]);
 
   const amountToPay = useMemo(() => {
-    // What we actually charge: keep your previous notion or use extractAmount(orderSummary)
-    // Using order summary if present; otherwise subtotal + shipping - discount
     const fromSummary = extractAmount(orderSummary);
-    if (fromSummary > 0) return fromSummary;
-    return Math.max(0, price.totalPrice + price.shipping);
+    return fromSummary > 0 ? fromSummary : Math.max(0, price.totalPrice + price.shipping);
   }, [orderSummary, price]);
 
   const addressId = addressActive || address?.items?.[0]?.id || null;
-  const orderId = useMemo(() => extractOrderId(orderSummary), [orderSummary]);
 
-  // --- Promo code actions (kept behavior, but optional now) ---
   const clearPromoCode = () => {
     setPromoCode("");
     setSearchParams((prev) => {
@@ -142,10 +114,6 @@ export default function ConfirmPayment({
     setPromoSuccess(null);
   };
 
-  // If you still validate promo via an API, call it and set promoSuccess accordingly.
-  // For brevity, I left out the network call here since your new backend likely computes promo in orderSummary.
-
-  // --- Main payment action ---
   const handlePayment = async () => {
     localStorage.removeItem("paymentCheckout");
 
@@ -157,64 +125,67 @@ export default function ConfirmPayment({
     try {
       setLoading(true);
 
-      // COD — create the order immediately
+      const dtoMethod = mapUiToDtoMethod(paymentMethod); // "Cash on Delivery" | "Credit Card" | "E-Wallet"
+
+      // 1) COD — create order now
       if (paymentMethod === "COD") {
         const payload = {
-          ...(DataSubmit || {}),
-          paymentMethod: "Cash on Delivery",
+          ...(DataSubmit || {}),      // already has mapped method & integer address from Checkout.jsx
+          paymentMethod: dtoMethod,   // ensure exact backend string
           address: addressId,
         };
-        const created = await createOrders(payload);
-        const newOrderId =
-          created?.orderId || created?.id || created?._id || orderId;
 
-        if (!newOrderId) {
-          notifyError("Order was created but ID is missing.");
-          return;
-        }
+        const created = await createOrders(payload);
+        const newId =
+          created?.id || created?.orderId || created?.data?.id || created?.data?.orderId;
 
         notifySuccess("Order placed successfully.");
-        navigate(`/thank-you?order=${newOrderId}&payment=cod`);
+
+        if (newId) navigate(`/thank-you?order=${newId}&payment=cod`);
+        else navigate(`/thank-you?payment=cod`);
         return;
       }
 
-      // Online methods — ask backend for Paymob redirect
-      if (!orderId) {
-        notifyError("Order is not ready yet. Please review your cart and try again.");
+      // 2) Online (Credit Card / E-Wallet) — ask backend for Paymob link
+      if (dtoMethod !== "Credit Card" && dtoMethod !== "E-Wallet") {
+        notifyError("Unsupported payment method.");
         return;
       }
 
       const res = await getUserPaymentLink({
-        orderId,
-        paymentMethod, // 'CARD' | 'WALLET' | 'VALU' | 'KIOSK'
-        amount: amountToPay, // backend may ignore and compute itself
+        amount: amountToPay,                // backend can re-check anyway
+        paymentMethod: dtoMethod,           // EXACT strings
       });
 
-      const redirectUrl = res?.redirectUrl || res?.link || null;
-      const returnedOrderId = res?.orderId || res?.order_id || orderId;
+      // accept multiple shapes safely
+      const redirectUrl = res?.redirectUrl || res?.data?.redirectUrl || res?.link || null;
+      const orderRef =
+        res?.merchantOrderId ||
+        res?.orderReference ||
+        res?.orderRef ||
+        res?.data?.merchantOrderId ||
+        res?.data?.orderReference ||
+        res?.data?.orderRef ||
+        null;
 
       if (!redirectUrl) {
         notifyError("Could not create payment link. Please try again.");
         return;
       }
 
-      // If you still want to use the modal component, pass it the shape it expects:
-      const payload = { link: redirectUrl, orderId: returnedOrderId };
+      // open in modal (keeps your existing component)
+      const payload = { link: redirectUrl, orderId: orderRef, orderRef };
       setPaymentLink(payload);
       localStorage.setItem("paymentCheckout", JSON.stringify(payload));
       handleOpenModal();
 
-      // (If you prefer immediate redirect instead of modal, just do:)
+      // If you prefer redirect instead:
       // window.location.href = redirectUrl;
-
-      // Optional non-blocking check (ignore errors)
-      try {
-        getUserStatusPayment(returnedOrderId).catch(() => {});
-      } catch {}
-
     } catch (e) {
       const msg =
-        e?.response?.data?.message || e?.message || "Payment failed. Please try again.";
+        e?.response?.data?.message ||
+        e?.message ||
+        "Payment failed. Please try again.";
       notifyError(msg);
     } finally {
       setLoading(false);
@@ -235,7 +206,6 @@ export default function ConfirmPayment({
       >
         <h2>Price Summary</h2>
 
-        {/* Promo Code */}
         <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
           <h3>Promo Code</h3>
           <div style={{ display: "flex", justifyContent: "space-between", gap: 12 }}>
@@ -247,13 +217,10 @@ export default function ConfirmPayment({
                 className="btn input-code"
                 placeholder="Enter Promo Code"
               />
-              {promoCode ? (
-                <CloseIcon onClick={clearPromoCode} className="btn-clear" />
-              ) : null}
+              {promoCode ? <CloseIcon onClick={clearPromoCode} className="btn-clear" /> : null}
             </div>
             <button
               onClick={() => {
-                // If you integrate real promo validation, call it here.
                 setPromoCodeMain?.(promoCode || "");
                 setSearchParams((prev) => {
                   const sp = new URLSearchParams(prev);
@@ -261,16 +228,13 @@ export default function ConfirmPayment({
                   else sp.delete("promocode");
                   return sp;
                 });
-                notifySuccess("Promo updated.");
               }}
               className="btn promo-code"
-              disabled={false}
             >
               Add
             </button>
           </div>
 
-          {/* Totals */}
           <Row label="SubTotal" value={fmt(price.totalPrice)} />
           <Row label="Shipping" value={fmt(price.shipping)} />
           <Row label="Discount" value={fmt(price.discount)} />
@@ -296,7 +260,8 @@ export default function ConfirmPayment({
               loading ||
               !address?.items?.[0]?.id ||
               !addressActive ||
-              (mapUiToDtoMethod(paymentMethod) === "E-Wallet" && (!DataSubmit?.phone || DataSubmit?.phone?.length < 11))
+              (mapUiToDtoMethod(paymentMethod) === "E-Wallet" &&
+                (!DataSubmit?.phone || DataSubmit?.phone?.length < 11))
             }
           >
             {loading ? (
@@ -310,7 +275,6 @@ export default function ConfirmPayment({
           </button>
         </div>
 
-        {/* Keep your existing modal (it will now receive { link: redirectUrl, orderId } ) */}
         <ModalPaymentLink
           closeModal={handleCloseModal}
           open={open}
