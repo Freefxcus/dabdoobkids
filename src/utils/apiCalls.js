@@ -922,8 +922,6 @@ function computeBase() {
 
 const BASE = computeBase();
 
-import axios from "axios";
-
 // one axios instance for ALL calls
 export const api = axios.create({ baseURL: BASE });
 
