@@ -1003,36 +1003,49 @@ export async function createOrders(payload) {
   }
 }
 
-  // create Paymob payment
   export async function getUserPaymentLink(amount) {
-    const { data } = await instance.get(`/payment/${amount}`);
-    // normalize various possible field names
-    const link =
-      data?.link ||
-      data?.redirectUrl ||
-      data?.redirect_url ||
-      null;
-
-    const orderId =
-      data?.orderId ||
-      data?.order_id ||
-      data?.merchantOrderId ||
-      data?.orderRef ||
-      data?.orderReference ||
-      null;
-
-    return { link, orderId, raw: data };
+    // Try the most likely shape first: GET /payment?amount=...
+    try {
+      const { data } = await instance.get("/payment", { params: { amount } });
+      return {
+        link: data?.link || data?.redirectUrl || data?.redirect_url || null,
+        orderId:
+          data?.orderId ||
+          data?.order_id ||
+          data?.merchantOrderId ||
+          data?.orderRef ||
+          data?.orderReference ||
+          null,
+        raw: data,
+      };
+    } catch (e) {
+      // Fallback: GET /payment/:amount (what the old render service used)
+      const { data } = await instance.get(`/payment/${amount}`);
+      return {
+        link: data?.link || data?.redirectUrl || data?.redirect_url || null,
+        orderId:
+          data?.orderId ||
+          data?.order_id ||
+          data?.merchantOrderId ||
+          data?.orderRef ||
+          data?.orderReference ||
+          null,
+        raw: data,
+      };
+    }
   }
 
-  /**
-   * Verify payment. Try plural then singular.
-   * Returns { isPaid, orderId?, orderReference? }
-   */
-  export async function getUserStatusPayment(orderId) {
-      const { data } = await instance.get(`/payment/verify/${orderId}`);
-      const isPaid = !!(data?.isPaid ?? data?.paid ?? data?.success);
-      return { isPaid, raw: data };
+  /** Verify payment (keep your existing verify route first; add query fallback) */
+  export async function getUserStatusPayment(id) {
+    try {
+      const { data } = await instance.get(`/payment/verify/${id}`);
+      return { isPaid: !!(data?.isPaid ?? data?.paid ?? data?.success), raw: data };
+    } catch {
+      // Some backends use /payment/verify?id=...
+      const { data } = await instance.get(`/payment/verify`, { params: { id } });
+      return { isPaid: !!(data?.isPaid ?? data?.paid ?? data?.success), raw: data };
     }
+  }
 
   export async function orderMail(payload) {
     const { data } = await api.post("/orders/mail", payload);

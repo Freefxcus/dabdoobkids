@@ -150,28 +150,15 @@ const handlePayment = async () => {
       return;
     }
 
-   const { link, raw } = await getUserPaymentLink(Number(amountToPay));
+   const { link, orderId } = await getUserPaymentLink(Number(amountToPay));
+    if (!link) {
+      notifyError("Could not create payment link. Please try again.");
+      return;
+    }
 
-  // Prefer orderId; fall back to orderReference(s) only if present
-  const orderIdentifier =
-    raw?.orderId ??
-    raw?.order_id ??
-    raw?.orderReference ??
-    raw?.orderRef ??
-    (Array.isArray(raw?.orderReferences) ? raw.orderReferences[0] : raw?.orderReferences) ??
-    null;
-
-  if (!link) {
-    notifyError("Could not create payment link. Please try again.");
-    return;
-  }
-
-  // Pass a single normalized field "orderId" down to the modal.
-  // (We intentionally call it orderId everywhere to avoid confusion.)
-  const payload = { link, orderId: orderIdentifier };
-  setPaymentLink(payload);
-  localStorage.setItem("paymentCheckout", JSON.stringify(payload));
-  handleOpenModal();
+   setPaymentLink({ link, orderId });
+    localStorage.setItem("paymentCheckout", JSON.stringify({ link, orderId }));
+    handleOpenModal();  
   } catch (e) {
     const msg = e?.response?.data?.message || e?.message || String(e) || "Payment failed. Please try again.";
     notifyError(msg);
