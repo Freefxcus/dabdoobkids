@@ -1007,7 +1007,7 @@ export async function createOrders(payload) {
   export async function getUserPaymentLink({ amount, paymentMethod }) {
     // 1) New style we tried first
     try {
-      const res = await instance.post("/payments/pay", { amount, paymentMethod });
+      const res = await instance.post(`/payments/${amount}`, { amount, paymentMethod });
       const data = unwrap(res);
       return {
         redirectUrl: data.redirectUrl || data.link,
@@ -1025,7 +1025,7 @@ export async function createOrders(payload) {
 
     // 2) Singular /payment/pay
     try {
-      const res = await instance.post("/payment/pay", { amount, paymentMethod });
+      const res = await instance.post(`/payment/${amount}`, { amount, paymentMethod });
       const data = unwrap(res);
       return {
         redirectUrl: data.redirectUrl || data.link,
