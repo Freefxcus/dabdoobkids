@@ -115,7 +115,7 @@ export default function Checkout() {
 
   /** Build CheckoutDto payload exactly as backend expects */
   const dtoPaymentMethod = useMemo(
-    () => mapUiToDtoMethod(paymentMethod), // e.g. WALLET → EWallet
+    () => mapUiToDtoMethod(paymentMethod), // 'Cash on Delivery' | 'Credit Card' | 'E-Wallet'
     [paymentMethod]
   );
 
