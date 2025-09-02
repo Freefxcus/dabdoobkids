@@ -161,7 +161,7 @@ export default function ConfirmPayment({
       if (paymentMethod === "COD") {
         const payload = {
           ...(DataSubmit || {}),
-          paymentMethod: "COD",
+          paymentMethod: "Cash on Delivery",
           address: addressId,
         };
         const created = await createOrders(payload);
