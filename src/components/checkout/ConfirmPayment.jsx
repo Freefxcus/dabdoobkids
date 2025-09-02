@@ -150,18 +150,28 @@ const handlePayment = async () => {
       return;
     }
 
-    // ⬅️ Correct API usage: GET /payment/:amount (helper returns { link, orderId })
-    const { link, orderId } = await getUserPaymentLink(Number(amountToPay));
+   const { link, raw } = await getUserPaymentLink(Number(amountToPay));
 
-    if (!link) {
-      notifyError("Could not create payment link. Please try again.");
-      return;
-    }
+  // Prefer orderId; fall back to orderReference(s) only if present
+  const orderIdentifier =
+    raw?.orderId ??
+    raw?.order_id ??
+    raw?.orderReference ??
+    raw?.orderRef ??
+    (Array.isArray(raw?.orderReferences) ? raw.orderReferences[0] : raw?.orderReferences) ??
+    null;
 
-    const payload = { link, orderId };
-    setPaymentLink(payload);
-    localStorage.setItem("paymentCheckout", JSON.stringify(payload));
-    handleOpenModal(); 
+  if (!link) {
+    notifyError("Could not create payment link. Please try again.");
+    return;
+  }
+
+  // Pass a single normalized field "orderId" down to the modal.
+  // (We intentionally call it orderId everywhere to avoid confusion.)
+  const payload = { link, orderId: orderIdentifier };
+  setPaymentLink(payload);
+  localStorage.setItem("paymentCheckout", JSON.stringify(payload));
+  handleOpenModal();
   } catch (e) {
     const msg = e?.response?.data?.message || e?.message || String(e) || "Payment failed. Please try again.";
     notifyError(msg);
