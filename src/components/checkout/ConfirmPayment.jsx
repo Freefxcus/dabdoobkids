@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import CloseIcon from "@mui/icons-material/Close";
 import { Box, CircularProgress, Stack } from "@mui/material";
 import { useNavigate, useSearchParams } from "react-router-dom";
-
+import { mapUiToDtoMethod } from "../../utils/paymentMap";  
 import {
   createOrders,
   getUserPaymentLink,
