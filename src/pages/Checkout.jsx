@@ -4,6 +4,7 @@ import { useSearchParams } from "react-router-dom";
 import { Box } from "@mui/material";
 import { useDispatch } from "react-redux";
 
+import { mapUiToDtoMethod } from "../utils/paymentMap";
 import BillingDetails from "../components/checkout/BillingDetails";
 import ConfirmPayment from "../components/checkout/ConfirmPayment.jsx";
 import SummaryOrderProductCard from "../components/checkout/SummaryOrderProductCard";
@@ -12,7 +13,7 @@ import { userInfoActions } from "../Redux/store";
 import { authorize, getAddress, getCart, orderSummary } from "../utils/apiCalls";
 import instance from "../utils/interceptor";
 
-/** Normalize any incoming query string into your internal enum-ish values */
+/** Normalize query param → UI values */
 const normalizeMethod = (m) => {
   if (!m) return "COD";
   const x = String(m).toLowerCase();
@@ -54,7 +55,7 @@ export default function Checkout() {
 
   const dispatch = useDispatch();
 
-  /** Ensure we always have a paymentMethod in the URL for consistency */
+  /** Ensure paymentMethod exists in URL for consistency */
   useEffect(() => {
     if (!searchParams.get("paymentMethod")) {
       setSearchParams((prev) => {
@@ -65,7 +66,7 @@ export default function Checkout() {
     }
   }, [searchParams, setSearchParams]);
 
-  /** Keep local state in sync with query changes (if user modifies URL) */
+  /** Sync local state when URL changes */
   useEffect(() => {
     setPaymentMethod(qpPayment || "COD");
     setPromoCode(qpPromo || "");
@@ -88,7 +89,7 @@ export default function Checkout() {
         const items = addressData?.items ?? [];
         setAddress({ items });
 
-        // Pick primary address if present, otherwise first, otherwise null
+        // primary → first → null
         const primary = items.find((it) => it?.primary);
         setAddressActive(primary?.id ?? items[0]?.id ?? null);
       } catch (e) {
@@ -108,25 +109,44 @@ export default function Checkout() {
         dispatch(userInfoActions.update(response.data?.data));
       })
       .catch((err) => {
-        // authorize triggers login refresh if needed
         if (err === "Unauthorized") authorize(setForceReload);
       });
   }, [dispatch]);
 
-  /** Build payload for summary + fetch order summary whenever inputs change */
-  const dataSubmit = useMemo(() => {
-    return {
-      promocode: promoCode,
-      useWallet: isUseWallet,
-      paymentMethod, // normalized value (COD/CARD/WALLET/VALU/KIOSK)
-      address: addressActive ?? address?.items?.[0]?.id ?? null,
-      phone,
-    };
-  }, [promoCode, isUseWallet, paymentMethod, addressActive, address?.items, phone]);
+  /** Build CheckoutDto payload exactly as backend expects */
+  const dtoPaymentMethod = useMemo(
+    () => mapUiToDtoMethod(paymentMethod), // e.g. WALLET → EWallet
+    [paymentMethod]
+  );
 
+  const addressId = useMemo(
+    () => addressActive ?? address?.items?.[0]?.id ?? null,
+    [addressActive, address?.items]
+  );
+
+  const addressInt = useMemo(() => {
+    const n = addressId != null ? Number(addressId) : null;
+    return Number.isFinite(n) ? n : null;
+  }, [addressId]);
+
+  const dataSubmit = useMemo(() => {
+    const base = {
+      promocode: promoCode || undefined,
+      useWallet: !!isUseWallet,
+      paymentMethod: dtoPaymentMethod, // 'Card' | 'EWallet' | 'COD' | 'ValU' | 'Kiosk'
+      address: addressInt,             // integer as required by DTO
+    };
+    return dtoPaymentMethod === "EWallet" ? { ...base, phone } : base;
+  }, [promoCode, isUseWallet, dtoPaymentMethod, addressInt, phone]);
+
+  /** Fetch order summary once we have a valid address */
   useEffect(() => {
     const fetchOrder = async () => {
       try {
+        if (!Number.isInteger(dataSubmit.address)) {
+          setOrder(null);
+          return;
+        }
         const orderData = await orderSummary(dataSubmit);
         setOrder(orderData || null);
       } catch (e) {
