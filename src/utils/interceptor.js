@@ -18,7 +18,7 @@ function computeBaseURL() {
     .replace("dabdoobkids.com", "dabdoobkidz.com") // normalize domain
     .replace(/\/+$/, ""); // strip trailing slash
 
-  if (!/\/api$/i.test(base)) base += "/api"; // ensure /api suffix
+  if (!/\/api$/i.test(base)) base ; // ensure /api suffix
   return base;
 }
 
