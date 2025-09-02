@@ -296,7 +296,7 @@ export default function ConfirmPayment({
               loading ||
               !address?.items?.[0]?.id ||
               !addressActive ||
-              (paymentMethod === "WALLET" && (!DataSubmit?.phone || DataSubmit?.phone?.length < 11))
+              (mapUiToDtoMethod(paymentMethod) === "E-Wallet" && (!DataSubmit?.phone || DataSubmit?.phone?.length < 11))
             }
           >
             {loading ? (

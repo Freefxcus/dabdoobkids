@@ -136,7 +136,7 @@ export default function Checkout() {
       paymentMethod: dtoPaymentMethod, // 'Card' | 'EWallet' | 'COD' | 'ValU' | 'Kiosk'
       address: addressInt,             // integer as required by DTO
     };
-    return dtoPaymentMethod === "EWallet" ? { ...base, phone } : base;
+    return dtoPaymentMethod === "E-Wallet" ? { ...base, phone } : base;
   }, [promoCode, isUseWallet, dtoPaymentMethod, addressInt, phone]);
 
   /** Fetch order summary once we have a valid address */
