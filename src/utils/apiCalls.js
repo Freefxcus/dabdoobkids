@@ -908,15 +908,25 @@ export async function orderMail(data) {
 }*/
 
 //Paymob
-const BASE =
-  (import.meta && import.meta.env && import.meta.env.VITE_API_BASE_URL) ||
-  process.env.REACT_APP_API_BASE_URL ||
-  "https://api.dabdoobkids.com/";
+function computeBase() {
+  // Accept either with or without /api in env, and fix typos
+  const raw =
+    (import.meta?.env?.VITE_API_BASE_URL ||
+      process.env.REACT_APP_API_BASE_URL ||
+      "https://api.dabdoobkids.com").trim();
 
-// Unified axios instance
-export const api = axios.create({
-  baseURL: BASE.replace(/\/$/, ""),
-});
+  // Normalize common typos (kidz -> kids)
+  let base = raw.replace("dabdoobkidz.com", "dabdoobkids.com");
+  // Drop trailing slash
+  base = base.replace(/\/+$/, "");
+  // Ensure /api suffix exactly once
+  if (!/\/api$/i.test(base)) base += "/api";
+  return base;
+}
+
+const BASE = computeBase();
+
+export const api = axios.create({ baseURL: BASE });
 
 // Always attach token with Bearer
 api.interceptors.request.use((config) => {
