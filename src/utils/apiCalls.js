@@ -911,7 +911,7 @@ export async function orderMail(data) {
 const BASE =
   (import.meta && import.meta.env && import.meta.env.VITE_API_BASE_URL) ||
   process.env.REACT_APP_API_BASE_URL ||
-  "https://api.dabdoobkids.com/api";
+  "https://api.dabdoobkids.com/";
 
 // Unified axios instance
 export const api = axios.create({
