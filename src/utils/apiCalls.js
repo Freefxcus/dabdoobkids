@@ -908,27 +908,25 @@ export async function orderMail(data) {
 }*/
 
 //Paymob
+// Paymob / API base (kidz is canonical)
 function computeBase() {
-  // Accept either with or without /api in env, and fix typos
   const raw =
     (import.meta?.env?.VITE_API_BASE_URL ||
       process.env.REACT_APP_API_BASE_URL ||
-      "https://api.dabdoobkids.com").trim();
+      "https://api.dabdoobkidz.com"   // default to kidz
+    ).trim();
 
-  // Normalize common typos (kidz -> kids)
-  let base = raw.replace("dabdoobkidz.com", "dabdoobkids.com");
-  // Drop trailing slash
-  base = base.replace(/\/+$/, "");
-  // Ensure /api suffix exactly once
-  if (!/\/api$/i.test(base)) base += "/api";
-  return base;
+  // Normalize accidental typos: kids -> kidz, remove trailing slash
+  return raw.replace("dabdoobkids.com", "dabdoobkidz.com").replace(/\/+$/, "");
 }
 
 const BASE = computeBase();
 
+import axios from "axios";
+
+// one axios instance for ALL calls
 export const api = axios.create({ baseURL: BASE });
 
-// Always attach token with Bearer
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem("access_token");
   if (token) {
