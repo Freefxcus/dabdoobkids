@@ -1,35 +1,61 @@
+// utils/interceptor.js
 import axios from "axios";
-console.log("url", process.env.REACT_APP_BASE_URL);
+
+/**
+ * Build a bullet-proof API base:
+ * - Prefer env var, fallback to production host
+ * - Normalize kidS/kidZ typos to the live host
+ * - Remove trailing slashes
+ * - Ensure exactly one "/api" suffix
+ */
+function computeBaseURL() {
+  const raw =
+    (import.meta?.env?.VITE_API_BASE_URL ||
+     process.env.REACT_APP_BASE_URL || // keep your existing var
+     "https://api.dabdoobkidz.com").trim();
+
+  let base = raw
+    .replace("dabdoobkids.com", "dabdoobkidz.com") // normalize domain
+    .replace(/\/+$/, ""); // strip trailing slash
+
+  if (!/\/api$/i.test(base)) base += "/api"; // ensure /api suffix
+  return base;
+}
+
 const instance = axios.create({
-  baseURL: "https://api.dabdoobkidz.com", // Set your API base URL
-  //baseURL: process.env.REACT_APP_BASE_URL, // Set your API base URL
+  baseURL: computeBaseURL(),
+  // withCredentials: true, // uncomment if you start using cookies
 });
 
-// Request interceptor
+// Request interceptor: attach Bearer token if present
 instance.interceptors.request.use(
   (config) => {
-    // Do something before request is sent
-    if (localStorage.getItem("access_token")) {
-      config.headers.Authorization = `Bearer ${localStorage.getItem(
-        "access_token"
-      )}`;
+    const token = localStorage.getItem("access_token");
+    if (token) {
+      config.headers = config.headers || {};
+      config.headers.Authorization = token.startsWith("Bearer ")
+        ? token
+        : `Bearer ${token}`;
     }
     return config;
   },
   (error) => {
-    // Do something with request error
     console.error("Request Error Interceptor:", error);
     return Promise.reject(error);
   }
 );
 
-// Response interceptor
+// Response interceptor: return response as-is; for errors, provide a safe message fallback
 instance.interceptors.response.use(
-  (response) => {
-    return response;
-  },
+  (response) => response,
   (error) => {
-    return Promise.reject(error.response.data.message);
+    // keep compatibility with places that expect a string (e.g. err === "Unauthorized")
+    const msg =
+      error?.response?.data?.message ||
+      error?.response?.data?.error ||
+      error?.message ||
+      "Request failed";
+    return Promise.reject(msg);
   }
 );
 
