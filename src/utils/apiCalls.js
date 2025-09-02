@@ -964,9 +964,27 @@ export async function getUserStatusPayment(orderId) {
   return data; // e.g. { isPaid: true, status: 'PAID', method: 'CARD' }
 }
 
-export async function createOrders(payload) {
+/*export async function createOrders(payload) {
   const { data } = await api.post("/orders", payload);
   return data;
+}
+*/
+
+export async function createOrders(payload) {
+  // This backend does not have POST /orders.
+  // First try /orders/checkout (most likely), then /checkout as a fallback.
+  try {
+    const { data } = await api.post("/orders/checkout", payload);
+    return data;
+  } catch (e) {
+    const msg = String(e || "");
+    // If the route doesn't exist, try the alternate path
+    if (msg.includes("Cannot POST") || msg.includes("NotFound")) {
+      const { data } = await api.post("/checkout", payload);
+      return data;
+    }
+    throw e;
+  }
 }
 
 export async function orderMail(payload) {
