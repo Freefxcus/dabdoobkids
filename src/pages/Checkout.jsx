@@ -1,116 +1,141 @@
-import { useEffect, useState } from "react";
+// src/pages/Checkout.jsx
+import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-
 import { Box } from "@mui/material";
 import { useDispatch } from "react-redux";
+
 import BillingDetails from "../components/checkout/BillingDetails";
 import ConfirmPayment from "../components/checkout/ConfirmPayment.jsx";
 import SummaryOrderProductCard from "../components/checkout/SummaryOrderProductCard";
+
 import { userInfoActions } from "../Redux/store";
-import {
-  authorize,
-  getAddress,
-  getCart,
-  orderSummary,
-} from "../utils/apiCalls";
+import { authorize, getAddress, getCart, orderSummary } from "../utils/apiCalls";
 import instance from "../utils/interceptor";
+
+/** Normalize any incoming query string into your internal enum-ish values */
+const normalizeMethod = (m) => {
+  if (!m) return "COD";
+  const x = String(m).toLowerCase();
+  if (x.includes("cod") || x.includes("cash")) return "COD";
+  if (x.includes("card") || x.includes("credit")) return "CARD";
+  if (x.includes("wallet")) return "WALLET";
+  if (x.includes("valu")) return "VALU";
+  if (x.includes("kiosk") || x.includes("fawry")) return "KIOSK";
+  return "COD";
+};
+
 export default function Checkout() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [payemntMethod, setPaymentMethod] = useState(
-    searchParams.get("paymentMethod") || "cash"
+
+  // Query params (safe parsing)
+  const qpPayment = useMemo(
+    () => normalizeMethod(searchParams.get("paymentMethod")),
+    [searchParams]
   );
-  const [promoCode, setPromoCode] = useState(
-    searchParams.get("promocode") || ""
+  const qpPromo = useMemo(() => searchParams.get("promocode") || "", [searchParams]);
+  const qpUseWallet = useMemo(
+    () => searchParams.get("useWallet") === "true",
+    [searchParams]
   );
+
+  // Local state
+  const [paymentMethod, setPaymentMethod] = useState(qpPayment || "COD");
+  const [promoCode, setPromoCode] = useState(qpPromo);
+  const [isUseWallet, setIsUseWallet] = useState(qpUseWallet);
+
   const [addressActive, setAddressActive] = useState(null);
+  const [address, setAddress] = useState({ items: [] });
 
   const [cart, setCart] = useState([]);
-  const [order, setOrder] = useState([]);
-  const [address, setAddress] = useState([]);
-  const [DataSubmit, setDataSubmit] = useState();
+  const [order, setOrder] = useState(null);
+
   const [phone, setPhone] = useState("");
-  const [ForceReload, setForceReload] = useState(false);
-  const [isUseWallet, setIsUseWallet] = useState(
-    searchParams.get("useWallet") || false
-  );
-  useEffect(() => {
-    const fetchCart = async () => {
-      const cartData = await getCart();
-      setCart(cartData);
-    };
+  const [forceReload, setForceReload] = useState(false);
 
-    const fetchAddress = async () => {
-      const addressData = await getAddress();
-      setAddress(addressData);
-      setAddressActive(
-        addressData?.items?.length
-          ? addressData?.items?.filter((item) => item?.primary).id ||
-              addressData?.items?.[0]?.id
-          : null
-      );
-    };
-
-    fetchCart();
-    fetchAddress();
-  }, [ForceReload]);
-
-  //* profile
   const dispatch = useDispatch();
+
+  /** Ensure we always have a paymentMethod in the URL for consistency */
+  useEffect(() => {
+    if (!searchParams.get("paymentMethod")) {
+      setSearchParams((prev) => {
+        const sp = new URLSearchParams(prev);
+        sp.set("paymentMethod", "COD");
+        return sp;
+      });
+    }
+  }, [searchParams, setSearchParams]);
+
+  /** Keep local state in sync with query changes (if user modifies URL) */
+  useEffect(() => {
+    setPaymentMethod(qpPayment || "COD");
+    setPromoCode(qpPromo || "");
+    setIsUseWallet(qpUseWallet);
+  }, [qpPayment, qpPromo, qpUseWallet]);
+
+  /** Fetch cart + addresses */
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const cartData = await getCart();
+        setCart(Array.isArray(cartData) ? cartData : []);
+      } catch (e) {
+        console.error("Failed to load cart:", e);
+        setCart([]);
+      }
+
+      try {
+        const addressData = await getAddress();
+        const items = addressData?.items ?? [];
+        setAddress({ items });
+
+        // Pick primary address if present, otherwise first, otherwise null
+        const primary = items.find((it) => it?.primary);
+        setAddressActive(primary?.id ?? items[0]?.id ?? null);
+      } catch (e) {
+        console.error("Failed to load addresses:", e);
+        setAddress({ items: [] });
+        setAddressActive(null);
+      }
+    };
+    load();
+  }, [forceReload]);
+
+  /** Load profile (kept your original logic) */
   useEffect(() => {
     instance
-      .get("/profile", {
-        // params: { page: 1 },
-      })
+      .get("/profile")
       .then((response) => {
         dispatch(userInfoActions.update(response.data?.data));
       })
       .catch((err) => {
+        // authorize triggers login refresh if needed
         if (err === "Unauthorized") authorize(setForceReload);
       });
-  }, []);
+  }, [dispatch]);
 
-  useEffect(() => {
-    if (!searchParams.get("paymentMethod")) {
-      setSearchParams((prev) => {
-        prev.set("paymentMethod", "Cash on Delivery");
-        return prev;
-      });
-    }
-  }, []);
-
-  useEffect(() => {
-    const data = {
+  /** Build payload for summary + fetch order summary whenever inputs change */
+  const dataSubmit = useMemo(() => {
+    return {
       promocode: promoCode,
       useWallet: isUseWallet,
-      paymentMethod: searchParams.get("paymentMethod"),
-      address: address?.items?.[0]?.id,
-      phone: phone,
+      paymentMethod, // normalized value (COD/CARD/WALLET/VALU/KIOSK)
+      address: addressActive ?? address?.items?.[0]?.id ?? null,
+      phone,
     };
-    setDataSubmit(data);
-  }, [
-    address?.items,
-    payemntMethod,
-    promoCode,
-    searchParams,
-    phone,
-    isUseWallet,
-  ]);
+  }, [promoCode, isUseWallet, paymentMethod, addressActive, address?.items, phone]);
 
   useEffect(() => {
-    const data = {
-      promocode: promoCode,
-      useWallet: isUseWallet,
-      paymentMethod: searchParams.get("paymentMethod"),
-      address: address?.items?.[0]?.id,
-      phone: phone,
-    };
-    setDataSubmit(data);
     const fetchOrder = async () => {
-      const orderData = await orderSummary(data);
-      setOrder(orderData);
+      try {
+        const orderData = await orderSummary(dataSubmit);
+        setOrder(orderData || null);
+      } catch (e) {
+        console.error("orderSummary failed:", e);
+        setOrder(null);
+      }
     };
     fetchOrder();
-  }, [address?.items, payemntMethod, promoCode, searchParams, isUseWallet]);
+  }, [dataSubmit]);
 
   return (
     <div
@@ -131,28 +156,27 @@ export default function Checkout() {
           flexDirection: "column",
           gap: "24px",
           flex: 3,
+          minWidth: 320,
+          maxWidth: 900,
         }}
       >
-        <h1 style={{ fontSize: "24px", fontWeight: "500" }}>Summary Order</h1>
+        <h1 style={{ fontSize: "24px", fontWeight: 500 }}>Summary Order</h1>
 
-        <Box
-          sx={{
-            backgroundColor: "#fff",
-            padding: "24px",
-            borderRadius: "12px",
-          }}
-        >
-          {cart?.map((item) => (
-            <SummaryOrderProductCard item={item} key={item.id} />
-          ))}
+        <Box sx={{ backgroundColor: "#fff", p: "24px", borderRadius: "12px" }}>
+          {Array.isArray(cart) && cart.length > 0 ? (
+            cart.map((item) => <SummaryOrderProductCard item={item} key={item.id} />)
+          ) : (
+            <p>Your cart is empty.</p>
+          )}
         </Box>
+
         <BillingDetails
           address={address}
           addressActive={addressActive}
           setAddressActive={setAddressActive}
           phone={phone}
           setPhone={setPhone}
-          ForceReload={ForceReload}
+          ForceReload={forceReload}
           setForceReload={setForceReload}
         />
       </div>
@@ -162,11 +186,36 @@ export default function Checkout() {
         addressActive={addressActive}
         orderSummary={order}
         promoCodeMain={promoCode}
-        setPromoCodeMain={setPromoCode}
+        setPromoCodeMain={(v) => {
+          setPromoCode(v);
+          setSearchParams((prev) => {
+            const sp = new URLSearchParams(prev);
+            if (v) sp.set("promocode", v);
+            else sp.delete("promocode");
+            return sp;
+          });
+        }}
         isUseWallet={isUseWallet}
-        DataSubmit={DataSubmit}
-        setIsUseWallet={setIsUseWallet}
+        setIsUseWallet={(v) => {
+          setIsUseWallet(!!v);
+          setSearchParams((prev) => {
+            const sp = new URLSearchParams(prev);
+            sp.set("useWallet", !!v);
+            return sp;
+          });
+        }}
+        DataSubmit={dataSubmit}
         cartItems={cart}
+        paymentMethod={paymentMethod}
+        setPaymentMethod={(m) => {
+          const nm = normalizeMethod(m);
+          setPaymentMethod(nm);
+          setSearchParams((prev) => {
+            const sp = new URLSearchParams(prev);
+            sp.set("paymentMethod", nm);
+            return sp;
+          });
+        }}
       />
     </div>
   );
