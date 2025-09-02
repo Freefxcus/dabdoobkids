@@ -153,28 +153,16 @@ export default function ConfirmPayment({
       }
 
       const res = await getUserPaymentLink({
-        amount: amountToPay,                // backend can re-check anyway
-        paymentMethod: dtoMethod,           // EXACT strings
+        amount: amountToPay,
+        paymentMethod: mapUiToDtoMethod(paymentMethod), // "Credit Card" | "E-Wallet"
       });
 
-      // accept multiple shapes safely
-      const redirectUrl = res?.redirectUrl || res?.data?.redirectUrl || res?.link || null;
-      const orderRef =
-        res?.merchantOrderId ||
-        res?.orderReference ||
-        res?.orderRef ||
-        res?.data?.merchantOrderId ||
-        res?.data?.orderReference ||
-        res?.data?.orderRef ||
-        null;
-
-      if (!redirectUrl) {
+      if (!res?.redirectUrl) {
         notifyError("Could not create payment link. Please try again.");
         return;
       }
 
-      // open in modal (keeps your existing component)
-      const payload = { link: redirectUrl, orderId: orderRef, orderRef };
+      const payload = { link: res.redirectUrl, orderId: res.orderRef, orderRef: res.orderRef };
       setPaymentLink(payload);
       localStorage.setItem("paymentCheckout", JSON.stringify(payload));
       handleOpenModal();
