@@ -1049,24 +1049,6 @@ export async function getUserStatusPayment(id) {
 // more paymob integration 
 /** Start Paymob for an existing order */
 // Start Paymob payment for an existing order
-export async function startOrderPayment(orderId, method = "card", phone) {
-  // If your backend route is different, change this path accordingly.
-  // Common shapes:
-  //   POST /orders/:id/pay            body { method: 'card' | 'wallet', phone? }
-  //   POST /orders/:id/pay/card       body {}
-  //   POST /orders/:id/pay/wallet     body { phone }
-  const { data } = await instance.post(`/orders/${orderId}/pay`, {
-    method,
-    ...(phone ? { phone } : {}),
-  });
-
-  // Service returns { url, paymobOrderId }
-  return {
-    link: data?.url || data?.link || data?.redirectUrl || null,
-    paymobOrderId: data?.paymobOrderId || data?.paymob_order_id || null,
-    raw: data,
-  };
-}
 
 export async function startOrderPayment(orderId, method = "card", phone) {
   // Guessing the route based on the service: order-based pay endpoint is typical.
