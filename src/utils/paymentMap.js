@@ -9,6 +9,8 @@ export function mapUiToDtoMethod(ui) {
       return "Credit Card";
     case "WALLET":
       return "E-Wallet";
+    case "VALU": return "ValU";
+    case "KIOSK": return "Kiosk";
     default:
       return "Cash on Delivery";
   }

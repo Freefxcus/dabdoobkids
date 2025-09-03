@@ -23,7 +23,7 @@ import instance from "../utils/interceptor";
 
 /** Normalize query param → UI values */
 const normalizeMethod = (m) => {
-  if (!m) return "Cash on Delivery";
+  if (!m) return "COD";
   const x = String(m).toLowerCase();
   if (x.includes("cod") || x.includes("cash")) return "COD";
   if (x.includes("card") || x.includes("credit")) return "CARD";
@@ -76,7 +76,7 @@ export default function Checkout() {
 
   /** Sync local state when URL changes */
   useEffect(() => {
-    setPaymentMethod(qpPayment || "Cash on Delivery");
+    setPaymentMethod(qpPayment || "COD");
     setPromoCode(qpPromo || "");
     setIsUseWallet(qpUseWallet);
   }, [qpPayment, qpPromo, qpUseWallet]);
@@ -295,7 +295,7 @@ export default function Checkout() {
         cartItems={cart}
         paymentMethod={paymentMethod}
         setPaymentMethod={(m) => {
-          const nm = normalizeMethod(m);
+          const nm = normalizeMethod(m); // -> token
           setPaymentMethod(nm);
           setSearchParams((prev) => {
             const sp = new URLSearchParams(prev);
