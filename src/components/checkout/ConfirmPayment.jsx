@@ -125,19 +125,18 @@ const handlePayment = async () => {
   try {
     setLoading(true);
 
-    const dtoMethod = mapUiToDtoMethod(paymentMethod); // "Cash on Delivery" | "Credit Card" | "E-Wallet"
+    const dtoMethod = mapUiToDtoMethod(paymentMethod);
 
     // 1) COD — create order now
     if (dtoMethod === "Cash on Delivery") {
       const payload = {
-        ...(DataSubmit || {}),      // already has mapped method & integer address from Checkout.jsx
-        paymentMethod: dtoMethod,   // ensure exact backend string
-        address: Number(addressId), // DTO expects integer
+        ...(DataSubmit || {}),
+        paymentMethod: dtoMethod,
+        address: Number(addressId),
       };
 
       const created = await createOrders(payload);
-      const newId =
-        created?.orderId || created?.id || created?.data?.orderId || created?.data?.id;
+      const newId = created?.orderId || created?.id || created?.data?.orderId || created?.data?.id;
 
       notifySuccess("Order placed successfully.");
       navigate(newId ? `/thank-you?order=${newId}&payment=cod` : `/thank-you?payment=cod`);
@@ -150,15 +149,27 @@ const handlePayment = async () => {
       return;
     }
 
-   const { link, orderId } = await getUserPaymentLink(Number(amountToPay));
+    // Check if we already have a payment link in storage
+    const storedPayment = localStorage.getItem("paymentCheckout");
+    if (storedPayment) {
+      const { link, orderId } = JSON.parse(storedPayment);
+      setPaymentLink({ link, orderId });
+      handleOpenModal();
+      return;
+    }
+
+    // Get new payment link from backend
+    const { link, orderId } = await getUserPaymentLink(Number(amountToPay));
+    
     if (!link) {
       notifyError("Could not create payment link. Please try again.");
       return;
     }
 
-   setPaymentLink({ link, orderId });
+    setPaymentLink({ link, orderId });
     localStorage.setItem("paymentCheckout", JSON.stringify({ link, orderId }));
-    handleOpenModal();  
+    handleOpenModal();
+
   } catch (e) {
     const msg = e?.response?.data?.message || e?.message || String(e) || "Payment failed. Please try again.";
     notifyError(msg);
