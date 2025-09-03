@@ -56,7 +56,7 @@ export default function ConfirmPayment({
   const [promoSuccess, setPromoSuccess] = useState(null);
 
   const [loading, setLoading] = useState(false);
-  const [paymentLink, setPaymentLink] = useState(); // { link, orderRef? }
+  const [paymentLink, setPaymentLink] = useState({}); // { link, orderRef? }
   const [open, setOpen] = useState(false);
   const handleOpenModal = () => setOpen(true);
   const handleCloseModal = async (result) => {
@@ -159,13 +159,10 @@ const handlePayment = async () => {
     }
 
     // Get new payment link from backend
-const { link, orderId } = await getUserPaymentLink(Number(amountToPay));
-if (!link) {
-  notifyError("Could not create payment link. Please try again.");
-  return;
-}
-setPaymentLink({ link, orderId });
-handleOpenModal();
+    const { link, orderId } = await getUserPaymentLink(Number(amountToPay));
+    if (!link) { notifyError("Could not create payment link."); return; }
+    setPaymentLink({ link, orderId });   // <-- ensures the prop is an object
+    handleOpenModal();
 
   } catch (e) {
     const msg = e?.response?.data?.message || e?.message || String(e) || "Payment failed. Please try again.";

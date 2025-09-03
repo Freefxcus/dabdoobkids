@@ -1,4 +1,3 @@
-// src/components/checkout/ModalPaymentLink.jsx
 import { Backdrop, Fade, Modal } from "@mui/material";
 import { useEffect, useMemo } from "react";
 import { useDeleteAllCartMutation } from "../../Redux/cartApi";
@@ -12,22 +11,27 @@ import styles from "../../styles/components/ModalPaymentLink.module.css";
 import { notifyError, notifySuccess } from "../../utils/general";
 import { useSelector } from "react-redux";
 
-function ModalPaymentLink({
-  paymentLink,   // may be undefined/null initially
-  open,
-  closeModal,
-  addressInfo = {},
-  paymentAmount = 0,
-  orderSummary = [],
-  price = {},
-}) {
+export default function ModalPaymentLink(props) {
+  // Robust defaults so nothing throws if props are missing
+  const {
+    paymentLink = {},               // <-- key fix: default to {}
+    open = false,
+    closeModal = () => {},
+    addressInfo = {},
+    paymentAmount = 0,
+    orderSummary = [],
+    price = {},
+  } = props || {};
+
   const { email } = useSelector((state) => state.userInfo.value) || {};
 
-  // ---- Normalize inputs safely ----
- const link =
-    paymentLink.link || paymentLink.redirectUrl || "";
+  // Normalize fields safely (never read from undefined)
+  const link =
+    paymentLink?.link ||
+    paymentLink?.redirectUrl ||
+    paymentLink?.redirect_url ||
+    "";
 
-  // Prefer orderId; fall back to orderReference / orderReferences if provided
   const orderId = useMemo(() => {
     const candidate =
       paymentLink?.orderId ??
@@ -35,12 +39,11 @@ function ModalPaymentLink({
       paymentLink?.orderReference ??
       (Array.isArray(paymentLink?.orderReferences)
         ? paymentLink.orderReferences[0]
-        : paymentLink?.orderReferences);
-
+        : paymentLink?.orderReferences) ??
+      null;
     return candidate == null || candidate === "" ? null : String(candidate);
   }, [paymentLink]);
 
-  // Map cart items → products payload safely
   const products = useMemo(
     () =>
       (orderSummary || []).map((item) => ({
@@ -52,11 +55,10 @@ function ModalPaymentLink({
 
   const [deleteAllCart] = useDeleteAllCartMutation();
 
-  // Transaction payload (optional, if your backend also creates transactions via webhook you can skip this)
   const transaction = useMemo(
     () => ({
       paymentAmount: Number(paymentAmount) || 0,
-      paymentStatus: "success", // intent; real status is verified below
+      paymentStatus: "success",
       paymentType: "online",
       shippingData: {
         warehouseName: addressInfo?.warehouseName || "",
@@ -72,20 +74,19 @@ function ModalPaymentLink({
     [paymentAmount, addressInfo, price?.shipping]
   );
 
-  // When modal closes (open === false), verify payment and finalize
+  // On modal close, verify and finalize
   useEffect(() => {
     if (open === false && orderId) {
       (async () => {
         try {
-          // 1) Verify payment result
           const verify = await getUserStatusPayment(orderId);
           if (!verify?.isPaid) {
             notifyError("Payment failed or was canceled.");
-            closeModal?.({ ok: false });
+            closeModal({ ok: false });
             return;
           }
 
-          // 2) Optionally create a transaction record
+          // Create a transaction record (optional)
           let transactionId = null;
           try {
             const created = await createTransaction(transaction);
@@ -96,34 +97,31 @@ function ModalPaymentLink({
               created?.id ||
               null;
           } catch {
-            // If this fails but verify succeeded, continue to create the order
+            /* continue even if this fails */
           }
 
-          // 3) Create order using collected products
+          // Create the order
           try {
             await createOrders({
               products,
               ...(transactionId ? { transaction: transactionId } : {}),
             });
-          } catch (e) {
-            // If your webhook already creates orders, this may not be needed.
-            // Uncomment to surface a message:
-            // notifyError(e?.response?.data?.message || e?.message || "Could not create order.");
+          } catch {
+            /* If your webhook creates orders, this can be optional */
           }
 
-          // 4) Cleanup + email (best effort)
           try { await deleteAllCart(); } catch {}
           try { if (email) await orderMail({ email }); } catch {}
 
           notifySuccess("Payment confirmed. Order created successfully.");
-          closeModal?.({ ok: true, orderId });
+          closeModal({ ok: true, orderId });
         } catch (err) {
           notifyError(
             err?.response?.data?.message ||
               err?.message ||
               "Payment verification failed."
           );
-          closeModal?.({ ok: false });
+          closeModal({ ok: false });
         } finally {
           localStorage.removeItem("paymentCheckout");
         }
@@ -135,7 +133,7 @@ function ModalPaymentLink({
   return (
     <Modal
       open={!!open}
-      onClose={() => closeModal?.({ ok: false })}
+      onClose={() => closeModal({ ok: false })}
       closeAfterTransition
       slots={{ backdrop: Backdrop }}
       slotProps={{ backdrop: { timeout: 500 } }}
@@ -144,7 +142,7 @@ function ModalPaymentLink({
         <div className={styles.modalContainer}>
           <button
             className={styles.closeButton}
-            onClick={() => closeModal?.({ ok: false })}
+            onClick={() => closeModal({ ok: false })}
           >
             X
           </button>
@@ -160,5 +158,3 @@ function ModalPaymentLink({
     </Modal>
   );
 }
-
-export default ModalPaymentLink;
