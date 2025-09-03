@@ -1003,6 +1003,17 @@ export async function createOrders(payload) {
   }
 }
 
+// Verify payment — usual route first; fallback to query style
+export async function getUserStatusPayment(id) {
+  try {
+    const { data } = await instance.get(`/payment/verify/${id}`);
+    return { isPaid: !!(data?.isPaid ?? data?.paid ?? data?.success), raw: data };
+  } catch {
+    const { data } = await instance.get(`/payment/verify`, { params: { id } });
+    return { isPaid: !!(data?.isPaid ?? data?.paid ?? data?.success), raw: data };
+  }
+}
+
 // more paymob integration 
 /** Start Paymob for an existing order */
 // Start Paymob payment for an existing order
