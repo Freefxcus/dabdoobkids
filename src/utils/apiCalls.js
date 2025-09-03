@@ -954,6 +954,20 @@ export async function getSizes(params) {
   return data;
 }
 
+** Update a cart line's quantity */
+export async function updateCartItem(itemId, count) {
+  // Most Nest carts: PATCH /cart/:id  body { count }
+  const { data } = await instance.patch(`/cart/${itemId}`, { count: Number(count) });
+  return data?.data ?? data;
+}
+
+/** Remove a cart line */
+export async function removeCartItem(itemId) {
+  // Most Nest carts: DELETE /cart/:id
+  const { data } = await instance.delete(`/cart/${itemId}`);
+  return data?.data ?? data;
+}
+
 // NOTE: Backend should create Paymob order/key and return { redirectUrl }
 // Keep the same function name but now call your NestJS API (not onrender)
 /*export async function getUserPaymentLink({ orderId, paymentMethod, amount }) {

@@ -1,5 +1,5 @@
 // src/pages/Checkout.jsx
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Box } from "@mui/material";
 import { useDispatch } from "react-redux";
@@ -10,7 +10,15 @@ import ConfirmPayment from "../components/checkout/ConfirmPayment.jsx";
 import SummaryOrderProductCard from "../components/checkout/SummaryOrderProductCard";
 
 import { userInfoActions } from "../Redux/store";
-import { authorize, getAddress, getCart, orderSummary } from "../utils/apiCalls";
+import {
+  authorize,
+  getAddress,
+  getCart,
+  orderSummary,
+  // 👇 add these helpers in utils/apiCalls.js (shown below)
+  updateCartItem,
+  removeCartItem,
+} from "../utils/apiCalls";
 import instance from "../utils/interceptor";
 
 /** Normalize query param → UI values */
@@ -74,32 +82,33 @@ export default function Checkout() {
   }, [qpPayment, qpPromo, qpUseWallet]);
 
   /** Fetch cart + addresses */
+  const loadCartAndAddress = useCallback(async () => {
+    try {
+      const cartData = await getCart();
+      setCart(Array.isArray(cartData) ? cartData : []);
+    } catch (e) {
+      console.error("Failed to load cart:", e);
+      setCart([]);
+    }
+
+    try {
+      const addressData = await getAddress();
+      const items = addressData?.items ?? [];
+      setAddress({ items });
+
+      // primary → first → null
+      const primary = items.find((it) => it?.primary);
+      setAddressActive(primary?.id ?? items[0]?.id ?? null);
+    } catch (e) {
+      console.error("Failed to load addresses:", e);
+      setAddress({ items: [] });
+      setAddressActive(null);
+    }
+  }, []);
+
   useEffect(() => {
-    const load = async () => {
-      try {
-        const cartData = await getCart();
-        setCart(Array.isArray(cartData) ? cartData : []);
-      } catch (e) {
-        console.error("Failed to load cart:", e);
-        setCart([]);
-      }
-
-      try {
-        const addressData = await getAddress();
-        const items = addressData?.items ?? [];
-        setAddress({ items });
-
-        // primary → first → null
-        const primary = items.find((it) => it?.primary);
-        setAddressActive(primary?.id ?? items[0]?.id ?? null);
-      } catch (e) {
-        console.error("Failed to load addresses:", e);
-        setAddress({ items: [] });
-        setAddressActive(null);
-      }
-    };
-    load();
-  }, [forceReload]);
+    loadCartAndAddress();
+  }, [loadCartAndAddress, forceReload]);
 
   /** Load profile (kept your original logic) */
   useEffect(() => {
@@ -133,29 +142,78 @@ export default function Checkout() {
     const base = {
       promocode: promoCode || undefined,
       useWallet: !!isUseWallet,
-      paymentMethod: dtoPaymentMethod, // 'Card' | 'EWallet' | 'COD' | 'ValU' | 'Kiosk'
-      address: addressInt,             // integer as required by DTO
+      paymentMethod: dtoPaymentMethod,
+      address: addressInt, // integer as required by DTO
     };
     return dtoPaymentMethod === "E-Wallet" ? { ...base, phone } : base;
   }, [promoCode, isUseWallet, dtoPaymentMethod, addressInt, phone]);
 
-  /** Fetch order summary once we have a valid address */
-  useEffect(() => {
-    const fetchOrder = async () => {
-      try {
-        if (!Number.isInteger(dataSubmit.address)) {
-          setOrder(null);
-          return;
-        }
-        const orderData = await orderSummary(dataSubmit);
-        setOrder(orderData || null);
-      } catch (e) {
-        console.error("orderSummary failed:", e);
+  /** Recalculate order summary */
+  const recalcSummary = useCallback(async () => {
+    try {
+      if (!Number.isInteger(addressInt)) {
         setOrder(null);
+        return;
       }
-    };
-    fetchOrder();
-  }, [dataSubmit]);
+      const orderData = await orderSummary(dataSubmit);
+      setOrder(orderData || null);
+    } catch (e) {
+      console.error("orderSummary failed:", e);
+      setOrder(null);
+    }
+  }, [dataSubmit, addressInt]);
+
+  useEffect(() => {
+    recalcSummary();
+  }, [recalcSummary]);
+
+  // ---------------- CART ACTIONS (restore remove / quantity) ----------------
+
+  const refreshCart = useCallback(async () => {
+    await loadCartAndAddress();
+    await recalcSummary();
+  }, [loadCartAndAddress, recalcSummary]);
+
+  const onRemove = useCallback(
+    async (item) => {
+      try {
+        await removeCartItem(item.id); // DELETE /cart/:id
+      } catch (e) {
+        console.error("removeCartItem failed:", e);
+      } finally {
+        await refreshCart();
+      }
+    },
+    [refreshCart]
+  );
+
+  const onIncrease = useCallback(
+    async (item) => {
+      const next = Number(item?.count ?? 1) + 1;
+      try {
+        await updateCartItem(item.id, next); // PATCH /cart/:id { count }
+      } catch (e) {
+        console.error("updateCartItem(+1) failed:", e);
+      } finally {
+        await refreshCart();
+      }
+    },
+    [refreshCart]
+  );
+
+  const onDecrease = useCallback(
+    async (item) => {
+      const next = Math.max(1, Number(item?.count ?? 1) - 1);
+      try {
+        await updateCartItem(item.id, next); // PATCH /cart/:id { count }
+      } catch (e) {
+        console.error("updateCartItem(-1) failed:", e);
+      } finally {
+        await refreshCart();
+      }
+    },
+    [refreshCart]
+  );
 
   return (
     <div
@@ -184,7 +242,16 @@ export default function Checkout() {
 
         <Box sx={{ backgroundColor: "#fff", p: "24px", borderRadius: "12px" }}>
           {Array.isArray(cart) && cart.length > 0 ? (
-            cart.map((item) => <SummaryOrderProductCard item={item} key={item.id} />)
+            cart.map((item) => (
+              <SummaryOrderProductCard
+                key={item.id}
+                item={item}
+                // 👇 restore controls
+                onRemove={() => onRemove(item)}
+                onIncrease={() => onIncrease(item)}
+                onDecrease={() => onDecrease(item)}
+              />
+            ))
           ) : (
             <p>Your cart is empty.</p>
           )}
