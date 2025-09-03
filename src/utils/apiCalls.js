@@ -954,7 +954,7 @@ export async function getSizes(params) {
   return data;
 }
 
-** Update a cart line's quantity */
+/** Update a cart line's quantity */
 export async function updateCartItem(itemId, count) {
   // Most Nest carts: PATCH /cart/:id  body { count }
   const { data } = await instance.patch(`/cart/${itemId}`, { count: Number(count) });
