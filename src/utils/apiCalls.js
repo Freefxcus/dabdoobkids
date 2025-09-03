@@ -1003,50 +1003,48 @@ export async function createOrders(payload) {
   }
 }
 
-  export async function getUserPaymentLink(amount) {
-    // Try the most likely shape first: GET /payment?amount=...
-    try {
-      const { data } = await instance.get("/payment", { params: { amount } });
-      return {
-        link: data?.link || data?.redirectUrl || data?.redirect_url || null,
-        orderId:
-          data?.orderId ||
-          data?.order_id ||
-          data?.merchantOrderId ||
-          data?.orderRef ||
-          data?.orderReference ||
-          null,
-        raw: data,
-      };
-    } catch (e) {
-      // Fallback: GET /payment/:amount (what the old render service used)
-      const { data } = await instance.get(`/payment/${amount}`);
-      return {
-        link: data?.link || data?.redirectUrl || data?.redirect_url || null,
-        orderId:
-          data?.orderId ||
-          data?.order_id ||
-          data?.merchantOrderId ||
-          data?.orderRef ||
-          data?.orderReference ||
-          null,
-        raw: data,
-      };
-    }
+export async function getUserPaymentLink(amount) {
+  // 1) Most common in Nest: GET /payment?amount=5680
+  try {
+    const { data } = await instance.get("/payment", { params: { amount } });
+    return {
+      link: data?.link || data?.redirectUrl || data?.redirect_url || null,
+      orderId:
+        data?.orderId ||
+        data?.order_id ||
+        data?.merchantOrderId ||
+        data?.orderRef ||
+        data?.orderReference ||
+        null,
+      raw: data,
+    };
+  } catch (e) {
+    // 2) Legacy fallback: GET /payment/5680
+    const { data } = await instance.get(`/payment/${amount}`);
+    return {
+      link: data?.link || data?.redirectUrl || data?.redirect_url || null,
+      orderId:
+        data?.orderId ||
+        data?.order_id ||
+        data?.merchantOrderId ||
+        data?.orderRef ||
+        data?.orderReference ||
+        null,
+      raw: data,
+    };
   }
+}
 
-  /** Verify payment (keep your existing verify route first; add query fallback) */
-  export async function getUserStatusPayment(id) {
-    try {
-      const { data } = await instance.get(`/payment/verify/${id}`);
-      return { isPaid: !!(data?.isPaid ?? data?.paid ?? data?.success), raw: data };
-    } catch {
-      // Some backends use /payment/verify?id=...
-      const { data } = await instance.get(`/payment/verify`, { params: { id } });
-      return { isPaid: !!(data?.isPaid ?? data?.paid ?? data?.success), raw: data };
-    }
+// Verify payment — usual route first; fallback to query style
+export async function getUserStatusPayment(id) {
+  try {
+    const { data } = await instance.get(`/payment/verify/${id}`);
+    return { isPaid: !!(data?.isPaid ?? data?.paid ?? data?.success), raw: data };
+  } catch {
+    const { data } = await instance.get(`/payment/verify`, { params: { id } });
+    return { isPaid: !!(data?.isPaid ?? data?.paid ?? data?.success), raw: data };
   }
-
+}
   export async function orderMail(payload) {
     const { data } = await api.post("/orders/mail", payload);
     return data;

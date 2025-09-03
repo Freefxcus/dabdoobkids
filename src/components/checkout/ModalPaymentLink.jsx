@@ -24,21 +24,20 @@ function ModalPaymentLink({
   const { email } = useSelector((state) => state.userInfo.value) || {};
 
   // ---- Normalize inputs safely ----
-  const link =
-    paymentLink?.link ||
-    paymentLink?.redirectUrl ||
-    "";
+ const link =
+    paymentLink.link || paymentLink.redirectUrl || "";
 
   // Prefer orderId; fall back to orderReference / orderReferences if provided
   const orderId = useMemo(() => {
-    const ref =
+    const candidate =
       paymentLink?.orderId ??
+      paymentLink?.order_id ??
       paymentLink?.orderReference ??
       (Array.isArray(paymentLink?.orderReferences)
         ? paymentLink.orderReferences[0]
-        : paymentLink?.orderReferences) ??
-      null;
-    return ref ?? null;
+        : paymentLink?.orderReferences);
+
+    return candidate == null || candidate === "" ? null : String(candidate);
   }, [paymentLink]);
 
   // Map cart items → products payload safely

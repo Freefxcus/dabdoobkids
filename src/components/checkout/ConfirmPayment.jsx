@@ -159,16 +159,13 @@ const handlePayment = async () => {
     }
 
     // Get new payment link from backend
-    const { link, orderId } = await getUserPaymentLink(Number(amountToPay));
-    
-    if (!link) {
-      notifyError("Could not create payment link. Please try again.");
-      return;
-    }
-
-    setPaymentLink({ link, orderId });
-    localStorage.setItem("paymentCheckout", JSON.stringify({ link, orderId }));
-    handleOpenModal();
+const { link, orderId } = await getUserPaymentLink(Number(amountToPay));
+if (!link) {
+  notifyError("Could not create payment link. Please try again.");
+  return;
+}
+setPaymentLink({ link, orderId });
+handleOpenModal();
 
   } catch (e) {
     const msg = e?.response?.data?.message || e?.message || String(e) || "Payment failed. Please try again.";
