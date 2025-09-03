@@ -115,6 +115,7 @@ export default function ConfirmPayment({
   };
 
 const handlePayment = async () => {
+  // Clear previous payment data
   localStorage.removeItem("paymentCheckout");
 
   if (!addressId) {
@@ -127,12 +128,14 @@ const handlePayment = async () => {
 
     const dtoMethod = mapUiToDtoMethod(paymentMethod);
 
-    // 1) COD — create order now
+    // 1) Cash on Delivery
     if (dtoMethod === "Cash on Delivery") {
       const payload = {
         ...(DataSubmit || {}),
         paymentMethod: dtoMethod,
         address: Number(addressId),
+        totalAmount: Number(amountToPay), // Ensure amount is included
+        items: cartItems // Include cart items if needed
       };
 
       const created = await createOrders(payload);
@@ -143,30 +146,61 @@ const handlePayment = async () => {
       return;
     }
 
-    // 2) Online (Credit Card / E-Wallet) — ask backend for Paymob link
-    if (dtoMethod !== "Credit Card" && dtoMethod !== "E-Wallet") {
-      notifyError("Unsupported payment method.");
+    if (dtoMethod === "Credit Card") {
+      // STEP A: create an unpaid order first
+      const orderRes = await createOrders({
+        ...(DataSubmit || {}),
+        paymentMethod: "Credit Card",
+        address: Number(addressId),
+      });
+
+      const orderId =
+        orderRes?.orderId || orderRes?.id || orderRes?.data?.orderId || orderRes?.data?.id;
+      if (!orderId) {
+        notifyError("Could not create order.");
+        return;
+      }
+
+      // STEP B: ask backend to start Paymob for that order
+      const { link } = await startOrderPayment(orderId, "card");
+      if (!link) {
+        notifyError("Could not create payment link.");
+        return;
+      }
+
+      setPaymentLink({ link, orderId });
+      handleOpenModal();  // now your modal opens with the Paymob iframe
       return;
     }
+    // Wallet (if you support it)
+    if (dtoMethod === "E-Wallet") {
+      // same pattern but pass phone:
+      const orderRes = await createOrders({
+        ...(DataSubmit || {}),
+        paymentMethod: "E-Wallet",
+        address: Number(addressId),
+      });
+      const orderId =
+        orderRes?.orderId || orderRes?.id || orderRes?.data?.orderId || orderRes?.data?.id;
 
-    // Check if we already have a payment link in storage
-    const storedPayment = localStorage.getItem("paymentCheckout");
-    if (storedPayment) {
-      const { link, orderId } = JSON.parse(storedPayment);
+      const { link } = await startOrderPayment(orderId, "wallet", DataSubmit?.phone);
+      if (!link) {
+        notifyError("Could not create wallet payment link.");
+        return;
+      }
+
       setPaymentLink({ link, orderId });
       handleOpenModal();
       return;
-    }
+    }    
+    notifyError("Unsupported payment method.");
 
-    // Get new payment link from backend
-    const { link, orderId } = await getUserPaymentLink(Number(amountToPay));
-    if (!link) { notifyError("Could not create payment link."); return; }
-    setPaymentLink({ link, orderId });   // <-- ensures the prop is an object
-    handleOpenModal();
-
-  } catch (e) {
-    const msg = e?.response?.data?.message || e?.message || String(e) || "Payment failed. Please try again.";
-    notifyError(msg);
+  } catch (error) {
+    console.error("Payment error:", error);
+    const errorMessage = error?.response?.data?.message || 
+                         error?.message || 
+                         "Payment failed. Please try again.";
+    notifyError(errorMessage);
   } finally {
     setLoading(false);
   }

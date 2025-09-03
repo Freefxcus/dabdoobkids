@@ -1045,6 +1045,30 @@ export async function getUserStatusPayment(id) {
     return { isPaid: !!(data?.isPaid ?? data?.paid ?? data?.success), raw: data };
   }
 }
+
+// more paymob integration 
+/** Start Paymob for an existing order */
+export async function startOrderPayment(orderId, method = "card", phone) {
+  // Guessing the route based on the service: order-based pay endpoint is typical.
+  // Search backend for the controller method that calls paymobService.registerOrder(...)
+  // Common shapes:
+  //   POST /orders/:id/pay       body { method: 'card' | 'wallet', phone? }
+  //   POST /orders/:id/pay/card  body {}
+  // If your controller uses one of these, adjust the path accordingly.
+  const { data } = await instance.post(`/orders/${orderId}/pay`, {
+    method,       // 'card' or 'wallet'
+    phone: phone || undefined,
+  });
+  // service returns { url, paymobOrderId }
+  return { link: data?.url, paymobOrderId: data?.paymobOrderId, raw: data };
+}
+
+/** Optional: verify / or just read order after redirect */
+export async function getOrderById(orderId) {
+  const { data } = await instance.get(`/orders/${orderId}`);
+  return data?.data ?? data;
+}
+
   export async function orderMail(payload) {
     const { data } = await api.post("/orders/mail", payload);
     return data;
