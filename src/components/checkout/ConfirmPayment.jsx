@@ -4,7 +4,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { Box, CircularProgress, Stack } from "@mui/material";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { mapUiToDtoMethod } from "../../utils/paymentMap";
-import { createOrders   } from "../../utils/apiCalls";
+import { createOrders  , checkoutOrder } from "../../utils/apiCalls";
 import { newCalcDiscount, notifyError, notifySuccess } from "../../utils/general";
 import ModalPaymentLink from "./ModalPaymentLink";
 import "./style.css";
