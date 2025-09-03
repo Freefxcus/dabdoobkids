@@ -1003,67 +1003,17 @@ export async function createOrders(payload) {
   }
 }
 
-export async function getUserPaymentLink(amount) {
-  // 1) Most common in Nest: GET /payment?amount=5680
-  try {
-    const { data } = await instance.get("/payment", { params: { amount } });
-    return {
-      link: data?.link || data?.redirectUrl || data?.redirect_url || null,
-      orderId:
-        data?.orderId ||
-        data?.order_id ||
-        data?.merchantOrderId ||
-        data?.orderRef ||
-        data?.orderReference ||
-        null,
-      raw: data,
-    };
-  } catch (e) {
-    // 2) Legacy fallback: GET /payment/5680
-    const { data } = await instance.get(`/payment/${amount}`);
-    return {
-      link: data?.link || data?.redirectUrl || data?.redirect_url || null,
-      orderId:
-        data?.orderId ||
-        data?.order_id ||
-        data?.merchantOrderId ||
-        data?.orderRef ||
-        data?.orderReference ||
-        null,
-      raw: data,
-    };
-  }
-}
-
-// Verify payment — usual route first; fallback to query style
-export async function getUserStatusPayment(id) {
-  try {
-    const { data } = await instance.get(`/payment/verify/${id}`);
-    return { isPaid: !!(data?.isPaid ?? data?.paid ?? data?.success), raw: data };
-  } catch {
-    const { data } = await instance.get(`/payment/verify`, { params: { id } });
-    return { isPaid: !!(data?.isPaid ?? data?.paid ?? data?.success), raw: data };
-  }
-}
-
 // more paymob integration 
 /** Start Paymob for an existing order */
 // Start Paymob payment for an existing order
 
-export async function startOrderPayment(orderId, method = "card", phone) {
-  // Guessing the route based on the service: order-based pay endpoint is typical.
-  // Search backend for the controller method that calls paymobService.registerOrder(...)
-  // Common shapes:
-  //   POST /orders/:id/pay       body { method: 'card' | 'wallet', phone? }
-  //   POST /orders/:id/pay/card  body {}
-  // If your controller uses one of these, adjust the path accordingly.
-  const { data } = await instance.post(`/orders/${orderId}/pay`, {
-    method,       // 'card' or 'wallet'
-    phone: phone || undefined,
-  });
-  // service returns { url, paymobOrderId }
-  return { link: data?.url, paymobOrderId: data?.paymobOrderId, raw: data };
+export async function checkoutOrder(payload) {
+  // This is the only call you need for all payment methods.
+  const { data } = await instance.post("/orders/checkout", payload);
+  // service often wraps as { status, data }, so normalize:
+  return data?.data ?? data;   // can be { url } for online, or { orderId, ... } for COD
 }
+
 
 /** Optional: verify / or just read order after redirect */
 export async function getOrderById(orderId) {

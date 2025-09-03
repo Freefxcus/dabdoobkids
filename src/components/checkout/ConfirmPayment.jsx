@@ -114,7 +114,7 @@ export default function ConfirmPayment({
     setPromoSuccess(null);
   };
 
-const handlePayment = async () => {
+/*const handlePayment = async () => {
   // Clear previous payment data
   localStorage.removeItem("paymentCheckout");
 
@@ -204,7 +204,68 @@ const handlePayment = async () => {
   } finally {
     setLoading(false);
   }
+};*/
+const handlePayment = async () => {
+  localStorage.removeItem("paymentCheckout");
+
+  if (!addressId) {
+    notifyError("Please select an address before continuing.");
+    return;
+  }
+
+  try {
+    setLoading(true);
+
+    const dtoMethod = mapUiToDtoMethod(paymentMethod); // "Cash on Delivery" | "Credit Card" | "E-Wallet"
+
+    const payload = {
+      promocode: promoCodeMain || undefined,
+      useWallet: dtoMethod === "E-Wallet",
+      paymentMethod: dtoMethod,           // EXACT strings the DTO expects
+      address: Number(addressId),         // DTO requires integer
+      phone: dtoMethod === "E-Wallet" ? (DataSubmit?.phone || "") : undefined,
+    };
+
+    console.log("[checkout] payload:", payload);
+    const res = await checkoutOrder(payload);
+    console.log("[checkout] response:", res);
+
+    // ONLINE: backend already returns the Paymob iframe URL
+    const url =
+      res?.url ||
+      res?.data?.url ||
+      res?.link ||
+      res?.data?.link ||
+      null;
+
+    if (dtoMethod === "Credit Card" || dtoMethod === "E-Wallet") {
+      if (!url) {
+        notifyError("Server didn't return a payment URL.");
+        return;
+      }
+      setPaymentLink({ link: url, orderId: res?.orderId || res?.id || null });
+      handleOpenModal();                        // <— opens your Paymob iframe modal
+      return;
+    }
+
+    // COD: expect an order id or success
+    const orderId =
+      res?.orderId || res?.id || res?.data?.orderId || res?.data?.id || null;
+
+    notifySuccess("Order placed successfully.");
+    navigate(orderId ? `/thank-you?order=${orderId}&payment=cod` : `/thank-you?payment=cod`);
+  } catch (e) {
+    const msg =
+      e?.response?.data?.message ||
+      e?.message ||
+      "Checkout failed.";
+    console.error("[checkout] error:", msg);
+    notifyError(msg);
+  } finally {
+    setLoading(false);
+  }
 };
+
 
 
   return (
