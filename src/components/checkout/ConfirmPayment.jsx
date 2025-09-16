@@ -30,6 +30,15 @@ export default function ConfirmPayment({
   const [deleteAllCart] = useDeleteAllCartMutation();
 
   // ---------- helpers ----------
+  const toApiPayment = (m) => {
+    switch (m) {
+      case "CARD":   return "Credit Card";
+      case "COD":    return "Cash on Delivery";
+      case "WALLET": return "E-Wallet";
+      default:       return m || "Cash on Delivery";
+    }
+  };
+
   const normalizePayment = (raw) => {
     switch ((raw || "").toLowerCase()) {
       case "credit+card":
@@ -148,10 +157,10 @@ export default function ConfirmPayment({
 
   // ---------- payment ----------
   const handlePayment = async () => {
-    // guard: need an address if required
+    // need an address
     if (!addrId) return;
 
-    // CARD flow: use cached link if present
+    // CARD flow
     if (paymentMethod === "CARD") {
       const cached = JSON.parse(localStorage.getItem("paymentURL") || "null");
       if (cached?.link) {
@@ -162,11 +171,10 @@ export default function ConfirmPayment({
 
       try {
         setLoading(true);
-        // Prefer server-calculated amount; sending for convenience
         const checkout = await getUserPaymentLink({
-          orderId: orderSummary?.data?.data?.orderId, // if you have it
-          paymentMethod: "CARD",
-          amount: price.totalDue,
+          orderId: orderSummary?.data?.data?.orderId, // if available
+          paymentMethod: toApiPayment("CARD"),         // => "Credit Card"
+          amount: price.totalDue,                      // optional if server calculates
         });
 
         if (checkout?.link) {
@@ -188,10 +196,11 @@ export default function ConfirmPayment({
         const payload = {
           ...DataSubmit,
           address: addrId,
-          paymentMethod: normalizePayment(paymentMethod), // => "Cash on Delivery"
+          paymentMethod: toApiPayment(paymentMethod),      // => "Cash on Delivery"
           promocode: promoCodeMain || undefined,
           useWallet: !!isUseWallet,
         };
+
         const checkout = await orderCheckout(payload);
 
         if (checkout?.data?.status === "success") {
@@ -205,7 +214,7 @@ export default function ConfirmPayment({
       return;
     }
 
-    // Other methods not yet wired here
+    // WALLET or others (wire similarly when ready)
     notifySuccess("Selected payment method is not supported yet.");
   };
 
