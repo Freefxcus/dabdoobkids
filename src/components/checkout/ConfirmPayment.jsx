@@ -2,8 +2,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import { Box, CircularProgress, Stack } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-
 import { useDeleteAllCartMutation } from "../../Redux/cartApi";
+
 import {
   checkPromoCode,
   getUserPaymentLink,
@@ -27,6 +27,7 @@ export default function ConfirmPayment({
 }) {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
+  const [deleteAllCart] = useDeleteAllCartMutation();
 
   // ---------- helpers ----------
   const normalizePayment = (raw) => {
