@@ -1,41 +1,18 @@
-import { useMemo, useState } from "react";
-import PropTypes from "prop-types";
 import CloseIcon from "@mui/icons-material/Close";
 import { Box, CircularProgress, Stack } from "@mui/material";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { mapUiToDtoMethod } from "../../utils/paymentMap";
-import { createOrders  , checkoutOrder } from "../../utils/apiCalls";
-import { newCalcDiscount, notifyError, notifySuccess } from "../../utils/general";
-import ModalPaymentLink from "./ModalPaymentLink";
+									   
+import { useDeleteAllCartMutation } from "../../Redux/cartApi";
+import {
+  checkPromoCode,
+  getUserPaymentLink,
+  getWallet,
+  orderCheckout,
+} from "../../utils/apiCalls";
 import "./style.css";
-
-function Row({ label, value }) {
-  return (
-    <div style={{ display: "flex", justifyContent: "space-between" }}>
-      <h2 style={{ color: "var(rhine-castle)", fontWeight: 500, fontSize: 16 }}>{label}</h2>
-      <h2 style={{ color: "var(rhine-castle)", fontWeight: 500, fontSize: 16 }}>{value}</h2>
-    </div>
-  );
-}
-Row.propTypes = { label: PropTypes.string, value: PropTypes.any };
-
-const fmt = (n) => `${Number(n || 0).toFixed(0)} EGP`;
-
-// best-effort read from summary
-function extractAmount(summary) {
-  const nums = [
-    summary?.paymentAmount,
-    summary?.amountToPay,
-    summary?.total,
-    summary?.totalShopping,
-    summary?.grandTotal,
-    summary?.subTotal,
-  ]
-    .map(Number)
-    .filter((x) => Number.isFinite(x) && x >= 0);
-  return nums[0] ?? 0;
-}
-
+import { newCalcDiscount, notifySuccess } from "../../utils/general";
+import ModalPaymentLink from "./ModalPaymentLink";
 export default function ConfirmPayment({
   orderSummary,
   address,
@@ -46,29 +23,22 @@ export default function ConfirmPayment({
   setIsUseWallet,
   DataSubmit,
   cartItems = [],
-  paymentMethod,     // 'COD' | 'CARD' | 'WALLET'
-  setPaymentMethod,
 }) {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
-
-  const [promoCode, setPromoCode] = useState(promoCodeMain || "");
-  const [promoSuccess, setPromoSuccess] = useState(null);
-
+  const paymentMethod = searchParams.get("paymentMethod");
+  const addressId = addressActive || address?.items?.[0]?.id;
+  const [promoCode, setPromoCode] = useState(promoCodeMain);
+  const [promoSuccess, setPromoSuccess] = useState();
+  const [paymentLink, setPaymentMethod] = useState("");
   const [loading, setLoading] = useState(false);
-  const [paymentLink, setPaymentLink] = useState({}); // { link, orderRef? }
+  const [deleteAllCart] = useDeleteAllCartMutation();
+  const [wallet, setWallet] = useState();
+
   const [open, setOpen] = useState(false);
   const handleOpenModal = () => setOpen(true);
-  const handleCloseModal = async (result) => {
-    setOpen(false);
-    localStorage.removeItem("paymentCheckout");
-    if (result?.ok && (result?.orderId || result?.orderRef)) {
-      notifySuccess("Payment confirmed");
-      navigate(`/thank-you?payment=card`);
-    }
-  };
+  const handleCloseModal = () => setOpen(false);
 
-  // totals (kept same behavior)
   const price = useMemo(() => {
     const totalPriceProduct = cartItems.reduce(
       (acc, curr) => acc + newCalcDiscount(curr).totalPrice,
@@ -80,196 +50,112 @@ export default function ConfirmPayment({
         ? (totalPriceProduct * promoSuccess?.amount) / 100
         : promoSuccess?.amount || 0;
 
-    const afterDiscount =
-      discount && promoSuccess?.maxAmount && discount > promoSuccess.maxAmount
-        ? totalPriceProduct - promoSuccess.maxAmount
+    const totalPrice =
+      discount && discount > promoSuccess?.maxAmount
+        ? totalPriceProduct - promoSuccess?.maxAmount
         : totalPriceProduct - discount;
 
     const shipping =
-      afterDiscount > 3500 ? 0 : Number(orderSummary?.shipping ?? orderSummary?.shippingFees ?? 0);
+      totalPrice > 3500 ? 0 : orderSummary?.data?.data?.shipping || 0;
 
     return {
-      totalPriceProduct,
-      discount,
+      totalPrice: totalPrice - shipping,
       shipping,
-      totalPrice: afterDiscount, // used as "SubTotal" label in UI
+      discount,
+      totalPriceProduct,
     };
   }, [cartItems, promoSuccess, orderSummary]);
 
-  const amountToPay = useMemo(() => {
-    const fromSummary = extractAmount(orderSummary);
-    return fromSummary > 0 ? fromSummary : Math.max(0, price.totalPrice + price.shipping);
-  }, [orderSummary, price]);
-
-  const addressId = addressActive || address?.items?.[0]?.id || null;
-
-  const clearPromoCode = () => {
-    setPromoCode("");
-    setSearchParams((prev) => {
-      const sp = new URLSearchParams(prev);
-      sp.delete("promocode");
-      return sp;
+  useEffect(() => {
+    getWallet().then((res) => {
+      setWallet(res);
     });
-    setPromoCodeMain?.("");
-    setPromoSuccess(null);
+  }, []);
+
+  const validatePromoCode = async () => {
+    let data = await checkPromoCode(promoCode);
+
+    if (data?.data?.status === "success") {
+      console.log(data);
+      setPromoCodeMain(promoCode);
+      setSearchParams((prev) => {
+        prev.set("promocode", promoCode);
+        return prev;
+      });
+      setPromoSuccess(data?.data?.data);
+    } else {
+      setPromoSuccess();
+      setPromoCodeMain("");
+    }
   };
 
-/*const handlePayment = async () => {
-  // Clear previous payment data
-  localStorage.removeItem("paymentCheckout");
+  const clearPromoCode = async () => {
+    setPromoCode("");
 
-  if (!addressId) {
-    notifyError("Please select an address before continuing.");
-    return;
-  }
+    setSearchParams((prev) => {
+      prev.set("promocode", "");
+      return prev;
+    });
+    setPromoCodeMain("");
+    setPromoSuccess("");
+  };
 
-  try {
-    setLoading(true);
+  const handlePayment = async () => {
+    const paymentURLStorage =
+      JSON.parse(localStorage.getItem("paymentURL")) || "";
+    if (paymentMethod === "Credit Card") {
+      if (paymentURLStorage) {
+        setPaymentMethod(paymentURLStorage);
+        handleOpenModal();
+        return;
+      }
+	 
 
-    const dtoMethod = mapUiToDtoMethod(paymentMethod);
+      setLoading(true);
+      const checkout = await getUserPaymentLink(price.totalPrice);
+      if (checkout.link) {
+        notifySuccess("Redirecting to Payment Gateway");
+        setPaymentMethod(checkout);
+        localStorage.setItem("paymentURL", JSON.stringify(checkout));
+        handleOpenModal();
+      }
+      setLoading(false);
+    } else if (paymentMethod === "Cash on Delivery") {
+      setLoading(true);
 
-    // 1) Cash on Delivery
-    if (dtoMethod === "Cash on Delivery") {
-      const payload = {
-        ...(DataSubmit || {}),
-        paymentMethod: dtoMethod,
-        address: Number(addressId),
-        totalAmount: Number(amountToPay), // Ensure amount is included
-        items: cartItems // Include cart items if needed
-      };
+      const checkout = await orderCheckout(DataSubmit);
 
-      const created = await createOrders(payload);
-      const newId = created?.orderId || created?.id || created?.data?.orderId || created?.data?.id;
-
-      notifySuccess("Order placed successfully.");
-      navigate(newId ? `/thank-you?order=${newId}&payment=cod` : `/thank-you?payment=cod`);
-      return;
+												  
+																	
+      if (checkout?.data?.status === "success") {
+        notifySuccess("Order Placed Successfully");
+        deleteAllCart().then(() => {
+          navigate("/");
+        });
+      }
+      setLoading(false);
     }
 
-    if (dtoMethod === "Credit Card") {
-      // STEP A: create an unpaid order first
-      const orderRes = await createOrders({
-        ...(DataSubmit || {}),
-        paymentMethod: "Credit Card",
-        address: Number(addressId),
-      });
-
-      const orderId =
-        orderRes?.orderId || orderRes?.id || orderRes?.data?.orderId || orderRes?.data?.id;
-      if (!orderId) {
-        notifyError("Could not create order.");
-        return;
-      }
-
-      // STEP B: ask backend to start Paymob for that order
-      const { link } = await startOrderPayment(orderId, "card");
-      if (!link) {
-        notifyError("Could not create payment link.");
-        return;
-      }
-
-      setPaymentLink({ link, orderId });
-      handleOpenModal();  // now your modal opens with the Paymob iframe
-      return;
-    }
-    // Wallet (if you support it)
-    if (dtoMethod === "E-Wallet") {
-      // same pattern but pass phone:
-      const orderRes = await createOrders({
-        ...(DataSubmit || {}),
-        paymentMethod: "E-Wallet",
-        address: Number(addressId),
-      });
-      const orderId =
-        orderRes?.orderId || orderRes?.id || orderRes?.data?.orderId || orderRes?.data?.id;
-
-      const { link } = await startOrderPayment(orderId, "wallet", DataSubmit?.phone);
-      if (!link) {
-        notifyError("Could not create wallet payment link.");
-        return;
-      }
-
-      setPaymentLink({ link, orderId });
-      handleOpenModal();
-      return;
-    }    
-    notifyError("Unsupported payment method.");
-
-  } catch (error) {
-    console.error("Payment error:", error);
-    const errorMessage = error?.response?.data?.message || 
-                         error?.message || 
-                         "Payment failed. Please try again.";
-    notifyError(errorMessage);
-  } finally {
-    setLoading(false);
-  }
-};*/
-const handlePayment = async () => {
-  localStorage.removeItem("paymentCheckout");
-
-  if (!addressId) {
-    notifyError("Please select an address before continuing.");
-    return;
-  }
-
-  try {
-    setLoading(true);
-
-    const dtoMethod = mapUiToDtoMethod(paymentMethod); // "Cash on Delivery" | "Credit Card" | "E-Wallet"
-
-    const payload = {
-      promocode: promoCodeMain || undefined,
-      useWallet: dtoMethod === "E-Wallet",
-      paymentMethod: dtoMethod,           // EXACT strings the DTO expects
-      address: Number(addressId),         // DTO requires integer
-      phone: dtoMethod === "E-Wallet" ? (DataSubmit?.phone || "") : undefined,
-    };
-
-    console.log("[checkout] payload:", payload);
-    const res = await checkoutOrder(payload);
-    console.log("[checkout] response:", res);
-
-    // ONLINE: backend already returns the Paymob iframe URL
-    const url =
-      res?.url ||
-      res?.data?.url ||
-      res?.link ||
-      res?.data?.link ||
-      null;
-
-    if (dtoMethod === "Credit Card" || dtoMethod === "E-Wallet") {
-      if (!url) {
-        notifyError("Server didn't return a payment URL.");
-        return;
-      }
-      setPaymentLink({ link: url, orderId: res?.orderId || res?.id || null });
-      handleOpenModal();                        // <— opens your Paymob iframe modal
-      return;
-    }
-
-    // COD: expect an order id or success
-    const orderId =
-      res?.orderId || res?.id || res?.data?.orderId || res?.data?.id || null;
-
-    notifySuccess("Order placed successfully.");
-    navigate(orderId ? `/thank-you?order=${orderId}&payment=cod` : `/thank-you?payment=cod`);
-  } catch (e) {
-    const msg =
-      e?.response?.data?.message ||
-      e?.message ||
-      "Checkout failed.";
-    console.error("[checkout] error:", msg);
-    notifyError(msg);
-  } finally {
-    setLoading(false);
-  }
-};
-
-
+    // if (checkout?.data?.data?.url) {
+    //   notifySuccess("Redirecting to Payment Gateway");
+    //   setPaymentMethod(checkout?.data?.data?.url);
+    //   localStorage.setItem("paymentURL", checkout?.data?.data?.url);
+    // }
+    // else if (checkout?.data?.status === "success") {
+    //   notifySuccess("Order Placed Successfully");
+    //   deleteAllCart().then(() => {
+    //     navigate("/");
+    //   });
+    // }
+  };
 
   return (
-    <Box sx={{ flex: 2, width: "70%" }}>
+    <Box
+      sx={{
+        flex: 2,
+        width: "70%",
+      }}
+    >
       <Box
         sx={{
           backgroundColor: "#fff",
@@ -281,10 +167,65 @@ const handlePayment = async () => {
         }}
       >
         <h2>Price Summary</h2>
+        {/* <Box
+          sx={{
+            backgroundColor: "#fff",
+            padding: "0.751rem",
+            border: "1px solid  #F4F4F4",
 
-        <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
+            borderRadius: "12px",
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            gap: "18px",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              gap: "4px",
+            }}
+          >
+            <Wallet3 />{" "}
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+
+                gap: "4px",
+              }}
+            >
+              <h4>Use wallet credits</h4>
+              <h5>you have {wallet?.balance} EGP</h5>
+            </div>
+          </div>
+          <Switch
+            // checked={isUseWallet}
+            checked={wallet?.balance === 0?false:isUseWallet}
+
+            disabled={wallet?.balance === 0}
+            onChange={() => {
+              setIsUseWallet((prev) => !prev);
+              setSearchParams((prev) => {
+                prev.set("useWallet", !isUseWallet);
+                return prev;
+              });
+            }}
+            inputProps={{ "aria-label": "controlled" }}
+          />
+        </Box> */}
+
+        <div style={{ display: "flex", flexDirection: "column", gap: "18px" }}>
           <h3>Promo Code</h3>
-          <div style={{ display: "flex", justifyContent: "space-between", gap: 12 }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              gap: "12px",
+            }}
+          >
             <div className="input-code-container">
               <input
                 value={promoCode}
@@ -293,33 +234,134 @@ const handlePayment = async () => {
                 className="btn input-code"
                 placeholder="Enter Promo Code"
               />
-              {promoCode ? <CloseIcon onClick={clearPromoCode} className="btn-clear" /> : null}
+              {promoSuccess ? (
+                <CloseIcon
+                  onClick={() => clearPromoCode()}
+                  className="btn-clear"
+                />
+              ) : null}
             </div>
             <button
-              onClick={() => {
-                setPromoCodeMain?.(promoCode || "");
-                setSearchParams((prev) => {
-                  const sp = new URLSearchParams(prev);
-                  if (promoCode) sp.set("promocode", promoCode);
-                  else sp.delete("promocode");
-                  return sp;
-                });
-              }}
+              onClick={validatePromoCode}
+              disabled={!promoCode || promoSuccess}
               className="btn promo-code"
             >
               Add
             </button>
           </div>
-
-          <Row label="SubTotal" value={fmt(price.totalPrice)} />
-          <Row label="Shipping" value={fmt(price.shipping)} />
-          <Row label="Discount" value={fmt(price.discount)} />
-          <Row label="Total Shopping" value={fmt(amountToPay)} />
-
-          <div style={{ textAlign: "center", color: "#888" }}>
-            {!address?.items?.[0]?.id || !addressActive ? "please enter address " : null}
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <h2
+              style={{
+										   
+                fontWeight: "500",
+                fontSize: "16px",
+              }}
+            >
+              SubTotal
+            </h2>
+            <h2
+              style={{
+                color: "var(rhine-castle)",
+                fontWeight: "500",
+                fontSize: "16px",
+              }}
+            >
+              {price.totalPrice} EGP
+            </h2>
+          </div>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <h2
+              style={{
+                color: "var(rhine-castle)",
+                fontWeight: "500",
+                fontSize: "16px",
+              }}
+            >
+              Shipping
+            </h2>
+            <h2
+              style={{
+                color: "var(rhine-castle)",
+                fontWeight: "500",
+                fontSize: "16px",
+              }}
+            >
+              {price.shipping} EGP
+            </h2>
+          </div>
+          {/* <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <h2
+            style={{
+              color: "var(rhine-castle)",
+              fontWeight: "500",
+              fontSize: "16px",
+            }}
+          >
+            Tax
+          </h2>
+          <h2
+            style={{
+              color: "var(rhine-castle)",
+              fontWeight: "500",
+              fontSize: "16px",
+            }}
+          >
+            $10
+          </h2>
+        </div> */}
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              color: "#444",
+            }}
+          >
+            <h2
+              style={{
+                color: "var(rhine-castle)",
+                fontWeight: "500",
+                fontSize: "16px",
+              }}
+            >
+              Discount
+            </h2>
+            <h2
+              style={{
+                color: "var(rhine-castle)",
+                fontWeight: "500",
+                fontSize: "16px",
+              }}
+            >
+              {price.discount} EGP
+            </h2>
+          </div>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <h2
+              style={{
+                color: "var(rhine-castle)",
+                fontWeight: "500",
+                fontSize: "16px",
+              }}
+            >
+              Total Shopping
+            </h2>
+            <h2
+              style={{
+                color: "var(rhine-castle)",
+                fontWeight: "500",
+                fontSize: "16px",
+              }}
+            >
+              {price.totalPriceProduct} EGP
+            </h2>
           </div>
 
+          <div style={{ textAlign: "center", color: "#888" }}>
+            {!address?.items?.[0]?.id || !addressActive
+              ? "please enter address "
+              : null}
+          </div>
+          {
           <button
             onClick={handlePayment}
             style={{
@@ -327,55 +369,68 @@ const handlePayment = async () => {
               color: "white",
               border: "none",
               padding: "12px 32px",
-              fontWeight: 400,
-              fontSize: 18,
-              borderRadius: 10,
-              cursor: loading ? "not-allowed" : "pointer",
+              fontWeight: "400",
+              fontSize: "18px",
+              borderRadius: "10px",
+              cursor: "pointer",
             }}
             disabled={
               loading ||
               !address?.items?.[0]?.id ||
               !addressActive ||
-              (mapUiToDtoMethod(paymentMethod) === "E-Wallet" &&
-                (!DataSubmit?.phone || DataSubmit?.phone?.length < 11))
+              (DataSubmit.paymentMethod === "E-Wallet" &&
+                DataSubmit?.phone?.length < 11)
             }
           >
             {loading ? (
-              <Stack direction="row" justifyContent="center" gap={2} alignItems="center">
-                <CircularProgress color="inherit" size="1rem" sx={{ width: 12 }} />
+              <Stack
+                direction="row"
+                justifyContent={"center"}
+                gap={2}
+                alignItems={"center"}
+              >
+                {" "}
+                <CircularProgress
+                  color="inherit"
+                  size="1rem"
+                  sx={{ width: "12px" }}
+                />{" "}
                 Loading
               </Stack>
             ) : (
               "Continue to Payment"
             )}
           </button>
+          }
         </div>
 
         <ModalPaymentLink
           closeModal={handleCloseModal}
           open={open}
           paymentLink={paymentLink}
-          addressInfo={address?.items?.find((item) => item.id === addressActive) || {}}
-          paymentAmount={amountToPay}
+          addressInfo={
+            address?.items?.find((item) => item.id === addressActive) || {}
+          }
+          paymentAmount={price.totalPrice}
           orderSummary={cartItems}
           paymentMethod={paymentMethod}
           price={price}
         />
+
+        {/* {paymentLink && (
+          <iframe
+            src={paymentLink}
+            title="Paymob"
+            style={{
+              position: "fixed",
+              height: "100vh",
+              width: "100vw",
+              zIndex: "9999",
+              inset: "0",
+            }}
+          />
+        )} */}
       </Box>
     </Box>
   );
 }
-
-ConfirmPayment.propTypes = {
-  orderSummary: PropTypes.object,
-  address: PropTypes.object,
-  addressActive: PropTypes.any,
-  promoCodeMain: PropTypes.string,
-  setPromoCodeMain: PropTypes.func,
-  isUseWallet: PropTypes.bool,
-  setIsUseWallet: PropTypes.func,
-  DataSubmit: PropTypes.object,
-  cartItems: PropTypes.array,
-  paymentMethod: PropTypes.string,
-  setPaymentMethod: PropTypes.func,
-};
