@@ -157,9 +157,8 @@ export default function ConfirmPayment({
 
   // ---------- payment ----------
 const handlePayment = async () => {
-  localStorage.removeItem("paymentCheckout");
-
-  if (!addressId) {
+  // require a selected address
+  if (!addrId) {
     notifyError("Please select an address before continuing.");
     return;
   }
@@ -167,55 +166,84 @@ const handlePayment = async () => {
   try {
     setLoading(true);
 
-    const dtoMethod = mapUiToDtoMethod(paymentMethod); // "Cash on Delivery" | "Credit Card" | "E-Wallet"
+    // NOTE: you're already using human labels in state ("Credit Card" | "Cash on Delivery" | "E-Wallet")
+    // so no need to re-map again here.
+    const method = paymentMethod; // human label
 
-    const payload = {
-      promocode: promoCodeMain || undefined,
-      useWallet: dtoMethod === "E-Wallet",
-      paymentMethod: dtoMethod,           // EXACT strings the DTO expects
-      address: Number(addressId),         // DTO requires integer
-      phone: dtoMethod === "E-Wallet" ? (DataSubmit?.phone || "") : undefined,
-    };
+    // ---- Online flows: "Credit Card" and "E-Wallet"
+    if (method === "Credit Card" || method === "E-Wallet") {
+      // 1) reuse cached link if exists
+      const cached = JSON.parse(localStorage.getItem("paymentURL") || "null");
+      if (cached?.link) {
+        setPaymentLink(cached.link);   // string URL
+        setOpen(true);                 // open modal (no handleOpenModal())
+        return;
+      }
 
-    console.log("[checkout] payload:", payload);
-    const res = await checkoutOrder(payload);
-    console.log("[checkout] response:", res);
+      // 2) request a fresh link
+      // If your backend needs an order first, call the correct API that creates the order+link.
+      // Here we assume getUserPaymentLink returns { link }
+      const linkResp = await getUserPaymentLink({
+        orderId: orderSummary?.data?.data?.orderId,   // pass if available; harmless if undefined
+        paymentMethod: method,                         // "Credit Card" | "E-Wallet"
+        amount: price.totalDue,                        // optional; server can recalc
+      });
 
-    // ONLINE: backend already returns the Paymob iframe URL
-    const url =
-      res?.url ||
-      res?.data?.url ||
-      res?.link ||
-      res?.data?.link ||
-      null;
+      const url =
+        linkResp?.link || linkResp?.data?.link || linkResp?.url || linkResp?.data?.url;
 
-    if (dtoMethod === "Credit Card" || dtoMethod === "E-Wallet") {
       if (!url) {
         notifyError("Server didn't return a payment URL.");
         return;
       }
-      setPaymentLink({ link: url, orderId: res?.orderId || res?.id || null });
-      handleOpenModal();                        // <— opens your Paymob iframe modal
+
+      setPaymentLink(url);
+      localStorage.setItem("paymentURL", JSON.stringify({ link: url }));
+      notifySuccess("Redirecting to Payment Gateway");
+      setOpen(true);
       return;
     }
 
-    // COD: expect an order id or success
-    const orderId =
-      res?.orderId || res?.id || res?.data?.orderId || res?.data?.id || null;
+    // ---- COD flow: place order directly
+    if (method === "Cash on Delivery") {
+      const payload = {
+        // build payload explicitly; don't rely on stale DataSubmit
+        promocode: promoCodeMain || undefined,
+        useWallet: false,
+        paymentMethod: "Cash on Delivery",
+        address: Number(addrId),
+        phone: undefined,
+      };
 
-    notifySuccess("Order placed successfully.");
-    navigate(orderId ? `/thank-you?order=${orderId}&payment=cod` : `/thank-you?payment=cod`);
+      // IMPORTANT: call the function you actually import
+      const res = await orderCheckout(payload);
+
+      if (res?.data?.status === "success") {
+        notifySuccess("Order Placed Successfully");
+        await deleteAllCart();
+        navigate("/");
+        return;
+      }
+
+      // fallthrough: unexpected shape
+      notifyError(res?.data?.message || "Checkout failed.");
+      return;
+    }
+
+    // unsupported method (e.g., VALU/KIOSK if you wire them later)
+    notifyError("Selected payment method is not supported yet.");
   } catch (e) {
     const msg =
       e?.response?.data?.message ||
       e?.message ||
       "Checkout failed.";
-    console.error("[checkout] error:", msg);
+    console.error("[checkout] error:", msg, e?.response?.data);
     notifyError(msg);
   } finally {
     setLoading(false);
   }
 };
+
 
   const disablePayBtn =
     loading ||
