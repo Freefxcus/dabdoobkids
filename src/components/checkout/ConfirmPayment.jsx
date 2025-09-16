@@ -35,9 +35,9 @@ export default function ConfirmPayment({
       case "credit+card":
       case "credit_card":
       case "card":
-        return "CARD";
+        return "Credit Card";
       case "wallet":
-        return "WALLET";
+        return "E-Wallet";
       case "valu":
         return "VALU";
       case "kiosk":
@@ -45,9 +45,9 @@ export default function ConfirmPayment({
       case "cash":
       case "cod":
       case "cash on delivery":
-        return "COD";
+        return "Cash on Delivery";
       default:
-        return "COD";
+        return "Cash on Delivery";
     }
   };
   const parseBool = (v) => v === true || v === "true" || v === "1";
@@ -188,7 +188,7 @@ export default function ConfirmPayment({
         const payload = {
           ...DataSubmit,
           address: addrId,
-          paymentMethod: "COD",
+          paymentMethod: toApiPayment(paymentMethod), // => "Cash on Delivery"
           promocode: promoCodeMain || undefined,
           useWallet: !!isUseWallet,
         };
