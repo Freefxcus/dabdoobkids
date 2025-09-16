@@ -28,6 +28,7 @@ export default function ConfirmPayment({
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const [deleteAllCart] = useDeleteAllCartMutation();
+  const n = (v) => (typeof v === "number" ? v : Number(v) || 0);
 
   // ---------- helpers ----------
   const toApiPayment = (m) => {
@@ -98,38 +99,34 @@ export default function ConfirmPayment({
   }, []);
 
   // ---------- computed prices ----------
-  const price = useMemo(() => {
-    const totalPriceProduct = (cartItems || []).reduce(
-      (acc, curr) => acc + newCalcDiscount(curr).totalPrice,
-      0
-    );
+const price = useMemo(() => {
+  const totalPriceProduct = (cartItems || []).reduce(
+    (acc, curr) => acc + n(newCalcDiscount(curr).totalPrice),
+    0
+  );
 
-    const discount =
-      promoSuccess?.type === "percentage"
-        ? (totalPriceProduct * (promoSuccess?.amount || 0)) / 100
-        : promoSuccess?.amount || 0;
+  const discountRaw =
+    promoSuccess?.type === "percentage"
+      ? (n(totalPriceProduct) * n(promoSuccess?.amount)) / 100
+      : n(promoSuccess?.amount);
 
-    const maxedDiscount =
-      promoSuccess?.maxAmount && discount > promoSuccess.maxAmount
-        ? promoSuccess.maxAmount
-        : discount;
+  const discount = promoSuccess?.maxAmount
+    ? Math.min(discountRaw, n(promoSuccess.maxAmount))
+    : discountRaw;
 
-    // shipping rule from your code: free > 3500 else from summary
-    const shipping =
-      totalPriceProduct - maxedDiscount > 3500
-        ? 0
-        : orderSummary?.data?.data?.shipping || 0;
+  const shipping =
+    n(totalPriceProduct) - n(discount) > 3500
+      ? 0
+      : n(orderSummary?.data?.data?.shipping); // <- this was likely a string
 
-    return {
-      totalPriceProduct,           // items before discounts/shipping
-      discount: maxedDiscount,     // effective discount
-      shipping,
-      totalDue: Math.max(
-        0,
-        totalPriceProduct - maxedDiscount + shipping
-      ),
-    };
-  }, [cartItems, promoSuccess, orderSummary]);
+  return {
+    totalPriceProduct: n(totalPriceProduct),
+    discount: n(discount),
+    shipping: n(shipping),
+    totalDue: n(totalPriceProduct) - n(discount) + n(shipping),
+  };
+}, [cartItems, promoSuccess, orderSummary]);
+
 
   // ---------- promo ----------
   const validatePromoCode = async () => {
