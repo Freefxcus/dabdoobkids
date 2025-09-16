@@ -11,7 +11,7 @@ import {
   orderCheckout,
 } from "../../utils/apiCalls";
 import "./style.css";
-import { newCalcDiscount, notifySuccess } from "../../utils/general";
+import { newCalcDiscount, notifySuccess,notifyError } from "../../utils/general";
 import ModalPaymentLink from "./ModalPaymentLink";
 
 export default function ConfirmPayment({
