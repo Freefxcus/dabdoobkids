@@ -188,7 +188,7 @@ export default function ConfirmPayment({
         const payload = {
           ...DataSubmit,
           address: addrId,
-          paymentMethod: toApiPayment(paymentMethod), // => "Cash on Delivery"
+          paymentMethod: normalizePayment(paymentMethod), // => "Cash on Delivery"
           promocode: promoCodeMain || undefined,
           useWallet: !!isUseWallet,
         };
