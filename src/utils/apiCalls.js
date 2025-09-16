@@ -970,14 +970,14 @@ export async function removeCartItem(itemId) {
 
 // NOTE: Backend should create Paymob order/key and return { redirectUrl }
 // Keep the same function name but now call your NestJS API (not onrender)
-/*export async function getUserPaymentLink({ orderId, paymentMethod, amount }) {
+export async function getUserPaymentLink({ orderId, paymentMethod, amount }) {
   const { data } = await api.post("/payments/pay", {
     orderId,        // required
     paymentMethod,  // 'CARD' | 'WALLET' | 'VALU' | 'KIOSK' | 'COD'
     amount,         // optional; prefer server-calculated
   });
   return data; // e.g. { redirectUrl, merchantOrderId, paymobOrderId }
-}*/
+}
 
 export async function createTransaction(payload) {
   const { data } = await api.post("/transactions", payload);
