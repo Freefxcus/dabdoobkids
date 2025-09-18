@@ -128,7 +128,7 @@ export default function ConfirmPayment({
         notifySuccess("Order Placed Successfully");
 
         deleteAllCart().then(() => {
-          navigate(ThankYou);
+          navigate("/");
         });
       }
       setLoading(false);
