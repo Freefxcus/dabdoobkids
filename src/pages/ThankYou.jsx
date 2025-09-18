@@ -13,6 +13,7 @@ export default function ThankYou() {
     try {
       localStorage.removeItem("cart");
       localStorage.removeItem("coupon");
+      sessionStorage.removeItem("orderComplete"); // reset the guard
     } catch {}
   }, []);
 

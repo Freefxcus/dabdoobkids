@@ -124,12 +124,18 @@ export default function ConfirmPayment({
       setLoading(true);
 
       const checkout = await orderCheckout(DataSubmit);					
-      if (checkout?.data?.status === "success") {
+      /*if (checkout?.data?.status === "success") {
         notifySuccess("Order Placed Successfully");
 
         deleteAllCart().then(() => {
           navigate(ThankYou);
         });
+      }*/
+     if (checkout?.data?.status === "success") {
+        notifySuccess("Order Placed Successfully");
+        await deleteAllCart();                        // ensure this resolves before nav
+        sessionStorage.setItem("orderComplete", "1"); // <-- guard flag
+        navigate(`${ThankYou}?order=${checkout.data?.orderId ?? ""}`);
       }
       setLoading(false);
     }
