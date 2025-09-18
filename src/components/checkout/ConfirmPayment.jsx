@@ -2,7 +2,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { Box, CircularProgress, Stack } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { ThankYou }  from "../../pages/ThankYou";
+import ThankYou   from "../../pages/ThankYou";
 import { useDeleteAllCartMutation } from "../../Redux/cartApi";
 import {
   checkPromoCode,
