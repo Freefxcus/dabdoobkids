@@ -135,7 +135,7 @@ export default function ConfirmPayment({
         notifySuccess("Order Placed Successfully");
         await deleteAllCart();                        // ensure this resolves before nav
         sessionStorage.setItem("orderComplete", "1"); // <-- guard flag
-        navigate(`${ThankYou}?order=${checkout.data?.orderId ?? ""}`);
+        navigate("/thank-you");
       }
       setLoading(false);
     }
