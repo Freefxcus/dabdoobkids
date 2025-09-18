@@ -1,124 +1,111 @@
-// src/components/checkout/ModalPaymentLink.jsx
 import { Backdrop, Fade, Modal } from "@mui/material";
-import { useEffect, useMemo, useRef } from "react";
-import { useSelector } from "react-redux";
+import { useEffect } from "react";
 import { useDeleteAllCartMutation } from "../../Redux/cartApi";
-import { getUserStatusPayment, orderMail } from "../../utils/apiCalls";
-import { notifyError, notifySuccess } from "../../utils/general";
+import {
+  createOrders,
+  createTransaction,
+  getUserStatusPayment,
+  orderMail,
+} from "../../utils/apiCalls";
 import styles from "../../styles/components/ModalPaymentLink.module.css";
+import { notifyError } from "../../utils/general";
+import { useSelector } from "react-redux";
 
-export default function ModalPaymentLink({
-  paymentLink = {},          // safe default so no destructure crash
-  open = false,
-  closeModal = () => {},
-  addressInfo = {},          // kept for parity; not used here
-  paymentAmount = 0,         // kept for parity; not used here
-  orderSummary = [],         // kept for parity; not used here
-  price = {},                // kept for parity; not used here
+function ModalPaymentLink({
+  paymentLink = {},
+  open,
+  closeModal,
+  addressInfo = {},
+  paymentAmount,
+  orderSummary,
+  price,
 }) {
-  // Pull email for the "thanks" email after success (best effort)
-  const { email } = useSelector((s) => s.userInfo.value) || {};
+  const { email } = useSelector((state) => state.userInfo.value) || {};
 
-  // ---- Normalize inputs safely ----
-  const link =
-    paymentLink?.link ||
-    paymentLink?.url ||                 // sometimes backend returns { url }
-    paymentLink?.redirectUrl ||
-    paymentLink?.redirect_url ||
-    "";
+  const { link, orderId } = paymentLink;
 
-  // Prefer one stable identifier to verify with
-  const orderId = useMemo(() => {
-    const candidate =
-      paymentLink?.orderId ??
-      paymentLink?.order_id ??
-      paymentLink?.orderReference ??
-      (Array.isArray(paymentLink?.orderReferences)
-        ? paymentLink.orderReferences[0]
-        : paymentLink?.orderReferences);
-    return candidate == null || candidate === "" ? null : String(candidate);
-  }, [paymentLink]);
+  const products = orderSummary.map((item) => ({
+    productId: item.product.id,
+    quantity: item.count,
+  }));
 
-  const [deleteAllCart] = useDeleteAllCartMutation();
+  const [
+    deleteAllCart,
+    {
+      isLoading: wishListDeleteLoad,
+      isSuccess: isSuccessDeleteWishList,
+      isError: isErrorDeleteWishList,
+      error: deleteWishListError, // Capture the error object
+    },
+  ] = useDeleteAllCartMutation();
 
-  // Prevent double-running the verify flow if React StrictMode replays effects
-  const verifiedRef = useRef(false);
+  const transaction = {
+    paymentAmount,
+    paymentStatus: "success",
+    paymentType: "online",
+    shippingData: {
+      warehouseName: addressInfo.warehouseName || "",
+      governate: addressInfo?.governorate?.name?.en || "",
+      city: addressInfo?.city?.name?.en || "",
+      street: addressInfo.street || "",
+      customerName: addressInfo.name || "",
+      phoneNumber: addressInfo.phone || "",
+      address: addressInfo.address || "",
+    },
+    shippingFees: +price.shipping,
+  };
 
-  /**
-   * When the modal closes (open -> false) and we have an orderId,
-   * verify the payment once. If paid: cleanup cart & email (best effort),
-   * then notify parent via closeModal({ ok: true, orderId }).
-   */
   useEffect(() => {
-    if (open === false && orderId && !verifiedRef.current) {
-      verifiedRef.current = true;
+    if (open === false && orderId) {
+      const paymentCycle = async () => {
+        const statusPayment = await getUserStatusPayment(orderId); // status key ?
 
-      (async () => {
-        try {
-          const verify = await getUserStatusPayment(orderId);
-
-          if (!verify?.isPaid) {
-            notifyError("Payment failed or was canceled.");
-            closeModal({ ok: false, orderId });
-            return;
-          }
-
-          // Best-effort cleanup; ignore failures
-          try { await deleteAllCart(); } catch {}
-          try { if (email) await orderMail({ email }); } catch {}
-
-          notifySuccess("Payment confirmed. Thank you!");
-          closeModal({ ok: true, orderId });
-        } catch (err) {
-          const msg =
-            err?.response?.data?.message ||
-            err?.message ||
-            "Payment verification failed.";
-          notifyError(msg);
-          closeModal({ ok: false, orderId });
-        } finally {
-          localStorage.removeItem("paymentCheckout");
+        if (!statusPayment.isPaid) {
+          notifyError("Payment Failed Or Canceled");
+          return;
         }
-      })();
-    }
 
-    // Reset the guard when the modal re-opens for a new attempt
-    if (open === true) {
-      verifiedRef.current = false;
+        const transactionCreated = await createTransaction(transaction);
+
+        const transactionId = transactionCreated.data._id;
+        if (transactionCreated.status === "success") {
+          createOrders({
+            products: products,
+            transaction: transactionId,
+            // status: "pending",
+          }).then(() => {
+            deleteAllCart();
+            orderMail({ email });
+          });
+        }
+      };
+
+      paymentCycle();
     }
-  }, [open, orderId, email, deleteAllCart, closeModal]);
+  }, [open, orderId]);
 
   return (
     <Modal
-      open={!!open}
-      onClose={() => closeModal({ ok: false, orderId })}
+      open={open}
+      onClose={closeModal}
       closeAfterTransition
       slots={{ backdrop: Backdrop }}
-      slotProps={{ backdrop: { timeout: 500 } }}
+      slotProps={{
+        backdrop: {
+          timeout: 500,
+        },
+      }}
     >
-      <Fade in={!!open}>
+      <Fade in={open}>
         <div className={styles.modalContainer}>
-          <button
-            className={styles.closeButton}
-            onClick={() => closeModal({ ok: false, orderId })}
-            aria-label="Close payment"
-            type="button"
-          >
-            ×
+          <button className={styles.closeButton} onClick={closeModal}>
+            X
           </button>
-
-          {/* Render the Paymob iframe only when we actually have a URL */}
-          {link ? (
-            <iframe
-              src={link}
-              title="Paymob Payment"
-              className={styles.iframe}
-            />
-          ) : (
-            <div style={{ padding: 16 }}>Preparing payment…</div>
-          )}
+          <iframe src={link} title="Paymob" className={styles.iframe} />
         </div>
       </Fade>
     </Modal>
   );
 }
+
+export default ModalPaymentLink;

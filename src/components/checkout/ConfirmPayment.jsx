@@ -2,8 +2,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import { Box, CircularProgress, Stack } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { ThankYou } from "..//../pages/ThankYou";
 import { useDeleteAllCartMutation } from "../../Redux/cartApi";
-
 import {
   checkPromoCode,
   getUserPaymentLink,
@@ -11,244 +11,152 @@ import {
   orderCheckout,
 } from "../../utils/apiCalls";
 import "./style.css";
-import { newCalcDiscount, notifySuccess,notifyError } from "../../utils/general";
+import { newCalcDiscount, notifySuccess } from "../../utils/general";
 import ModalPaymentLink from "./ModalPaymentLink";
-
 export default function ConfirmPayment({
   orderSummary,
-  address,           // { items: [...] }
-  addressActive,     // selected address id from parent
+  address,
+  addressActive,
   promoCodeMain,
   setPromoCodeMain,
   isUseWallet,
   setIsUseWallet,
-  DataSubmit,        // { promocode, useWallet, paymentMethod, address, phone }
+  DataSubmit,
   cartItems = [],
 }) {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
-  const [deleteAllCart] = useDeleteAllCartMutation();
-  const n = (v) => (typeof v === "number" ? v : Number(v) || 0);
-
-  // ---------- helpers ----------
-  const toApiPayment = (m) => {
-    switch (m) {
-      case "CARD":   return "Credit Card";
-      case "COD":    return "Cash on Delivery";
-      case "WALLET": return "E-Wallet";
-      default:       return m || "Cash on Delivery";
-    }
-  };
-
-  const normalizePayment = (raw) => {
-    switch ((raw || "").toLowerCase()) {
-      case "credit+card":
-      case "credit_card":
-      case "card":
-        return "Credit Card";
-      case "wallet":
-        return "E-Wallet";
-      case "valu":
-        return "VALU";
-      case "kiosk":
-        return "KIOSK";
-      case "cash":
-      case "cod":
-      case "cash on delivery":
-        return "Cash on Delivery";
-      default:
-        return "Cash on Delivery";
-    }
-  };
-  const parseBool = (v) => v === true || v === "true" || v === "1";
-
-  // ---------- local state ----------
-  const [paymentMethod, setPaymentMethod] = useState(
-    normalizePayment(searchParams.get("paymentMethod") || "COD")
-  );
-  const [promoCode, setPromoCode] = useState(
-    searchParams.get("promocode") || ""
-  );
+  const paymentMethod = searchParams.get("paymentMethod");
+  const addressId = addressActive || address?.items?.[0]?.id;
+  const [promoCode, setPromoCode] = useState(promoCodeMain);
   const [promoSuccess, setPromoSuccess] = useState();
-  const [paymentLink, setPaymentLink] = useState("");
+  const [paymentLink, setPaymentMethod] = useState("");
   const [loading, setLoading] = useState(false);
+  const [deleteAllCart] = useDeleteAllCartMutation();
   const [wallet, setWallet] = useState();
+
   const [open, setOpen] = useState(false);
+  const handleOpenModal = () => setOpen(true);
+  const handleCloseModal = () => setOpen(false);
 
-  const addrId = addressActive || address?.items?.[0]?.id || null;
+  const price = useMemo(() => {
+    const totalPriceProduct = cartItems.reduce(
+      (acc, curr) => acc + newCalcDiscount(curr).totalPrice,
+      0
+    );
 
-  // keep URL sane on first load
+    const discount =
+      promoSuccess?.type === "percentage"
+        ? (totalPriceProduct * promoSuccess?.amount) / 100
+        : promoSuccess?.amount || 0;
+
+    const totalPrice =
+      discount && discount > promoSuccess?.maxAmount
+        ? totalPriceProduct - promoSuccess?.maxAmount
+        : totalPriceProduct - discount;
+
+    const shipping =
+      totalPrice > 3500 ? 0 : orderSummary?.data?.data?.shipping || 0;
+
+    return {
+      totalPrice: totalPrice - shipping,
+      shipping,
+      discount,
+      totalPriceProduct,
+    };
+  }, [cartItems, promoSuccess, orderSummary]);
+
   useEffect(() => {
-    const sp = new URLSearchParams(searchParams);
-    let changed = false;
-    if (!sp.get("paymentMethod")) {
-      sp.set("paymentMethod", paymentMethod);
-      changed = true;
-    }
-    if (isUseWallet !== undefined && !sp.get("useWallet")) {
-      sp.set("useWallet", String(!!isUseWallet));
-      changed = true;
-    }
-    if (changed) setSearchParams(sp, { replace: true });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    getWallet().then((res) => {
+      setWallet(res);
+    });
   }, []);
 
-  // read wallet once
-  useEffect(() => {
-    getWallet().then(setWallet).catch(() => {});
-  }, []);
-
-  // ---------- computed prices ----------
-const price = useMemo(() => {
-  const totalPriceProduct = (cartItems || []).reduce(
-    (acc, curr) => acc + n(newCalcDiscount(curr).totalPrice),
-    0
-  );
-
-  const discountRaw =
-    promoSuccess?.type === "percentage"
-      ? (n(totalPriceProduct) * n(promoSuccess?.amount)) / 100
-      : n(promoSuccess?.amount);
-
-  const discount = promoSuccess?.maxAmount
-    ? Math.min(discountRaw, n(promoSuccess.maxAmount))
-    : discountRaw;
-
-  const shipping =
-    n(totalPriceProduct) - n(discount) > 3500
-      ? 0
-      : n(orderSummary?.data?.data?.shipping); // <- this was likely a string
-
-  return {
-    totalPriceProduct: n(totalPriceProduct),
-    discount: n(discount),
-    shipping: n(shipping),
-    totalDue: n(totalPriceProduct) - n(discount) + n(shipping),
-  };
-}, [cartItems, promoSuccess, orderSummary]);
-
-
-  // ---------- promo ----------
   const validatePromoCode = async () => {
-    const data = await checkPromoCode(promoCode);
+    let data = await checkPromoCode(promoCode);
+
     if (data?.data?.status === "success") {
+      console.log(data);
       setPromoCodeMain(promoCode);
-      const sp = new URLSearchParams(searchParams);
-      sp.set("promocode", promoCode);
-      setSearchParams(sp);
+      setSearchParams((prev) => {
+        prev.set("promocode", promoCode);
+        return prev;
+      });
       setPromoSuccess(data?.data?.data);
     } else {
-      setPromoSuccess(undefined);
+      setPromoSuccess();
       setPromoCodeMain("");
     }
   };
 
-  const clearPromoCode = () => {
+  const clearPromoCode = async () => {
     setPromoCode("");
-    const sp = new URLSearchParams(searchParams);
-    sp.set("promocode", "");
-    setSearchParams(sp);
+
+    setSearchParams((prev) => {
+      prev.set("promocode", "");
+      return prev;
+    });
     setPromoCodeMain("");
-    setPromoSuccess(undefined);
+    setPromoSuccess("");
   };
 
-  // ---------- payment ----------
-const handlePayment = async () => {
-  // require a selected address
-  if (!addrId) {
-    notifyError("Please select an address before continuing.");
-    return;
-  }
-
-  try {
-    setLoading(true);
-
-    // NOTE: you're already using human labels in state ("Credit Card" | "Cash on Delivery" | "E-Wallet")
-    // so no need to re-map again here.
-    const method = paymentMethod; // human label
-
-    // ---- Online flows: "Credit Card" and "E-Wallet"
-    if (method === "Credit Card" || method === "E-Wallet") {
-      // 1) reuse cached link if exists
-      const cached = JSON.parse(localStorage.getItem("paymentURL") || "null");
-      if (cached?.link) {
-        setPaymentLink(cached.link);   // string URL
-        setOpen(true);                 // open modal (no handleOpenModal())
+  const handlePayment = async () => {
+    const paymentURLStorage =
+      JSON.parse(localStorage.getItem("paymentURL")) || "";
+    if (paymentMethod === "Credit Card") {
+      if (paymentURLStorage) {
+        setPaymentMethod(paymentURLStorage);
+        handleOpenModal();
         return;
       }
+	 
 
-      // 2) request a fresh link
-      // If your backend needs an order first, call the correct API that creates the order+link.
-      // Here we assume getUserPaymentLink returns { link }
-      const linkResp = await getUserPaymentLink({
-        orderId: orderSummary?.data?.data?.orderId,   // pass if available; harmless if undefined
-        paymentMethod: method,                         // "Credit Card" | "E-Wallet"
-        amount: price.totalDue,                        // optional; server can recalc
-      });
-
-      const url =
-        linkResp?.link || linkResp?.data?.link || linkResp?.url || linkResp?.data?.url;
-
-      if (!url) {
-        notifyError("Server didn't return a payment URL.");
-        return;
+      setLoading(true);
+      const checkout = await getUserPaymentLink(price.totalPrice);
+      if (checkout.link) {
+        notifySuccess("Redirecting to Payment Gateway");
+        setPaymentMethod(checkout);
+        localStorage.setItem("paymentURL", JSON.stringify(checkout));
+        handleOpenModal();
       }
+      setLoading(false);
+    } else if (paymentMethod === "Cash on Delivery") {
+      setLoading(true);
 
-      setPaymentLink(url);
-      localStorage.setItem("paymentURL", JSON.stringify({ link: url }));
-      notifySuccess("Redirecting to Payment Gateway");
-      setOpen(true);
-      return;
-    }
+      const checkout = await orderCheckout(DataSubmit);
 
-    // ---- COD flow: place order directly
-    if (method === "Cash on Delivery") {
-      const payload = {
-        // build payload explicitly; don't rely on stale DataSubmit
-        promocode: promoCodeMain || undefined,
-        useWallet: false,
-        paymentMethod: "Cash on Delivery",
-        address: Number(addrId),
-        phone: undefined,
-      };
-
-      // IMPORTANT: call the function you actually import
-      const res = await orderCheckout(payload);
-
-      if (res?.data?.status === "success") {
+												  
+																	
+      if (checkout?.data?.status === "success") {
         notifySuccess("Order Placed Successfully");
-        await deleteAllCart();
-        navigate("/");
-        return;
-      }
 
-      // fallthrough: unexpected shape
-      notifyError(res?.data?.message || "Checkout failed.");
-      return;
+        deleteAllCart().then(() => {
+          navigate(ThankYou);
+        });
+      }
+      setLoading(false);
     }
 
-    // unsupported method (e.g., VALU/KIOSK if you wire them later)
-    notifyError("Selected payment method is not supported yet.");
-  } catch (e) {
-    const msg =
-      e?.response?.data?.message ||
-      e?.message ||
-      "Checkout failed.";
-    console.error("[checkout] error:", msg, e?.response?.data);
-    notifyError(msg);
-  } finally {
-    setLoading(false);
-  }
-};
-
-
-  const disablePayBtn =
-    loading ||
-    !addrId ||
-    (paymentMethod === "WALLET" && (!DataSubmit?.phone || DataSubmit.phone.length < 11));
+    // if (checkout?.data?.data?.url) {
+    //   notifySuccess("Redirecting to Payment Gateway");
+    //   setPaymentMethod(checkout?.data?.data?.url);
+    //   localStorage.setItem("paymentURL", checkout?.data?.data?.url);
+    // }
+    // else if (checkout?.data?.status === "success") {
+    //   notifySuccess("Order Placed Successfully");
+    //   deleteAllCart().then(() => {
+    //     navigate("/");
+    //   });
+    // }
+  };
 
   return (
-    <Box sx={{ flex: 2, width: "70%" }}>
+    <Box
+      sx={{
+        flex: 2,
+        width: "70%",
+      }}
+    >
       <Box
         sx={{
           backgroundColor: "#fff",
@@ -260,9 +168,55 @@ const handlePayment = async () => {
         }}
       >
         <h2>Price Summary</h2>
+        {/* <Box
+          sx={{
+            backgroundColor: "#fff",
+            padding: "0.751rem",
+            border: "1px solid  #F4F4F4",
 
-        {/* Wallet switch (kept commented like your file) */}
-        {/* ... */}
+            borderRadius: "12px",
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            gap: "18px",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              gap: "4px",
+            }}
+          >
+            <Wallet3 />{" "}
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+
+                gap: "4px",
+              }}
+            >
+              <h4>Use wallet credits</h4>
+              <h5>you have {wallet?.balance} EGP</h5>
+            </div>
+          </div>
+          <Switch
+            // checked={isUseWallet}
+            checked={wallet?.balance === 0?false:isUseWallet}
+
+            disabled={wallet?.balance === 0}
+            onChange={() => {
+              setIsUseWallet((prev) => !prev);
+              setSearchParams((prev) => {
+                prev.set("useWallet", !isUseWallet);
+                return prev;
+              });
+            }}
+            inputProps={{ "aria-label": "controlled" }}
+          />
+        </Box> */}
 
         <div style={{ display: "flex", flexDirection: "column", gap: "18px" }}>
           <h3>Promo Code</h3>
@@ -282,32 +236,80 @@ const handlePayment = async () => {
                 placeholder="Enter Promo Code"
               />
               {promoSuccess ? (
-                <CloseIcon onClick={clearPromoCode} className="btn-clear" />
+                <CloseIcon
+                  onClick={() => clearPromoCode()}
+                  className="btn-clear"
+                />
               ) : null}
             </div>
             <button
               onClick={validatePromoCode}
-              disabled={!promoCode || !!promoSuccess}
+              disabled={!promoCode || promoSuccess}
               className="btn promo-code"
             >
               Add
             </button>
           </div>
-
           <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <h2 style={{ fontWeight: 500, fontSize: "16px" }}>SubTotal</h2>
-            <h2 style={{ fontWeight: 500, fontSize: "16px" }}>
-              {price.totalPriceProduct} EGP
+            <h2
+              style={{
+										   
+                fontWeight: "500",
+                fontSize: "16px",
+              }}
+            >
+              SubTotal
+            </h2>
+            <h2
+              style={{
+                color: "var(rhine-castle)",
+                fontWeight: "500",
+                fontSize: "16px",
+              }}
+            >
+              {price.totalPrice} EGP
             </h2>
           </div>
-
           <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <h2 style={{ fontWeight: 500, fontSize: "16px" }}>Shipping</h2>
-            <h2 style={{ fontWeight: 500, fontSize: "16px" }}>
+            <h2
+              style={{
+                color: "var(rhine-castle)",
+                fontWeight: "500",
+                fontSize: "16px",
+              }}
+            >
+              Shipping
+            </h2>
+            <h2
+              style={{
+                color: "var(rhine-castle)",
+                fontWeight: "500",
+                fontSize: "16px",
+              }}
+            >
               {price.shipping} EGP
             </h2>
           </div>
-
+          {/* <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <h2
+            style={{
+              color: "var(rhine-castle)",
+              fontWeight: "500",
+              fontSize: "16px",
+            }}
+          >
+            Tax
+          </h2>
+          <h2
+            style={{
+              color: "var(rhine-castle)",
+              fontWeight: "500",
+              fontSize: "16px",
+            }}
+          >
+            $10
+          </h2>
+        </div> */}
           <div
             style={{
               display: "flex",
@@ -315,23 +317,52 @@ const handlePayment = async () => {
               color: "#444",
             }}
           >
-            <h2 style={{ fontWeight: 500, fontSize: "16px" }}>Discount</h2>
-            <h2 style={{ fontWeight: 500, fontSize: "16px" }}>
+            <h2
+              style={{
+                color: "var(rhine-castle)",
+                fontWeight: "500",
+                fontSize: "16px",
+              }}
+            >
+              Discount
+            </h2>
+            <h2
+              style={{
+                color: "var(rhine-castle)",
+                fontWeight: "500",
+                fontSize: "16px",
+              }}
+            >
               {price.discount} EGP
             </h2>
           </div>
-
           <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <h2 style={{ fontWeight: 500, fontSize: "16px" }}>Total Due</h2>
-            <h2 style={{ fontWeight: 500, fontSize: "16px" }}>
-              {price.totalDue} EGP
+            <h2
+              style={{
+                color: "var(rhine-castle)",
+                fontWeight: "500",
+                fontSize: "16px",
+              }}
+            >
+              Total Shopping
+            </h2>
+            <h2
+              style={{
+                color: "var(rhine-castle)",
+                fontWeight: "500",
+                fontSize: "16px",
+              }}
+            >
+              {price.totalPriceProduct} EGP
             </h2>
           </div>
 
           <div style={{ textAlign: "center", color: "#888" }}>
-            {!addrId ? "please enter address" : null}
+            {!address?.items?.[0]?.id || !addressActive
+              ? "please enter address "
+              : null}
           </div>
-
+          {
           <button
             onClick={handlePayment}
             style={{
@@ -344,7 +375,13 @@ const handlePayment = async () => {
               borderRadius: "10px",
               cursor: "pointer",
             }}
-            disabled={disablePayBtn}
+            disabled={
+              loading ||
+              !address?.items?.[0]?.id ||
+              !addressActive ||
+              (DataSubmit.paymentMethod === "E-Wallet" &&
+                DataSubmit?.phone?.length < 11)
+            }
           >
             {loading ? (
               <Stack
@@ -353,27 +390,47 @@ const handlePayment = async () => {
                 gap={2}
                 alignItems={"center"}
               >
-                <CircularProgress color="inherit" size="1rem" />
+                {" "}
+                <CircularProgress
+                  color="inherit"
+                  size="1rem"
+                  sx={{ width: "12px" }}
+                />{" "}
                 Loading
               </Stack>
             ) : (
               "Continue to Payment"
             )}
           </button>
+          }
         </div>
 
         <ModalPaymentLink
-          closeModal={() => setOpen(false)}
+          closeModal={handleCloseModal}
           open={open}
           paymentLink={paymentLink}
           addressInfo={
-            address?.items?.find((item) => item.id === addrId) || {}
+            address?.items?.find((item) => item.id === addressActive) || {}
           }
-          paymentAmount={price.totalDue}
+          paymentAmount={price.totalPrice}
           orderSummary={cartItems}
           paymentMethod={paymentMethod}
           price={price}
         />
+
+        {/* {paymentLink && (
+          <iframe
+            src={paymentLink}
+            title="Paymob"
+            style={{
+              position: "fixed",
+              height: "100vh",
+              width: "100vw",
+              zIndex: "9999",
+              inset: "0",
+            }}
+          />
+        )} */}
       </Box>
     </Box>
   );
