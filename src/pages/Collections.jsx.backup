@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import styles from "../styles/pages/Collection.module.css";
 import { getCollections } from "../utils/apiCalls";
 
 export default function Collections() {
-  const navigate = useNavigate();
   const [collections, setCollections] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -28,11 +26,12 @@ export default function Collections() {
         setLoading(false);
       }
     };
+
     fetchCollectionsData();
   }, []);
 
   if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error loading Collections</div>;
+  if (error)   return <div>Error loading Collections</div>;
 
   // 1 hero + 4 cards
   const [hero, ...rest] = collections;
@@ -42,11 +41,7 @@ export default function Collections() {
     <section className={styles.wrap}>
       {/* HERO */}
       {hero && (
-        <div 
-          className={styles.heroCard}
-          onClick={() => navigate(`/search?collection=${hero.id}`)}
-          style={{ cursor: 'pointer' }}
-        >
+        <div className={styles.heroCard}>
           <img
             src={hero.image}
             alt={hero.title || "Collections"}
@@ -58,15 +53,11 @@ export default function Collections() {
               {hero.subtitle && (
                 <p className={styles.heroSubtitle}>{hero.subtitle}</p>
               )}
-              <button 
-                className={styles.ctaBtn}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  navigate(`/search?collection=${hero.id}`);
-                }}
-              >
-                Shop Collection
-              </button>
+              {hero.link && (
+                <a className={styles.ctaBtn} href={hero.link}>
+                  Shop Collection
+                </a>
+              )}
             </div>
           </div>
         </div>
@@ -75,12 +66,7 @@ export default function Collections() {
       {/* 4 cards */}
       <div className={styles.cardsRail} aria-label="Collections">
         {four.map((c) => (
-          <article 
-            key={c.id} 
-            className={styles.card}
-            onClick={() => navigate(`/search?collection=${c.id}`)}
-            style={{ cursor: 'pointer' }}
-          >
+          <article key={c.id} className={styles.card}>
             <div
               className={styles.cardImg}
               style={{ backgroundImage: `url(${c.image})` }}

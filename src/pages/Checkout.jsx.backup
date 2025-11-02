@@ -48,19 +48,19 @@ export default function Checkout() {
 
   // ———————————————————————————————————
   // Helpers
+  // ———————————————————————————————————
+  const methodMap = {
+    "Credit Card": "CARD",
+    "Cash on Delivery": "COD",
+    Wallet: "WALLET",
+    ValU: "VALU",
+  };
+
   const buildBody = (raw) => {
-    const methodMap = {
-      "Credit Card": "Credit Card",
-      "Cash on Delivery": "Cash on Delivery",
-      "E-Wallet": "E-Wallet",
-      "Valu": "Valu",
-      "Souhoola": "Souhoola",
-      "Halan": "Halan"
-    };
     const body = {
       useWallet: raw?.useWallet === true || raw?.useWallet === "true",
       paymentMethod: methodMap[raw?.paymentMethod] ?? raw?.paymentMethod,
-      address: raw?.address,
+      address: raw?.address, // expect address id
       promocode: raw?.promocode || undefined,
       phone: raw?.phone || undefined,
     };
@@ -75,7 +75,7 @@ export default function Checkout() {
       useWallet: isUseWallet,
       paymentMethod: paymentMethod || searchParams.get("paymentMethod"),
       address: address?.items?.[0]?.id, // default to first address for now
-      phone: phone || address?.items?.find(item => item.id === addressActive)?.phone || "",
+      phone,
     }),
     [promoCode, isUseWallet, paymentMethod, searchParams, address?.items, phone]
   );
@@ -161,33 +161,46 @@ export default function Checkout() {
 
   // ———————————————————————————————————
   // Fetch order summary (guarded + abortable)
+  // ———————————————————————————————————
   useEffect(() => {
     const controller = new AbortController();
+
     // Guards: do not fetch summary if...
-    if (orderComplete) return () => controller.abort();
-    if (location.pathname.toLowerCase().includes("thank")) return () => controller.abort();
-    if (!Array.isArray(cart) || cart.length === 0) return () => controller.abort();
-    if (!address?.items?.[0]?.id) return () => controller.abort();
+    if (orderComplete) return; // just completed an order
+    if (location.pathname.toLowerCase().includes("thank")) return; // on thank-you route
+    if (!Array.isArray(cart) || cart.length === 0) return; // cart empty
+    if (!address?.items?.[0]?.id) return; // need a valid address id
+
     const run = async () => {
       try {
         const payload = buildBody({
           promocode: promoCode,
           useWallet: isUseWallet,
-          paymentMethod,
+          paymentMethod, // UI label → enum via buildBody
           address: address?.items?.[0]?.id,
           phone,
         });
+
         const orderData = await orderSummary(payload, { signal: controller.signal });
         setOrder(orderData);
       } catch (err) {
+        // Swallow "cart is empty" to avoid noisy UX if racing with a successful checkout
         const msg = err?.response?.data?.message || err?.message;
         if (msg && /cart is empty/i.test(String(msg))) return;
+
+        // Ignore aborts
         if (err?.name === "CanceledError" || err?.name === "AbortError") return;
+
+        // Otherwise, surface the error (optional: toast/log)
+        // console.error("orderSummary error:", err);
       }
     };
+
     run();
+
     return () => controller.abort();
   }, [
+    // deps that truly change the inputs to orderSummary:
     orderComplete,
     location.pathname,
     cart,
@@ -197,56 +210,8 @@ export default function Checkout() {
     paymentMethod,
     phone,
   ]);
+
   // ———————————————————————————————————
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   // Render
   // ———————————————————————————————————
   return (

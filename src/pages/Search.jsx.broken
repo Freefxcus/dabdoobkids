@@ -64,11 +64,11 @@ function Search() {
       20,
       params.category || "",
       params.subcategory || "",
+      params.collection || "",
       params.brand || "",
       params.query || "",
-      params.sizes,
-      sale,
-      params.collection || ""
+      params.sizes ,
+      sale
     )
       .then((res) => setSearchData(res))
       .finally(() => setIsLoading(false));
@@ -80,6 +80,7 @@ function Search() {
     params.sizes,
     sale,
     params.subcategory,
+    params.collection,
     params.collection,
     
   ]);

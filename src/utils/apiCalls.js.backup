@@ -31,8 +31,7 @@ export const getProducts = async (
   brand,
   query,
   sizes,
-  sale,
-  collection
+  sale
 ) => {
   let returnedValue;
   const params = {
@@ -42,7 +41,6 @@ export const getProducts = async (
     category,
     subcategory,
     brand,
-    collection,
     query,
     sizes,
     sale,

@@ -2,6 +2,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { Box, CircularProgress, Stack } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import ThankYou   from "../../pages/ThankYou";
 import { useDeleteAllCartMutation } from "../../Redux/cartApi";
 import {
   checkPromoCode,
@@ -108,8 +109,6 @@ export default function ConfirmPayment({
         handleOpenModal();
         return;
       }
-	 
-
       setLoading(true);
       const checkout = await getUserPaymentLink(price.totalPrice);
       if (checkout.link) {
@@ -119,17 +118,24 @@ export default function ConfirmPayment({
         handleOpenModal();
       }
       setLoading(false);
-    } else if (paymentMethod === "Cash on Delivery") {
+    } 
+    
+    else if (paymentMethod === "Cash on Delivery") {
       setLoading(true);
 
-      const checkout = await orderCheckout(DataSubmit);
-
-      if (checkout?.data?.status === "success") {
+      const checkout = await orderCheckout(DataSubmit);					
+      /*if (checkout?.data?.status === "success") {
         notifySuccess("Order Placed Successfully");
+
         deleteAllCart().then(() => {
-          //navigate("/");
-          navigate(`/thank-you?order=${checkout?.data?.orderId}`);
+          navigate(ThankYou);
         });
+      }*/
+     if (checkout?.data?.status === "success") {
+        notifySuccess("Order Placed Successfully");
+        await deleteAllCart();                        // ensure this resolves before nav
+        sessionStorage.setItem("orderComplete", "1"); // <-- guard flag
+        navigate("/thank-you");
       }
       setLoading(false);
     }

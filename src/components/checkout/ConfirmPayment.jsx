@@ -11,7 +11,7 @@ import {
   orderCheckout,
 } from "../../utils/apiCalls";
 import "./style.css";
-import { newCalcDiscount, notifySuccess } from "../../utils/general";
+import { newCalcDiscount, notifySuccess, notifyError } from "../../utils/general";
 import ModalPaymentLink from "./ModalPaymentLink";
 export default function ConfirmPayment({
   orderSummary,
@@ -101,56 +101,42 @@ export default function ConfirmPayment({
   };
 
   const handlePayment = async () => {
-    const paymentURLStorage =
-      JSON.parse(localStorage.getItem("paymentURL")) || "";
     if (paymentMethod === "Credit Card") {
-      if (paymentURLStorage) {
-        setPaymentMethod(paymentURLStorage);
-        handleOpenModal();
-        return;
-      }
       setLoading(true);
-      const checkout = await getUserPaymentLink(price.totalPrice);
-      if (checkout.link) {
+      const checkout = await orderCheckout(DataSubmit);
+      console.log("Credit Card response:", checkout);
+      if (checkout?.data?.status === "success" && checkout?.data?.data?.url) {
         notifySuccess("Redirecting to Payment Gateway");
-        setPaymentMethod(checkout);
-        localStorage.setItem("paymentURL", JSON.stringify(checkout));
-        handleOpenModal();
+        window.location.href = checkout.data.data.url;
+      } else {
+        notifyError("Failed to create payment");
       }
       setLoading(false);
-    } 
-    
+    }
     else if (paymentMethod === "Cash on Delivery") {
       setLoading(true);
-
-      const checkout = await orderCheckout(DataSubmit);					
-      /*if (checkout?.data?.status === "success") {
+      const checkout = await orderCheckout(DataSubmit);
+      if (checkout?.data?.status === "success") {
         notifySuccess("Order Placed Successfully");
-
-        deleteAllCart().then(() => {
-          navigate(ThankYou);
-        });
-      }*/
-     if (checkout?.data?.status === "success") {
-        notifySuccess("Order Placed Successfully");
-        await deleteAllCart();                        // ensure this resolves before nav
-        sessionStorage.setItem("orderComplete", "1"); // <-- guard flag
+        await deleteAllCart();
+        sessionStorage.setItem("orderComplete", "1");
         navigate("/thank-you");
       }
       setLoading(false);
     }
-
-    // if (checkout?.data?.data?.url) {
-    //   notifySuccess("Redirecting to Payment Gateway");
-    //   setPaymentMethod(checkout?.data?.data?.url);
-    //   localStorage.setItem("paymentURL", checkout?.data?.data?.url);
-    // }
-    // else if (checkout?.data?.status === "success") {
-    //   notifySuccess("Order Placed Successfully");
-    //   deleteAllCart().then(() => {
-    //     navigate("/");
-    //   });
-    // }
+    else if (["E-Wallet", "Valu", "Souhoola", "Halan"].includes(paymentMethod)) {
+      console.log("DataSubmit:", DataSubmit);
+      setLoading(true);
+      const checkout = await orderCheckout(DataSubmit);
+      console.log("Checkout response:", checkout);
+      if (checkout?.data?.status === "success" && checkout?.data?.data?.url) {
+        notifySuccess("Redirecting to Payment Gateway");
+        window.location.href = checkout.data.data.url;
+      } else {
+        notifyError("Failed to create payment");
+      }
+      setLoading(false);
+    }
   };
 
   return (

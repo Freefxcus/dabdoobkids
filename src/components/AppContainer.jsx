@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import ProtectedRoute from "./auth/ProtectedRoute";
 import Home from "../pages/Home";
 import Error from "../pages/Error";
@@ -20,6 +20,7 @@ import Profile from "../pages/Profile";
 import Plans from "./Plans";
 import Categories from "../pages/Categories";
 import WishList from "../pages/WishList";
+import Collections from "../pages/Collections";
 import PostPayment from "../pages/post-payment";
 import OrderDetails from "./orders/OrderDetails";
 import { useEffect, useState } from "react";
@@ -103,6 +104,7 @@ function AppContainer() {
             <Route path="/returns-refunds" element={<ReturnsRefunds />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/thank-you" element={<ThankYou />} />
+	    <Route path="/payment/response" element={<Navigate to="/thank-you" replace />} />
             <Route
               path="/payment-information"
               element={<PaymentInformation />}
@@ -124,6 +126,7 @@ function AppContainer() {
             />
             <Route path="/plans" element={<ProtectedRoute element={Plans} />} />
             <Route path="/categories" element={<Categories />} />
+            <Route path="/collections" element={<Collections />} />
             <Route
               path="/wishlist"
               element={<ProtectedRoute element={WishList} />}
