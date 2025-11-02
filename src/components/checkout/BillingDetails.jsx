@@ -138,17 +138,6 @@ export default function BillingDetails({
             </div>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
-                <img src="/Wallet.svg" style={{ height: "28px", width: "28px" }} alt="Halan" />
-                Halan
-              </div>
-              <Radio
-                onClick={() => { setSearchParams((prev) => { prev.set("paymentMethod", "Halan"); return prev; }); }}
-                {...controlProps("Halan")}
-                sx={{ "&.Mui-checked": { color: "var(--brown)" } }}
-              />
-            </div>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
                 <img src="/Wallet.svg" style={{ height: "28px", width: "28px" }} alt="Wallet" />
                 E-Wallet
               </div>
@@ -158,6 +147,18 @@ export default function BillingDetails({
                 sx={{ "&.Mui-checked": { color: "var(--brown)" } }}
               />
             </div>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
+                <img src="/Wallet.svg" style={{ height: "28px", width: "28px" }} alt="Halan" />
+                Halan
+              </div>
+              <Radio
+                onClick={() => { setSearchParams((prev) => { prev.set("paymentMethod", "Halan"); return prev; }); }}
+                {...controlProps("Halan")}
+                sx={{ "&.Mui-checked": { color: "var(--brown)" } }}
+              />
+            </div>
+
 
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
