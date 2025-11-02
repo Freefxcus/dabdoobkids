@@ -7,6 +7,9 @@ import masterCard from "../../images/master_card.svg";
 import meeza from "../../images/meeza.svg";
 import applePay from "../../images/apple_pay.svg";
 import valu from "../../images/valu.svg";
+import halan from "../../images/halan.svg";
+import sohoula from "../../images/sohoula.svg";
+
 
 import {
   Box,
@@ -149,7 +152,7 @@ export default function BillingDetails({
             </div>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
-                <img src="/halan.svg" style={{ height: "28px", width: "28px" }} alt="Halan" />
+                <img src={halan} style={{ height: "28px", width: "28px" }} alt="Halan" />
                 Halan
               </div>
               <Radio
@@ -174,7 +177,7 @@ export default function BillingDetails({
 
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
-                <img src="/sohoula.svg" style={{ height: "28px", width: "28px" }} alt="Souhoola" />
+                <img src={sohoula} style={{ height: "28px", width: "28px" }} alt="Souhoola" />
                 Souhoola
               </div>
               <Radio
