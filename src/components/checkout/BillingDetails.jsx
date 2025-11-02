@@ -149,7 +149,7 @@ export default function BillingDetails({
             </div>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
-                <img src="/Wallet.svg" style={{ height: "28px", width: "28px" }} alt="Halan" />
+                <img src="/halan.svg" style={{ height: "28px", width: "28px" }} alt="Halan" />
                 Halan
               </div>
               <Radio
@@ -174,7 +174,7 @@ export default function BillingDetails({
 
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
-                <img src="/Wallet.svg" style={{ height: "28px", width: "28px" }} alt="Souhoola" />
+                <img src="/sohoula.svg" style={{ height: "28px", width: "28px" }} alt="Souhoola" />
                 Souhoola
               </div>
               <Radio
