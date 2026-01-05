@@ -202,7 +202,7 @@ export default function BillingDetails({
             </div>
 
 
-            
+
             {/* Order confirmation note (Figma Design Match) */}
             <div
               style={{
@@ -244,7 +244,7 @@ export default function BillingDetails({
                   // Even though it's English, Figma shows it right-aligned. 
                   // We use direction 'ltr' for correct punctuation but align it right.
                   direction: "ltr", 
-                  textAlign: "right" 
+                  textAlign: "left" 
                 }}
               >
                 To confirm the order, we just need the deposit via InstaPay or Vodafone Cash 🤎
