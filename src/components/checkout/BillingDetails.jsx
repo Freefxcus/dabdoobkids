@@ -200,30 +200,57 @@ export default function BillingDetails({
                 sx={{ "&.Mui-checked": { color: "var(--brown)" } }}
               />
             </div>
-            {/* Order confirmation note (the section in the red box) */}
+
+            
+            {/* Order confirmation note (Figma Design Match) */}
             <div
               style={{
-                marginTop: "14px",
-                border: "1px solid #E5E7EB",
-                backgroundColor: "#F9FAFB",
+                marginTop: "24px", // Adjusted slightly for spacing
+                backgroundColor: "#FFFFFF", // White background
                 borderRadius: "12px",
-                padding: "14px 16px",
-                textAlign: "center",
-                lineHeight: 1.6,
+                // Figma Shadow: Blur 4, X 0, Y 0, Color Black 15%
+                boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.15)", 
+                padding: "24px",
+                textAlign: "right", // Figma property says Right Align
+                fontFamily: "'Cairo', sans-serif", // Cairo Font
+                color: "#000000",
               }}
             >
-              <p style={{ margin: 0, fontSize: "13px" }} dir="rtl">
-                ملحوظة: لتأكيد الطلب، الرجاء إرسال رسالة على حسابنا على Instagram أو إرسال العربون عبر Vodafone Cash ❤️
+              {/* Arabic Section */}
+              <p
+                style={{
+                  margin: "0 0 16px 0", // Space between Arabic and English
+                  fontSize: "16px",
+                  fontWeight: "400",
+                  lineHeight: "1.6",
+                  direction: "rtl",
+                }}
+              >
+                علشان نأكد الأوردر، هنحتاج بس دفع الديبوزيت عن طريق InstaPay أو فودافون كاش 🤎
                 <br />
-                بمجرد وصول العربون سنبدأ تنفيذ طلبك فورًا ❤️
+                وأول ما الديبوزيت يوصل هنبدأ تنفيذ طلبك على طول ✨
+                <br />
+                وشكرًا جدًا على ثقتك فينا 🌸
               </p>
-              <div style={{ height: "10px" }} />
-              <p style={{ margin: 0, fontSize: "13px" }}>
-                To confirm the order, just send the deposit via Instagram DM or Vodafone Cash ❤️
+
+              {/* English Section */}
+              <p
+                style={{
+                  margin: 0,
+                  fontSize: "16px",
+                  fontWeight: "400",
+                  lineHeight: "1.6",
+                  // Even though it's English, Figma shows it right-aligned. 
+                  // We use direction 'ltr' for correct punctuation but align it right.
+                  direction: "ltr", 
+                  textAlign: "right" 
+                }}
+              >
+                To confirm the order, we just need the deposit via InstaPay or Vodafone Cash 🤎
                 <br />
-                Once it&apos;s received, we&apos;ll start working on your request right away ❤️
+                Once it’s received, we’ll start working on your request right away ✨
                 <br />
-                Thank you so much for your trust ❤️
+                Thank you so much for your trust 🌸
               </p>
             </div>
 
