@@ -7,17 +7,30 @@ import axios from "axios";
  * - NO automatic "/api" suffix
  * - Remove any trailing slash
  */
-function computeBaseURL() {
-  const raw =
-    (import.meta?.env?.VITE_API_BASE_URL ||
-      process.env.REACT_APP_BASE_URL ||
-      "https://api.dabdoobkidz.com").trim();
-
-  return raw.replace(/\/+$/, ""); // strip trailing slashes only
+function getViteApiBaseUrl() {
+  try {
+    // avoids parse error in CRA because import.meta is inside a string
+    return Function("try { return import.meta.env?.REACT_APP_BASE_URL } catch(e) { return undefined }")();
+  } catch {
+    return undefined;
+  }
 }
 
+function computeBase() {
+  const raw = (
+    getViteApiBaseUrl() ||
+    process.env.REACT_APP_API_BASE_URL ||
+    "https://api.dabdoobkidz.com"
+  ).trim();
+
+  return raw
+    .replace("dabdoobkids.com", "dabdoobkidz.com")
+    .replace(/\/+$/, "");
+}
+
+
 const instance = axios.create({
-  baseURL: computeBaseURL(),
+  baseURL: computeBase(),
 });
 
 instance.interceptors.request.use(
