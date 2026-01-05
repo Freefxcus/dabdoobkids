@@ -200,6 +200,32 @@ export default function BillingDetails({
                 sx={{ "&.Mui-checked": { color: "var(--brown)" } }}
               />
             </div>
+            {/* Order confirmation note (the section in the red box) */}
+            <div
+              style={{
+                marginTop: "14px",
+                border: "1px solid #E5E7EB",
+                backgroundColor: "#F9FAFB",
+                borderRadius: "12px",
+                padding: "14px 16px",
+                textAlign: "center",
+                lineHeight: 1.6,
+              }}
+            >
+              <p style={{ margin: 0, fontSize: "13px" }} dir="rtl">
+                ملحوظة: لتأكيد الطلب، الرجاء إرسال رسالة على حسابنا على Instagram أو إرسال العربون عبر Vodafone Cash ❤️
+                <br />
+                بمجرد وصول العربون سنبدأ تنفيذ طلبك فورًا ❤️
+              </p>
+              <div style={{ height: "10px" }} />
+              <p style={{ margin: 0, fontSize: "13px" }}>
+                To confirm the order, just send the deposit via Instagram DM or Vodafone Cash ❤️
+                <br />
+                Once it&apos;s received, we&apos;ll start working on your request right away ❤️
+                <br />
+                Thank you so much for your trust ❤️
+              </p>
+            </div>
 
             <div style={{ marginTop: "6px", display: "flex", flexDirection: "column", gap: "12px" }}>
               <h3>Add Delivery Instructions</h3>

@@ -922,15 +922,25 @@ export async function orderMail(data) {
 
 //Paymob
 // Paymob / API base (kidz is canonical)
-function computeBase() {
-  const raw =
-    (import.meta?.env?.VITE_API_BASE_URL ||
-      process.env.REACT_APP_API_BASE_URL ||
-      "https://api.dabdoobkidz.com"   // default to kidz
-    ).trim();
+function getViteApiBaseUrl() {
+  try {
+    // avoids parse error in CRA because import.meta is inside a string
+    return Function("try { return import.meta.env?.REACT_APP_BASE_URL } catch(e) { return undefined }")();
+  } catch {
+    return undefined;
+  }
+}
 
-  // Normalize accidental typos: kids -> kidz, remove trailing slash
-  return raw.replace("dabdoobkids.com", "dabdoobkidz.com").replace(/\/+$/, "");
+function computeBase() {
+  const raw = (
+    getViteApiBaseUrl() ||
+    process.env.REACT_APP_API_BASE_URL ||
+    "https://api.dabdoobkidz.com"
+  ).trim();
+
+  return raw
+    .replace("dabdoobkids.com", "dabdoobkidz.com")
+    .replace(/\/+$/, "");
 }
 
 const BASE = computeBase();
